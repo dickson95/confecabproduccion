@@ -1,0 +1,228 @@
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title" id="myModalLabel">LOTE <%=@lote.lote.referencia.referencia%></h4>
+    </div>
+    <div class="modal-body">
+      <div class="row form-group">
+        <div class="col-lg-4">
+          <p>
+            <strong>Proceso actual:</strong>
+            <%= @lote.estado.estado %>
+          </p>
+        </div>
+        <div class="col-lg-4">
+          <p>
+            <strong>Entrada a este proceso:</strong>
+            <%=I18n::localize(@lote.fecha_ingreso, :format => "%d de %B de %Y") %>
+          </p>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-lg-4">
+          <p>
+            <strong>Precio unitario:</strong>
+            <%= Lote.str_pesos @lote.lote.precio_u %>
+          </p>
+        </div>
+        <div class="col-lg-4">
+          <p>
+            <strong>Precio Total:</strong>
+            <%= Lote.str_pesos @lote.lote.precio_t %>
+          </p>
+        </div>
+        <div class="col-lg-4">
+          <p>
+            <strong>Número de remisión:</strong>
+            <%= @lote.lote.no_remision %>
+          </p>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-lg-4">
+          <p>
+            <strong>Número de factura:</strong>
+            <%= @lote.lote.no_factura %>
+          </p>
+        </div>
+        <div class="col-lg-4">
+          <p>
+            <strong>Cliente:</strong>
+            <%= @lote.lote.cliente.cliente %>
+          </p>
+        </div>
+        <div class="col-lg-4">
+          <%if @lote.lote.tipo_prenda.nil?%>
+          <p>
+            <strong>Descripción:</strong>
+            Sin descripción
+          </p>
+          <%else%>
+          <p>
+            <strong>Descripción:</strong>
+            <%= @lote.lote.tipo_prenda.tipo %>
+          </p>
+          <%end%>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-lg-4">
+          <p>
+            <strong>Empresa:</strong>
+            <%= @lote.lote.empresa %>
+          </p>
+        </div>
+        <div class="col-lg-4">
+          <p>
+            <strong>OP:</strong>
+            <%= @lote.lote.op %>
+          </p>
+        </div>
+        <div class="col-lg-4">
+          <p>
+            <strong>Empresa:</strong>
+            <%= @lote.lote.empresa %>
+          </p>
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col-lg-4">
+          <p>
+            <strong>Proceso adicional:</strong>
+            <%if !@lote.sub_estado.nil?%>
+              <%= @lote.sub_estado.sub_estado %>
+            <%end%>
+          </p>
+        </div>
+        <div class="col-lg-4">
+        </div>
+      </div>
+      <div class="panel panel-info">
+        <div class="panel-heading">
+              Detalle de cantidades
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr class="small">
+                  <th rowspan="3" class="text-center">Cantidad Corte</th>
+                  <th rowspan="3">Tallas</th>
+                  <%cont = 0%>
+                  <%@tallas.each do |talla|%>
+                    <% if cont == 0%>
+                      <th class="col-lg-1"><%=talla.talla%></th>
+                    <%end%>
+                    <%cont == 2 ? cont = 0 : cont = cont + 1%>
+                  <%end%>
+                  <th rowspan="3">
+                    Total colores
+                  </th>
+                </tr>
+                <tr class="small">
+                  <%cont = 0%>
+                  <%@tallas.each do |talla|%>
+                    <% if cont == 1%>
+                      <th class="col-lg-1"><%=talla.talla%></th>
+                    <%end%>
+                    <%cont == 2 ? cont = 0 : cont = cont + 1%>
+                  <%end%>
+                </tr>
+                <tr class="small">
+                  <%cont = 0%>
+                  <%@tallas.each do |talla|%>
+                    <% if cont == 2%>
+                      <th class="col-lg-1"><%=talla.talla%></th>
+                    <%end%>
+                    <%cont == 2 ? cont = 0 : cont = cont + 1%>
+                  <%end%>
+                  
+                </tr>
+              </thead>
+              <tbody>
+                <%totales = Array.new%>
+                <%@lote.lote.colores_lotes.each do |color|%>
+                <tr>
+                  <td rowspan="1">Colores</td>
+                  <td><%=color.color.color%></td>
+                  <%color.cantidades.each do |cantidad|%>
+                    <td>
+                      <%=cantidad.cantidad%>
+                      <% totales.push cantidad.total.total%>
+                    </td>
+                  <%end%>
+                  <td><%=color.total.total%></td>
+                </tr>
+                <%end%>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan="2">Totales tallas</td>
+                  <%if totales.empty?%>
+                    <%(0..9).each do |i|%>
+                      <td></td>
+                    <%end%>
+                  <%else%>
+                      <%(0..8).each do |i|%>
+                      <td><%=totales.fetch i%></td>
+                    <%end%>
+                  <%end%>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </div>
+        <div class="panel-footer">
+          <div class="text-right">
+            Unidades totales
+            <%=@lote.lote.cantidad%>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      <% if can? :manage, Lote %>
+        <div class="btn-group">
+          <%= link_to edit_lote_path(@lote.lote, :commit => "edit", :estado_id => @lote.estado.id), 
+          class: "btn btn-primary" do |l|%>
+            <%=content_tag :i, "", :class => "glyphicon glyphicon-pencil"%>
+            Editar
+          <%end%>
+          <%
+            btn = nil
+            men = nil
+            boolean = true
+            case @lote.estado.id
+              when 1
+                btn = 'integrar'
+                men = 'Integrar'
+              when 2
+                btn = 'confe'
+                men = 'Confeccionar'
+              when 3
+                btn = 'terminar'
+                men = 'Terminar'
+              when 4
+                btn = 'completar'
+                men = 'Completar'
+              else 
+                boolean = false
+            end
+                
+          %>
+          <% if boolean%>
+            <%= link_to cambio_estado_path(@lote.lote, :btn => btn), 
+            class: "btn btn-primary" do |l|%>
+              <%=content_tag :i, "", :class => "glyphicon glyphicon-triangle-right"%>
+              <%=men%>
+            <%end%>
+          <%end%>
+        </div>
+      <%end%>
+    </div>
+  </div>
+</div>

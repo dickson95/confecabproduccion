@@ -1,0 +1,2 @@
+module ControlLotesHelper
+end

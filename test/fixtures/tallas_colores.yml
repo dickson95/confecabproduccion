@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  talla: one
+  color: one
+  lote: one
+
+two:
+  talla: two
+  color: two
+  lote: two

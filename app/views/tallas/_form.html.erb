@@ -1,0 +1,15 @@
+<%= simple_form_for(@talla) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.input :talla %>
+  </div>
+  <div class="form-inputs">
+    <%= f.association :categoria %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+  
+<% end %>

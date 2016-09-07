@@ -1,0 +1,68 @@
+<%content_for :title do "Usuarios" end%>
+<div class="panel panel-default page-header">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-lg-6">
+        <h1>Usuarios</h1>
+      </div>
+      <div class="col-lg-6">
+        <div class="col-lg-offset-11">
+          <h1>
+          <%= link_to new_user_path do %>
+            <%= content_tag :i, "", :class => "glyphicon glyphicon-plus" %>
+          <%end%>
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <table class ="table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Usuario</th>
+          <th>Correo</th>
+          <th>Teléfono</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><%= user.name %></td>
+            <td><%= user.username %></td>
+            <td><%= user.email %></td>
+            <td><%= user.telefono %></td>
+            <td>
+                <%=link_to user_path(user) ,{:remote => true, 
+                    'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-info",
+                    :title => "Ver detalles"}  do%>
+                    <%=content_tag :i, "", :class => "glyphicon glyphicon-list-alt" %>
+                <%end%>
+            </td>
+            <td>
+              <%if @id_user == user.id%>
+                <%=link_to edit_user_registration_path, class: "btn btn-default", 
+                :title => "Editar mi perfil" do%>
+                    <%=content_tag :i, "", :class => "glyphicon glyphicon-pencil" %>
+                <%end%>
+              <%else%>
+                <%=link_to user, method: :delete, class: "btn btn-danger", :title => "Eliminar",
+                data: { confirm: "Are you sure?" } do%>
+                    <%=content_tag :i, "", :class => "glyphicon glyphicon-remove" %>
+                <%end%>
+              <%end%>
+            </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  
+</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
+aria-labelledby="myModalLabel" aria-hidden="true">
+</div>

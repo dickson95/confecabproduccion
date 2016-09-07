@@ -1,0 +1,17 @@
+<%= simple_form_for(@control_lote) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= f.association :sub_estado %>
+    <%= f.input :fecha_ingreso %>
+    <%= f.input :fecha_salida %>
+    <%= f.input :responsable_ingreso %>
+    <%= f.input :responsable_salida %>
+    <%= f.association :lote %>
+    <%= f.association :estado %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

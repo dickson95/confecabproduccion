@@ -1,0 +1,2 @@
+json.extract! lote, :id, :precio_unitario, :empresa, :color_prenda, :no_remision, :no_factura, :fecha_entr_prog, :cantidad, :referencia_id, :cliente_id, :tipo_prenda_id, :op_id, :prioridad_id, :created_at, :updated_at
+json.url lote_url(lote, format: :json)

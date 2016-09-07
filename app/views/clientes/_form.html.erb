@@ -1,0 +1,95 @@
+<%if params[:place]== "form_lote_cliente"%>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title" id="myModalLabel">Cliente nuevo</h4>
+    </div>
+    <div class="modal-body">
+      <%= simple_form_for(@cliente, 
+      url: clientes_path(:place => "form_lote_cliente_response"), remote: true) do |f| %>
+        <div class="alert alert-danger" role="alert" style="display: none;" id="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          Verifique la información de los datos
+        </div>
+        <div class="form-inputs">
+          <%= f.input :cliente %>
+          <div id="error_div_cliente" class="text-danger"></div>
+          <%= f.input :telefono %>
+          <%= f.input :direccion %>
+          <%= f.input :email %>
+          <div id="error_div_email" class="text-danger"></div>
+        </div>
+      
+        <div class="modal-footer">
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <%= f.button :submit %>
+            </div>
+          </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<% #Formulario para enviar los correos %>
+<%elsif params[:place]== "form_email_cliente"%>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-body">
+      <%= simple_form_for(@cliente, 
+      url: send_email_path(:place => "form_email_cliente_response"), 
+      remote: true, method: :get) do |f| %>
+        <%= f.error_notification %>
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel">Correo para <%= @cliente.cliente%></h4>
+        </div>
+      
+        <div class="form-inputs">
+          <div class ="row">
+            <div class="col-lg-6">
+              <%= f.input :email %>              
+            </div>
+            <div id="errors_div" class="text-danger"></div>
+            <div class="col-lg-6">
+              <%= f.input :asunto %>
+            </div>
+          </div>
+          <div class ="row">
+            <div class="col-lg-12">
+              <%= f.input :mensaje, as: "text" , input_html: {:style => "height: 300px"}%>
+            </div>
+          </div>
+        </div>
+      
+        <div class="modal-footer">
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <%= f.button :submit, :value => "Enviar", data: {:disable_with => "Enviando"}%>
+            </div>
+          </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<%else%>
+  <%= simple_form_for(@cliente) do |f| %>
+    <%= f.error_notification %>
+  
+    <div class="form-inputs">
+      <%= f.input :cliente %>
+      <%= f.input :telefono %>
+      <%= f.input :direccion %>
+      <%= f.input :email %>
+    </div>
+    <div class="form-actions">
+      <%= f.button :submit %>
+    </div>
+  <% end %>
+<% end %>

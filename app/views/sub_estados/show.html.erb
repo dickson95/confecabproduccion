@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Sub estado:</strong>
+  <%= @sub_estado.sub_estado %>
+</p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @sub_estado.estado %>
+</p>
+
+<%= link_to 'Edit', edit_sub_estado_path(@sub_estado) %> |
+<%= link_to 'Back', sub_estados_path %>

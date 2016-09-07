@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  precio_unitario: 9.99
+  empresa: MyString
+  color_prenda: MyString
+  no_remision: MyString
+  no_factura: MyString
+  fecha_entr_prog: 2016-07-25
+  cantidad: 1
+  referencia: one
+  cliente: one
+  tipo_prenda: one
+  op: one
+  prioridad: one
+
+two:
+  precio_unitario: 9.99
+  empresa: MyString
+  color_prenda: MyString
+  no_remision: MyString
+  no_factura: MyString
+  fecha_entr_prog: 2016-07-25
+  cantidad: 1
+  referencia: two
+  cliente: two
+  tipo_prenda: two
+  op: two
+  prioridad: two

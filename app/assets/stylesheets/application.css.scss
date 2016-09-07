@@ -1,0 +1,30 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "bootstrap_sb_admin_base_v2";
+@import "jquery-ui";
+@import "jquery-ui/datepicker";
+@import "jquery-ui/core";
+@import "jquery-ui/theme";
+@import "jquery-ui-timepicker-addon";
+
+
+#page-wrapper{
+  padding-top: 50px;
+}
+
+.margin{
+  margin: 20px;
+}
+.dropdown-menu li:hover {
+    cursor: pointer;
+}
+.table>thead>tr>th {
+    vertical-align: 90%;
+}
+
+/*
+#vertical-text {
+  transform: rotate(90deg);
+  transform-origin: right top 0
+}
+*/

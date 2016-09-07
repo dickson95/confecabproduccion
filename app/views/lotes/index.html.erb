@@ -1,0 +1,36 @@
+<% content_for :title do  "Lotes" end%>
+<div class="panel panel-default page-header">
+  <div class="panel panel-heading">
+    <div class="row">
+      <div class="col-lg-6">
+        <h1>Tenemos estos lotes</h1>
+      </div>
+      <div class="col-lg-6">
+        <div class="col-lg-offset-11">
+          <%if @rol_form ==("coor_integracion") || @rol_form ==("admin") || 
+          @rol_form ==("coor_tiempos")%>
+            <h1>
+            <%= link_to new_lote_path, {:title => "Integrar lote"} do %>
+              <%= content_tag :i, "", :class => "glyphicon glyphicon-plus" %>
+            <%end%>
+            </h1>
+          <%end%>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="panel-body">
+    <div class="table-responsive">
+      <% # Tabla para los insumos %>
+        <%=render 'table' %>
+    <!--Fin de la lista-->
+    </div>
+  <!--Tabla responsiva-->
+  </div>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
+  aria-labelledby="myModalLabel" aria-hidden="true">
+  </div>
+</div>

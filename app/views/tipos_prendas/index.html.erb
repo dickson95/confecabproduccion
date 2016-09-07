@@ -1,0 +1,121 @@
+<% content_for :title do  "Tablas" end%>
+<div class="row page-header">
+  <div class="pull-left">
+    <h1>Tablas</h1>
+    <p class="text-muted">Clientes, procesos, descripción de prendas</p>
+  </div>
+</div>
+<div class="pull-rigth">
+  <div class="dropdown">
+    <a class="dropdown-toggle btn btn-default" data-toggle="dropdown" href="#">
+        <i class="fa fa-gear fa-fw"></i>  <i class="fa fa-caret-down"></i>
+    </a>
+    <ul class="dropdown-menu dropdown-messages">
+        <li>
+          <a>
+            <div id="on_cliente" >
+                <i class="fa fa-gears fa-fw"></i> Clientes
+            </div>
+          </a>
+        </li>
+        <li>
+          <a>
+            <div id="on_prenda" >
+                <i class="fa fa-gears fa-fw"></i> Descripción de prendas
+            </div>
+          </a>
+        </li>
+        <li>
+          <a>
+            <div id="on_proceso" >
+                <i class="fa fa-gears fa-fw"></i> Procesos
+            </div>
+          </a>
+        </li>
+        <li class="divider"></li>
+        <li>
+            <a>
+                <div id="all" >
+                    <i class="fa fa-gears fa-fw"></i> Ver todo
+                </div>
+            </a>
+        </li>
+    </ul>
+    <!-- /.dropdown-alerts -->
+  </div>
+</div>
+<div class="row page-header" id="p_clientes" >
+  <div class="col-md-12">
+    <%= render 'clientes/index'%>
+  </div>
+</div>
+<div class="row" id="tip_est">
+  <!--Panel de referencias-->
+  <div class="col-lg-6 page-header" id="p_tipos_prendas">
+    <!--Panel de prendas-->
+    <section>
+      <div class=" panel panel-default">
+        <!--Panel de tipos de prendas-->
+        <div class="panel-heading">
+          <div class="row">
+            <div class="col-lg-6">
+              <h4>Descripción de prenda</h4>
+            </div>
+            <div class="col-lg-6">
+              <div class="col-lg-offset-11">
+                <h4>
+                  <% if can? :manage, TipoPrenda %>
+                    <%= link_to new_tipo_prenda_path, class:"pull-right btn btn-default btn-circle" do %>
+                      <%= content_tag :i, "", :class => "glyphicon glyphicon-plus" %>
+                    <%end%>
+                  <%end%>
+                </h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body">
+          <table class="table table-striped table-bordered table-hover tablas2">
+            <thead>
+              <tr>
+                <th>Descripción</th>
+                <% if can? :manage, TipoPrenda %>
+                <th></th>
+                <%end%>
+              </tr>
+            </thead>
+            <tbody>
+              <% @tipos_prendas.each do |tipo_prenda| %>
+                <tr>
+                  <td><%= tipo_prenda.tipo %></td>
+                  <% if can? :manage, TipoPrenda %>
+                  <td>
+                    <div class="btn-group">
+                      <%= link_to edit_tipo_prenda_path(tipo_prenda), :title =>"Editar", class: "btn btn-primary" do%>
+                            <%= content_tag(:i, "", :class => "glyphicon glyphicon-pencil") %>
+                      <% end %>
+                      <%= link_to tipo_prenda, remote: true, method: :delete, :title => "Eliminar",
+                      data: { confirm: '¿Seguro desea eliminar el registro?' }, 
+                      class: "btn btn-danger" do %>
+                        <%= content_tag(:i, "", :class => "glyphicon glyphicon-remove") %>
+                      <% end %>
+                    </div>
+                  </td>
+                  <%end%>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="col-lg-6 page-header" id="p_estados">
+    <!--Panel de estados-->
+    <section>
+      <%= render 'sub_estados/index'%>
+    </section>
+  </div>
+</div>
+<!--Panel de estados de clientes-->
+

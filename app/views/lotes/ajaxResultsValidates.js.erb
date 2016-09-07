@@ -1,0 +1,44 @@
+<% # Fallas en la validación de los campor %>
+
+<%if params[:place] == "form_lote_response"%>
+    $("#alert").show();
+    $("#errors_div").html("<%= @tipo_prenda.errors[:tipo] %>");
+    $("#tipo_prenda_tipo").parent().addClass("has-error");
+<%elsif params[:place] == "form_lote_cliente_response"%>
+    $("#alert").show();
+    $("#cliente_email").parent().addClass("has-error");
+    $("#cliente_cliente").parent().addClass("has-error");
+    $("#error_div_cliente").html("<%= @cliente.errors[:cliente] %>");
+    $("#error_div_email").html("<%= @cliente.errors[:email] %>");
+<%elsif params[:place] =="form_new_lote_response"%>
+    $("#alert").show();
+    <%if !@lote.errors[:referencia].empty?%>
+        $("#error_div_referencia").html("<%= @lote.errors[:referencia] %>");
+        $("#lote_referencia").parent().addClass("has-error");
+    <%end%>
+    <%if !@lote.errors[:empresa].empty?%>
+        $("#error_div_empresa").html("<%= @lote.errors[:empresa] %>");
+        $("#lote_empresa").parent().addClass("has-error");
+    <%end%>
+    <%if !@lote.errors[:cliente].empty?%>
+        $("#error_div_cliente").html("<%= @lote.errors[:cliente] %>");
+        $("#lote_cliente_id").parent().addClass("has-error");
+    <%end%>
+<%elsif params[:place] =="form_edit_lote"%>
+    $('#form_collapse').html("<%= escape_javascript(render 'form', lote: @lote)%>")
+<%elsif params[:place] =="form_edit_lote_response"%>
+    $("#alert").show();
+    $("#errors_full").html("<%= @lote.errors.full_messages %>");
+    <%if !@lote.errors[:referencia].empty?%>
+        $("#error_div_referencia").html("<%= @lote.errors[:referencia] %>");
+        $("#lote_referencia").parent().addClass("has-error");
+    <%end%>
+    <%if !@lote.errors[:empresa].empty?%>
+        $("#error_div_empresa").html("<%= @lote.errors[:empresa] %>");
+        $("#lote_empresa").parent().addClass("has-error");
+    <%end%>
+    <%if !@lote.errors[:cliente].empty?%>
+        $("#error_div_cliente").html("<%= @lote.errors[:cliente] %>");
+        $("#lote_cliente_id").parent().addClass("has-error");
+    <%end%>
+<%end%>

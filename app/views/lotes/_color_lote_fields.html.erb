@@ -1,0 +1,41 @@
+<td class="col-lg-1 color" style="padding:0; margin:0;">
+    <fieldset>
+        <div class="input-group">
+            <%=f.autocomplete_field  :color_id, 
+            autocomplete_color_color_lotes_path, :as => :autocomplete,
+            label: false,  wrapper: false, :value => col, 
+            class: "form-control input-sm"%>
+            <%=f.hidden_field :_destroy %>
+        </div>
+    </fieldset>
+</td> 
+
+<%if params[:action]=="new" || b%>
+    <%for n in 1..9%>
+          <%= f.fields_for :cantidades, @cantidades do |cantidades_for_form| %>
+        <td style="padding:0; margin:0;">
+            <fieldset>
+               <%=render partial: 'cantidad_fields', locals: {f: cantidades_for_form, n: n}%>
+            </fieldset>
+        </td>
+          <% end %>
+    <% end %>
+<%elsif b == false%>
+    <%n = 0%>
+     <%= f.fields_for :cantidades do |cantidades_for_form| %>
+     <%n = n + 1%>
+    <td style="padding:0; margin:0;">
+        <fieldset>
+           <%=render partial: 'cantidad_fields', locals: {f: cantidades_for_form, n: n}%>
+        </fieldset>
+    </td>
+     <% end %> 
+<% end %>
+<td class="total" style="padding:0; margin:0;">
+    <fieldset>
+        <div class="input-group">
+            <%=f.input :total_id, readonly: true, label: false, wrapper: false,
+            input_html:{class: "input-sm", :value => total}%>
+        </div>
+    </fieldset>
+</td>

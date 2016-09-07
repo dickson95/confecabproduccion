@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  secuencia: 1
+  precio_total: 9.99
+  costo_total: 9.99
+  mes: MyString
+  lote: one
+
+two:
+  secuencia: 1
+  precio_total: 9.99
+  costo_total: 9.99
+  mes: MyString
+  lote: two

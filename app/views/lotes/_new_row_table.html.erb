@@ -1,0 +1,56 @@
+<%
+  btn = nil
+  men = nil
+  estado = nil
+  boolean = true
+  case @lote.estado.id
+    when 1
+      men = 'Integrar'
+      estado = 2
+    when 2
+      men = 'Confeccionar'
+      estado = 3
+    when 3
+      men = 'Terminar'
+      estado = 4
+    when 4
+      men = 'Completar'
+      estado = 5
+    else 
+      boolean = false
+  end
+            
+%>
+<tr>
+    <td><%=@lote.lote.referencia.referencia%></td>
+    <td><%=@lote.lote.op%></td>
+    <td><%=I18n::localize(@lote.fecha_ingreso, :format => "%d de %b")%></td>
+    <td>-</td>
+    <td><%=ControlLote.where(lote_id: @lote.lote.id).sum(:min_u)%></td>
+    <td><%= link_to 'Detalles', view_datails_path(@lote.lote) ,{:remote => true, 
+                    'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-info"} %></td>
+    <% if can? :manage, Lote %>
+      <td>
+        <!---->
+        <div class="btn-group">
+            <%= link_to edit_lote_path(@lote.lote, :commit => "edit", :estado_id => @lote.estado.id,
+                :place => "form_edit_lote"), {:remote => true, 'data-toggle' =>  "collapse", 
+                'data-target' => '#form_collapse', :class => "btn btn-primary", 
+                :title => 'Editar'}  do |l|%>
+                  <%=content_tag :i, "", :class => "glyphicon glyphicon-pencil"%>
+            <%end%>
+          <% if boolean%>
+              <%= link_to cambio_estado_path(@lote.lote, :btn => estado), :title => men,
+              class: "btn btn-primary" do |l|%>
+                <%=content_tag :i, "", :class => "glyphicon glyphicon-triangle-right"%>
+              <%end%>
+          <%end%>
+        </div>
+      </td>
+      <td>
+        <%= link_to 'Eliminar', @lote.lote, method: :delete,
+        data: { confirm: 'Si elimina este registro no podrá recuperarlo. ¿Está
+        realmente seguro?' }, class:'btn btn-danger' %>
+      </td>
+    <% end %>
+</tr>

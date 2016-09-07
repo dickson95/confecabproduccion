@@ -1,0 +1,1 @@
+json.partial! "sub_estados/sub_estado", sub_estado: @sub_estado

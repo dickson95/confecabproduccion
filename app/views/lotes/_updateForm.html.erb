@@ -1,0 +1,34 @@
+<%= simple_form_for(@lote, wrapper: :vertical_input_group,
+        wrapper_mappings: {
+          check_boxes: :horizontal_radio_and_checkboxes,
+          radio_buttons: :horizontal_radio_and_checkboxes,
+          file: :horizontal_file_input,
+          boolean: :horizontal_boolean
+        }) do |f| %>
+        <% # Recarga de formulario para los tipos de prendas %>
+        <%if params[:place] == "form_lote_response"%>
+          <%= f.input :tipo_prenda,  wrapper: :vertical_input_group do %>
+            <%= f.input_field  :tipo_prenda, class: "form-control",
+            :collection => @tipos_prendas, :selected => @tipo_prenda.id ,
+            :value_method => :id, :label => false  %>
+            <div class="input-group-btn">
+              <%= link_to '...', add_remote_data_path(:place => "form_lote_tipo_prenda"),{:remote => true, 
+              'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-default"} %>
+            </div>
+          <% end %>
+        <%end%>
+        
+        <% # Recarga de formulario para los clientes%>
+        <%if params[:place] == "form_lote_cliente_response"%>
+          <%= f.input :cliente,  wrapper: :vertical_input_group do %>
+            <%= f.input_field  :cliente, class: "form-control", 
+            :collection => @clientes, :label_method => false, 
+            :value_method => :id, :selected => @cliente.id %>
+            <%=content_tag :div, "", :class => "input-group-btn" do%>
+              <%= link_to '...', add_remote_data_path(:place => "form_lote_cliente"),{:remote => true, 
+              'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-default"} %>
+            <%end%>
+          <% end %>
+        <% end %>
+        
+<% end %>

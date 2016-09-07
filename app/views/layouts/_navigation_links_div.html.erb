@@ -1,0 +1,22 @@
+<li class="active">
+    <a href="/"><i class="fa fa-fw fa-dashboard"></i> Lotes</a>
+</li>
+<%if (can? :manage, ControlLote) || (can? :read, ControlLote)  %>
+<li>
+    <a href="/control_lotes"><i class="fa fa-fw fa-wrench"></i>Historial</a>
+</li>
+<%end%>
+
+<% if (can? :manage, Referencia) || (can? :read, Referencia) %>
+<li>
+    <a href="/tipos_prendas"><i class="fa fa-table fa-fw"></i> Tablas</a>
+</li>
+<%end%>
+<%if (can? :manage, User) || (can? :read, User)%>
+<li>
+    <%=link_to users_path do%>
+        <%=content_tag :i, "", :class => "fa fa-fw fa-wrench"%>
+        Usuarios
+    <%end%>
+</li>
+<%end%>

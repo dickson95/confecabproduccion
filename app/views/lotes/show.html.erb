@@ -1,0 +1,143 @@
+<div class="container panel panel-default"> 
+  <blockquotec class="row">
+    
+    <h2>Detalle del lote</h2>
+    <p id="notice"><%= notice %></p>
+    <div class="col-md-6">
+      <p>
+        <strong>Estado:</strong>
+        <%
+        estado = nil
+        cont = 0
+        aux = 0
+        @control_lotes.each do |c_o|
+          if c_o.lote != nil
+            if c_o.lote.op == @lote.op 
+              com = c_o.id # comparativo
+              if aux < com
+                aux = com
+              end
+            end 
+          end
+        end 
+        @control_lotes.each do |c_o|
+          if c_o.lote != nil
+            if c_o.id == aux 
+        %>
+        <%= c_o.estado.estado %>
+        <% 
+        estado = c_o.estado.estado
+            end
+          end
+        end 
+        %>
+      </p>
+      
+      <p>
+        <strong>Empresa:</strong>
+        <%= @lote.empresa %>
+      </p>
+      
+      <p>
+        <strong>No remision:</strong>
+        <%= @lote.no_remision %>
+      </p>
+      
+      <p>
+        <strong>No factura:</strong>
+        <%= @lote.no_factura %>
+      </p>
+      
+      <% if @lote.referencia != nil %>
+      <p>
+        <strong>Referencia:</strong>
+          <%= @lote.referencia.referencia %>
+      </p>
+      <%end%>
+      
+      <p>
+        <strong>Cliente:</strong>
+        <%= @lote.cliente.cliente %>
+      </p>
+    </div>
+    <div class="col-md-6">
+      <% if @lote.tipo_prenda != nil %>
+      <p>
+        <strong>Tipo prenda:</strong>
+        <%= @lote.tipo_prenda.tipo %>
+      </p>
+      <%end%>
+      
+      <p>
+        <strong>Op:</strong>
+        <%= @lote.op %>
+      </p>
+      
+      <p>
+        <strong>Prioridad:</strong>
+        <%= @lote.prioridad %>
+      </p>
+      
+      <p>
+        <strong>Ingresó a <%=  estado %>:</strong>
+        <%= @lote.fecha_entrada %>
+      </p>
+      
+      <p>
+        <strong>Observaciones:</strong>
+        <%= @lote.obs_integracion %>
+      </p>
+      
+      <p>
+        <strong>Fecha de revisión:</strong>
+        <%= @lote.fecha_revision %>
+      </p>
+      
+      <p>
+        <strong>Fecha de entrega:</strong>
+        <%= @lote.fecha_entrada %>
+      </p>
+      
+      <p>
+        <strong>Alta de insumos:</strong>
+        <%= @lote.fecha_entrada %>
+      </p>
+      
+      <p>
+        <strong>Última edición:</strong>
+        <%if !@lote.respon_edicion_id.nil?%>
+        <%=@lote.respon_edicion_id.name %>
+        <%end%>
+      </p>
+
+      <p>
+        <strong>Estado:</strong>
+        <%
+        cont = 0
+        aux = 0
+        @control_lotes.each do |c_o|
+          if c_o.lote != nil
+            if c_o.lote.op == @lote.op 
+              com = c_o.id # comparativo
+              if aux < com
+                aux = com
+              end
+            end 
+          end
+        end 
+        @control_lotes.each do |c_o|
+          if c_o.lote != nil
+            if c_o.id == aux 
+        %>
+        <%= c_o.estado.estado %>
+        <% 
+            end
+          end
+        end 
+        %>
+      </p>
+    </div>
+  </blockquote>
+  <%= link_to 'Editar', edit_lote_path(@lote) %> |
+    <%= link_to 'Atrás', lotes_path %>
+</div>

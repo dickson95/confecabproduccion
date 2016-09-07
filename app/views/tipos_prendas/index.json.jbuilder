@@ -1,0 +1,1 @@
+json.array! @tipos_prendas, partial: 'tipos_prendas/tipo_prenda', as: :tipo_prenda

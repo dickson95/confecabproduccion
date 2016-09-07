@@ -1,0 +1,12 @@
+<%content_for :title do "Nuevo lote" end%>
+<div class="row page-header">
+    <div class="pull-left">
+       <h1>Nuevo Lote</h1> 
+    </div>
+    <div class="pull-right margin">
+        <%= link_to 'Atrás', lotes_path, class: 'btn btn-default' %>
+    </div>
+</div>
+<%= render 'form', lote: @lote %>
+
+

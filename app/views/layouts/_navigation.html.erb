@@ -1,0 +1,21 @@
+<div class="navbar-header">
+  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+    <span class="sr-only">Toggle navigation</span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+    <span class="icon-bar"></span>
+  </button>
+  <%= link_to 'PRODUCCIÓN', root_path, class: "navbar-brand", :title => 'Inicio de la aplicación' %>
+</div>
+
+<ul class="nav navbar-top-links navbar-right"> 
+  <%= render 'layouts/navigation_links'%>
+</ul>
+
+<div class="navbar-default sidebar" role="navigation">
+  <div class="sidebar-nav navbar-collapse">
+    <ul class="nav" id="side-menu">
+      <%= render 'layouts/navigation_links_div'%>
+    </ul>
+  </div>
+</div>

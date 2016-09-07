@@ -1,0 +1,41 @@
+<div class="row page-header">
+  <div class="pull-left m-y-auto">
+    <h2>Configuración de mi cuenta</h2>
+  </div>
+  <div class="pull-right">
+    <%= link_to "Atrás", :back, class:"btn btn-default" %>
+  </div>
+</div>
+
+<div>
+  <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= f.error_notification %>
+  
+    <div class="form-inputs">
+      <%= f.input :email, required: true, autofocus: true, label: "Correo electrónico" %>
+  
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+        <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>
+      <% end %>
+      <%= f.input :name, required: true, autofocus: true, label: "Nombre" %>
+      <%= f.input :telefono, autofocus: true, label: "Teléfono" %>
+      <%= f.input :username, required: true, autofocus: true, label: "Cédula" %>
+      <%= f.input :password, autocomplete: "off", hint: "Deje este campo en blanco si no desea cambiar la contraseña", required: false %>
+      <%= f.input :password_confirmation, required: false %>
+      <%if can? :manage, User%>
+      <%= f.collection_select :rol_ids, Rol.all, :id, :name, {}, {multiple: true} %>
+      <%end%>
+      <%= f.input :current_password, label: "Contraseña actual",
+      hint: "Ingrese su contraseña actual para confirmar los cambios", required: true %>
+    </div>
+  
+    <div class="form-actions">
+      <%= f.button :submit, "Actualizar datos" %>
+    </div>
+  <% end %>
+  
+  <h3>Cancelar mi cuenta</h3>
+  
+  <p><%= link_to "Cancelar mi cuenta", registration_path(resource_name), 
+  data: { confirm: "Perderá acceso total a la aplicación si elimina su cuenta. ¿Está seguro?" }, method: :delete %></p>
+</div>

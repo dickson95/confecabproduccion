@@ -1,0 +1,174 @@
+<table class="table table-hover" id="lotes">
+  <thead>
+    <%if @rol_form ==("aux_insumos")%>
+      <tr>
+        <th title="Referencia del lote">Referencia</th>
+        <th title="OP de lote">OP</th>
+        <th title="Fecha de ingreso a terminación">Terminación</th>
+        <th title="Proceso actual">Estado</th>
+        <th title="Tipo de camisa">Descripción</th>
+        <th></th>
+        <th></th>
+      </tr>
+    <%else #Verificación de rol para insumos%>
+      <tr>
+          <!--Columnas de integración-->
+          <th title="Identificador">#</th>
+          <th title="Referencia del lote">Referencia</th>
+          <th title="OP de lote">OP</th>
+          <th title="Cantidad">Día ingreso</th>
+          <th title="Fecha de ingreso a terminación">Día salida</th>
+          <th title="Proceso actual">Tiempo total</th>
+          <th></th>
+          <% if can? :manage, Lote %>
+          <th></th>
+          <th></th>
+          <% end %>
+      </tr>
+    <%end #Verificación de rol %>
+  </thead>
+  
+  <tbody>
+    <%
+    #
+    #La distribució a continuación es solo para comodidad 
+    #de los usuarios, si alguno quiere ver todos los datos solo
+    #debe revisar los detalles del lote
+    #
+    %>
+    <% @lotes.reverse_each do |id|%>
+      <%
+          # "clote" es un indicador de ControlLote. Sin embargo el objetivo es 
+          # imprimir los datos de los lotes y no los controles. Para lograrlo
+          # se obtiene un único resultado con cada consulta en control lote y mediante
+          # la relación se accede a toda la información necesaria de lote.
+          # Al ser el nombre del objeto contenido en "clote" también lote,
+          # sumo como razón para sólo poner la "c" al principio y no todo el
+          # nombre.
+          clote = ControlLote.where(lote_id: id)
+                                  .joins([lote: [:referencia]], [:estado])
+                                  .pluck(
+                                    "lotes.id",
+                                    "referencias.referencia", 
+                                    "lotes.op",
+                                    "control_lotes.estado_id",
+                                    "control_lotes.fecha_ingreso",
+                                    "estados.estado"
+                                  ).max
+      %>
+      <%
+          btn = nil
+          men = nil
+          estado = nil
+          boolean = true
+          case clote.fetch 3
+            when 1
+              men = 'Integrar'
+              estado = 2
+            when 2
+              men = 'Confeccionar'
+              estado = 3
+            when 3
+              men = 'Terminar'
+              estado = 4
+            when 4
+              men = 'Completar'
+              estado = 5
+            else 
+              boolean = false
+          end
+                    
+      %>
+      <%if @rol_form ==("aux_insumos")%>
+        <tr>
+            <!--Esto ve el auxiliar de insumos-->
+            <td><%= clote.fetch 1 %></td>
+            <td><%= clote.fetch 2 %></td>
+            <td><%=I18n::localize(clote.fecha_ingreso, :format => "%d de %b")%></td>
+            <td><%=clote.fetch 5%></td> 
+              <%if clote.lote.tipo_prenda.nil?%>
+            <td>Sin descripción</td>
+              <%else%>
+            <td><%= clote.lote.tipo_prenda.tipo %></td>
+              <%end%>
+            <!--inicio de los botones de gestión-->
+            <td>
+            <%= link_to 'Detalles', view_datails_path(clote.lote) ,{:remote => true,
+            'data-target' => '#myModal', :class => "btn btn-info"} %>
+            </td>
+              <% if can? :manage, Lote %>
+              <!--Integración-->
+            <td>
+              
+                <div class="btn-group">
+                  <%= link_to edit_lote_path(clote.lote, :estado_id => clote.estado.id,
+                  :place => "form_edit_lote"), class: "btn btn-primary", 
+                  :title => 'Editar'  do |l|%>
+                    <%=content_tag :i, "", :class => "glyphicon glyphicon-pencil"%>
+                  <%end%>
+                  <% if boolean%>
+                      <%= link_to cambio_estado_path(clote.lote, :btn => estado), :title => men,
+                      class: "btn btn-primary" do |l|%>
+                        <%=content_tag :i, "", :class => "glyphicon glyphicon-triangle-right"%>
+                      <%end%>
+                  <%end%>
+                </div>
+            </td>
+              <%else #confirmación de abilidad%>
+            <td></td>
+            <td></td>
+              <% end %>
+        </tr>
+      <%else #Verificación de rol insumos%>
+        <tr>
+          <!--Esto ve el auxiliar de insumos-->
+          <td><%= clote.fetch 0 %></td>
+          <td><%= clote.fetch 1 %></td>
+          <td><%= clote.fetch 2 %></td>
+          <!--fechas de ingreso a empresa-->
+          <td>
+            <% f_entrada = ControlLote.where(lote_id: id).pluck(:fecha_ingreso).min%>
+            <%=I18n::localize(f_entrada, :format => "%d de %b")%>
+          </td>
+          <%if clote.fetch(3)==5%>
+          <td><%= l(clote.fetch(4), format: "%d de %b") %></td>
+          <%else%>
+          <td>-</td>
+          <%end%>
+          <td><%= ControlLote.where(lote_id: id).sum(:min_u) %></td>
+          <!--inicio de los botones de gestión-->
+          <td>
+            <%= link_to 'Detalles', view_datails_path(clote.fetch(0)), {:remote => true, 
+            :class => "btn btn-info",  
+            "data-target" => "#myModal"}
+            %>
+          </td>
+            <% if can? :manage, Lote %>
+          <td>
+            <!---->
+            <div class="btn-group">
+              <%= link_to edit_lote_path(clote.fetch(0), :commit => "edit", :estado_id => clote.fetch(3),
+            :place => "form_edit_lote"), { :class => "btn btn-primary", 
+            :title => 'Editar'}  do |l|%>
+              <%=content_tag :i, "", :class => "glyphicon glyphicon-pencil"%>
+            <%end%>
+              <% if boolean%>
+                  <%= link_to cambio_estado_path(clote.fetch(0), :btn => estado), :title => men,
+                  class: "btn btn-primary" do |l|%>
+                    <%=content_tag :i, "", :class => "glyphicon glyphicon-triangle-right"%>
+                  <%end%>
+              <%end%>
+            </div>
+          </td>
+          <td>
+            <%id_lote = Lote.new(:id => clote.fetch(0))%>
+            <%= link_to 'Eliminar', id_lote, method: :delete,
+            data: { confirm: 'Si elimina este registro no podrá recuperarlo. ¿Está
+            realmente seguro?' }, class:'btn btn-danger' %>
+          </td>
+            <% end %>
+        </tr>
+      <%end #Verificación de rol%>
+    <%end #Fin ciclo de @lotes%>
+  </tbody>
+</table>

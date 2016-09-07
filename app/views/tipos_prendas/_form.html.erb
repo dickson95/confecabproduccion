@@ -1,0 +1,45 @@
+<%if params[:place]== "form_lote_tipo_prenda"%>
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="modal-title" id="myModalLabel">Descripción nueva</h4>
+    </div>
+    <div class="modal-body">
+      <%= simple_form_for(@tipo_prenda, 
+      url: tipos_prendas_path(:place => "form_lote_response"), remote: true) do |f| %>
+        <div class="alert alert-danger" role="alert" style="display: none;" id="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          Verifique la información de los campos
+        </div>
+        <div class="form-inputs">
+          <%= f.input :tipo, label: "Descrición"%>
+        </div>
+        <div id="errors_div" class="text-danger"></div>
+        
+          <div class="modal-footer">
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <%= f.button :submit %>
+            </div>
+          </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<%else%>
+  <%= simple_form_for(@tipo_prenda) do |f| %>
+    <%= f.error_notification %>
+  
+    <div class="form-inputs">
+      <%= f.input :tipo, label: "Descrición" %>
+    </div>
+    
+     <div class="form-actions">
+        <%= f.button :submit %>
+      </div>
+  <% end %>
+<%end%>

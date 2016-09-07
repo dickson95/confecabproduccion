@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sub_estado: MyString
+  lote: one
+  fecha: one
+  fecha: one
+  estado: one
+
+two:
+  sub_estado: MyString
+  lote: two
+  fecha: two
+  fecha: two
+  estado: two

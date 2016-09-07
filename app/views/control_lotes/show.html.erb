@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Sub estado:</strong>
+  <%= @control_lote.sub_estado %>
+</p>
+
+<p>
+  <strong>Lote:</strong>
+  <%= @control_lote.lote.referencia.referencia %>
+</p>
+
+<p>
+  <strong>Fecha de entrada:</strong>
+  <%= @control_lote.fecha_ingreso %>
+</p>
+
+<p>
+  <strong>Fecha de salida:</strong>
+  <%= @control_lote.fecha_salida %>
+</p>
+
+<p>
+  <strong>Responsable de entrada:</strong>
+  <%= @control_lote.fecha_salida %>
+</p>
+
+<p>
+  <strong>Responsable de salida:</strong>
+  <%= @control_lote.fecha_salida %>
+</p>
+
+<p>
+  <strong>Estado:</strong>
+  <%= @control_lote.estado.estado %>
+</p>
+
+<%= link_to 'Edit', edit_control_lote_path(@control_lote) %> |
+<%= link_to 'Back', control_lotes_path %>

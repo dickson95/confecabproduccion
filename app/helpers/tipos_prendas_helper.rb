@@ -1,0 +1,2 @@
+module TiposPrendasHelper
+end
