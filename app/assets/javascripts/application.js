@@ -15,7 +15,6 @@
 //= require jquery-ui
 //= require jquery-ui/datepicker
 //= require autocomplete-rails
-//= require bootstrap-sprockets
 //= require bootstrap_sb_admin_base_v2
 //= require jquery-ui-timepicker-addon
 //= require turbolinks

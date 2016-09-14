@@ -1,5 +1,8 @@
 class User < ApplicationRecord
   
+  # Validaciones
+  validates :name, :username, presence: true
+  
   # AUTENTICACIÓN
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -19,7 +22,6 @@ class User < ApplicationRecord
   
   # MÉTODOS
   def has_rol?(rol_sym)
-    print "\nRol asignado\n"
     roles.any? { |r| r.name.underscore.to_sym == rol_sym }
   end
   
@@ -27,7 +29,6 @@ class User < ApplicationRecord
   #Documentación para más información
   #https://github.com/plataformatec/devise/wiki/How-To:-Allow-users-to-sign-in-using-their-username-or-email-address
   def self.find_for_database_authentication(warden_conditions)
-    print "\nMétodo de find for database\n"
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)
       where(conditions.to_h).where(["lower(username) = :value OR lower(email) = :value",

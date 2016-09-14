@@ -9,14 +9,14 @@
         <div class="col-lg-offset-11">
           <h1>
           <%= link_to new_user_path do %>
-            <%= content_tag :i, "", :class => "glyphicon glyphicon-plus" %>
+            <%= content_tag :i, "", :class => "fa fa-plus" %>
           <%end%>
           </h1>
         </div>
       </div>
     </div>
   </div>
-  <div class="panel-body">
+  <div class="panel-body table-responsive">
     <table class ="table">
       <thead>
         <tr>
@@ -36,22 +36,26 @@
             <td><%= user.email %></td>
             <td><%= user.telefono %></td>
             <td>
-                <%=link_to user_path(user) ,{:remote => true, 
-                    'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-info",
+                <%=link_to user_path(user) ,{:remote => true, :class => "btn btn-info",
                     :title => "Ver detalles"}  do%>
-                    <%=content_tag :i, "", :class => "glyphicon glyphicon-list-alt" %>
+                    <%=content_tag :i, "", :class => "fa fa-list-alt" %>
                 <%end%>
             </td>
             <td>
-              <%if @id_user == user.id%>
+              <%if current_user.id == user.id%>
                 <%=link_to edit_user_registration_path, class: "btn btn-default", 
                 :title => "Editar mi perfil" do%>
-                    <%=content_tag :i, "", :class => "glyphicon glyphicon-pencil" %>
+                    <%=content_tag :i, "", :class => "fa fa-pencil" %>
+                <%end%>
+              <%elsif user.id == 1%>
+                <%=link_to "",class: "btn btn-danger", :disabled => true,
+                :title => "El usuario administrador no se puede eliminar" do%>
+                    <%=content_tag :i, "", :class => "fa fa-trash-o" %>
                 <%end%>
               <%else%>
-                <%=link_to user, method: :delete, class: "btn btn-danger", :title => "Eliminar",
-                data: { confirm: "Are you sure?" } do%>
-                    <%=content_tag :i, "", :class => "glyphicon glyphicon-remove" %>
+                <%=link_to user, method: :delete, class: "btn btn-danger", 
+                :title => "Eliminar", data: { confirm: "Are you sure?" } do%>
+                    <%=content_tag :i, "", :class => "fa fa-trash-o" %>
                 <%end%>
               <%end%>
             </td>

@@ -1,8 +1,9 @@
+
 source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.0'
+gem 'rails', '~> 5.0.0.1'
 # Use sqlite3 as the database for Active Record
 gem 'mysql2'
 # Use Puma as the app server
@@ -54,7 +55,6 @@ end
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'simple_form'
-gem 'bootstrap-sass', '~> 3.3.7'
 gem 'bootstrap_sb_admin_base_v2'
 gem 'jquery-ui-rails'
 gem 'jquery-timepicker-addon-rails'
@@ -62,4 +62,5 @@ gem 'devise'
 gem 'cancancan', '~> 1.10'
 gem 'whenever', :require => false
 gem 'rails4-autocomplete'
+gem 'gon'
 

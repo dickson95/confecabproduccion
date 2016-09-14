@@ -2,9 +2,10 @@
   <thead>
     <%if @rol_form ==("aux_insumos")%>
       <tr>
+        <th title="Identificador">#</th>
         <th title="Referencia del lote">Referencia</th>
         <th title="OP de lote">OP</th>
-        <th title="Fecha de ingreso a terminación">Terminación</th>
+        <th title="Fecha de ingreso a terminación">Estado</th>
         <th title="Proceso actual">Estado</th>
         <th title="Tipo de camisa">Descripción</th>
         <th></th>
@@ -21,7 +22,6 @@
           <th title="Proceso actual">Tiempo total</th>
           <th></th>
           <% if can? :manage, Lote %>
-          <th></th>
           <th></th>
           <% end %>
       </tr>
@@ -46,18 +46,24 @@
           # sumo como razón para sólo poner la "c" al principio y no todo el
           # nombre.
           clote = ControlLote.where(lote_id: id)
-                                  .joins([lote: [:referencia]], [:estado])
+                                  .joins(:estado, [lote: [:referencia]])
+                                  .order("control_lotes.id desc").limit(1)
                                   .pluck(
                                     "lotes.id",
                                     "referencias.referencia", 
                                     "lotes.op",
                                     "control_lotes.estado_id",
                                     "control_lotes.fecha_ingreso",
-                                    "estados.estado"
-                                  ).max
+                                    "estados.estado",
+                                    "control_lotes.sub_estado_id",
+                                    "lotes.tipo_prenda_id"
+                                  ).last
       %>
       <%
-          btn = nil
+        # men: Variable para almacenar el mensaje de los attr title
+        # estado: Se encarga de determinar cual es el estado siguiente del proceso
+        # boolean: En caso de que el lote esté terminado esta variable dice 
+        #          si se construye o no el botón para el siguiente proceso
           men = nil
           estado = nil
           boolean = true
@@ -79,37 +85,45 @@
           end
                     
       %>
-      <%if @rol_form ==("aux_insumos")%>
+      <%if @rol_form ==("aux_insumos")#Verificación de rol insumos%>
         <tr>
             <!--Esto ve el auxiliar de insumos-->
+            <td><%= clote.fetch 0 %></td>
             <td><%= clote.fetch 1 %></td>
             <td><%= clote.fetch 2 %></td>
-            <td><%=I18n::localize(clote.fecha_ingreso, :format => "%d de %b")%></td>
+            <td><%=l(clote.fetch(4), format: "%d de %b")%></td>
             <td><%=clote.fetch 5%></td> 
-              <%if clote.lote.tipo_prenda.nil?%>
-            <td>Sin descripción</td>
+            <%puts "numero #{clote.fetch(7)}"%>
+              <%if clote.fetch(7).nil?%>
+            <td>-</td>
               <%else%>
-            <td><%= clote.lote.tipo_prenda.tipo %></td>
+            <td><%= TipoPrenda.where(:id => clote.fetch(7)).pluck(:tipo).last %></td>
               <%end%>
             <!--inicio de los botones de gestión-->
             <td>
-            <%= link_to 'Detalles', view_datails_path(clote.lote) ,{:remote => true,
-            'data-target' => '#myModal', :class => "btn btn-info"} %>
+            <%= link_to  view_datails_path(clote.fetch(0)), {:remote => true, 
+              :class => "btn btn-primary", "data-target" => "#myModal"} do
+              %>
+                <%=content_tag :i, "", :class => "fa fa-list-alt"%>
+              <%end%>
             </td>
               <% if can? :manage, Lote %>
               <!--Integración-->
             <td>
               
                 <div class="btn-group">
-                  <%= link_to edit_lote_path(clote.lote, :estado_id => clote.estado.id,
-                  :place => "form_edit_lote"), class: "btn btn-primary", 
-                  :title => 'Editar'  do |l|%>
-                    <%=content_tag :i, "", :class => "glyphicon glyphicon-pencil"%>
+                  <% # El parámetro sub_id será usado para establecer el subestado
+                     # en el formulario de edición%>
+                  <%= link_to edit_lote_path(clote.fetch(0), :sub_id => clote.fetch(6), 
+                    :estado_id => clote.fetch(3), :place => "form_edit_lote"), 
+                    { :class => "btn btn-info", :title => 'Editar'}  do%>
+                      <%=content_tag :i, "", :class => "fa fa-pencil"%>    
                   <%end%>
+                  
                   <% if boolean%>
-                      <%= link_to cambio_estado_path(clote.lote, :btn => estado), :title => men,
-                      class: "btn btn-primary" do |l|%>
-                        <%=content_tag :i, "", :class => "glyphicon glyphicon-triangle-right"%>
+                      <%= link_to cambio_estado_path(clote.fetch(0), :btn => estado), 
+                        :title => men, class: "btn btn-primary" do%>
+                          <%=content_tag :i, "", :class => "fa fa-forward"%>
                       <%end%>
                   <%end%>
                 </div>
@@ -119,7 +133,7 @@
             <td></td>
               <% end %>
         </tr>
-      <%else #Verificación de rol insumos%>
+      <%else #resto de roles%>
         <tr>
           <!--Esto ve el auxiliar de insumos-->
           <td><%= clote.fetch 0 %></td>
@@ -138,34 +152,42 @@
           <td><%= ControlLote.where(lote_id: id).sum(:min_u) %></td>
           <!--inicio de los botones de gestión-->
           <td>
-            <%= link_to 'Detalles', view_datails_path(clote.fetch(0)), {:remote => true, 
-            :class => "btn btn-info",  
-            "data-target" => "#myModal"}
-            %>
-          </td>
-            <% if can? :manage, Lote %>
-          <td>
             <!---->
             <div class="btn-group">
-              <%= link_to edit_lote_path(clote.fetch(0), :commit => "edit", :estado_id => clote.fetch(3),
-            :place => "form_edit_lote"), { :class => "btn btn-primary", 
-            :title => 'Editar'}  do |l|%>
-              <%=content_tag :i, "", :class => "glyphicon glyphicon-pencil"%>
-            <%end%>
-              <% if boolean%>
-                  <%= link_to cambio_estado_path(clote.fetch(0), :btn => estado), :title => men,
-                  class: "btn btn-primary" do |l|%>
-                    <%=content_tag :i, "", :class => "glyphicon glyphicon-triangle-right"%>
-                  <%end%>
+              <%= link_to  view_datails_path(clote.fetch(0)), {:remote => true, 
+              :class => "btn btn-primary", "data-target" => "#myModal"} do
+              %>
+                <%=content_tag :i, "", :class => "fa fa-list-alt"%>
               <%end%>
-            </div>
-          </td>
-          <td>
-            <%id_lote = Lote.new(:id => clote.fetch(0))%>
-            <%= link_to 'Eliminar', id_lote, method: :delete,
-            data: { confirm: 'Si elimina este registro no podrá recuperarlo. ¿Está
-            realmente seguro?' }, class:'btn btn-danger' %>
-          </td>
+            <% if can? :manage, Lote %>
+                  
+                  <% # El parámetro sub_id será usado para establecer el subestado
+                     # en el formulario de edición%>
+                  <%= link_to edit_lote_path(clote.fetch(0), :sub_id => clote.fetch(6), 
+                    :estado_id => clote.fetch(3), :place => "form_edit_lote"), 
+                    { :class => "btn btn-info", :title => 'Editar'}  do%>
+                      <%=content_tag :i, "", :class => "fa fa-pencil"%>    
+                  <%end%>
+                  
+                  <% if boolean%>
+                      <%= link_to cambio_estado_path(clote.fetch(0), :btn => estado), 
+                        :title => men, class: "btn btn-primary" do%>
+                          <%=content_tag :i, "", :class => "fa fa-forward"%>
+                      <%end%>
+                  <%end%>
+                </div>
+              </td>
+              <td>
+                <%= link_to lote_path(clote.fetch(0)), method: :delete,
+                  data: { confirm: 'Si elimina este registro no podrá recuperarlo. ¿Está
+                  realmente seguro?' }, class:'btn btn-danger' do %>
+                    <% content_tag :i, "", :class => "fa fa-trash-o"%>
+                <%end%>
+              </td>
+            <%else%>
+              <% # Etiquetas en caso de que el rol no pueda administrar los lotes %>
+                  </div>
+                </td>
             <% end %>
         </tr>
       <%end #Verificación de rol%>

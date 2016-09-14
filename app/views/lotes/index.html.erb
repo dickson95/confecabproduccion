@@ -1,6 +1,6 @@
 <% content_for :title do  "Lotes" end%>
 <div class="panel panel-default page-header">
-  <div class="panel panel-heading">
+  <div class="panel-heading">
     <div class="row">
       <div class="col-lg-6">
         <h1>Tenemos estos lotes</h1>
@@ -11,7 +11,7 @@
           @rol_form ==("coor_tiempos")%>
             <h1>
             <%= link_to new_lote_path, {:title => "Integrar lote"} do %>
-              <%= content_tag :i, "", :class => "glyphicon glyphicon-plus" %>
+              <%= content_tag :i, "", :class => "fa fa-plus" %>
             <%end%>
             </h1>
           <%end%>

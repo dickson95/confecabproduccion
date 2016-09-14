@@ -11,16 +11,20 @@
         <%= simple_form_for(@sub_estado, 
         url: sub_estados_path(:place => "form_lote_sub_estado_response"), remote: true) do |f| %>
           <div class="alert alert-danger" role="alert" style="display: none;" id="alert">
-            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <span class="fa fa-exclamation-circle" aria-hidden="true"></span>
             <span class="sr-only">Error:</span>
             Verifique la información de los campos
           </div>
           <div class="form-inputs">
-            <%= f.input :sub_estado, label: "Proceso adicional" %>
-            <%= f.association :estado, label: "Estado para el nuevo proceso" %>
+            <div>
+              <%= f.input :sub_estado, label: "Proceso adicional" %>
+              <div id="error_sub_div" class="text-danger"></div>
+            </div>
+            <div>
+              <%= f.association :estado, label: "Estado para el nuevo proceso" %>
+              <div id="error_estado_div" class="text-danger"></div>
+            </div>
           </div>
-          <div id="errors_div" class="text-danger"></div>
-          
             <div class="modal-footer">
               <div class="form-actions">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

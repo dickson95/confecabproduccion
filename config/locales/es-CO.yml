@@ -10,7 +10,7 @@ es-CO:
         signed_up: "Bienvenido, te has registrado correctamente"
     failure:
       already_authenticated: "Ya has iniciado sesión."
-      inactive: "Your account is not activated yet."
+      inactive: "Tu cuenta ya fue activada."
       invalid: "Invalid %{authentication_keys} or password."
       locked: "Your account is locked."
       last_attempt: "You have one more attempt before your account is locked."
@@ -22,7 +22,7 @@ es-CO:
         unauthenticated: "Debe iniciar sesión para usar antes de continuar."
     sessions:
       user:
-        signed_in: "Bienvenido al sistema de producción de Confecab"
+        signed_in: "Bienvenido al sistema de producción para Confecab y D&C"
   activerecord:
     errors:
       messages:
@@ -126,10 +126,10 @@ es-CO:
     format: "%{attribute} %{message}"
     messages:
       accepted: debe ser aceptado
-      blank: no puede estar en blanco
+      blank: No puede estar en blanco
       present: debe estar en blanco
       confirmation: no coincide
-      empty: no puede estar vacío
+      empty: No puede estar vacío
       equal_to: debe ser igual a %{count}
       even: debe ser un número par
       exclusion: está reservado
@@ -224,6 +224,17 @@ es-CO:
       last_word_connector: " y "
       two_words_connector: " y "
       words_connector: ", "
+  simple_form:
+    "yes": 'Sí'
+    "no": 'No'
+    required:
+      text: 'Requerido'
+      mark: '*'
+      # You can uncomment the line below if you need to overwrite the whole required html.
+      # When using html, text and mark won't be used.
+      # html: '<abbr title="required">*</abbr>'
+    error_notification:
+      default_message: "Por favor resvise los campos que acaba de diligenciar"
   time:
     am: am
     formats:

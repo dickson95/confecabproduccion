@@ -2,35 +2,65 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).on 'turbolinks:load', ->
+  if !gon.rol_user
+    $('#lotes').DataTable
+      language:
+        processing: 'Cargando...'
+        search: 'Buscar&nbsp;:'
+        lengthMenu: 'Mostrar _MENU_ registros'
+        info: 'Resultados _START_ a _END_ de _TOTAL_ '
+        infoEmpty: 'No hay datos o intente de nuevo'
+        infoFiltered: '(filtrado de _MAX_ registros)'
+        infoPostFix: ''
+        loadingRecords: 'Cargando...'
+        zeroRecords: 'No se encuentran registros'
+        emptyTable: 'No hay datos disponibles'
+        paginate:
+          previous: 'Anterior'
+          next: 'Siguiente'
+      responsive: details: true
+      order: [[0, "desc"]]
+      columnDefs:[
+                    {
+                      'targets': [ 0 ]
+                      'visible': false
+                      'searchable': false
+                    }
+                    {
+                      'targets': [ 6, 7 ]
+                      'orderable': false
+                    }
+                  ]
+  else
+    $('#lotes').DataTable
+      language:
+        processing: 'Cargando...'
+        search: 'Buscar&nbsp;:'
+        lengthMenu: 'Mostrar _MENU_ registros'
+        info: 'Resultados _START_ a _END_ de _TOTAL_ '
+        infoEmpty: 'No hay datos o intente de nuevo'
+        infoFiltered: '(filtrado de _MAX_ registros)'
+        infoPostFix: ''
+        loadingRecords: 'Cargando...'
+        zeroRecords: 'No se encuentran registros'
+        emptyTable: 'No hay datos disponibles'
+        paginate:
+          previous: 'Anterior'
+          next: 'Siguiente'
+      responsive: details: true
+      order: [[0, "desc"]]
+      columnDefs:[
+                    {
+                      'targets': [ 0 ]
+                      'visible': false
+                      'searchable': false
+                    }
+                    {
+                      'targets': [ 5, 6 ]
+                      'orderable': false
+                    }
+                  ]
   
-  $('#lotes').DataTable
-    language:
-      processing: 'Cargando...'
-      search: 'Buscar&nbsp;:'
-      lengthMenu: 'Mostrar _MENU_ registros'
-      info: 'Resultados _START_ a _END_ de _TOTAL_ '
-      infoEmpty: 'No hay datos o intente de nuevo'
-      infoFiltered: '(filtrado de _MAX_ registros)'
-      infoPostFix: ''
-      loadingRecords: 'Cargando...'
-      zeroRecords: 'No se encuentran registros'
-      emptyTable: 'No hay datos disponibles'
-      paginate:
-        previous: 'Anterior'
-        next: 'Siguiente'
-    responsive: details: true
-    order: [[0, "desc"]]
-    columnDefs:[
-                  {
-                    'targets': [ 0 ]
-                    'visible': false
-                    'searchable': false
-                  }
-                  {
-                    'targets': [ 6, 7, 8 ]
-                    'orderable': false
-                  }
-                ]
   
   
   # Inputs con fecha administrada por parte de jQuery
@@ -172,9 +202,43 @@ $(document).on 'turbolinks:load', ->
       newSum.call that
       return
     return
-  
+    
+  ############################################################################
+  #   Validación del formulario                                              #
+  ############################################################################
+  $('#lote_referencia').keyup ->
+    referencia = $('#lote_referencia')
+    if referencia.val().trim() == ""
+      $("#fa-check").remove()
+      referencia.parent().parent().parent()
+      .removeClass("has-error has-success has-feedback")
+      .addClass("has-error has-feedback")
+      referencia.parent()
+      .append("<span id='fa-check' class='fa fa-times form-control-feedback'></span>")
+    else
+      $("#fa-check").remove()
+      referencia.parent().parent().parent()
+      .removeClass("has-error has-success has-feedback")
+      .addClass("has-success has-feedback")
+      referencia.parent()
+      .append("<span id='fa-check' class='fa fa-check form-control-feedback'></span>")
+      
+  $("#lote_cliente_id").click ->
+    cliente = $("#lote_cliente_id")
+    if cliente.val().trim() == ""
+      cliente.parent().removeClass("has-error has-success")
+      .addClass("has-error")
+      cliente.parent().children(".input-group-btn").children()
+      .removeClass("btn-default btn-danger btn-success")
+      .addClass("btn-danger")
+    else
+      cliente.parent().removeClass("has-error has-success")
+      .addClass("has-success")
+      cliente.parent().children(".input-group-btn").children()
+      .removeClass("btn-default btn-danger btn-success")
+      .addClass("btn-success")
   return
-
+  # Fin del document ready
   
  $ ->
   $('a[data-remote]').on 'ajax:success', (e, data, status, xhr) ->

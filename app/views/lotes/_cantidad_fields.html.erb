@@ -1,7 +1,7 @@
 <div class="input-group">
 <%=f.input :cantidad, label: false, wrapper: false,
 input_html: { class: "cantidad#{n} input-sm input-group" } %>
-<%=f.hidden_field :total_id, :value => "",  class: "total#{n}" %>
+<%=f.hidden_field :total_id, :value => !@totales_tallas.nil? ? @totales_tallas.fetch(n - 1) : 0,  class: "total#{n}" %>
 <%=f.hidden_field :categoria_id, :value => n %>
 <%=f.hidden_field :_destroy %>    
 </div>

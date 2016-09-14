@@ -4,13 +4,37 @@
       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      <h4 class="modal-title" id="myModalLabel">LOTE <%=@lote.lote.referencia.referencia%></h4>
+      <h4 class="modal-title" id="myModalLabel">
+        Detalles del lote con referencia
+        <%=@lote.lote.referencia.referencia%>
+      </h4>
     </div>
     <div class="modal-body">
+      <p>
+        <strong>OP:</strong>
+        <%= @lote.lote.op %>
+      </p>
+      <p>
+        <strong>Cliente:</strong>
+        <%= @lote.lote.cliente.cliente %>
+      </p>
+      <p>
+        <strong>Empresa:</strong>
+        <%= @lote.lote.empresa %>
+      </p>
+      <p>
+        <strong>Descripción:</strong>
+        <%if @lote.lote.tipo_prenda.nil?%>
+            -
+        <%else%>
+          <%= @lote.lote.tipo_prenda.tipo %>
+        <%end%>
+      </p>
       <div class="row form-group">
         <div class="col-lg-4">
+          <!--Detalles del proceso actual-->
           <p>
-            <strong>Proceso actual:</strong>
+            <strong>Proceso:</strong>
             <%= @lote.estado.estado %>
           </p>
         </div>
@@ -24,20 +48,25 @@
       <div class="row form-group">
         <div class="col-lg-4">
           <p>
+            <strong>Proceso adicional:</strong>
+            <%if lote.sub_estado.nil?%>
+            -
+            <%else%>
+              <%= @lote.sub_estado.sub_estado %>
+            <%end%>
+          </p>
+        </div>
+        <!--Precios-->
+        <div class="col-lg-4">
+          <p>
             <strong>Precio unitario:</strong>
             <%= Lote.str_pesos @lote.lote.precio_u %>
           </p>
         </div>
         <div class="col-lg-4">
           <p>
-            <strong>Precio Total:</strong>
+            <strong>Precio total:</strong>
             <%= Lote.str_pesos @lote.lote.precio_t %>
-          </p>
-        </div>
-        <div class="col-lg-4">
-          <p>
-            <strong>Número de remisión:</strong>
-            <%= @lote.lote.no_remision %>
           </p>
         </div>
       </div>
@@ -50,59 +79,60 @@
         </div>
         <div class="col-lg-4">
           <p>
-            <strong>Cliente:</strong>
-            <%= @lote.lote.cliente.cliente %>
+            <strong>Número de remisión:</strong>
+            <%= @lote.lote.no_remision%>
           </p>
-        </div>
-        <div class="col-lg-4">
-          <%if @lote.lote.tipo_prenda.nil?%>
-          <p>
-            <strong>Descripción:</strong>
-            Sin descripción
-          </p>
-          <%else%>
-          <p>
-            <strong>Descripción:</strong>
-            <%= @lote.lote.tipo_prenda.tipo %>
-          </p>
-          <%end%>
         </div>
       </div>
+      
+      <h4>Detalles de insumos</h4>
       <div class="row form-group">
         <div class="col-lg-4">
           <p>
-            <strong>Empresa:</strong>
-            <%= @lote.lote.empresa %>
+            <strong>Día de revisión:</strong>
+            <%= @lote.lote.fecha_revision %>
           </p>
         </div>
         <div class="col-lg-4">
           <p>
-            <strong>OP:</strong>
-            <%= @lote.lote.op %>
+            <strong>Fecha de entrega:</strong>
+            <%= @lote.lote.fecha_entrega %>
           </p>
         </div>
         <div class="col-lg-4">
           <p>
-            <strong>Empresa:</strong>
-            <%= @lote.lote.empresa %>
+            <strong>Observaciones:</strong>
+            <%= @lote.lote.obs_insumos %>
           </p>
         </div>
       </div>
       <div class="row form-group">
         <div class="col-lg-4">
           <p>
-            <strong>Proceso adicional:</strong>
-            <%if !@lote.sub_estado.nil?%>
-              <%= @lote.sub_estado.sub_estado %>
-            <%end%>
+            <strong>Listos:</strong>
+            <%@lote.lote.fin_insumos ? "Si" : "No"%>
           </p>
         </div>
         <div class="col-lg-4">
         </div>
       </div>
+      <h4>Detalles de integración</h4>
+      <p>
+        <strong>Observaciones:</strong>
+        <%= @lote.lote.obs_integracion %>
+      </p>
+      <p>
+        <strong>Listo:</strong>
+        <%= @lote.lote.fin_integracion ? "Si" : "No" %>
+      </p>
+      <p>
+        <strong>Última edición:</strong>
+        El <%= I18n::localize @lote.lote.updated_at, :format => "%d de %b" %> 
+        por <%= @lote.lote.respon_edicion_id.name %>
+      </p>
       <div class="panel panel-info">
         <div class="panel-heading">
-              Detalle de cantidades
+          Detalle de cantidades
         </div>
         <div class="panel-body">
           <div class="table-responsive">
@@ -189,7 +219,7 @@
         <div class="btn-group">
           <%= link_to edit_lote_path(@lote.lote, :commit => "edit", :estado_id => @lote.estado.id), 
           class: "btn btn-primary" do |l|%>
-            <%=content_tag :i, "", :class => "glyphicon glyphicon-pencil"%>
+            <%=content_tag :i, "", :class => "fa fa-pencil"%>
             Editar
           <%end%>
           <%
@@ -217,7 +247,7 @@
           <% if boolean%>
             <%= link_to cambio_estado_path(@lote.lote, :btn => btn), 
             class: "btn btn-primary" do |l|%>
-              <%=content_tag :i, "", :class => "glyphicon glyphicon-triangle-right"%>
+              <%=content_tag :i, "", :class => "fa fa-forward"%>
               <%=men%>
             <%end%>
           <%end%>

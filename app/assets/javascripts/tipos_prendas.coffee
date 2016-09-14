@@ -2,34 +2,64 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).on 'turbolinks:load', ->
-  $('.tablas').DataTable
-    'scrollY': '581px'
-    'scrollCollapse': true
-    'paging': false
-    language:
-      processing: 'Cargando...'
-      search: 'Buscar&nbsp;:'
-      info: 'Resultados _START_ a _END_ de _TOTAL_ '
-      infoEmpty: 'No hay datos o intente de nuevo'
-      infoFiltered: '(filtrado de _MAX_ registros)'
-      infoPostFix: ''
-      loadingRecords: 'Cargando...'
-      zeroRecords: 'No se encuentran registros'
-      emptyTable: 'No hay datos disponibles'
+  
+  if !gon.rol_user
+    $('#t_clientes').DataTable
+      'scrollY': '581px'
+      'scrollCollapse': true
+      'paging': false
+      language:
+        processing: 'Cargando...'
+        search: 'Buscar&nbsp;:'
+        info: 'Resultados _START_ a _END_ de _TOTAL_ '
+        infoEmpty: 'No hay datos o intente de nuevo'
+        infoFiltered: '(filtrado de _MAX_ registros)'
+        infoPostFix: ''
+        loadingRecords: 'Cargando...'
+        zeroRecords: 'No se encuentran registros'
+        emptyTable: 'No hay datos disponibles'
+      columnDefs:[
+                    {
+                      'targets': [ 1..4 ]
+                      'orderable': false
+                    }
+                  ]
+  else
+    $('#t_clientes').DataTable
+      'scrollY': '581px'
+      'scrollCollapse': true
+      'paging': false
+      language:
+        processing: 'Cargando...'
+        search: 'Buscar&nbsp;:'
+        info: 'Resultados _START_ a _END_ de _TOTAL_ '
+        infoEmpty: 'No hay datos o intente de nuevo'
+        infoFiltered: '(filtrado de _MAX_ registros)'
+        infoPostFix: ''
+        loadingRecords: 'Cargando...'
+        zeroRecords: 'No se encuentran registros'
+        emptyTable: 'No hay datos disponibles'
+      columnDefs:[
+                    {
+                      'targets': [ 1..3 ]
+                      'orderable': false
+                    }
+                  ]
+  
   $('.tablas2').DataTable
-    'scrollY': '190px'
-    'scrollCollapse': true
-    'paging': false
-    language:
-      processing: 'Cargando...'
-      search: 'Buscar&nbsp;:'
-      info: 'Resultados _START_ a _END_ de _TOTAL_ '
-      infoEmpty: 'No hay datos o intente de nuevo'
-      infoFiltered: '(filtrado de _MAX_ registros)'
-      infoPostFix: ''
-      loadingRecords: 'Cargando...'
-      zeroRecords: 'No se encuentran registros'
-      emptyTable: 'No hay datos disponibles'
+      'scrollY': '190px'
+      'scrollCollapse': true
+      'paging': false
+      language:
+        processing: 'Cargando...'
+        search: 'Buscar&nbsp;:'
+        info: 'Resultados _START_ a _END_ de _TOTAL_ '
+        infoEmpty: 'No hay datos o intente de nuevo'
+        infoFiltered: '(filtrado de _MAX_ registros)'
+        infoPostFix: ''
+        loadingRecords: 'Cargando...'
+        zeroRecords: 'No se encuentran registros'
+        emptyTable: 'No hay datos disponibles'  
   $('#on_cliente').on 'click', ->
     #muestra solo el pánel de referencias
     $('#tip_est').slideUp 600 

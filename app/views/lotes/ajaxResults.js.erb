@@ -1,9 +1,10 @@
 <% #Acciones %>
 
 <% if params[:place] == "form_lote_tipo_prenda"%>
-    $("#myModal").html("<%= escape_javascript(render 'tipos_prendas/form') %>");
+    $("#myModal").html("<%= escape_javascript(render 'tipos_prendas/form') %>"); 
 <%elsif params[:place] == "form_lote_response"%>
     var updatedTipos = $('#lote_tipo_prenda_id', $('<%= j render "lotes/updateForm" %>'));
+    console.log(updatedTipos);
     $('#lote_tipo_prenda_id').replaceWith(updatedTipos);
     $('#myModal').modal('toggle');
 <%elsif params[:place] == "form_lote_cliente"%>
@@ -27,7 +28,6 @@
 <%elsif params[:place] == "form_lote_sub_estado_response"%>
     $('#form_lote_estado_update').replaceWith('<%= j render 'estados/form_for_lote' %>');
     $('#myModal').modal('toggle');
-
 <%elsif params[:place] =="form_edit_lote_response" || params[:place] =="form_new_lote_response"%>
     $("#myModal").html("<%= escape_javascript(render 'lotes/view_datails', lote: @lote) %>");
     $("#myModal").modal('toggle');

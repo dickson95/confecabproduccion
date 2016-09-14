@@ -7,9 +7,9 @@
       <div class="col-lg-6">
         <div class="col-lg-offset-11">
           <h4>
-            <% if can? :manage, Estado %>
+            <% if can? :manage, SubEstado %>
               <%= link_to new_sub_estado_path, class:"pull-right btn btn-default btn-circle" do %>
-                <%= content_tag :i, "", :class => "glyphicon glyphicon-plus" %>
+                <%= content_tag :i, "", :class => "fa fa-plus" %>
               <%end%>
             <%end%>
           </h4>
@@ -22,7 +22,9 @@
       <thead>
         <tr>
           <th>Proceso</th>
-          <th></th>
+          <% if can? :manage, SubEstado %>
+            <th></th>
+          <%end%>
         </tr>
       </thead>
     
@@ -30,18 +32,20 @@
         <% @sub_estados.each do |sub_estado| %>
           <tr>
             <td><%= sub_estado.sub_estado %></td>
-            <td>
-              <div class="btn-group">
-                <%= link_to edit_sub_estado_path(sub_estado), class: "btn btn-primary",
-                :title => "Editar proceso" do%>
-                  <%=content_tag :i ,"", :class => "glyphicon glyphicon-pencil"%>
-                <%end%>
-                <%= link_to sub_estado, method: :delete, class: "btn btn-danger",
-                data: { confirm: 'Are you sure?' }, :title => "Eliminar proceso" do%>
-                  <%=content_tag :i, "", :class => "glyphicon glyphicon-remove"%>
-                <%end%>
-              </div>
-            </td>
+            <% if can? :manage, SubEstado %>
+              <td>
+                <div class="btn-group">
+                  <%= link_to edit_sub_estado_path(sub_estado), class: "btn btn-primary",
+                  :title => "Editar proceso" do%>
+                    <%=content_tag :i ,"", :class => "fa fa-pencil"%>
+                  <%end%>
+                  <%= link_to sub_estado, method: :delete, class: "btn btn-danger",
+                  data: { confirm: 'Are you sure?' }, :title => "Eliminar proceso" do%>
+                    <%=content_tag :i, "", :class => "fa fa-trash-o"%>
+                  <%end%>
+                </div>
+              </td>
+            <%end%>
           </tr>
         <% end %>
       </tbody>

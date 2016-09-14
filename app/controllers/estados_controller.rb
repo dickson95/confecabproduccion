@@ -9,11 +9,6 @@ class EstadosController < ApplicationController
     @estados = Estado.all
   end
 
-  # GET /estados/1
-  # GET /estados/1.json
-  def show
-  end
-
   # GET /estados/new
   def new
     @estado = Estado.new

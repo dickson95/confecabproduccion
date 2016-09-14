@@ -35,7 +35,8 @@ class ClientesController < ApplicationController
           @cliente = Cliente.last
           format.js {render "lotes/ajaxResults"}
         else
-          format.html { redirect_to @cliente, notice: 'Cliente guardado con éxito.' }
+          format.html { redirect_to @cliente }
+          flash[:success] = "Cliente guardado con éxito."
           format.json { render :show, status: :created, location: @cliente }
         end
       else
@@ -56,7 +57,8 @@ class ClientesController < ApplicationController
   def update
     respond_to do |format|
       if @cliente.update(cliente_params)
-        format.html { redirect_to @cliente, notice: 'Actualización correcta.' }
+        format.html { redirect_to @cliente }
+        flash[:success] = "Actualización correcta."
         format.json { render :show, status: :ok, location: @cliente }
       else
         format.html { render :edit }
@@ -70,7 +72,8 @@ class ClientesController < ApplicationController
   def destroy
     @cliente.destroy
     respond_to do |format|
-      format.html { redirect_to tipos_prendas_path, notice: 'Cliente eliminado.' }
+      format.html { redirect_to tipos_prendas_path }
+      flash[:success] = "Cliente eliminado."
       format.json { head :no_content }
     end
   end
@@ -98,3 +101,4 @@ class ClientesController < ApplicationController
       :mensaje, :asunto)
     end
 end
+

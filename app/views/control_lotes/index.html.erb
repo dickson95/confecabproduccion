@@ -28,28 +28,28 @@
             <% else %>
               <td></td>
             <% end %>
-            <td>
+            <td class="col-xs-1">
               <% if control_lote.lote.referencia != nil %>
                 <%= control_lote.lote.referencia.referencia %>
               <% end %>
             </td>
-            <td><%= I18n::localize(control_lote.fecha_ingreso, :format => "%d de %b %I:%M %p") %></td>
+            <td class="col-xs-2"><%= I18n::localize(control_lote.fecha_ingreso, :format => "%d de %b %H:%M ") %></td>
             <% if control_lote.fecha_salida.nil? %>
-              <td>Aun no sale</td>
+              <td>-</td>
             <% else %>
-              <td><%= I18n::localize(control_lote.fecha_salida, :format => "%d de %b %I:%M %p") %></td>
+              <td class="col-xs-2"><%= I18n::localize(control_lote.fecha_salida, :format => "%d de %b %H:%M ") %></td>
             <% end  %>
             <td><%= control_lote.estado.estado %></td>
             <td><%= control_lote.min_u %></td>
             <%if control_lote.resp_ingreso_id.nil?%>
               <td></td>
             <%else%>
-              <td><%= control_lote.resp_ingreso_id.name %></td>
+              <td  class="col-xs-2"><%= control_lote.resp_ingreso_id.name %></td>
             <%end%>
             <%if control_lote.resp_salida_id.nil?%>
-              <td></td>
+              <td>-</td>
             <%else%>
-              <td><%= control_lote.resp_salida_id.name %></td>
+              <td class="col-xs-2"><%= control_lote.resp_salida_id.name %></td>
             <%end%>
           </tr>
         <% end %>

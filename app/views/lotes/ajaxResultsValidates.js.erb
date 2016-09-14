@@ -10,20 +10,6 @@
     $("#cliente_cliente").parent().addClass("has-error");
     $("#error_div_cliente").html("<%= @cliente.errors[:cliente] %>");
     $("#error_div_email").html("<%= @cliente.errors[:email] %>");
-<%elsif params[:place] =="form_new_lote_response"%>
-    $("#alert").show();
-    <%if !@lote.errors[:referencia].empty?%>
-        $("#error_div_referencia").html("<%= @lote.errors[:referencia] %>");
-        $("#lote_referencia").parent().addClass("has-error");
-    <%end%>
-    <%if !@lote.errors[:empresa].empty?%>
-        $("#error_div_empresa").html("<%= @lote.errors[:empresa] %>");
-        $("#lote_empresa").parent().addClass("has-error");
-    <%end%>
-    <%if !@lote.errors[:cliente].empty?%>
-        $("#error_div_cliente").html("<%= @lote.errors[:cliente] %>");
-        $("#lote_cliente_id").parent().addClass("has-error");
-    <%end%>
 <%elsif params[:place] =="form_edit_lote"%>
     $('#form_collapse').html("<%= escape_javascript(render 'form', lote: @lote)%>")
 <%elsif params[:place] =="form_edit_lote_response"%>
@@ -40,5 +26,17 @@
     <%if !@lote.errors[:cliente].empty?%>
         $("#error_div_cliente").html("<%= @lote.errors[:cliente] %>");
         $("#lote_cliente_id").parent().addClass("has-error");
+    <%end%>
+<%elsif params[:place] == "form_lote_sub_estado_response"%>
+    <%puts "respuesta"%>
+    $("#alert").show();
+    <%if !@sub_estado.errors[:sub_estado].empty?%>
+        $("#sub_estado_sub_estado").parent().addClass("has-error");
+        $("#error_sub_div").html("No puede estar en blanco");
+    <%end%>
+    <%puts "estados #{@sub_estado.errors[:estado]}"%>
+    <%if !@sub_estado.errors[:estado].empty?%>
+        $("#sub_estado_estado_id").parent().addClass("has-error");
+        $("#error_estado_div").html("No puede estar en blanco");
     <%end%>
 <%end%>

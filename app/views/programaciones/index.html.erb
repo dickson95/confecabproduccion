@@ -1,14 +1,14 @@
 <% content_for :title do  "Programación" end%>
 <p id="notice"><%= notice %></p>
 <div class="panel panel-default">
-  <div class="panel panel-heading">
+  <div class="panel-heading">
     <div class="row">
       <div class="col-lg-6">
         <h1>Programaciones</h1>
       </div>
     </div>
   </div>
-  <div class="panel panel-body">
+  <div class="panel-body">
     <table class ="table">
       <thead>
         <tr>
@@ -33,11 +33,13 @@
         <% @programacion_lotes.each do |programacion| %>
           <tr>
             <td><%= programacion.cliente.cliente %></td>
-            <td><%= programacion.descripcion %></td>
+            <td>
+              <%= programacion.tipo_prenda.nil? ? "-" : programacion.tipo_prenda.tipo%>
+            </td>
             <td><%= secuencia %><% secuencia = secuencia + 1  %></td>
             <td><%= programacion.referencia.referencia %></td>
-            <td class="text-right"><%= Lote.str_pesos(programacion.precio_u)%></td>
-            <td class="text-right"><%= Lote.str_pesos(programacion.precio_t) %></td>
+            <td class="text-right"><%= Lote.str_pesos programacion.precio_u%></td>
+            <td class="text-right"><%= Lote.str_pesos programacion.precio_t %></td>
             <td><%= programacion.meta %></td>
             <td><%= programacion.h_req %></td>
             <td><%= programacion.mes %></td>
@@ -52,7 +54,7 @@
       </tbody>
     </table>
   </div>
-  <div class="panel panel-footer">
+  <div class="panel-footer">
     <p>Costo total: $<%=@costo_total%></p>
     <p>Horas requeridas:&nbsp;<%=@horas_t%></p>
   </div>

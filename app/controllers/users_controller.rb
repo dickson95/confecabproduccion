@@ -1,9 +1,10 @@
 class UsersController < ApplicationController
-  before_filter :authorize_admin, only: :create
-  before_action :set_user, only: [:only, :show]
+  before_action :set_user, only: [:only, :show, :destroy]
+  
+  # Validación de autorización
+  load_and_authorize_resource
   def index
     @users = User.all
-    @id_user = current_user.id
   end
   def new
     @user = User.new
@@ -19,37 +20,39 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
   
-    respond_to do |wants|
+    respond_to do |format|
       if @user.save
-        flash[:notice] = 'User was successfully created.'
-        wants.html { redirect_to(@user) }
-        wants.json  { render :json => @user, :status => :created, :location => @user }
+        flash[:success] = 'Usuario registrado con éxito.'
+        format.html { redirect_to(@user) }
+        format.json  { render :json => @user, :status => :created, :location => @user }
       else
-        wants.html { render :action => "new" }
-        wants.json  { render :json => @user.errors, :status => :unprocessable_entity }
+        format.html { render :action => "new" }
+        format.json  { render :json => @user.errors, :status => :unprocessable_entity }
       end
     end
   end
   
   def destroy
-    @user = User.find(params[:id])
     
-    if @user.destroy
-  
+    if @user.id != 1
+      if @user.destroy
+    
+        respond_to do |format|
+          format.html { redirect_to users_path }
+          flash[:success] = "Usuario eliminado correctamente"
+          format.json  { head :no_content }
+        end
+      end
+    else
       respond_to do |format|
-        format.html { redirect_to users_path, notice: 'Usuario eliminado.' }
-        format.json  { head :no_content }
+        format.html { redirect_to users_path }
+        flash[:danger] = "Este usuario no puede ser eliminado"
+        format.json { head :conflict }
       end
     end
   end
   
   private
-   
-    def authorize_admin
-      return unless !current_user.has_rol? :admin
-      redirect_to root_path, alert: '¡Sólo administradores!'
-    end
-  
     def user_params
       params.require(:user).permit(:username, :email, :password, :password_confirmation, :name,
       :telefono, :remember_me, :rol_ids => [] )

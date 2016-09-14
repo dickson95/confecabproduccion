@@ -50,9 +50,8 @@
   </div>
 </div>
 <div class="row" id="tip_est">
-  <!--Panel de referencias-->
+  <!--Panel de prendas-->
   <div class="col-lg-6 page-header" id="p_tipos_prendas">
-    <!--Panel de prendas-->
     <section>
       <div class=" panel panel-default">
         <!--Panel de tipos de prendas-->
@@ -66,7 +65,7 @@
                 <h4>
                   <% if can? :manage, TipoPrenda %>
                     <%= link_to new_tipo_prenda_path, class:"pull-right btn btn-default btn-circle" do %>
-                      <%= content_tag :i, "", :class => "glyphicon glyphicon-plus" %>
+                      <%= content_tag :i, "", :class => "fa fa-plus" %>
                     <%end%>
                   <%end%>
                 </h4>
@@ -92,12 +91,12 @@
                   <td>
                     <div class="btn-group">
                       <%= link_to edit_tipo_prenda_path(tipo_prenda), :title =>"Editar", class: "btn btn-primary" do%>
-                            <%= content_tag(:i, "", :class => "glyphicon glyphicon-pencil") %>
+                            <%= content_tag(:i, "", :class => "fa fa-pencil") %>
                       <% end %>
                       <%= link_to tipo_prenda, remote: true, method: :delete, :title => "Eliminar",
                       data: { confirm: '¿Seguro desea eliminar el registro?' }, 
                       class: "btn btn-danger" do %>
-                        <%= content_tag(:i, "", :class => "glyphicon glyphicon-remove") %>
+                        <%= content_tag(:i, "", :class => "fa fa-trash-o") %>
                       <% end %>
                     </div>
                   </td>

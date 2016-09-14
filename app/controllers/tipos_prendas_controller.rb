@@ -38,7 +38,8 @@ class TiposPrendasController < ApplicationController
           @tipo_prenda = TipoPrenda.last
           format.js {render "/lotes/ajaxResults"}
         else
-          format.html { redirect_to @tipo_prenda, notice: 'Tipo prenda was successfully created.' }
+          format.html { redirect_to @tipo_prenda}
+          flash[:success] = "Descripción creada correctamente"
           format.json { render :show, status: :created, location: @tipo_prenda }
         end
       else
@@ -59,7 +60,8 @@ class TiposPrendasController < ApplicationController
   def update
     respond_to do |format|
       if @tipo_prenda.update(tipo_prenda_params)
-        format.html { redirect_to @tipo_prenda, notice: 'Tipo prenda was successfully updated.' }
+        format.html { redirect_to @tipo_prenda}
+        flash[:success] = "Descripción actualizada"
         format.json { render :show, status: :ok, location: @tipo_prenda }
       else
         format.html { render :edit }
@@ -73,7 +75,8 @@ class TiposPrendasController < ApplicationController
   def destroy
     @tipo_prenda.destroy
     respond_to do |format|
-      format.html { redirect_to tipos_prendas_url, notice: 'Prenda eliminada.' }
+      format.html { redirect_to tipos_prendas_url }
+      flash[:success] = "Descripción eliminada."
       format.json { head :no_content }
     end
   end

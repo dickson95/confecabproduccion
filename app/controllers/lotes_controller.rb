@@ -28,6 +28,7 @@ class LotesController < ApplicationController
     end
   end
   
+  # Añadir las tablas especificadas acá desde le formulario de lote
   def add_remote_data
     if params[:place] == "form_lote_cliente"
       @cliente = Cliente.new
@@ -56,19 +57,12 @@ class LotesController < ApplicationController
     @lote = Lote.new
     @colores_lotes = @lote.colores_lotes.build
     @cantidades = @colores_lotes.cantidades.build
-=begin
-    respond_to do |format|
-      format.js{render 'ajaxResults'}
-      format.html
-    end
-=end
   end
 
   # GET /lotes/1/edit
   def edit
     if @lote.colores_lotes.empty?
       @colores_lotes = @lote.colores_lotes.build
-      puts "sin colores"
       (0..8).each{|n| @cantidades = @colores_lotes.cantidades.build}
     else
       @totales = Array.new
@@ -96,12 +90,17 @@ class LotesController < ApplicationController
   def create
     @lote = Lote.new(lote_params)
     respond_to do |format|
+      
       if @lote.save
         @lote = ControlLote.last
+        ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user)
         format.html{ redirect_to lotes_path }
         format.js{ render "ajaxResults" }
       else
-        format.js { render 'ajaxResultsValidates' }
+        set_tipo_prenda
+        @colores_lotes = @lote.colores_lotes.build
+        (0..8).each{|n| @cantidades = @colores_lotes.cantidades.build }
+        format.html { render :new }
         format.json { render json: @lote.errors, status: :unprocessable_entity }
       end
     end
@@ -110,39 +109,39 @@ class LotesController < ApplicationController
   # PATCH/PUT /lotes/1
   # PATCH/PUT /lotes/1.json
   def update
-    #Se consulta si el lote ya tienen este estado dentro de los procesos
-    lote = ControlLote.joins(:lote).where(['lote_id=? and estado_id=?', params[:id], 
-    params[:lote][:control_lotes_attributes][:'0'][:estado_id]])
     boolean = false
-    if lote.empty?
-      time = Time.local
-      
-      #Actualización de fecha para el último estado
-      id = ControlLote.where(["lote_id=?", params[:id]]).maximum(:id)
-      lote = ControlLote.find(id)
-      
-      #Método de minutos
-      min = Lote.minutos_proceso(lote.fecha_ingreso, time)
-      ControlLote.where(:id => id).update(fecha_salida: time, min_u: min,
-        resp_salida_id: current_user)
-      boolean = true
-    elsif (params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id] != "")
-      lote_sp = ControlLote.joins(:lote).where(['lote_id=? and estado_id=? and  sub_estado_id=?', params[:lote][:id], 
-      params[:lote][:control_lotes_attributes][:'0'][:estado_id],
-      params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]])
-      if lote_sp.empty? 
-        time = Time.new
-      
-        #Actualización de fecha para el último estado
-        id = ControlLote.where(["lote_id=?", params[:id]]).maximum(:id)
-        #Estado a confección. Anteriormente estaba en integración
-        lote = ControlLote.find(id)
-        #método de minutos
-        min = Lote.minutos_proceso(lote.fecha_ingreso, time)
-        ControlLote.where(:id => id).update(fecha_salida: time, min_u: min,
-        resp_salida_id: current_user)
+    # Se consulta el último estado del lote para ser comparado con el actual
+    lote = ControlLote.where(lote_id: params[:id]).joins(:estado)
+              .order("control_lotes.id desc").limit(1)
+              .pluck("estados.id", "control_lotes.fecha_ingreso",
+              "control_lotes.id", "control_lotes.sub_estado_id", 
+              "control_lotes.id").last
+    # Id del estado en variable est_id
+    est_id = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
+    if lote.fetch(0) == est_id.to_i
+      # Id del subestado en variable sub_id
+      sub_id = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
+      if sub_id == ""
+        sub_id = 0
+      end
+      if lote.fetch(3) != sub_id.to_i
         boolean = true
       end
+    else
+      boolean = true
+    end
+    
+    # Actualizar fecha salida, responsable de salida, minutos del historial
+    if boolean
+      puts "actualización de usuario de salida, tiempo y demás"
+      time = Time.new()
+      updated = ControlLote.where(:id => lote.fetch(2)).update(fecha_salida: time)
+      #Método de minutos
+      $up
+      updated.each{|u| $up = u.fecha_salida}
+      min = Lote.minutos_proceso(lote.fetch(1), $up)
+      ControlLote.where(:id => lote.fetch(2)).update(min_u: min,
+      resp_salida_id: current_user)
     end
     # Respuesta a la solicitud de actualización
     respond_to do |format|
@@ -150,9 +149,11 @@ class LotesController < ApplicationController
       if @lote.update(boolean ? lote_params : lote_params_u )
         if boolean
           ult = ControlLote.last
-          ControlLote.where(:id => ult).update(resp_ingreso_id: current_user)
+          ControlLote.where(:id => ult).update(resp_ingreso_id: current_user, 
+          fecha_salida: est_id == "5" ? time : nil, resp_salida_id: est_id == "5" ? current_user : nil)
         end
-        format.html{ redirect_to lotes_path, notice:"Lote actualizado" }
+        format.html{ redirect_to lotes_path }
+        flash[:success] = "Lote actualizado correctamente"
       else
         format.js { render 'ajaxResultsValidates' }
         format.json { render json: @lote.errors, status: :unprocessable_entity }
@@ -169,7 +170,8 @@ class LotesController < ApplicationController
     ControlLote.where(:id => id).update(fecha_salida: time)
     lote = ControlLote.find(id)
     #método de minutos
-    min = Lote.minutos_proceso(lote.fecha_ingreso, lote.fecha_salida)   
+    min = Lote.minutos_proceso(lote.fecha_ingreso, lote.fecha_salida)
+    
     ControlLote.where(:id => id).update(min_u: min, 
     resp_salida_id: current_user)
     estado = 0
@@ -183,7 +185,7 @@ class LotesController < ApplicationController
         men = "confección"
       when '4' # terminar
         estado = 4
-        men = "integración"
+        men = "terminación"
       when '5' # completar
         estado = 5
         men = "completado"
@@ -191,12 +193,14 @@ class LotesController < ApplicationController
     # Asignación de parámetros para el nuevo control a registrar. Responsable
     # por el movimiento
     @control_lote = ControlLote.new(:lote_id => params[:id], :estado_id => estado, 
-    :fecha_ingreso => time, :resp_ingreso_id => current_user, :fecha_salida => estado == 5 ? time : nil)
+    :fecha_ingreso => time, :resp_ingreso_id => current_user, :fecha_salida => estado == 5 ? time : nil,
+    :resp_salida_id => estado == 5 ? current_user : nil)
  
     respond_to do |format|
       # Nuevo estado en el historial de los lotes
       if @control_lote.save
-        format.html { redirect_to lotes_path, notice: "Lote #{men=="completado" ? men : "cambiado a #{men}"}." }
+        format.html { redirect_to lotes_path }
+        flash[:info] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}." 
         format.json { render :index, status: :ok, location: @control_lote }
       else
         @lotes = ControlLote.select(:lote_id).map(&:lote_id).uniq
@@ -211,7 +215,8 @@ class LotesController < ApplicationController
   def destroy
     @lote.destroy
     respond_to do |format|
-      format.html { redirect_to lotes_url, notice: 'Registro eliminado con éxito.' }
+      format.html { redirect_to lotes_url }
+      flash[:success] = "Registro eliminado con éxito."
       format.json { head :no_content }
     end
   end
@@ -326,7 +331,7 @@ class LotesController < ApplicationController
           end  
         end
       end
-        Rails.logger.info("PARAMS: #{params.inspect}")
+      # Rails.logger.info("PARAMS: #{params.inspect}")
     end
     
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160827140219) do
+ActiveRecord::Schema.define(version: 20160912121224) do
 
   create_table "asignaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -72,9 +72,8 @@ ActiveRecord::Schema.define(version: 20160827140219) do
     t.integer  "estado_id",                                           null: false
     t.datetime "created_at",                                          null: false
     t.datetime "updated_at",                                          null: false
-    t.integer  "sub_estado_id"
+    t.integer  "sub_estado_id",                           default: 0
     t.decimal  "min_u",           precision: 9, scale: 2
-    t.decimal  "min_p_total",     precision: 9, scale: 2
     t.integer  "resp_ingreso_id",                         default: 9, null: false
     t.integer  "resp_salida_id"
     t.index ["estado_id"], name: "index_control_lotes_on_estado_id", using: :btree
@@ -92,10 +91,8 @@ ActiveRecord::Schema.define(version: 20160827140219) do
 
   create_table "lotes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "empresa"
-    t.string   "color_prenda"
     t.string   "no_remision"
     t.string   "no_factura"
-    t.string   "prioridad"
     t.string   "op",                                          null: false
     t.date     "fecha_revision"
     t.date     "fecha_entrega"
@@ -106,7 +103,6 @@ ActiveRecord::Schema.define(version: 20160827140219) do
     t.integer  "tipo_prenda_id"
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
-    t.text     "descripcion",       limit: 65535
     t.integer  "meta"
     t.integer  "h_req",                           default: 0
     t.integer  "h_total"

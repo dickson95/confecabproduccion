@@ -36,12 +36,18 @@ class SubEstadosController < ApplicationController
           params[:estado_id] = @sub_estado.estado.id
           format.js{ render 'lotes/ajaxResults' }
         else
-          format.html { redirect_to tipos_prendas_path, 
-          notice: 'Proceso registrado con éxito' }
+          format.html { redirect_to tipos_prendas_path }
+          flash[:success] = "Proceso registrado con éxito"
         end
       else
-        format.html { render :new }
-        format.json { render json: @sub_estado.errors, status: :unprocessable_entity }
+        if params[:place] == "form_lote_sub_estado_response"
+          format.html { render :new }
+          format.js { render "lotes/ajaxResultsValidates" }
+          format.json { render json: @sub_estado.errors, status: :unprocessable_entity }
+        else
+          format.html { render :new }
+          format.json { render json: @sub_estado.errors, status: :unprocessable_entity }
+        end
       end
     end
   end
@@ -51,8 +57,8 @@ class SubEstadosController < ApplicationController
   def update
     respond_to do |format|
       if @sub_estado.update(sub_estado_params)
-        format.html { redirect_to tipos_prendas_path, 
-        notice: 'Proceso actualizado correctamente' }
+        format.html { redirect_to tipos_prendas_path }
+        flash[:success] = "Proceso actualizado correctamente"
       else
         format.html { render :edit }
         format.json { render json: @sub_estado.errors, status: :unprocessable_entity }
@@ -65,7 +71,8 @@ class SubEstadosController < ApplicationController
   def destroy
     @sub_estado.destroy
     respond_to do |format|
-      format.html { redirect_to tipos_prendas_path, notice: 'Proceso eliminado con éxito' }
+      format.html { redirect_to tipos_prendas_path }
+      flash[:success] = "Proceso eliminado con éxito"
       format.json { head :no_content }
     end
   end
