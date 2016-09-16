@@ -76,11 +76,6 @@ $(document).on 'turbolinks:load', ->
     color = $('#color_all').val()
     $('.color_uniq').val color
     return
-  	
-  $('.remove_fields').on 'click',  (event) ->
-  	$(this).prev('input[type=hidden]').val('1')
-  	$(this).closest('fieldset').hide()
-  	event.preventDefault()
   
   # Nuevos campos para la tabla con las cantidades y colores
   $('.add_fields').on 'click',  (event) ->

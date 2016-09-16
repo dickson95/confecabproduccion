@@ -1,3 +1,4 @@
+
 <div class="row">
   <div class=" col-md-12">
     <%
@@ -9,17 +10,17 @@
     end
     %>
     <%= simple_form_for(@lote, 
-    :url => params[:action]=="edit" ? lote_path(:place => place) : lotes_path(:place => place), 
-    wrapper: :vertical_input_group,
-        wrapper_mappings: {
-          check_boxes: :horizontal_radio_and_checkboxes,
-          radio_buttons: :horizontal_radio_and_checkboxes,
-          file: :horizontal_file_input,
-          boolean: :horizontal_boolean
-        }) do |f| %>
+      :url => params[:action]=="edit" ? lote_path(:place => place) : lotes_path(:place => place), 
+      wrapper: :vertical_input_group) do |f|
+    %>
+    
         <%= f.error_notification %>
+        
+<!--inicio form-inputs-->
       <div class="form-inputs">
-<!--Form para integración-->
+<!--#########################################################################-->
+<!--_______________________Form para otros roles_____________________________-->
+<!--#########################################################################-->
         <% if @rol_form == "coor_integracion" || @rol_form == "coor_tiempos" || 
         @rol_form == "admin"%>
           <div class="row">
@@ -33,7 +34,7 @@
                 </div>
               </div>
           </div>
-          <!--Primera fila-->
+      <!--Otros roles Primera fila-->
           <div class="row">
             <div class="col-sm-9">
               <div class="col-sm-4">
@@ -58,7 +59,7 @@
                     <%= f.input :cliente_id do %>
                       <%= f.input_field  :cliente_id, class: "form-control", 
                       :collection => @clientes, 
-                      :value_method => :id%>
+                      :value_method => :id, :include_blank => "-- seleccione cliente --"%>
                       <div class="input-group-btn">
                         <%= link_to '...', add_remote_data_path(:place => "form_lote_cliente"),{:remote => true, 
                           'data-toggle' =>  "modal", 'data-target' => '#myModal', 
@@ -68,7 +69,7 @@
                   </div>
                   <div id="error_div_cliente" class="text-danger"></div>
                   <%  else %>
-                    <%= f.association :cliente, :disabled => true %>
+                    <%= f.association :cliente, :disabled => :disabled %>
                   <%  end %>
               </div>
               <div class="col-sm-4">
@@ -76,7 +77,7 @@
                   <%= f.input :tipo_prenda_id,  label: "Descripción" do %>
                     <%= f.input_field  :tipo_prenda_id, class: "form-control",
                     :collection => @tipos_prendas,
-                    :value_method => :id %>
+                    :value_method => :id, :include_blank => "-- seleccione descripción --" %>
                     <div class="input-group-btn">
                       <%= link_to '...', add_remote_data_path(:place => "form_lote_tipo_prenda"),{:remote => true, 
                       'data-toggle' =>  "modal", 'data-target' => '#myModal', 
@@ -87,17 +88,17 @@
               </div>
               <div class="col-sm-4">
                 <div style="padding-top: 15px; padding-bottom: 19px;">
-                  <%=f.label :empresa%><br>
-                  <%= f.collection_radio_buttons :empresa, [['CAB'],[ 'D&C']],
+                  <%=f.label :empresa_cab%><br>
+                  <%= f.collection_radio_buttons :empresa, [['CAB', 'CAB'],[ 'D&C','D&C']],
                   :first, :last, item_wrapper_class: 'radio-inline', checked: 'CAB',
-                  label: false%>
+                  label: false, item_wrapper_tag: :div %>
                 </div>
               </div>
               <div class="col-sm-4" style="padding-top:15px">
-                <%=f.label :fin_integracion, label: "¿Ingreso completado?"%><br>
+                <%=f.label :fin_integracion_true, label: "¿Ingreso completado?"%><br>
                 <%= f.collection_radio_buttons :fin_integracion, [[true, 'Sí'], [false, 'No']], 
-                :first, :last, label: false,
-                      item_wrapper_class: 'radio-inline', item_wrapper_tag: :label, checked: true %>
+                :first, :last, {item_wrapper_class: 'radio-inline', 
+                item_wrapper_tag: :div, checked: true} %>
               </div>
             </div>
             <div class="col-sm-3">
@@ -105,18 +106,25 @@
                 :label => 'Notas de integración'%>
             </div>
           </div>
-              <div class="row">
+      <!--Otros roles Fin primera fila-->
+      <!--Otros roles Segunda fila-->
+          <div class="row">
                 <div class="panel">
                   <div class="panel panel-heading"></div>
                 </div>
               </div>
+      <!--Otros roles Fin segunda fila-->
         <%end%>
-<!--Fin zona de integración-->
+<!--_________________________Otros roles fin form____________________________-->
+
+<!--#########################################################################-->
+<!--____________Form para insumos(tiempos, admin tienen acceso_______________-->
+<!--#########################################################################-->      
        
-       
-<!--Zona de form para insumos-->
+<!--Form para insumos(tiempos, admin tienen acceso)-->
         <% if @rol_form == "aux_insumos" || @rol_form == "coor_tiempos" ||
         @rol_form == "admin"%>
+          <!--Panel introducción a insumos-->
           <div class="panel">
             <div class="panel-heading panel-primary">
               <div class="row">
@@ -129,28 +137,29 @@
                 </div>
                 <div class="col-lg-6">
                   <%if !@lote.cliente.nil?%>
-                  <div class="col-lg-3">
-                    <h3>Cliente</h3>
-                    <p>
-                      <%=@lote.cliente.cliente%>
-                    </p>
-                  </div>
-                  <div class="col-lg-3">
-                    <h3>Referencia</h3>
-                    <p>
-                      <%= @lote.referencia.referencia%>
-                    </p>
-                  </div>
+                    <div class="col-lg-3">
+                      <h3>Cliente</h3>
+                      <p>
+                        <%=@lote.cliente.cliente%>
+                      </p>
+                    </div>
+                    <div class="col-lg-3">
+                      <h3>Referencia</h3>
+                      <p>
+                        <%= @lote.referencia.referencia%>
+                      </p>
+                    </div>
                   <%end%>
                 </div>
               </div>
             </div>
           </div>
+          <!--Fin panel introducción a insumos-->
           <%if @rol_form == "aux_insumos" && params[:action]=="edit"%>
-          <%= f.hidden_field :referencia, :value => "#{@lote.referencia.referencia}"%>
+            <%= f.hidden_field :referencia, :value => "#{@lote.referencia.referencia}"%>
           <%end%>
+          <!--Fila insumos-->
           <div class="row">
-            <!--Fila 1-->
             <div class="col-lg-12">
               <div class="col-md-4">
                 <div>
@@ -159,7 +168,7 @@
                     input_html: {:value => I18n::localize(Time.zone.utc_to_local(Time.new) + 60, :format => "%Y-%m-%d")},
                     readonly: true, label: 'Entró a insumos el:'  %>
                   <%else%>
-                  <%=f.input :fecha_entrada, as: "string", disabled: true%>
+                  <%=f.input :fecha_entrada, as: "string", disabled: :disabled%>
                   <%end%>
                 </div>
                 <div>
@@ -173,7 +182,7 @@
                   :autocomplete => "off"  }%>
                 </div>
                 <div style="padding-top:15px">
-                  <%= f.label :fin_insumos, label: "¿Insumos listos?"%> <br>
+                  <%= f.label :fin_insumos_true, label: "¿Insumos listos?"%> <br>
                   <%= f.collection_radio_buttons :fin_insumos, [[true, 'Sí'], [false, 'No']], :first, :last, label: false,
                       item_wrapper_class: 'radio-inline', item_wrapper_tag: :label, checked: true %>
                 </div>
@@ -183,12 +192,13 @@
               </div>
             </div>
           </div>
-<!--Form estados-->
+          <!--Fin fila insumos-->
         <%end%>
-<!--Fin zona form para insumos-->    
+<!--______________________Fin zona form para insumos_________________________-->    
 
-
-<!--Detalle de cantidades--> 
+<!--#########################################################################-->
+<!--_________________________Detalle de cantidades___________________________-->
+<!--#########################################################################--> 
         <div class="row">
           <div class="col-md-12">
             <div class="panel">
@@ -201,28 +211,30 @@
         <div class="row">
           <div class="col-md-12">
             <div class="table-responsive">
+        <!--Inicio de tabla-->
               <table class="table table-hover" id="table_form_lote">
+                <!--Body de tabla-->
                 <tbody>
+                  <% # Vairables. row: tamaño de rowspan en edición %>
+                  <% # bool: pintar solo un th de color%>
                   <%bool = true%>
                   <%row = ColorLote.where(:lote_id => @lote.id).count()%>
                   <%i = 0%>
                   <%=f.fields_for :colores_lotes do |color_lote|%>
-                  <tr>
-                    <% if bool%>
-                      <th scope="rowgroup" rowspan="<%=row + 1%>" style="padding:0; margin:0;" 
-                        id="row_sp_color">
-                        Colores
-                      </th>
-                      <%bool = false%>
-                    <%end%>
-                    <%=render partial: 'color_lote_fields', locals: {
-                      col: @colores.nil? ? "" : @colores.fetch(i), 
-                      total: @totales.nil? ? "" : @totales.fetch(i),
-                      f: color_lote, b: false }%>
-                  </tr>
-                  
-                  <% i += 1 %>
-                  
+                    <tr>
+                      <% if bool%>
+                        <th scope="rowgroup" rowspan="<%=row + 1%>" style="padding:0; margin:0;" 
+                          id="row_sp_color">
+                          Colores
+                        </th>
+                        <%bool = false%>
+                      <%end%>
+                      <%=render partial: 'color_lote_fields', locals: {
+                        col: @colores.nil? ? "" : @colores.fetch(i), 
+                        total: @totales.nil? ? "" : @totales.fetch(i),
+                        f: color_lote, b: false }%>
+                    </tr>
+                    <% i += 1 %>
                   <%end%>
                 </tbody>
                 <%
@@ -230,10 +242,12 @@
                   # que no exista interferencia con el fields_for que hay en el 
                   # tbody
                 %>
+                <!--Head de tabla-->
                 <thead>
                   <tr class="small" title="Talla tipo A">
                     <th scope="col" rowspan="3" class="text-center">Cantidad Corte</th>
                     <th scope="col" rowspan="3">Tallas</th>
+                    <% # Variable. cont: controlador para filas de tallas%>
                     <%cont = 0%>
                     <%@tallas.each do |talla|%>
                       <% if cont == 0%>
@@ -243,6 +257,7 @@
                     <%end%>
                     <th scope="col" rowspan="2" class="text-center">
                       <%
+                        # Nuevos campos para colores y cantidades
                         @colores_lotes = @lote.colores_lotes.build
                         @cantidades = @colores_lotes.cantidades.build
                       %>
@@ -272,6 +287,7 @@
                     </th>
                   </tr>
                 </thead>
+                <!--Foot de tabla-->
                 <tfoot>
                   <tr>
                     <th scope="row" style="padding:0; margin:0;" title="Total">Total</th>
@@ -279,7 +295,7 @@
                       <td style="padding:0; margin:0;">
                         <%if n > 0%>
                           <input id="total<%=n%>" class="form-control input-sm" 
-                            type="number" disabled="true" title="Total de &#013;talla <%=n + (n + 4)%>"
+                            type="number" disabled="disabled" title="Total de&#10; talla <%=n + (n + 4)%>"
                             value="<%= !@totales_tallas.nil? ? @totales_tallas.fetch(n - 1) : 0%>"/>
                         <%end%>
                       </td>
@@ -291,26 +307,32 @@
                   </tr>
                 </tfoot>
               </table>
+        <!--fin de tabla-->
             </div>
           </div>
         </div>
         <% if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="col-md-4">
-              <%= f.input :no_remision, label: "Número de remisión" %>
-            </div>
-            <div class="col-md-4">
-              <%= f.input :no_factura, label: "Número de factura" %>
-            </div>
-            <div class="col-md-4">
-              <%= f.input :precio_u, label: "Precio unitario" %>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="col-md-4">
+                <%= f.input :no_remision, label: "Número de remisión" %>
+              </div>
+              <div class="col-md-4">
+                <%= f.input :no_factura, label: "Número de factura" %>
+              </div>
+              <div class="col-md-4">
+                <%= f.input :precio_u, label: "Precio unitario" %>
+              </div>
             </div>
           </div>
-        </div>
         <%end%>
 
-        <!--Detalle de estado-->
+<!--______________________Fin detalle de cantidades__________________________-->
+
+<!--#########################################################################-->
+<!--_________________________Detalle de estado_______________________________-->
+<!--#########################################################################-->
+
         <div class="row" id="form_lote_estado_update">
           <div class="col-lg-12">
             <div class="panel">
@@ -324,9 +346,12 @@
             <%=render 'estados/form_for_lote', f: f %>
           </div>
         </div>
-        <!--Fin detalle de estado-->
-        
-<!--Form submit-->
+<!--_______________________Fin detalle de estado_____________________________-->
+
+
+<!--#########################################################################-->
+<!--_____________________________Form submit_________________________________-->
+<!--#########################################################################-->
         <div class="row">
           <div class="col-lg-12">
             <div class="panel">
@@ -348,11 +373,17 @@
             </div>
           </div>
         </div>
+<!--____________________________fin form-submit______________________________-->
       </div>
+  <!--fin form-inputs-->
     <% end %>
+    
+    <% # Fin simple form %>
+    
   </div>
 </div>
  <!-- Modal -->
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
   aria-labelledby="myModalLabel" aria-hidden="true">
   </div>
+  
