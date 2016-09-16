@@ -89,6 +89,8 @@ class LotesController < ApplicationController
   # POST /lotes.json
   def create
     @lote = Lote.new(lote_params)
+    Rails.logger.info("PARAMS: #{params.inspect}")
+    puts @lote
     respond_to do |format|
       
       if @lote.save
@@ -267,12 +269,15 @@ class LotesController < ApplicationController
     end
     
     def set_color
+      puts "antes"
+      Rails.logger.info("PARAMS: #{params.inspect}")
+      # Totales: Array para los totales por tallas
       totales = Array.new
       color_id = nil
       total_cantidades_id = nil
       total_colores_id = nil
       bool = true
-      i = 0
+      
       
       # Decisión para retirar o no el array del color 
       col_bool = params[:lote][:colores_lotes_attributes].reject!{|k, v| v[:color_id]==""}
@@ -302,19 +307,22 @@ class LotesController < ApplicationController
             v['total_id'] = total_colores_id.id
             
             
-            
+            i = 0
             # Recorrer parámetros de cantidades_attributes para asignar el total real
             
             params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes].each do |k2, v2|
               
               if bool
-                
+                # Se hace revisión de la primara fila de totales y se establecen
+                # en la base de datos y en el array de totales
                 total_cantidades_id = Total.find_or_create_by(:total => 
                 params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes][:"#{k2}"][:total_id])
                 v2['total_id'] = total_cantidades_id.id
                 totales.push(v2['total_id'])
                 
               else
+                # Con el fin de evitar más consultas sobre la base de datos
+                # se usa el array para poder establecer el parámetro total_id
                 
                 v2['total_id'] = totales.fetch(i)
                 i = i + 1
@@ -331,7 +339,8 @@ class LotesController < ApplicationController
           end  
         end
       end
-      # Rails.logger.info("PARAMS: #{params.inspect}")
+      puts "despues"
+      Rails.logger.info("PARAMS: #{params.inspect}")
     end
     
     # Never trust parameters from the scary internet, only allow the white list through.

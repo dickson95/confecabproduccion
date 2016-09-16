@@ -16,7 +16,7 @@
           Verifique la información de los datos
         </div>
         <div class="form-inputs">
-          <%= f.input :cliente %>
+          <%= f.input :cliente, autofocus: true%>
           <div id="error_div_cliente" class="text-danger"></div>
           <%= f.input :telefono %>
           <%= f.input :direccion %>
@@ -88,8 +88,9 @@
       <%= f.input :direccion %>
       <%= f.input :email %>
     </div>
-    <div class="form-actions">
-      <%= f.button :submit %>
+    <div class="form-actions text-right">
+      <%= f.button :submit, :value => "Aceptar" %>
+      <%= link_to 'Cancelar', tipos_prendas_path,  class: "btn btn-outline btn-primary" %>
     </div>
   <% end %>
 <% end %>

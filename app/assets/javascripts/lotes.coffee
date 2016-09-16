@@ -86,7 +86,7 @@ $(document).on 'turbolinks:load', ->
   $('.add_fields').on 'click',  (event) ->
   	time = new Date().getTime()
   	regexp = new RegExp($(this).data('id'), 'g')
-  	$('#table_form_lote').children().children().find('td[rowspan]').attr 'rowspan', (i, rs) ->
+  	$('#table_form_lote').children().children().find('#row_sp_color').attr 'rowspan', (i, rs) ->
       rs = parseInt rs
       rs + 1
       
@@ -229,14 +229,14 @@ $(document).on 'turbolinks:load', ->
       cliente.parent().removeClass("has-error has-success")
       .addClass("has-error")
       cliente.parent().children(".input-group-btn").children()
-      .removeClass("btn-default btn-danger btn-success")
-      .addClass("btn-danger")
+      .removeClass("btn-default btn-danger btn-outline btn-success")
+      .addClass("btn-outline btn-danger")
     else
       cliente.parent().removeClass("has-error has-success")
       .addClass("has-success")
       cliente.parent().children(".input-group-btn").children()
       .removeClass("btn-default btn-danger btn-success")
-      .addClass("btn-success")
+      .addClass("btn-outline btn-success")
   return
   # Fin del document ready
   

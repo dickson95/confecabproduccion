@@ -8,7 +8,7 @@
       <div class="col-lg-6">
         <div class="col-lg-offset-11">
           <h1>
-          <%= link_to new_user_path do %>
+          <%= link_to new_user_path, :title => "Nuevo usuario" do %>
             <%= content_tag :i, "", :class => "fa fa-plus" %>
           <%end%>
           </h1>
@@ -20,10 +20,10 @@
     <table class ="table">
       <thead>
         <tr>
-          <th>Nombre</th>
-          <th>Usuario</th>
-          <th>Correo</th>
-          <th>Teléfono</th>
+          <th title="Nombre">Nombre</th>
+          <th title="Cédula">Cédula</th>
+          <th title="Correo">Correo</th>
+          <th title="Teléfono">Teléfono</th>
           <th></th>
           <th></th>
         </tr>
@@ -31,10 +31,10 @@
       <tbody>
         <% @users.each do |user| %>
           <tr>
-            <td><%= user.name %></td>
-            <td><%= user.username %></td>
-            <td><%= user.email %></td>
-            <td><%= user.telefono %></td>
+            <td title="Nombre"><%= user.name %></td>
+            <td title="Cédula"><%= user.username %></td>
+            <td title="Correo"><%= user.email %></td>
+            <td title="Teléfono"><%= user.telefono %></td>
             <td>
                 <%=link_to user_path(user) ,{:remote => true, :class => "btn btn-info",
                     :title => "Ver detalles"}  do%>

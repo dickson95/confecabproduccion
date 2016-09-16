@@ -8,7 +8,7 @@
         <div class="col-lg-offset-11">
           <h4>
           <% if can? :manage, Cliente %>
-            <%= link_to new_cliente_path, :title =>"Nuevo", class:"btn btn-default btn-circle" do%>
+            <%= link_to new_cliente_path, :title =>"Nuevo", class:"btn btn-primary btn-circle" do%>
               <%= content_tag(:i, "", :class => "fa fa-plus") %>
             <% end %>
           <% end %>
@@ -21,10 +21,10 @@
     <table  class="table table-striped table-bordered table-hover" id="t_clientes">
       <thead>
         <tr>
-          <th>Cliente</th>
-          <th>Telefono</th>
-          <th>Direccion</th>
-          <th>Email</th>
+          <th title="Cliente">Cliente</th>
+          <th title="Teléfono">Telefono</th>
+          <th title="Dirección">Direccion</th>
+          <th title="Correo">Correo</th>
           <% if can? :manage, Cliente %>
           <th></th>
           <% end %>
@@ -34,10 +34,10 @@
       <tbody>
         <% @clientes.each do |cliente| %>
           <tr>
-            <td><%= cliente.cliente %></td>
-            <td class="col-sm-1"><%= cliente.telefono %></td>
-            <td class="col-sm-2"><%= cliente.direccion %></td>
-            <td class="col-sm-3"><%= cliente.email %></td>
+            <td title="Cliente"><%= cliente.cliente %></td>
+            <td class="col-sm-1" title="Teléfono"><%= cliente.telefono %></td>
+            <td class="col-sm-2" title="Dirección"><%= cliente.direccion %></td>
+            <td class="col-sm-3" title="Correo"><%= cliente.email %></td>
             <% if can? :manage, Cliente %>
             <td>
               <div class="btn-group">

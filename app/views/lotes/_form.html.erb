@@ -23,7 +23,6 @@
         <% if @rol_form == "coor_integracion" || @rol_form == "coor_tiempos" || 
         @rol_form == "admin"%>
           <div class="row">
-            <div cla="col-lg-12">
               <div class="panel">
                 <div class="panel-heading panel-primary">
                   <h2>Integración de lote</h2>
@@ -33,14 +32,13 @@
                   </p>
                 </div>
               </div>
-            </div>
           </div>
           <!--Primera fila-->
           <div class="row">
             <div class="col-sm-9">
               <div class="col-sm-4">
                   <%= f.input :op, input_html: { style: 'text-transform:uppercase;',
-                    autocomplete: 'off'} %>
+                    autocomplete: 'off', autofocus: true} %>
               </div>
               <div class="col-sm-4">
                   <%if params[:action] != 'edit' %>
@@ -60,10 +58,11 @@
                     <%= f.input :cliente_id do %>
                       <%= f.input_field  :cliente_id, class: "form-control", 
                       :collection => @clientes, 
-                      :value_method => :id, :label => false %>
+                      :value_method => :id%>
                       <div class="input-group-btn">
                         <%= link_to '...', add_remote_data_path(:place => "form_lote_cliente"),{:remote => true, 
-                        'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-default"} %>
+                          'data-toggle' =>  "modal", 'data-target' => '#myModal', 
+                          :class => "btn btn-primary", :title => "Nuevo cliente"} %>
                       </div>
                     <% end %>
                   </div>
@@ -77,22 +76,25 @@
                   <%= f.input :tipo_prenda_id,  label: "Descripción" do %>
                     <%= f.input_field  :tipo_prenda_id, class: "form-control",
                     :collection => @tipos_prendas,
-                    :value_method => :id,:label => false  %>
+                    :value_method => :id %>
                     <div class="input-group-btn">
                       <%= link_to '...', add_remote_data_path(:place => "form_lote_tipo_prenda"),{:remote => true, 
-                      'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-default"} %>
+                      'data-toggle' =>  "modal", 'data-target' => '#myModal', 
+                      :class => "btn btn-primary", :title => "Nueva descripción"} %>
                     </div>
                   <% end %>
                 </div>
               </div>
               <div class="col-sm-4">
-                <div style="padding-top: 25px; padding-bottom: 19px;">
+                <div style="padding-top: 15px; padding-bottom: 19px;">
+                  <%=f.label :empresa%><br>
                   <%= f.collection_radio_buttons :empresa, [['CAB'],[ 'D&C']],
-                  :first, :last, item_wrapper_class: 'radio-inline', checked: 'CAB' %>
+                  :first, :last, item_wrapper_class: 'radio-inline', checked: 'CAB',
+                  label: false%>
                 </div>
               </div>
-              <div class="col-sm-4" style="padding-top:10px">
-                <%=f.label "¿Ingreso completado?"%><br>
+              <div class="col-sm-4" style="padding-top:15px">
+                <%=f.label :fin_integracion, label: "¿Ingreso completado?"%><br>
                 <%= f.collection_radio_buttons :fin_integracion, [[true, 'Sí'], [false, 'No']], 
                 :first, :last, label: false,
                       item_wrapper_class: 'radio-inline', item_wrapper_tag: :label, checked: true %>
@@ -103,13 +105,7 @@
                 :label => 'Notas de integración'%>
             </div>
           </div>
-          <!--Segunda fila-->
-              <% if @rol_form == "coor_integracion"%>
-            <!--Detalle de estado-->
-              <%=render 'estados/form_for_lote', sub_estados: @sub_estados%>
-            <!--Fin detalle de estado-->
-              <%end%>
-          <div class="row">
+              <div class="row">
                 <div class="panel">
                   <div class="panel panel-heading"></div>
                 </div>
@@ -128,8 +124,7 @@
                   <h2>Insumos del lote</h2>
                   <p class="text-muted">
                     Hola <%=current_user.name%>. Por favor ingresa los datos para 
-                    confirmar que los insumos se encuentran completos. De no ser
-                    así solo debes enviar un correo al proveedor
+                    confirmar que los insumos se encuentran completos.
                   </p>
                 </div>
                 <div class="col-lg-6">
@@ -178,7 +173,7 @@
                   :autocomplete => "off"  }%>
                 </div>
                 <div style="padding-top:15px">
-                  <%= f.label "¿Insumos listos?"%> <br>
+                  <%= f.label :fin_insumos, label: "¿Insumos listos?"%> <br>
                   <%= f.collection_radio_buttons :fin_insumos, [[true, 'Sí'], [false, 'No']], :first, :last, label: false,
                       item_wrapper_class: 'radio-inline', item_wrapper_tag: :label, checked: true %>
                 </div>
@@ -188,8 +183,7 @@
               </div>
             </div>
           </div>
-          
-            <%=render 'estados/form_for_lote', sub_estados: @sub_estados%>
+<!--Form estados-->
         <%end%>
 <!--Fin zona form para insumos-->    
 
@@ -212,19 +206,19 @@
                   <%bool = true%>
                   <%row = ColorLote.where(:lote_id => @lote.id).count()%>
                   <%i = 0%>
-                  <%colorf = nil%>
                   <%=f.fields_for :colores_lotes do |color_lote|%>
                   <tr>
                     <% if bool%>
-                    <td rowspan="<%=row + 1%>" style="padding:0; margin:0;">
-                      Colores
-                    </td>
-                    <%bool = false%>
+                      <th scope="rowgroup" rowspan="<%=row + 1%>" style="padding:0; margin:0;" 
+                        id="row_sp_color">
+                        Colores
+                      </th>
+                      <%bool = false%>
                     <%end%>
                     <%=render partial: 'color_lote_fields', locals: {
-                    col: @colores.nil? ? "" : @colores.fetch(i), 
-                    total: @totales.nil? ? "" : @totales.fetch(i),
-                    f: color_lote, b: false }%>
+                      col: @colores.nil? ? "" : @colores.fetch(i), 
+                      total: @totales.nil? ? "" : @totales.fetch(i),
+                      f: color_lote, b: false }%>
                   </tr>
                   
                   <% i += 1 %>
@@ -237,59 +231,63 @@
                   # tbody
                 %>
                 <thead>
-                  <tr class="small">
-                    <th rowspan="3" class="text-center">Cantidad Corte</th>
-                    <th rowspan="3">Tallas</th>
+                  <tr class="small" title="Talla tipo A">
+                    <th scope="col" rowspan="3" class="text-center">Cantidad Corte</th>
+                    <th scope="col" rowspan="3">Tallas</th>
                     <%cont = 0%>
                     <%@tallas.each do |talla|%>
                       <% if cont == 0%>
-                        <th class="col-lg-1"><%=talla.talla%></th>
+                        <th scope="col" class="col-lg-1"><%=talla.talla%></th>
                       <%end%>
                       <%cont == 2 ? cont = 0 : cont = cont + 1%>
                     <%end%>
-                    <th rowspan="3">
-                      Total colores
+                    <th scope="col" rowspan="2" class="text-center">
                       <%
                         @colores_lotes = @lote.colores_lotes.build
                         @cantidades = @colores_lotes.cantidades.build
                       %>
-                        <%= link_to_add_fields "","add_fields btn btn-default 
-                        fa fa-plus", f, :colores_lotes %>
+                        <%= link_to_add_fields "","add_fields btn btn-primary  
+                          fa fa-plus", f, :colores_lotes %>
                     </th>
                   </tr>
-                  <tr class="small">
+                  <tr class="small" title="Talla tipo B">
                     <%cont = 0%>
                     <%@tallas.each do |talla|%>
                       <% if cont == 1%>
-                        <th class="col-lg-1"><%=talla.talla%></th>
+                        <th scope="col" class="col-lg-1"><%=talla.talla%></th>
                       <%end%>
                       <%cont == 2 ? cont = 0 : cont = cont + 1%>
                     <%end%>
                   </tr>
-                  <tr class="small">
+                  <tr class="small" title="Talla tipo C">
                     <%cont = 0%>
                     <%@tallas.each do |talla|%>
                       <% if cont == 2%>
-                        <th class="col-lg-1"><%=talla.talla%></th>
+                        <th scope="col" class="col-lg-1"><%=talla.talla%></th>
                       <%end%>
                       <%cont == 2 ? cont = 0 : cont = cont + 1%>
                     <%end%>
-                    
+                    <th scope="col">
+                      Total colores
+                    </th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
-                    <td style="padding:0; margin:0;">Total</td>
+                    <th scope="row" style="padding:0; margin:0;" title="Total">Total</th>
                     <%for n in 0..9%>
-                    <td style="padding:0; margin:0;">
-                      <%if n > 0%>
-                      <input id="total<%=n%>" class="form-control input-sm" type="number" disabled="true"
-                      value="<%= !@totales_tallas.nil? ? @totales_tallas.fetch(n - 1) : 0%>"/>
-                      <%end%>
-                    </td>
+                      <td style="padding:0; margin:0;">
+                        <%if n > 0%>
+                          <input id="total<%=n%>" class="form-control input-sm" 
+                            type="number" disabled="true" title="Total de &#013;talla <%=n + (n + 4)%>"
+                            value="<%= !@totales_tallas.nil? ? @totales_tallas.fetch(n - 1) : 0%>"/>
+                        <%end%>
+                      </td>
                     <%end%>
-                    <td class="total" style="padding:0; margin:0;"><%=f.input :cantidad, readonly: true, label: false,
-                    input_html:{class: "input-sm"}%></td>
+                    <td class="total" style="padding:0; margin:0;">
+                      <%=f.input :cantidad, readonly: true, label: false,
+                        input_html:{class: "input-sm", title: "Total absoluto"}%>
+                    </td>
                   </tr>
                 </tfoot>
               </table>
@@ -312,7 +310,22 @@
         </div>
         <%end%>
 
-
+        <!--Detalle de estado-->
+        <div class="row" id="form_lote_estado_update">
+          <div class="col-lg-12">
+            <div class="panel">
+              <div class="panel-heading panel-default">
+                <h4>Datos del proceso</h4>
+              </div>
+            </div>
+          </div>
+        
+          <div class="col-lg-12">
+            <%=render 'estados/form_for_lote', f: f %>
+          </div>
+        </div>
+        <!--Fin detalle de estado-->
+        
 <!--Form submit-->
         <div class="row">
           <div class="col-lg-12">
@@ -321,14 +334,10 @@
               </div>
             </div>
             <div class="form-actions text-right">
-              <%if @rol_form == "aux_insumos"%>
-                <%= link_to 'Enviar correo', add_remote_data_path(:place => "form_email_cliente", 
-                :cliente => @lote.cliente.id),{:remote => true, 'data-toggle' =>  "modal",
-                'data-target' => '#myModal', :class => "btn btn-default"}%>
-              <%end%>
-              <%= f.button :submit, :value => 'Guardar',
-              data:{:disable_with => "Guardando"}, class: 'btn-info',
+              <%= f.button :submit, :value => 'Aceptar',
+              data:{:disable_with => "Guardando"}, class: 'btn-default',
               :id =>"lote_guardar" %>
+              <%= link_to 'Cancelar', lotes_path, class: 'btn btn-outline btn-primary' %>
             </div>
             <div class="panel">
               <div class="panel-heading panel-primary">

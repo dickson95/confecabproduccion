@@ -33,7 +33,6 @@ class SubEstadosController < ApplicationController
           @lote = Lote.new
           @sub_estados = SubEstado.all
           @sub_estado = SubEstado.last
-          params[:estado_id] = @sub_estado.estado.id
           format.js{ render 'lotes/ajaxResults' }
         else
           format.html { redirect_to tipos_prendas_path }
@@ -85,6 +84,6 @@ class SubEstadosController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sub_estado_params
-      params.require(:sub_estado).permit(:sub_estado, :estado_id)
+      params.require(:sub_estado).permit(:sub_estado)
     end
 end

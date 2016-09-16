@@ -20,10 +20,6 @@
               <%= f.input :sub_estado, label: "Proceso adicional" %>
               <div id="error_sub_div" class="text-danger"></div>
             </div>
-            <div>
-              <%= f.association :estado, label: "Estado para el nuevo proceso" %>
-              <div id="error_estado_div" class="text-danger"></div>
-            </div>
           </div>
             <div class="modal-footer">
               <div class="form-actions">
@@ -41,8 +37,7 @@
     <%= f.error_notification %>
   
     <div class="form-inputs">
-      <%= f.input :sub_estado %>
-      <%= f.association :estado %>
+      <%= f.input :sub_estado, :label => "Proceso" %>
     </div>
   
     <div class="form-actions">

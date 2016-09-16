@@ -11,15 +11,15 @@ es-CO:
     failure:
       already_authenticated: "Ya has iniciado sesión."
       inactive: "Tu cuenta ya fue activada."
-      invalid: "Invalid %{authentication_keys} or password."
-      locked: "Your account is locked."
-      last_attempt: "You have one more attempt before your account is locked."
-      not_found_in_database: "Invalid %{authentication_keys} or password."
+      invalid: "Nombre de usuario %{authentication_keys} o contraseña incorrectos."
+      locked: "Tu cuenta está bloqueada."
+      last_attempt: "Tienes un intento más antes de que tu cuenta sea bloqueada."
+      not_found_in_database: "Nombre de usuario %{authentication_keys} o contraseña incorrectos."
       timeout: "Su sesion ha expirado. Inicie nuevamente para seguir."
-      unauthenticated: "Debe iniciar sesión para usar antes de continuar."
-      unconfirmed: "Debe confirmar su correo antes de continuar."
+      unauthenticated: "Debes iniciar sesión para usar antes de continuar."
+      unconfirmed: "Debes confirmar en tu correo antes de continuar."
       user:
-        unauthenticated: "Debe iniciar sesión para usar antes de continuar."
+        unauthenticated: "Debes iniciar sesión antes de continuar."
     sessions:
       user:
         signed_in: "Bienvenido al sistema de producción para Confecab y D&C"
@@ -28,8 +28,8 @@ es-CO:
       messages:
         record_invalid: "La validación falló: %{errors}"
         restrict_dependent_destroy:
-          has_one: No se puede eliminar el registro porque existe un %{record} dependiente
-          has_many: No se puede eliminar el registro porque existen %{record} dependientes
+          has_one: "No se puede eliminar el registro porque existe un %{record} dependiente"
+          has_many: "No se puede eliminar el registro porque existen %{record} dependientes"
   date:
     abbr_day_names:
     - dom

@@ -5,51 +5,49 @@
     <table class="table table-hover" id="control">
       <thead>
         <tr>
-          <th>Id</th>
-          <th>Op</th>
-          <th>Sub estado</th>
-          <th>Lote</th>
-          <th>Fecha de entrada</th>
-          <th>Fecha de salida</th>
-          <th>Estado</th>
-          <th>Minutos</th>
-          <th>Reponsable ingreso</th>
-          <th>Reponsable salida</th>
+          <th title="Referencia">Referencia</th>
+          <th title="Proceso adicional">Proceso</th>
+          <th title="OP">Op</th>
+          <th title="Fecha de entrada">Entrada</th>
+          <th title="Fecha de salida">Salida</th>
+          <th title="Estado">Estado</th>
+          <th title="Minutos en este estado">Minutos</th>
+          <th title="Responsable de ingreso">Reponsable ingreso</th>
+          <th title="Responsable de salida">Reponsable salida</th>
         </tr>
       </thead>
     
       <tbody>
         <% @control_lotes.each do |control_lote| %>
           <tr>
-            <td><%= control_lote.id %></td>
-            <td><%= control_lote.lote.op %></td>
-            <%  if control_lote.sub_estado.nil? == false %>
-              <td><%= control_lote.sub_estado.sub_estado %></td>
-            <% else %>
-              <td></td>
-            <% end %>
-            <td class="col-xs-1">
+            <td class="col-xs-1" title="Referencia">
               <% if control_lote.lote.referencia != nil %>
                 <%= control_lote.lote.referencia.referencia %>
               <% end %>
             </td>
-            <td class="col-xs-2"><%= I18n::localize(control_lote.fecha_ingreso, :format => "%d de %b %H:%M ") %></td>
-            <% if control_lote.fecha_salida.nil? %>
-              <td>-</td>
+            <%  if control_lote.sub_estado.nil? == false %>
+              <td title="Proceso adicional"><%= control_lote.sub_estado.sub_estado %></td>
             <% else %>
-              <td class="col-xs-2"><%= I18n::localize(control_lote.fecha_salida, :format => "%d de %b %H:%M ") %></td>
+              <td title="Proceso adicional">-</td>
+            <% end %>
+            <td title="OP"><%= control_lote.lote.op %></td>
+            <td class="col-xs-2" title="Fecha de entrada"><%= I18n::localize(control_lote.fecha_ingreso, :format => "%d de %b %H:%M ") %></td>
+            <% if control_lote.fecha_salida.nil? %>
+              <td title="Fecha de entrada">-</td>
+            <% else %>
+              <td class="col-xs-2" title="Fecha de salida"><%= I18n::localize(control_lote.fecha_salida, :format => "%d de %b %H:%M ") %></td>
             <% end  %>
-            <td><%= control_lote.estado.estado %></td>
-            <td><%= control_lote.min_u %></td>
+            <td title="Estado"><%= control_lote.estado.estado %></td>
+            <td class="col-xs-1" title="Minutos"><%= control_lote.min_u %></td>
             <%if control_lote.resp_ingreso_id.nil?%>
               <td></td>
             <%else%>
-              <td  class="col-xs-2"><%= control_lote.resp_ingreso_id.name %></td>
+              <td  class="col-xs-2" title="Responsable de ingreso"><%= control_lote.resp_ingreso_id.name %></td>
             <%end%>
             <%if control_lote.resp_salida_id.nil?%>
-              <td>-</td>
+              <td title="Responsable de salida">-</td>
             <%else%>
-              <td class="col-xs-2"><%= control_lote.resp_salida_id.name %></td>
+              <td class="col-xs-2" title="Responsable de salida"><%= control_lote.resp_salida_id.name %></td>
             <%end%>
           </tr>
         <% end %>

@@ -1,1 +1,0 @@
-json.partial! "control_lotes/control_lote", control_lote: @control_lote

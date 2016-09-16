@@ -31,4 +31,16 @@
           <% end %>
         <% end %>
         
+        <%if params[:place] == "form_lote_sub_estado_response"%>
+           <%= f.fields_for :control_lotes, @lote.control_lotes.build do |c| %>
+              <%= c.input_field  :sub_estado_id, class: "form-control",
+                :collection => @sub_estados, :value_method => :id, 
+                :selected => @sub_estado.id%>
+              <div class="input-group-btn">
+                <%= link_to '...', add_remote_data_path(:place => "form_lote_sub_estado"),
+                {:remote => true, :class => "btn btn-default"} %>
+              </div>
+          <%end%>
+        <%end%>
+        
 <% end %>

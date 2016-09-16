@@ -2,9 +2,9 @@
     <fieldset>
         <div class="input-group">
             <%=f.autocomplete_field  :color_id, 
-            autocomplete_color_color_lotes_path, :as => :autocomplete,
+            autocomplete_color_color_lotes_path, 
             label: false,  wrapper: false, :value => col, 
-            class: "form-control input-sm"%>
+            class: "form-control input-sm", :title => "Color"%>
             <%=f.hidden_field :_destroy %>
         </div>
     </fieldset>
@@ -35,7 +35,7 @@
     <fieldset>
         <div class="input-group">
             <%=f.input :total_id, readonly: true, label: false, wrapper: false,
-            input_html:{class: "input-sm", :value => total}%>
+            input_html:{class: "input-sm", :value => total, :title => "Total relativo"}%>
         </div>
     </fieldset>
 </td>

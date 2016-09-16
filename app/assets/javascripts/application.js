@@ -12,10 +12,9 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui
+//= require jquery-ui/autocomplete
 //= require jquery-ui/datepicker
 //= require autocomplete-rails
 //= require bootstrap_sb_admin_base_v2
-//= require jquery-ui-timepicker-addon
 //= require turbolinks
 //= require_tree .

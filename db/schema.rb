@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160912121224) do
+ActiveRecord::Schema.define(version: 20160915190502) do
 
   create_table "asignaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -146,10 +146,8 @@ ActiveRecord::Schema.define(version: 20160912121224) do
 
   create_table "sub_estados", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "sub_estado", null: false
-    t.integer  "estado_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["estado_id"], name: "index_sub_estados_on_estado_id", using: :btree
   end
 
   create_table "tallas", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -201,5 +199,4 @@ ActiveRecord::Schema.define(version: 20160912121224) do
   add_foreign_key "lotes", "tipos_prendas"
   add_foreign_key "roles_users", "roles"
   add_foreign_key "roles_users", "users"
-  add_foreign_key "sub_estados", "estados"
 end

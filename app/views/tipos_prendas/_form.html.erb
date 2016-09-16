@@ -38,8 +38,9 @@
       <%= f.input :tipo, label: "Descrición" %>
     </div>
     
-     <div class="form-actions">
-        <%= f.button :submit %>
+     <div class="form-actions text-right">
+        <%= f.button :submit, :value => "Aceptar", data:{:disabled_with => "Guardando"} %>
+        <%= link_to 'Cancelar', tipos_prendas_path, class:"btn btn-outline btn-primary" %>
       </div>
   <% end %>
 <%end%>

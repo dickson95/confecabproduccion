@@ -5,9 +5,9 @@
         <th title="Identificador">#</th>
         <th title="Referencia del lote">Referencia</th>
         <th title="OP de lote">OP</th>
-        <th title="Fecha de ingreso a terminación">Estado</th>
+        <th title="Fecha de ingreso a estado">Fecha</th>
         <th title="Proceso actual">Estado</th>
-        <th title="Tipo de camisa">Descripción</th>
+        <th title="Descripción de la prenda">Descripción</th>
         <th></th>
         <th></th>
       </tr>
@@ -17,9 +17,9 @@
           <th title="Identificador">#</th>
           <th title="Referencia del lote">Referencia</th>
           <th title="OP de lote">OP</th>
-          <th title="Cantidad">Día ingreso</th>
-          <th title="Fecha de ingreso a terminación">Día salida</th>
-          <th title="Proceso actual">Tiempo total</th>
+          <th title="Ingreso a la empresa">Día ingreso</th>
+          <th title="Salida de la empresa">Día salida</th>
+          <th title="Minutos durante los procesos">Tiempo total</th>
           <th></th>
           <% if can? :manage, Lote %>
           <th></th>
@@ -89,20 +89,19 @@
         <tr>
             <!--Esto ve el auxiliar de insumos-->
             <td><%= clote.fetch 0 %></td>
-            <td><%= clote.fetch 1 %></td>
-            <td><%= clote.fetch 2 %></td>
-            <td><%=l(clote.fetch(4), format: "%d de %b")%></td>
-            <td><%=clote.fetch 5%></td> 
-            <%puts "numero #{clote.fetch(7)}"%>
+            <td  title="Referencia del lote"><%= clote.fetch 1 %></td>
+            <td title="OP"><%= clote.fetch 2 %></td>
+            <td title="Fecha de ingreso a estado"><%=l(clote.fetch(4), format: "%d de %b")%></td>
+            <td title="Estado"><%=clote.fetch 5%></td> 
               <%if clote.fetch(7).nil?%>
-            <td>-</td>
+            <td title="Descripción de la prenda">-</td>
               <%else%>
-            <td><%= TipoPrenda.where(:id => clote.fetch(7)).pluck(:tipo).last %></td>
+            <td title="Descripción de la prenda"><%= TipoPrenda.where(:id => clote.fetch(7)).pluck(:tipo).last %></td>
               <%end%>
             <!--inicio de los botones de gestión-->
             <td>
             <%= link_to  view_datails_path(clote.fetch(0)), {:remote => true, 
-              :class => "btn btn-primary", "data-target" => "#myModal"} do
+              :class => "btn btn-primary", "data-target" => "#myModal", :title => "Ver detalles"} do
               %>
                 <%=content_tag :i, "", :class => "fa fa-list-alt"%>
               <%end%>
@@ -137,25 +136,25 @@
         <tr>
           <!--Esto ve el auxiliar de insumos-->
           <td><%= clote.fetch 0 %></td>
-          <td><%= clote.fetch 1 %></td>
-          <td><%= clote.fetch 2 %></td>
+          <td title="Referencia del lote"><%= clote.fetch 1 %></td>
+          <td title="OP de lote"><%= clote.fetch 2 %></td>
           <!--fechas de ingreso a empresa-->
-          <td>
+          <td title="Ingreso a la empresa">
             <% f_entrada = ControlLote.where(lote_id: id).pluck(:fecha_ingreso).min%>
             <%=I18n::localize(f_entrada, :format => "%d de %b")%>
           </td>
           <%if clote.fetch(3)==5%>
-          <td><%= l(clote.fetch(4), format: "%d de %b") %></td>
+          <td title="Salida de la empresa"><%= l(clote.fetch(4), format: "%d de %b") %></td>
           <%else%>
-          <td>-</td>
+          <td title="Salida de la empresa">-</td>
           <%end%>
-          <td><%= ControlLote.where(lote_id: id).sum(:min_u) %></td>
+          <td title="Minutos durante los procesos"><%= ControlLote.where(lote_id: id).sum(:min_u) %></td>
           <!--inicio de los botones de gestión-->
           <td>
             <!---->
             <div class="btn-group">
               <%= link_to  view_datails_path(clote.fetch(0)), {:remote => true, 
-              :class => "btn btn-primary", "data-target" => "#myModal"} do
+              :class => "btn btn-primary", "data-target" => "#myModal", :title => "Ver detalles"} do
               %>
                 <%=content_tag :i, "", :class => "fa fa-list-alt"%>
               <%end%>
@@ -180,7 +179,7 @@
               <td>
                 <%= link_to lote_path(clote.fetch(0)), method: :delete,
                   data: { confirm: 'Si elimina este registro no podrá recuperarlo. ¿Está
-                  realmente seguro?' }, class:'btn btn-danger' do %>
+                  realmente seguro?' }, class:'btn btn-danger', :title => "Eliminar" do %>
                     <% content_tag :i, "", :class => "fa fa-trash-o"%>
                 <%end%>
               </td>

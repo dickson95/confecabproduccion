@@ -7,6 +7,6 @@ module LotesHelper
               f: colores_lotes_for_form, b: true, col:"", total:""})
         end
         link_to name, '', class: "#{clase}", 
-        data: { id: id, fields: fields.gsub("\n", "")} 
+        data: { id: id, fields: fields.gsub("\n", "")}, :title => "Más cantidades"
     end
 end
