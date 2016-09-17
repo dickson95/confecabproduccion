@@ -18,7 +18,6 @@ $(document).on 'turbolinks:load', ->
         paginate:
           previous: 'Anterior'
           next: 'Siguiente'
-      responsive: details: true
       order: [[0, "desc"]]
       columnDefs:[
                     {
@@ -47,7 +46,7 @@ $(document).on 'turbolinks:load', ->
         paginate:
           previous: 'Anterior'
           next: 'Siguiente'
-      responsive: details: true
+      responsive: true
       order: [[0, "desc"]]
       columnDefs:[
                     {
@@ -61,7 +60,7 @@ $(document).on 'turbolinks:load', ->
                     }
                   ]
   
-  
+  $('.dataTables_filter label').after $('.dataTables_filter label input[type="search"]').detach()
   
   # Inputs con fecha administrada por parte de jQuery
   $("input.datepicker").each (i) ->

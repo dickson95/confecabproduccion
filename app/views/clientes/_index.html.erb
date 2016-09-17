@@ -1,11 +1,11 @@
 <div class="panel panel-default">
   <div class=" panel-heading">
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-sm-6">
         <h4>Clientes</h4>
       </div>
-      <div class="col-lg-6">
-        <div class="col-lg-offset-11">
+      <div class="col-sm-6">
+        <div class="col-sm-offset-11">
           <h4>
           <% if can? :manage, Cliente %>
             <%= link_to new_cliente_path, :title =>"Nuevo", class:"btn btn-primary btn-circle" do%>
@@ -35,9 +35,9 @@
         <% @clientes.each do |cliente| %>
           <tr>
             <td title="Cliente"><%= cliente.cliente %></td>
-            <td class="col-sm-1" title="Teléfono"><%= cliente.telefono %></td>
-            <td class="col-sm-2" title="Dirección"><%= cliente.direccion %></td>
-            <td class="col-sm-3" title="Correo"><%= cliente.email %></td>
+            <td class="col-xs-1" title="Teléfono"><%= cliente.telefono %></td>
+            <td class="col-xs-2" title="Dirección"><%= cliente.direccion %></td>
+            <td class="col-xs-3" title="Correo"><%= cliente.email %></td>
             <% if can? :manage, Cliente %>
             <td>
               <div class="btn-group">

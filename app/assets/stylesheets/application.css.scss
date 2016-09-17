@@ -5,8 +5,15 @@
 @import "jquery-ui/theme";
 
 
-#page-wrapper{
-  padding-top: 60px;
+@media (max-width: 768px) {
+  #page-wrapper{
+    padding-top: 80px;
+  }
+}
+@media (min-width: 768px) {
+  #page-wrapper{
+    padding-top: 50px;
+  }
 }
 
 .margin{

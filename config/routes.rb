@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   resources :users, except: :create
   post 'users/create_user' => 'users#create', as: :create_user
   
-  resources :programaciones
   resources :control_lotes
   
   get "lotes/add_remote_data" => 'lotes#add_remote_data', :as => :add_remote_data

@@ -6,7 +6,6 @@ $(document).on 'turbolinks:load', ->
   if !gon.rol_user
     $('#t_clientes').DataTable
       'scrollY': '581px'
-      'scrollCollapse': true
       'paging': false
       language:
         processing: 'Cargando...'
@@ -46,6 +45,8 @@ $(document).on 'turbolinks:load', ->
                     }
                   ]
   
+  $('.dataTables_filter label').after $('#t_clientes_filter label input[type="search"]').detach()
+  
   $('.tablas2').DataTable
       'scrollY': '190px'
       'scrollCollapse': true
@@ -60,6 +61,10 @@ $(document).on 'turbolinks:load', ->
         loadingRecords: 'Cargando...'
         zeroRecords: 'No se encuentran registros'
         emptyTable: 'No hay datos disponibles'  
+        
+  $('#DataTables_Table_0_filter label').after $('#DataTables_Table_0_filter label input[type="search"]').detach()
+  $('#DataTables_Table_1_filter label').after $('#DataTables_Table_1_filter label input[type="search"]').detach()
+  
   $('#on_cliente').on 'click', ->
     #muestra solo el pánel de referencias
     $('#tip_est').slideUp 600 

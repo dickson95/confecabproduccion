@@ -1,7 +1,7 @@
 class SubEstadosController < ApplicationController
   before_action :set_sub_estado, only: [:show, :edit, :update, :destroy]
   #Solicitar prueba de permisos antes de cargar cualquier acción
-  load_and_authorize_resource 
+  load_and_authorize_resource :except  => [:create]
   # GET /sub_estados
   # GET /sub_estados.json
   def index

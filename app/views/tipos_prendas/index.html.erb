@@ -4,7 +4,7 @@
     <h1>Tablas</h1>
     <p class="text-muted">Clientes, procesos, descripción de prendas</p>
   </div>
-  <!--dropdown-->
+<!--dropdown-->
   <div class="text-right">
     <div class="dropdown">
       <a class="dropdown-toggle btn btn-default" data-toggle="dropdown" href="#" title="Configuración">
@@ -47,25 +47,25 @@
   </div>
 </div>
 
+<!--Panel de clientes-->
 <div class="row page-header" id="p_clientes" >
-  <!--Panel de clientes-->
   <div class="col-md-12">
     <%= render 'clientes/index'%>
   </div>
 </div>
+<!--Tipos, subestados-->
 <div class="row" id="tip_est">
-  <!--Panel de prendas-->
   <div class="col-lg-6 page-header" id="p_tipos_prendas">
+    <!--Panel de tipos prendas-->
     <section>
-      <div class=" panel panel-default">
-        <!--Panel de tipos de prendas-->
+      <div class="panel panel-default">
         <div class="panel-heading">
           <div class="row">
-            <div class="col-lg-6">
+            <div class="col-sm-6">
               <h4>Descripción de prenda</h4>
             </div>
-            <div class="col-lg-6">
-              <div class="col-lg-offset-11">
+            <div class="col-sm-6">
+              <div class="col-sm-offset-11">
                 <h4>
                   <% if can? :manage, TipoPrenda %>
                     <%= link_to new_tipo_prenda_path, :title => "Nueva descripción",
@@ -122,5 +122,3 @@
     </section>
   </div>
 </div>
-<!--Panel de estados de clientes-->
-

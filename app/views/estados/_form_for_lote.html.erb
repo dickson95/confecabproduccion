@@ -1,4 +1,3 @@
-
     <%= f.fields_for :control_lotes, @lote.control_lotes.build do |c| %>
       <%= c.hidden_field :lote %>
       <div class="col-md-3">
@@ -9,29 +8,22 @@
       <div class="col-md-3">
         <%= c.association :estado, :selected => params[:estado_id], 
         collection: Estado.all, label: 'Parte del proceso' %>
-        
       </div>
       
       <% # Sección del subestado %>
       <div class="col-md-3">
-        
-        <%= c.input :sub_estado_id, :label => 'Proceso adicional',  wrapper: :vertical_input_group do %>
-        
+        <%= c.input :sub_estado, :label => 'Proceso adicional',  wrapper: :vertical_input_group do %>
           <% # form nuevo  %>
-          
             <%= c.input_field  :sub_estado_id, class: "form-control",
             :collection => @sub_estados, :value_method => :id, 
-            :include_blank => "-- Proceso adicional --", :selected => params[:sub_id]%>
+            :include_blank => true, :selected => params[:sub_id]%>
           
             <div class="input-group-btn">
               <%= link_to '...', add_remote_data_path(:place => "form_lote_sub_estado"),
               {:remote => true, :class => "btn btn-primary", :title => "Nuevo proceso"} %>
             </div>
-            
         <% end %>
-        
         <%= f.hidden_field :_destroy %>
-        
       </div>
     <% end %>
 </div>
