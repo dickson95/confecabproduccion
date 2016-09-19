@@ -2,6 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).on 'turbolinks:load', ->
+  
   if !gon.rol_user
     $('#lotes').DataTable
       language:
@@ -178,8 +179,7 @@ $(document).on 'turbolinks:load', ->
     $('#total9').val String(sum)
     $('.total9').val String(sum)
     return
-  
-  
+    
   # Sumar filas
   newSum = ->
     sum = 0
@@ -190,16 +190,37 @@ $(document).on 'turbolinks:load', ->
     thisRow.find('td.total :input[type="number"]').val sum
     return
   
+  # Establecer precio total
+  valPrecioT = ->
+    precio_u = $("#lote_precio_u").val()
+    cantidad = $("#lote_cantidad").val()
+    total = parseInt(precio_u) * parseInt(cantidad)
+    $("#lote_precio_t").val(total)
+  
+  # Horas requeridas para terminar el lote
+  valHReq = ->
+    cantidad = $("#lote_cantidad").val()
+    meta = $("#lote_meta").val()
+    total = parseInt(cantidad) / parseInt(meta)
+    total = Math.round total
+    $("#lote_h_req").val(total)
+  
   $('table').keyup ->
     $('div input').each ->
       that = this
       newSum.call that
+      valPrecioT()
+      valHReq()
       return
     return
+  
+  $("#lote_precio_u").keyup ->
+    valPrecioT()
     
-  ############################################################################
-  #   Validación del formulario                                              #
-  ############################################################################
+  $("#lote_meta").keyup ->
+    valHReq()
+    
+  # Validación del formulario
   $('#lote_referencia').keyup ->
     referencia = $('#lote_referencia')
     if referencia.val().trim() == ""
@@ -231,6 +252,7 @@ $(document).on 'turbolinks:load', ->
       cliente.parent().children(".input-group-btn").children()
       .removeClass("btn-default btn-danger btn-success")
       .addClass("btn-outline btn-success")
+      
   return
   # Fin del document ready
   

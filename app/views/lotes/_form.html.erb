@@ -26,11 +26,7 @@
           <div class="row">
               <div class="panel">
                 <div class="panel-heading panel-primary">
-                  <h2>Integración de lote</h2>
-                  <p class="text-muted">
-                    Hola <%=current_user.name%>, Ingresa aquí los primeros datos para los lotes que
-                    recibe nuestra empresa.
-                  </p>
+                  <h3>Integración de lote</h3>
                 </div>
               </div>
           </div>
@@ -129,11 +125,7 @@
             <div class="panel-heading panel-primary">
               <div class="row">
                 <div class="col-lg-6">
-                  <h2>Insumos del lote</h2>
-                  <p class="text-muted">
-                    Hola <%=current_user.name%>. Por favor ingresa los datos para 
-                    confirmar que los insumos se encuentran completos.
-                  </p>
+                  <h3>Insumos del lote</h3>
                 </div>
                 <div class="col-lg-6">
                   <%if !@lote.cliente.nil?%>
@@ -314,14 +306,27 @@
         <% if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
           <div class="row">
             <div class="col-lg-12">
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <%= f.input :no_remision, label: "Número de remisión" %>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <%= f.input :no_factura, label: "Número de factura" %>
               </div>
-              <div class="col-md-4">
+              <div class="col-md-3">
                 <%= f.input :precio_u, label: "Precio unitario" %>
+              </div>
+              <div class="col-md-3">
+                <%= f.input :precio_t, label: "Precio total", readonly: true %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="col-md-3">
+                <%= f.input :meta%>
+              </div>
+              <div class="col-md-3">
+                <%= f.input :h_req, label: "Horas requeridas", readonly: true %>
               </div>
             </div>
           </div>

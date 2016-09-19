@@ -89,7 +89,6 @@ class LotesController < ApplicationController
   # POST /lotes.json
   def create
     @lote = Lote.new(lote_params)
-    Rails.logger.info("PARAMS: #{params.inspect}")
     puts @lote
     respond_to do |format|
       

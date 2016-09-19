@@ -16,14 +16,6 @@ class Lote < ApplicationRecord
   validates :empresa, :cliente, :referencia,
               presence: true
   
-  def self.lote_all
-    lot = self.all
-    lot.each do |l|
-      puts l.op
-    end
-    true
-  end
-  
   
   def categorias_colores_for_form
     collection = categorias_colores.where(ave_id: id)
