@@ -16,14 +16,14 @@
           Verifique la información de los campos
         </div>
         <div class="form-inputs">
-          <%= f.input :tipo, label: "Descrición"%>
+          <%= f.input :tipo, label: "Descripción"%>
         </div>
         <div id="errors_div" class="text-danger"></div>
         
           <div class="modal-footer">
             <div class="form-actions">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <%= f.button :submit %>
+              <%= f.button :submit, :value => "Aceptar", data:{:dismiss_with => "Guardando"} %>
             </div>
           </div>
       <% end %>

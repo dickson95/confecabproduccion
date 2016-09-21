@@ -1,5 +1,6 @@
 class Lote < ApplicationRecord
   #Relaciones
+  belongs_to :programacion, optional: true
   belongs_to :referencia
   belongs_to :cliente
   belongs_to :tipo_prenda,  optional: true

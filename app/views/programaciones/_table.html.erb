@@ -1,0 +1,40 @@
+<table class="table">
+	<caption>
+		<div class="pull-left">
+			<h5>Programacion</h5>
+		</div>
+		<div class="pull-right">
+			<button type="button">Exportar</button>
+			<button type="button">Importar</button>
+		</div>
+	</caption>
+	<thead>
+		<tr>
+			<th>&#x2713;</th>
+			<th>Cliente</th>
+			<th>Descripción</th>
+			<th>Sec</th>
+			<th>Referencia</th>
+			<th>Cant</th>
+			<th>Precio</th>
+			<th>Total</th>
+			<th>Meta</th>
+			<th>Horas</th>
+			<th>I</th>
+		</tr>
+
+	</thead>
+	<%=render partial: "table_tbody"%>
+	<tfoot>
+		<tr>
+			<td colspan="11" style="margin-right:0px; padding-right:0px;">
+				<div class="pull-right">
+					<button type="button">Retirar</button>
+					<button type="button">Añadir</button>
+				</div>
+			</td>
+		</tr>
+	</tfoot>
+</table>
+
+

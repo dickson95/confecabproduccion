@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160915190502) do
+ActiveRecord::Schema.define(version: 20160920134457) do
 
   create_table "asignaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -105,10 +105,8 @@ ActiveRecord::Schema.define(version: 20160915190502) do
     t.datetime "updated_at",                                  null: false
     t.integer  "meta"
     t.integer  "h_req",                           default: 0
-    t.integer  "h_total"
     t.integer  "precio_u",                        default: 0
     t.integer  "precio_t",                        default: 0
-    t.string   "mes"
     t.integer  "secuencia"
     t.text     "obs_integracion",   limit: 65535
     t.boolean  "fin_integracion"
@@ -116,11 +114,21 @@ ActiveRecord::Schema.define(version: 20160915190502) do
     t.integer  "respon_edicion_id",                           null: false
     t.date     "fecha_entrada"
     t.integer  "cantidad"
+    t.integer  "programacion_id"
     t.index ["cliente_id"], name: "index_lotes_on_cliente_id", using: :btree
+    t.index ["programacion_id"], name: "index_lotes_on_programacion_id", using: :btree
     t.index ["referencia_id"], name: "index_lotes_on_referencia_id", using: :btree
     t.index ["respon_edicion_id"], name: "index_lotes_on_respon_edicion_id", using: :btree
     t.index ["respon_insumos_id"], name: "index_lotes_on_respon_insumos_id", using: :btree
     t.index ["tipo_prenda_id"], name: "index_lotes_on_tipo_prenda_id", using: :btree
+  end
+
+  create_table "programaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.date     "mes"
+    t.integer  "horas"
+    t.string   "costo"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "referencias", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -195,6 +203,7 @@ ActiveRecord::Schema.define(version: 20160915190502) do
   add_foreign_key "control_lotes", "estados"
   add_foreign_key "control_lotes", "lotes"
   add_foreign_key "lotes", "clientes"
+  add_foreign_key "lotes", "programaciones"
   add_foreign_key "lotes", "referencias"
   add_foreign_key "lotes", "tipos_prendas"
   add_foreign_key "roles_users", "roles"

@@ -1,6 +1,10 @@
 <li class="active">
     <a href="/" title="Lotes" class="item"><i class="fa fa-fw fa-dashboard"></i>&nbsp;&nbsp;Lotes</a>
 </li>
+<li class="active">
+    <%date_current = Time.new%>
+	<%=link_to "Programaciones", programaciones_path(:month => date_current.strftime("%Y%m"))%>
+</li>
 <%if (can? :manage, ControlLote) || (can? :read, ControlLote)  %>
 <li>
     <a href="/control_lotes" title="Historial" class="item"><i class="fa fa-history"></i>&nbsp;&nbsp;&nbsp;Historial</a>

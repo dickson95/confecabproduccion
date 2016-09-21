@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  post 'programaciones/program_table/:month', to: 'programaciones#program_table', as: :program_table
+  post 'programaciones/generate_program/:id', to: 'programaciones#generate_program', as: :generate
+  get 'programaciones/index', to: 'programaciones#index', as: :programaciones
+
   resources :tallas
   root :to => 'lotes#index'
   resources :roles

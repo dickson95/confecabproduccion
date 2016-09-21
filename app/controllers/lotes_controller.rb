@@ -346,8 +346,8 @@ class LotesController < ApplicationController
     def lote_params
       params.require(:lote).permit(:empresa, :color_prenda, 
       :no_remision, :no_factura, :cliente_id, :tipo_prenda_id, :prioridad, 
-      :op, :fecha_entrada,  :fin_insumos, :obs_insumos, 
-      :obs_integracion, :fin_integracion, :cantidad, :precio_u,
+      :op, :fecha_entrada,  :fin_insumos, :obs_insumos, :meta, :h_req,
+      :obs_integracion, :fin_integracion, :cantidad, :precio_u, :precio_t,
       :fecha_revision, :fecha_entrega, :control_lotes_attributes => [:id, 
       :sub_estado_id, :lote_id, :fecha_ingreso, :fecha_salida, :estado_id, :_destroy],
       :colores_lotes_attributes => [:id, :color_id, :lote_id, :total_id, :_destroy, 
@@ -359,9 +359,9 @@ class LotesController < ApplicationController
     def lote_params_u
       params.require(:lote).permit(:empresa, :color_prenda, 
       :no_remision, :no_factura, :fin_insumos, :obs_insumos, 
-      :obs_integracion, :fin_integracion, :precio_u,
+      :obs_integracion, :fin_integracion, :precio_u,  :meta, :h_req,
       :cliente_id, :tipo_prenda_id, :prioridad, :op, :fecha_entrada,
-      :fecha_revision, :fecha_entrega,:cantidad,
+      :fecha_revision, :fecha_entrega,:cantidad,  :precio_t,
       :colores_lotes_attributes => [:id, :color_id, :lote_id, :total_id, :_destroy, 
       :cantidades_attributes =>[:id, :categoria_id, :total_id, :cantidad, :_destroy]]).
       merge(respon_edicion_id: current_user, referencia_id: set_referencia)

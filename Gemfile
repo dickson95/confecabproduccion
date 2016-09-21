@@ -60,7 +60,6 @@ gem 'jquery-ui-rails'
 gem 'jquery-timepicker-addon-rails'
 gem 'devise'
 gem 'cancancan', '~> 1.10'
-gem 'whenever', :require => false
 gem 'rails4-autocomplete'
 gem 'gon'
 

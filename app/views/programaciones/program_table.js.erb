@@ -1,0 +1,8 @@
+<%date = Programacion.date_split params[:month]%>
+<%month = date[:month]%>
+<%month = @meses.fetch(month.to_i - 1)%>
+$("#<%=params[:month]%>").addClass("active");
+$("div.tab-content").find(".tab-content").find(".active").removeClass("in active");
+$("#<%=month%>").children().remove();
+$("#<%=month%>").append("<%= j render "table", programaciones: @programaciones%>");
+$("#<%=month%>").addClass("in active");

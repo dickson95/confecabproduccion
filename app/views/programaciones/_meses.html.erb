@@ -1,0 +1,21 @@
+<%date = Programacion.date_split params[:month] %>
+<%mes_active = @meses.fetch(date[:month].to_i - 1)%>
+<div id="<%=year%>" class="tab-pane fade in active"> 
+	<!--Meses-->
+	<ul class="nav nav-tabs nav-justified" role="tablist">
+		<%cont_mes = 1%>
+		<%@meses.each do |mes|%>
+		<li class="tab_mes <%=mes == mes_active ? "active" : ""%>" id='<%="#{year}#{cont_mes < 10 ? "0#{cont_mes}" : cont_mes}"%>'><%= link_to mes, program_table_path("#{year}#{cont_mes < 10 ? "0#{cont_mes}" : cont_mes}"), method: :post, remote: true%></li>
+		<%cont_mes += 1%>
+		<%end%>	
+	</ul>
+	<div class="tab-content">
+		<%@meses.each do |mes|%>
+		<div id="<%=mes%>" class="tab-pane fade <%=mes == mes_active ? "in active" : ""%>">
+			<%if mes == mes_active%>
+				<%=render "table"%>
+			<%end%>
+		</div>	
+		<%end%>
+	</div>
+</div>
