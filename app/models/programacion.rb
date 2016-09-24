@@ -35,7 +35,7 @@ class Programacion < ApplicationRecord
 	# Retorna true si hay lotes para la programación
 	def self.lotes_for_program
 		lotes_program = Lote.joins(:control_lotes)
-							.where("lotes.programacion_id IS NULL and control_lotes.estado_id = 2")
+							.where("lotes.programacion_id IS NULL")
 							.distinct().pluck("lotes.id")
 		if lotes_program.empty?
 			return false
@@ -43,5 +43,4 @@ class Programacion < ApplicationRecord
 			return true
 		end
 	end
-
 end

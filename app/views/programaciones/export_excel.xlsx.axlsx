@@ -1,0 +1,95 @@
+wb = xlsx_package.workbook
+
+# Configuración del mes de la programación
+date = Programacion.date_split params[:month]
+month = date[:month]
+month = @meses.fetch(month.to_i - 1)
+
+# Centrar celdas
+wrap_text_title = wb.styles.add_style(
+	{
+		:bg_color => "D8D8D8",
+		:sz => 14,
+		:font_name => 'Calibri',
+		:alignment => 
+			{:horizontal => 
+				:center, 
+				:vertical => :center, 
+				:wrap_text => true
+			},
+		:border => 
+			{ 
+				:style => :thin, 
+				:color => "00" 
+			}
+	}  
+)
+wrap_text_subtitles = wb.styles.add_style (
+	{
+		:fg_color => "17365D",
+		:border => { :style => :thin, :color => "00" },
+		:alignment => 
+		{
+			:horizontal => :center, 
+			:vertical => :center, 
+			:wrap_text => true
+		}
+		
+	}
+)
+
+border =  wb.styles.add_style :border => { :style => :thin, :color => "00" }
+# Celdas a imprimir
+wb.add_worksheet(:name  => "Programación") do |sheet|
+	sheet.add_row ["PROGRAMACIÓN MES #{month.upcase} DE #{date[:year]}","","","","","","",""], :style => wrap_text_title
+	sheet.add_row ["","","","","","","",""], :style => wrap_text_title
+	# Combinar celdas
+	sheet.merge_cells("A1:I2")
+	rt = Axlsx::RichText.new
+	rt1 = Axlsx::RichText.new
+	rt2 = Axlsx::RichText.new
+	rt3 = Axlsx::RichText.new
+	rt4 = Axlsx::RichText.new
+	rt5 = Axlsx::RichText.new
+	rt6 = Axlsx::RichText.new
+	rt7 = Axlsx::RichText.new
+	rt8 = Axlsx::RichText.new
+
+	rt.add_run('CLIENTE', :b => true)
+	rt1.add_run('DESCRIPCIÓN', :b => true)
+	rt2.add_run('SECU', :b => true)
+	rt3.add_run('REFERENCIA', :b => true)
+	rt4.add_run('CANT', :b => true)
+	rt5.add_run('PRECIO', :b => true)
+	rt6.add_run('TOTAL', :b => true)
+	rt7.add_run('META', :b => true)
+	rt8.add_run('HORAS', :b => true)
+
+	sheet.add_row [
+			rt,
+			rt1,
+			rt2,
+			rt3,
+			rt4,
+			rt5,
+			rt6,
+			rt7,
+			rt8,
+		], :style => wrap_text_subtitles
+  @programaciones.each do |programacion|
+    sheet.add_row [
+    	programacion.fetch(0), 
+    	programacion.fetch(1), 
+    	programacion.fetch(2),
+    	programacion.fetch(3), 
+    	programacion.fetch(4), 
+    	programacion.fetch(5),
+    	programacion.fetch(6), 
+    	programacion.fetch(7), 
+    	programacion.fetch(8)
+    ], :style => border
+  end
+
+  sheet.column_widths 20, nil, nil, nil, nil, nil, nil, nil, nil
+end
+

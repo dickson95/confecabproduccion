@@ -54,12 +54,28 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+
+# Maquetación y efectos dinámicos
 gem 'simple_form'
 gem 'bootstrap_sb_admin_base_v2'
 gem 'jquery-ui-rails'
 gem 'jquery-timepicker-addon-rails'
+gem 'rails4-autocomplete'
+
+# Autenticación y control
 gem 'devise'
 gem 'cancancan', '~> 1.10'
-gem 'rails4-autocomplete'
+
+
+# usada para pintar dataTables de acuerdo con el rol que se presenta
 gem 'gon'
+
+# Grupo de gemas para exportar a excel
+gem 'rubyzip', '~> 1.1.0'
+gem 'axlsx', '2.1.0.pre'
+gem 'axlsx_rails'
+
+# Gema para exportar a PDF
+gem 'wicked_pdf'
+gem 'wkhtmltopdf-binary'
 

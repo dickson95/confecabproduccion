@@ -1,0 +1,44 @@
+<div class="modal-dialog modal-sm" role="document">
+	<div class="modal-content">
+		
+		<div class="modal-body">
+			<%=form_tag add_lotes_programing_path, remote: true do%>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>&#x2713;</th>
+							<th class="text-right">Referencia</th>
+						</tr>
+					</thead>
+					<tbody>
+					<%if @lotes_to_program.empty?%>
+						<tr>
+							<td colspan="2">
+								No hay lotes para añadir
+							</td>
+						</tr>
+									<input type="hidden" name="month" value="<%=@programacion%>">
+					<%else%>
+						<%@lotes_to_program.each do |lote|%>
+							<tr>
+								<td><%=check_box_tag "lotes[]", "#{lote.fetch(0)}"%></td>
+								<td class="text-right">
+									<%=hidden_field_tag 'month', @programacion%>
+									<%=lote.fetch(1)%>
+								</td>
+							</tr>
+						<%end%>
+					<%end%>
+					</tbody>	
+				</table>
+				<div class="modal-footer">
+					<%=submit_tag "Aceptar", data:{:dismiss_with => "Espere..."}, :disabled => @lotes_to_program.empty? ? true : false, class: "btn btn-primary"%>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">
+						Cerrar
+					</button>
+				</div>
+			<%end%>
+		</div>
+		
+	</div>
+</div>

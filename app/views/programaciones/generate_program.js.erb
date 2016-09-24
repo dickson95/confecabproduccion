@@ -1,4 +1,4 @@
 <%date = Programacion.date_split params[:month]%>
 <%month = date[:month]%>
 <%month = @meses.fetch(month.to_i - 1)%>
-$("#<%=month%>").find("table").find("tbody").replaceWith("<%=j render partial: "table_tbody"%>");
+$("#<%=month%>t").find("tbody").replaceWith("<%=j render partial: "table_tbody", locals:{mes: month}%>");

@@ -1,16 +1,15 @@
 	<tbody>
 		<% # Control en caso de que la programación esté vacía %>
-		<!--Evitar que aparezca la opción de generar programación si no hay lotes con que hacerla-->
 		<%if @no_empty_program.nil?%>
 		<%@programaciones.each do |programacion|%>
 		<tr>
-			<td><input type="checkbox" name=""></td>
+			<td><%=check_box_tag "lotes[#{programacion.fetch(9)}]", programacion.fetch(9)%></td>
 			<td><%=programacion.fetch(0)%></td>
 			<td><%=programacion.fetch(1)%></td>
 			<td><%=programacion.fetch(2)%></td>
 			<td><%=programacion.fetch(3)%></td>
 			<td><%=programacion.fetch(4)%></td>
-			<td><%=programacion.fetch(5)%></td>
+			<td><%=Lote.str_pesos programacion.fetch(5)%></td>
 			<td><%=Lote.str_pesos programacion.fetch(6)%></td>
 			<td><%=programacion.fetch(7)%></td>
 			<td><%=programacion.fetch(8)%></td>
@@ -18,7 +17,7 @@
 		</tr>
 		<%end%>
 		<%elsif @no_empty_program%>
-		<tr>
+		<tr id="row_generate">
 			<td colspan="11">
 				No existe programación para este mes<br>
 				¿Desea generarla?

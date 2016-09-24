@@ -1,0 +1,13 @@
+<%@lotes.each do |id|%>
+$("#lotes_<%=id%>").parent().parent().remove();
+<%end%>
+<%date = Programacion.date_split params[:month]%>
+<%month = date[:month]%>
+<%month = @meses.fetch(month.to_i - 1)%>
+var size_table = $('#<%=month%>t >tbody >tr').length;
+if (size_table < 1){
+	console.log("leido");
+	$('#<%=month%>t').parent().replaceWith("<%=j render "table", mes: month%>");
+}
+
+

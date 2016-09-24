@@ -1,0 +1,17 @@
+<%@lotes.each do |lote|%>
+	<%lote.each do |l|%>
+		<tr>
+			<td><%=check_box_tag "lotes[#{l.id}]", l.id%></td>
+			<td><%=l.cliente.cliente%></td>
+			<td><%=l.tipo_prenda.tipo%></td>
+			<td><%=l.secuencia%></td>
+			<td><%=l.referencia.referencia%></td>
+			<td><%=l.cantidad%></td>
+			<td><%=Lote.str_pesos l.precio_u%></td>
+			<td><%=Lote.str_pesos l.precio_t%></td>
+			<td><%=l.meta%></td>
+			<td><%=l.h_req%></td>
+			<td>I</td>
+		</tr>
+	<%end%>
+<%end%>

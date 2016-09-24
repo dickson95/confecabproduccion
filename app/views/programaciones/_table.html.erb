@@ -1,10 +1,13 @@
-<table class="table">
+
+<%=form_tag remove_from_programing_path(params[:month]), remote: true do%>
+<table class="table" id="<%=mes%>t">
 	<caption>
 		<div class="pull-left">
-			<h5>Programacion</h5>
+			<h4>Programación</h4>
 		</div>
 		<div class="pull-right">
-			<button type="button">Exportar</button>
+			<%=link_to "Exportar", export_excel_path(format: "xlsx", :month => params[:month])%>
+			<%=link_to "Exportar PDF", export_pdf_path(format: "pdf",:month => params[:month])%>
 			<button type="button">Importar</button>
 		</div>
 	</caption>
@@ -29,12 +32,12 @@
 		<tr>
 			<td colspan="11" style="margin-right:0px; padding-right:0px;">
 				<div class="pull-right">
-					<button type="button">Retirar</button>
-					<button type="button">Añadir</button>
+					<%=submit_tag "Retirar", data:{:dismiss_with => "Espere..."}, class:"btn btn-warning"%>
+					<%= link_to "Añadir", modal_open_path(params[:month]), class:"btn btn-default", remote: true%>
 				</div>
 			</td>
 		</tr>
 	</tfoot>
 </table>
-
+<%end%>
 

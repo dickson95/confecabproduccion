@@ -1,0 +1,35 @@
+<table class="table">
+	<caption>
+			<h2>Programación</h2>
+	</caption>
+	<thead>
+		<tr>
+			<th>Cliente</th>
+			<th>Descripción</th>
+			<th>Sec</th>
+			<th>Referencia</th>
+			<th>Cant</th>
+			<th>Precio</th>
+			<th>Total</th>
+			<th>Meta</th>
+			<th>Horas</th>
+		</tr>
+
+	</thead>
+	<tbody>
+		<%@programaciones.each do |programacion|%>
+		<tr>
+			<td><%=programacion.fetch(0)%></td>
+			<td><%=programacion.fetch(1)%></td>
+			<td><%=programacion.fetch(2)%></td>
+			<td><%=programacion.fetch(3)%></td>
+			<td><%=programacion.fetch(4)%></td>
+			<td><%=Lote.str_pesos programacion.fetch(5)%></td>
+			<td><%=Lote.str_pesos programacion.fetch(6)%></td>
+			<td><%=programacion.fetch(7)%></td>
+			<td><%=programacion.fetch(8)%></td>
+		</tr>
+		<%end%>
+	</tbody>
+</table>
+
