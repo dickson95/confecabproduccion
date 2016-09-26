@@ -5,33 +5,48 @@ class Programacion < ApplicationRecord
 
 	###
   	# Métodos del modelo
-
+	
 	# Método que determina si hay una programación existente para el mes solicitado.
 	# Retorna true en caso de no encontrar nada en la consulta
 	def self.new_old_programacion (month, empresa)
-		empresa = 
 		$programacion = self.where("extract(year_month from programaciones.mes) = ? and programaciones.empresa = ?",
 							month, empresa)
 		boolean = false 
-		puts $programacion
 		if $programacion.empty?
 			boolean = true
 		end
 		boolean
 	end
-
-
-	# Establece cuales son los años que hay en la tabla de las programaciones
-	def self.years_db 
-		@years = self.distinct.pluck("extract(year from mes)")
-	end
-
-
 	# Retorna un hash con el año y el mes
 	def self.date_split(year_month)
 		year = year_month[0..3]
 		month = year_month[4, 5]
 		y_m = {:year => year, :month => month}
+	end
+	
+	
+	def self.set_year_program(empresa, month)
+		empresa_f = empresa == "CAB" ? true : false
+		desicion = self.new_old_programacion month, empresa_f
+		puts "desición tomada #{desicion}"
+		if desicion
+			puts "Debe crearse una nueva programación"
+			# date_split retorna un hash con el año y el mes
+			date = self.date_split month
+
+			# Fecha con la que se va a generar la programación
+			timelocal = Time.local(date[:year], date[:month])
+
+			# Crear la programación para el mes seleccionado
+			puts "voy a crearla"
+			programacion = self.new(:mes => timelocal, :empresa => empresa_f)
+			programacion.save
+		end
+	end
+	
+	# Establece cuales son los años que hay en la tabla de las programaciones
+	def self.years_db 
+		@years = self.distinct.pluck("extract(year from mes)")
 	end
 
 	# Establecer si hay lotes para hacer una nueva programación

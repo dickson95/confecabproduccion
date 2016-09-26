@@ -5,32 +5,22 @@ class ProgramacionesController < ApplicationController
 	before_action :no_empty_program, except: [:modal_open, :remove_from_programing, :add_lotes_to_programing]
 	
 	def index
+		programacion = Programacion.set_year_program params[:empresa], params[:month]
 		@years = Programacion.years_db
+		if programacion
+			programacion_id
+		end
 	end
 
 
 	# Consultar las programaciones por mes y crear si es necesario
-	# NOTA IMPORTANTE: Organizar este método de forma que solo genere la programación
 	# si hace falta, no combinarlo con otras funciones.
 	# POST /program_table/:month
 	def program_table
-		# Existe o no progrmación para el mes del parámetro
-		empresa = params[:empresa] == "CAB" ? true : false
-		desicion = Programacion.new_old_programacion params[:month], empresa
-		if desicion
-			# date_split retorna un hash con el año y el mes
-			date = Programacion.date_split params[:month]
-
-			# Fecha con la que se va a generar la programación
-			timelocal = Time.local(date[:year], date[:month])
-
-			# Crear la programación para el mes seleccionado
-			
-			programacion = Programacion.new(:mes => timelocal, :empresa => empresa)
-			if programacion.save
-				respond_to do |format|
-					format.js
-				end
+		programacion  = Programacion.set_year_program params[:empresa], params[:month]
+		if programacion
+			respond_to do |format|
+				format.js
 			end
 		end
 		set_programaciones
@@ -154,8 +144,10 @@ class ProgramacionesController < ApplicationController
 		def programacion_id
 			# Consultar id de la programación para el enlace de generar la programación
 			# en _table_body.html.erb y para imprimir la primera vez en el index
+			empresa = params[:empresa] == "CAB" ? true : false
 			@programacion = Programacion
-				.where("extract(year_month from programaciones.mes) = ?", params[:month])
+				.where("extract(year_month from programaciones.mes) = ? and empresa = ?", 
+				params[:month], empresa)
 				.pluck(:id)
 		end
 
