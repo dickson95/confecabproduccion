@@ -17,6 +17,7 @@ class Programacion < ApplicationRecord
 		end
 		boolean
 	end
+
 	# Retorna un hash con el año y el mes
 	def self.date_split(year_month)
 		year = year_month[0..3]
@@ -25,6 +26,8 @@ class Programacion < ApplicationRecord
 	end
 	
 	
+	# Crea el año y mes en caso de que estos no existan para la programación
+
 	def self.set_year_program(empresa, month)
 		empresa_f = empresa == "CAB" ? true : false
 		desicion = self.new_old_programacion month, empresa_f
@@ -63,6 +66,9 @@ class Programacion < ApplicationRecord
 		end
 	end
 
+	# Retorna un array que contiene un campo dos espacios que coinciden
+	# y dos que no coinciden de acuerdo con las combinaciones dadas para
+	# las programaciones existentes y las vacías
 	def self.interfaz (n_e_p, programaciones)
 		booleans = Array.new
 		if n_e_p == false && !programaciones.empty?

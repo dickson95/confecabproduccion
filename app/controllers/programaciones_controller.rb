@@ -19,11 +19,12 @@ class ProgramacionesController < ApplicationController
 	def program_table
 		programacion  = Programacion.set_year_program params[:empresa], params[:month]
 		if programacion
-			respond_to do |format|
-				format.js
-			end
+			programacion_id
 		end
 		set_programaciones
+		respond_to do |format|
+			format.js
+		end
 	end
 
 	# Generar la programación
@@ -76,8 +77,7 @@ class ProgramacionesController < ApplicationController
 			@lotes = Array.new
 			if !params[:lotes].nil?
 				params[:lotes].each do |lote|
-					Lote
-					.where(:id => lote)
+					Lote.where(:id => lote)
 					.update(:programacion_id => nil)
 					@lotes.push lote
 				end
@@ -133,8 +133,10 @@ class ProgramacionesController < ApplicationController
 
 		def set_programaciones
 			# Consulta necesaria para cargar todas las instancias de las vistas exstentes
-			@programaciones = Programacion.joins(lotes: [:cliente, :tipo_prenda, :referencia])
-			.where("extract(year_month from programaciones.mes) = ? and lotes.empresa = ?",  params[:month], params[:empresa])
+			@programaciones = Programacion
+			.joins(lotes: [:cliente, :tipo_prenda, :referencia])
+			.where("extract(year_month from programaciones.mes) = ? and lotes.empresa = ?",  
+				params[:month], params[:empresa])
 			.order("lotes.secuencia asc")
 			.pluck("clientes.cliente", "tipos_prendas.tipo", "lotes.secuencia", "referencias.referencia", 
 				"lotes.cantidad", "lotes.precio_u", "lotes.precio_t", "lotes.meta", "lotes.h_req",
