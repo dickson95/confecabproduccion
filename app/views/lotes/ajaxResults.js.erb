@@ -22,8 +22,7 @@
 <%elsif params[:place] =="form_edit_lote"%>
     $('#form_collapse').html("<%= escape_javascript(render 'form', lote: @lote)%>");
 <%elsif params[:place] == "form_lote_sub_estado"%>
-    $("#myModal").html("<%= escape_javascript(render 'sub_estados/form', 
-    sub_estado: @sub_estado) %>");
+    $("#myModal").html("<%= escape_javascript(render 'sub_estados/form', sub_estado: @sub_estado) %>");
     $('#myModal').modal('toggle');
 <%elsif params[:place] == "form_lote_sub_estado_response"%>
     var updatedFormEst = $('#lote_control_lotes_attributes_0_sub_estado_id', $('<%= j render 'lotes/updateForm' %>'));

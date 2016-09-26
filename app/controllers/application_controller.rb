@@ -20,6 +20,11 @@ class ApplicationController < ActionController::Base
   def rol_user
     if !current_user.nil?
       gon.rol_user = current_user.has_rol? :gerente
+      @rol_form = nil
+      rol = current_user.roles
+      (rol).each do |s|
+        @rol_form = s.name
+      end
     end
   end
 end

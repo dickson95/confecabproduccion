@@ -2,7 +2,6 @@ class LotesController < ApplicationController
   
   # Acciones primarias
   before_action :set_color, only: [:create, :update]
-  before_action :set_rol, only: [:index, :new, :edit, :update, :create]
   before_action :set_tipo_prenda, only: [:new, :edit]
   before_action :referencia_params, only: [:set_referencia]
   before_action :set_lote, only: [:show, :edit, :update, :destroy]
@@ -235,15 +234,6 @@ class LotesController < ApplicationController
     
     def set_lote_u
       @lote = ControlLote.where(lote_id: params[:id]).order("fecha_ingreso").max
-    end
-    
-    def set_rol
-      # Carga de rol
-      @rol_form = nil
-      rol = current_user.roles
-      (rol).each do |s|
-        @rol_form = s.name
-      end
     end
     
     def set_talla

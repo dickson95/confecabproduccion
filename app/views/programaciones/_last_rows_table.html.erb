@@ -1,17 +1,23 @@
-<%@lotes.each do |lote|%>
-	<%lote.each do |l|%>
-		<tr>
-			<td><%=check_box_tag "lotes[#{l.id}]", l.id%></td>
-			<td><%=l.cliente.cliente%></td>
-			<td><%=l.tipo_prenda.tipo%></td>
-			<td><%=l.secuencia%></td>
-			<td><%=l.referencia.referencia%></td>
-			<td><%=l.cantidad%></td>
-			<td><%=Lote.str_pesos l.precio_u%></td>
-			<td><%=Lote.str_pesos l.precio_t%></td>
-			<td><%=l.meta%></td>
-			<td><%=l.h_req%></td>
-			<td>I</td>
-		</tr>
+
+	<%@lotes.each do |lote|%>
+		<%lote.each do |l|%>
+			<tr>
+				<td><%=check_box_tag "lotes[#{l.id}]", l.id%></td>
+				<td class="col-xs-2"><%=l.cliente.cliente%></td>
+				<td class="col-xs-1"><%=l.tipo_prenda.tipo%></td>
+				<td style="width: 3.5em;">
+					<%=text_field_tag "secuencia[#{l.id}[sec]]", "", class:"form-control", :value => l.id%>
+					<%=hidden_field_tag "secuencia[#{l.id}[id]]", l.id%>
+				</td>
+				<td><%=l.referencia.referencia%></td>
+				<td><%=l.cantidad%></td>
+				<td><%=Lote.str_pesos l.precio_u%></td>
+				<td><%=Lote.str_pesos l.precio_t%></td>
+				<td><%=l.meta%></td>
+				<td><%=l.h_req%></td>
+				<td>I</td>
+			</tr>
+		<%end%>
 	<%end%>
-<%end%>
+
+	

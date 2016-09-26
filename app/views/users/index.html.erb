@@ -7,11 +7,13 @@
       </div>
       <div class="col-lg-6">
         <div class="col-lg-offset-11">
+        <%if @rol_form != "gerente"%>
           <h1>
           <%= link_to new_user_path, :title => "Nuevo usuario" do %>
             <%= content_tag :i, "", :class => "fa fa-plus" %>
           <%end%>
           </h1>
+        <%end%>
         </div>
       </div>
     </div>
@@ -47,15 +49,18 @@
                 :title => "Editar mi perfil" do%>
                     <%=content_tag :i, "", :class => "fa fa-pencil" %>
                 <%end%>
-              <%elsif user.id == 1%>
-                <%=link_to "",class: "btn btn-danger", :disabled => true,
-                :title => "El usuario administrador no se puede eliminar" do%>
-                    <%=content_tag :i, "", :class => "fa fa-trash-o" %>
-                <%end%>
-              <%else%>
-                <%=link_to user, method: :delete, class: "btn btn-danger", 
-                :title => "Eliminar", data: { confirm: "Are you sure?" } do%>
-                    <%=content_tag :i, "", :class => "fa fa-trash-o" %>
+              <%elsif @rol_form != "gerente"%>
+                <%if user.id == 1%>
+                  <%=link_to "",class: "btn btn-danger", :disabled => true,
+                  :title => "El usuario administrador no se puede eliminar" do%>
+                      <%=content_tag :i, "", :class => "fa fa-trash-o" %>
+                  <%end%>
+                <%else%>
+
+                  <%=link_to user, method: :delete, class: "btn btn-danger", 
+                  :title => "Eliminar", data: { confirm: "Are you sure?" } do%>
+                      <%=content_tag :i, "", :class => "fa fa-trash-o" %>
+                  <%end%>
                 <%end%>
               <%end%>
             </td>

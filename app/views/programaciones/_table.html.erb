@@ -1,14 +1,31 @@
 
-<%=form_tag remove_from_programing_path(params[:month]), remote: true do%>
+<%=form_tag remove_from_programing_path(params[:month], :empresa => params[:empresa]), remote: true do%>
+<%disabled = Programacion.interfaz @no_empty_program, @programaciones%>
 <table class="table" id="<%=mes%>t">
 	<caption>
 		<div class="pull-left">
 			<h4>Programación</h4>
 		</div>
-		<div class="pull-right">
-			<%=link_to "Exportar", export_excel_path(format: "xlsx", :month => params[:month])%>
-			<%=link_to "Exportar PDF", export_pdf_path(format: "pdf",:month => params[:month])%>
-			<button type="button">Importar</button>
+		<!--Opciones de exportación-->
+		<div class="row pull-right text-right">
+			<div class="col-sm-5 col-sm-offset-1">
+				<div class="dropdown">
+					<button type="button" class="btn btn-primary dropdown-toggle disabled-btn" data-toggle="dropdown" <%=disabled.fetch(0) ? 'disabled' : ''%>>Exportar&nbsp;<i class="caret"></i></button>
+					<ul class="dropdown-menu pull-right">
+						<li>
+							<%=link_to "Excel", export_excel_path(format: "xlsx", :month => params[:month], :empresa => params[:empresa])%>
+						</li>
+						<li>
+							<%=link_to "PDF", export_pdf_path(format: "pdf",:month => params[:month], :empresa => params[:empresa])%>
+						</li>
+					</ul>	
+				</div>
+			</div>
+			<%if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
+			<div class="col-sm-6">
+				<%=submit_tag "Ordenar", class:"btn btn-default disabled-btn", disabled: disabled.fetch(0)%>
+			</div>
+			<%end%>
 		</div>
 	</caption>
 	<thead>
@@ -28,16 +45,18 @@
 
 	</thead>
 	<%=render partial: "table_tbody"%>
+	<%if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
 	<tfoot>
 		<tr>
 			<td colspan="11" style="margin-right:0px; padding-right:0px;">
 				<div class="pull-right">
-					<%=submit_tag "Retirar", data:{:dismiss_with => "Espere..."}, class:"btn btn-warning"%>
-					<%= link_to "Añadir", modal_open_path(params[:month]), class:"btn btn-default", remote: true%>
+					<%=submit_tag "Retirar", class:"btn btn-warning disabled-btn", disabled: disabled.fetch(0)%>
+					<%=link_to "Añadir", modal_open_path(params[:month], :empresa => params[:empresa]), class:"btn btn-default #{disabled.fetch(1) ? 'disabled' : ''}", remote: true, id: "add-lote" %>
 				</div>
 			</td>
 		</tr>
 	</tfoot>
+	<%end%>
 </table>
 <%end%>
 

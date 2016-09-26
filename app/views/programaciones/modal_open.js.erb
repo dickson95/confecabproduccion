@@ -19,8 +19,14 @@ $("#modal_add").modal("toggle");
 <%date = Programacion.date_split params[:month]%>
 <%month = date[:month]%>
 <%month = @meses.fetch(month.to_i - 1)%>
-$("#<%=month%>t").find("tbody").append("<%=j render partial: "last_rows_table", locals:{mes: month}%>");
+var last_rows = $('<%=j render partial: "last_rows_table", locals:{mes: month}%>');
+$("#<%=month%>t").find("tbody").append(last_rows);
 $("#row_generate").remove();
+$(".disabled-btn").prop("disabled", false);
+<%if @no_empty_program == false%>
+	$("#add-lote").bind('click', false);
+	$("#add-lote").addClass("disabled");
+<%end%>
 $("#modal_add").modal("toggle");
 <%end%>
 

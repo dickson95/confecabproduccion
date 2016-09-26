@@ -1,12 +1,19 @@
 	<tbody>
 		<% # Control en caso de que la programación esté vacía %>
-		<%if @no_empty_program.nil?%>
+		<%if @no_empty_program == false && !@programaciones.empty? %>
 		<%@programaciones.each do |programacion|%>
 		<tr>
 			<td><%=check_box_tag "lotes[#{programacion.fetch(9)}]", programacion.fetch(9)%></td>
-			<td><%=programacion.fetch(0)%></td>
-			<td><%=programacion.fetch(1)%></td>
-			<td><%=programacion.fetch(2)%></td>
+			<td class="col-xs-2"><%=programacion.fetch(0)%></td>
+			<td class="col-xs-1"><%=programacion.fetch(1)%></td>
+			<td style="width: 3.5em;">
+			<%if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
+				<%=text_field_tag "secuencia[#{programacion.fetch(9)}[sec]]", "", class:"form-control", :value => programacion.fetch(2)%>
+				<%=hidden_field_tag "secuencia[#{programacion.fetch(9)}[id]]", programacion.fetch(9)%>
+			<%else%>
+				<%=programacion.fetch(2)%>
+			<%end%>
+			</td>
 			<td><%=programacion.fetch(3)%></td>
 			<td><%=programacion.fetch(4)%></td>
 			<td><%=Lote.str_pesos programacion.fetch(5)%></td>
@@ -16,15 +23,38 @@
 			<td>I</td>
 		</tr>
 		<%end%>
-		<%elsif @no_empty_program%>
+		<%elsif @no_empty_program && @programaciones.empty?%>
 		<tr id="row_generate">
 			<td colspan="11">
 				No existe programación para este mes<br>
 				¿Desea generarla?
-				<%=link_to "Generar programación", generate_path(@programacion, :month => params[:month]), 
+				<%=link_to "Generar programación", generate_path(@programacion, :month => params[:month], :empresa => params[:empresa]), 
 				method: :post, remote: :true%>
 			</td>
 		</tr>
+		<%elsif @no_empty_program && !@programaciones.empty?%>
+		<%@programaciones.each do |programacion|%>
+		<tr>
+			<td><%=check_box_tag "lotes[#{programacion.fetch(9)}]", programacion.fetch(9)%></td>
+			<td class="col-xs-2"><%=programacion.fetch(0)%></td>
+			<td class="col-xs-1"><%=programacion.fetch(1)%></td>
+			<td style="width: 3.5em;">
+			<%if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
+				<%=text_field_tag "secuencia[#{programacion.fetch(9)}[sec]]", "", class:"form-control", :value => programacion.fetch(2)%>
+				<%=hidden_field_tag "secuencia[#{programacion.fetch(9)}[id]]", programacion.fetch(9)%>
+			<%else%>
+				<%=programacion.fetch(9)%>
+			<%end%>
+			</td>
+			<td><%=programacion.fetch(3)%></td>
+			<td><%=programacion.fetch(4)%></td>
+			<td><%=Lote.str_pesos programacion.fetch(5)%></td>
+			<td><%=Lote.str_pesos programacion.fetch(6)%></td>
+			<td><%=programacion.fetch(7)%></td>
+			<td><%=programacion.fetch(8)%></td>
+			<td>I</td>
+		</tr>
+		<%end%>
 		<%else%>
 		<tr>
 			<td colspan="11">

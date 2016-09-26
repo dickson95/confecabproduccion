@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160920134457) do
+ActiveRecord::Schema.define(version: 20160926135257) do
 
   create_table "asignaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -103,7 +103,7 @@ ActiveRecord::Schema.define(version: 20160920134457) do
     t.integer  "tipo_prenda_id"
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
-    t.integer  "meta"
+    t.integer  "meta",                            default: 0
     t.integer  "h_req",                           default: 0
     t.integer  "precio_u",                        default: 0
     t.integer  "precio_t",                        default: 0
@@ -129,6 +129,7 @@ ActiveRecord::Schema.define(version: 20160920134457) do
     t.string   "costo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean  "empresa"
   end
 
   create_table "referencias", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

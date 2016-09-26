@@ -2,3 +2,6 @@
 <%month = date[:month]%>
 <%month = @meses.fetch(month.to_i - 1)%>
 $("#<%=month%>t").find("tbody").replaceWith("<%=j render partial: "table_tbody", locals:{mes: month}%>");
+$(".disabled-btn").prop("disabled", false);
+$("#add-lote").bind('click', false);
+$("#add-lote").addClass("disabled");

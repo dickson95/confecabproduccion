@@ -5,7 +5,7 @@
 	<ul class="nav nav-tabs nav-justified" role="tablist">
 		<%cont_mes = 1%>
 		<%@meses.each do |mes|%>
-		<li class="tab_mes <%=mes == mes_active ? "active" : ""%>" id='<%="#{year}#{cont_mes < 10 ? "0#{cont_mes}" : cont_mes}"%>'><%= link_to mes, program_table_path("#{year}#{cont_mes < 10 ? "0#{cont_mes}" : cont_mes}"), method: :post, remote: true%></li>
+		<li class="tab_mes <%=mes == mes_active ? "active" : ""%>" id='<%="#{year}#{cont_mes < 10 ? "0#{cont_mes}" : cont_mes}"%>'><%= link_to mes, program_table_path("#{year}#{cont_mes < 10 ? "0#{cont_mes}" : cont_mes}", :empresa => params[:empresa]), method: :post, remote: true%></li>
 		<%cont_mes += 1%>
 		<%end%>	
 	</ul>

@@ -18,3 +18,12 @@
 //= require bootstrap_sb_admin_base_v2
 //= require turbolinks
 //= require_tree .
+
+
+$(document).on("turbolinks:load", function(){
+	$("#programaciones").click(function(e){
+		$(this).parent().children("ul").collapse();
+	});
+});
+
+
