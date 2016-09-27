@@ -99,11 +99,6 @@
                       class: "btn btn-primary" do%>
                             <%= content_tag(:i, "", :class => "fa fa-pencil") %>
                       <% end %>
-                      <%= link_to tipo_prenda, remote: true, method: :delete, :title => "Eliminar",
-                      data: { confirm: '¿Seguro desea eliminar el registro?' }, 
-                      class: "btn btn-danger" do %>
-                        <%= content_tag(:i, "", :class => "fa fa-trash-o") %>
-                      <% end %>
                     </div>
                   </td>
                   <%end%>
