@@ -133,11 +133,11 @@
                 <div class="panel-body">
                   <p class="col-sm-6">
                     <strong>Fecha de revisión:</strong><br>
-                    <%= I18n::localize @lote.lote.fecha_revision, :format => "%d de %b" %>
+                    <%= @lote.lote.fecha_revision%>
                   </p>
                   <p class="col-sm-6">
                     <strong>Fecha de entrega:</strong><br>
-                    <%= I18n::localize @lote.lote.fecha_entrega, :format => "%d de %b" %>
+                    <%= @lote.lote.fecha_entrega %>
                   </p>
                   <p class="col-sm-6">
                     <strong>Observaciones:</strong><br>
