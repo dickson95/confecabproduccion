@@ -62,7 +62,7 @@
                     <%@lote.lote.colores_lotes.each do |color|%>
                     <tr>
                       <td rowspan="1">Colores</td>
-                      <td><%=color.color.color%></td>
+                      <td><%=color.color.nil? ? "COLOR" : color.color.color%></td>
                       <%color.cantidades.each do |cantidad|%>
                         <td>
                           <%=cantidad.cantidad%>

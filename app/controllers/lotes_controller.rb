@@ -270,13 +270,25 @@ class LotesController < ApplicationController
       total_cantidades_id = nil
       total_colores_id = nil
       bool = true
+      recorrer_una = true
+
+      # Zona de acción en caso de que las validaciones correspondientes 
+      # sean inválidas
       @remove = false
       @colores = Array.new
       @totales = Array.new
+      @totales_tallas = Array.new
       params[:lote][:colores_lotes_attributes].each do |k, v| 
         @colores.push v[:color_id]
         puts v[:total_id]
         @totales.push v[:total_id]
+
+        if recorrer_una
+          v[:cantidades_attributes].each do |k2, v2|
+            @totales_tallas.push v2[:total_id]
+          end
+          recorrer_una = false
+        end
       end
       
       # Decisión para retirar o no el array del color, retira los colores que no tienen
