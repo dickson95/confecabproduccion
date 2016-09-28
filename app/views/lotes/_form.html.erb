@@ -15,6 +15,7 @@
     %>
     
         <%= f.error_notification %>
+        <%=@lote.errors.full_messages%>
         
 <!--inicio form-inputs-->
       <div class="form-inputs">
@@ -41,8 +42,6 @@
                   <%if params[:action] != 'edit' %>
                       <%= f.input :referencia, input_html: { style: 'text-transform:uppercase;',
                     autocomplete: 'off'}%>
-                      <span></span>
-                      <div id="error_div_referencia" class="text-danger"></div>
                   <%else %>
                     <%= f.input :referencia, :readonly => true, 
                     input_html: { style: 'text-transform:uppercase;', 
@@ -52,7 +51,7 @@
               <div class="col-sm-4">
                   <%  if params[:action] != 'edit' %>
                   <div class="input-group">
-                    <%= f.input :cliente_id do %>
+                    <%= f.input :cliente do %>
                       <%= f.input_field  :cliente_id, class: "form-control", 
                       :collection => @clientes, 
                       :value_method => :id, :include_blank => "-- seleccione cliente --"%>
@@ -104,11 +103,7 @@
           </div>
       <!--Otros roles Fin primera fila-->
       <!--Otros roles Segunda fila-->
-          <div class="row">
-                <div class="panel">
-                  <div class="panel panel-heading"></div>
-                </div>
-              </div>
+          <hr>
       <!--Otros roles Fin segunda fila-->
         <%end%>
 <!--_________________________Otros roles fin form____________________________-->
@@ -195,7 +190,7 @@
           <div class="col-md-12">
             <div class="panel">
               <div class="panel-heading panel-default">
-                <h4>Detalle de cantidad</h4>
+                <h4>Cantidades por talla</h4>
               </div>
             </div>
           </div>
@@ -210,12 +205,12 @@
                   <% # Vairables. row: tamaño de rowspan en edición %>
                   <% # bool: pintar solo un th de color%>
                   <%bool = true%>
-                  <%row = ColorLote.where(:lote_id => @lote.id).count()%>
+                  <%row = @colores.nil? ? 1 : @colores.length%>
                   <%i = 0%>
                   <%=f.fields_for :colores_lotes do |color_lote|%>
                     <tr>
                       <% if bool%>
-                        <th scope="rowgroup" rowspan="<%=row + 1%>" style="padding:0; margin:0;" 
+                        <th scope="rowgroup" rowspan="<%=row%>" style="padding:0; margin:0;" 
                           id="row_sp_color">
                           Colores
                         </th>

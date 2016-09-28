@@ -107,16 +107,15 @@ class ProgramacionesController < ApplicationController
 
 	# Exportar archivos a excel 
 	def export_excel
-	    respond_to do |format|
-      		format.xlsx
-    	end
+    	render xlsx: "export_excel", filename: "Programacion.xlsx"
+    
 	end
 
 	# Exportar archivos a PDF
 	def export_pdf
 		respond_to do |format|
 			format.pdf do
-			   render :pdf => "export_pdf",
+			  render :pdf => "export_pdf",
 		      :disposition => "inline",
 		      :orientation => 'Landscape',
 		      :template => "programaciones/programacion.pdf.erb",

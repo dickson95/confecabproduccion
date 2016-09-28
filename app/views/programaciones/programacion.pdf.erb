@@ -1,6 +1,9 @@
 <table class="table">
+<%date = Programacion.date_split params[:month]%>
+<%month = date[:month]%>
+<%month = @meses.fetch(month.to_i - 1)%>
 	<caption>
-			<h2>Programación</h2>
+			<h2>Programación de <%=month%></h2>
 	</caption>
 	<thead>
 		<tr>
@@ -18,16 +21,16 @@
 	</thead>
 	<tbody>
 		<%@programaciones.each do |programacion|%>
-		<tr>
-			<td><%=programacion.fetch(0)%></td>
-			<td><%=programacion.fetch(1)%></td>
-			<td><%=programacion.fetch(2)%></td>
-			<td><%=programacion.fetch(3)%></td>
-			<td><%=programacion.fetch(4)%></td>
-			<td><%=Lote.str_pesos programacion.fetch(5)%></td>
-			<td><%=Lote.str_pesos programacion.fetch(6)%></td>
-			<td><%=programacion.fetch(7)%></td>
-			<td><%=programacion.fetch(8)%></td>
+		<tr style="height: 25px;">
+			<td style="padding:0; margin:0;"><%=programacion.fetch(0)%></td>
+			<td style="padding:0; margin:0;"><%=programacion.fetch(1)%></td>
+			<td style="padding:0; margin:0;"><%=programacion.fetch(2)%></td>
+			<td style="padding:0; margin:0;"><%=programacion.fetch(3)%></td>
+			<td style="padding:0; margin:0;"><%=programacion.fetch(4)%></td>
+			<td style="padding:0; margin:0;"><%=Lote.str_pesos programacion.fetch(5)%></td>
+			<td style="padding:0; margin:0;"><%=Lote.str_pesos programacion.fetch(6)%></td>
+			<td style="padding:0; margin:0;"><%=programacion.fetch(7)%></td>
+			<td style="padding:0; margin:0;"><%=programacion.fetch(8)%></td>
 		</tr>
 		<%end%>
 	</tbody>

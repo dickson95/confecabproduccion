@@ -38,6 +38,7 @@ wrap_text_subtitles = wb.styles.add_style (
 	}
 )
 
+text = wb.styles.add_style :types => [:string]
 border =  wb.styles.add_style :border => { :style => :thin, :color => "00" }
 # Celdas a imprimir
 wb.add_worksheet(:name  => "Programación") do |sheet|
@@ -90,6 +91,9 @@ wb.add_worksheet(:name  => "Programación") do |sheet|
     ], :style => border
   end
 
+  sheet.col_style 3, text
+
+  # Especificar ancho de cada columna
   sheet.column_widths 20, nil, nil, nil, nil, nil, nil, nil, nil
 end
 

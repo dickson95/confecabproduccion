@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160926135257) do
+ActiveRecord::Schema.define(version: 20160928174656) do
 
   create_table "asignaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 20160926135257) do
     t.integer  "respon_insumos_id"
     t.integer  "respon_edicion_id",                           null: false
     t.date     "fecha_entrada"
-    t.integer  "cantidad"
+    t.integer  "cantidad",                        default: 0
     t.integer  "programacion_id"
     t.index ["cliente_id"], name: "index_lotes_on_cliente_id", using: :btree
     t.index ["programacion_id"], name: "index_lotes_on_programacion_id", using: :btree
@@ -125,10 +125,10 @@ ActiveRecord::Schema.define(version: 20160926135257) do
 
   create_table "programaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.date     "mes"
-    t.integer  "horas"
+    t.integer  "horas",      default: 0
     t.string   "costo"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
     t.boolean  "empresa"
   end
 

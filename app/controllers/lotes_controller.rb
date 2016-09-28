@@ -18,6 +18,7 @@ class LotesController < ApplicationController
   # GET /lotes.json
   def index
     @lotes = ControlLote.pluck(:lote_id).uniq
+    # ControlLote.find(@lotes) # Hacer una consulta con los datos que toma @lotes
   end
   
   def view_datails
@@ -60,10 +61,14 @@ class LotesController < ApplicationController
 
   # GET /lotes/1/edit
   def edit
+    # Si cuando el lote fue guardado se guardó sin tener detalles de las
+    # cantidades se construye un grupo nuevo de campos para el formulario
     if @lote.colores_lotes.empty?
       @colores_lotes = @lote.colores_lotes.build
       (0..8).each{|n| @cantidades = @colores_lotes.cantidades.build}
     else
+      # En caso de tenerlos, se adapta la situación para que imprima lo que ya existe en 
+      # en el formulario
       @totales = Array.new
       @colores = Array.new
       @totales_tallas = Array.new
@@ -93,13 +98,14 @@ class LotesController < ApplicationController
       
       if @lote.save
         @lote = ControlLote.last
-        ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user)
+        ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user)  
         format.html{ redirect_to lotes_path }
-        format.js{ render "ajaxResults" }
       else
         set_tipo_prenda
-        @colores_lotes = @lote.colores_lotes.build
-        (0..8).each{|n| @cantidades = @colores_lotes.cantidades.build }
+        if @remove
+          @colores_lotes = @lote.colores_lotes.build
+          (0..8).each{|n| @cantidades = @colores_lotes.cantidades.build } 
+        end
         format.html { render :new }
         format.json { render json: @lote.errors, status: :unprocessable_entity }
       end
@@ -233,7 +239,7 @@ class LotesController < ApplicationController
     end
     
     def set_lote_u
-      @lote = ControlLote.where(lote_id: params[:id]).order("fecha_ingreso").max
+      @lote = ControlLote.where(lote_id: params[:id]).max
     end
     
     def set_talla
@@ -258,78 +264,85 @@ class LotesController < ApplicationController
     end
     
     def set_color
-      puts "antes"
-      Rails.logger.info("PARAMS: #{params.inspect}")
       # Totales: Array para los totales por tallas
       totales = Array.new
       color_id = nil
       total_cantidades_id = nil
       total_colores_id = nil
       bool = true
+      @remove = false
+      @colores = Array.new
+      @totales = Array.new
+      params[:lote][:colores_lotes_attributes].each do |k, v| 
+        @colores.push v[:color_id]
+        puts v[:total_id]
+        @totales.push v[:total_id]
+      end
       
+      # Decisión para retirar o no el array del color, retira los colores que no tienen
+      # descripción
+      # col_bool = params[:lote][:colores_lotes_attributes].reject!{|k, v| v[:color_id]==""}
       
-      # Decisión para retirar o no el array del color 
-      col_bool = params[:lote][:colores_lotes_attributes].reject!{|k, v| v[:color_id]==""}
-      
-      if !col_bool.empty?
-        params[:lote][:colores_lotes_attributes].each do |k, v|
-          # Con la siguiente linea se eliminan del hash aquellos registros que en 
-          # la cantidad no tienen nada. Se estableció el valor el valor por defecto 
-          # igual a 0 mientras se encuentra una forma más eficiente
-          # v['cantidades_attributes'] = v['cantidades_attributes'].reject{|k2, v2| v2[:cantidad]==""}
-          cont = 0
+      # if !col_bool.empty?
+      params[:lote][:colores_lotes_attributes].each do |k, v|
+        cont = 0
+
+        # Validar que entre los 9 parámetros hay algún número distinto de 0
+        # si así es, se dejan los parámetro intactos
+        params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes].each do |k2, v2|
+          if v2[:cantidad] == "0" && cont < 9
+            cont += 1
+          else
+            break
+          end
+        end
+
+        # Si el contador es menor a 8 significa que en los 9 campos hay un número distinto
+        # de 0, es decir, máximos se encuentran 8 ceros
+        if cont < 8
+          color_id = Color.find_or_create_by(:color =>
+          params[:lote][:colores_lotes_attributes][:"#{k}"][:color_id])
+          v['color_id'] = color_id.id
+          
+          total_colores_id = Total.find_or_create_by(:total =>
+          params[:lote][:colores_lotes_attributes][:"#{k}"][:total_id])
+          v['total_id'] = total_colores_id.id
+          
+          
+          i = 0
+          # Recorrer parámetros de cantidades_attributes para asignar el total real
+          
           params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes].each do |k2, v2|
-            if v2[:cantidad] == "0" && cont < 9
-              cont += 1
+            
+            if bool
+              # Se hace revisión de la primara fila de totales y se establecen
+              # en la base de datos y en el array de totales
+              total_cantidades_id = Total.find_or_create_by(:total => 
+              params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes][:"#{k2}"][:total_id])
+              v2['total_id'] = total_cantidades_id.id
+              totales.push(v2['total_id'])
+              
             else
-              break
+              # Con el fin de evitar más consultas sobre la base de datos
+              # se usa el array para poder establecer el parámetro total_id
+              
+              v2['total_id'] = totales.fetch(i)
+              i = i + 1
+              
             end
           end
-          puts "Este es contador #{cont}"
-          if cont < 8
-            color_id = Color.find_or_create_by(:color =>
-            params[:lote][:colores_lotes_attributes][:"#{k}"][:color_id])
-            v['color_id'] = color_id.id
             
-            total_colores_id = Total.find_or_create_by(:total =>
-            params[:lote][:colores_lotes_attributes][:"#{k}"][:total_id])
-            v['total_id'] = total_colores_id.id
-            
-            
-            i = 0
-            # Recorrer parámetros de cantidades_attributes para asignar el total real
-            
-            params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes].each do |k2, v2|
-              
-              if bool
-                # Se hace revisión de la primara fila de totales y se establecen
-                # en la base de datos y en el array de totales
-                total_cantidades_id = Total.find_or_create_by(:total => 
-                params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes][:"#{k2}"][:total_id])
-                v2['total_id'] = total_cantidades_id.id
-                totales.push(v2['total_id'])
-                
-              else
-                # Con el fin de evitar más consultas sobre la base de datos
-                # se usa el array para poder establecer el parámetro total_id
-                
-                v2['total_id'] = totales.fetch(i)
-                i = i + 1
-                
-              end
-            end
-              
-              # "bool" es asignada como false para evitar que se repitan las consultas
-              # contra la base de datos del ciclo anterior
-              bool = false
-          else
-            puts "Se eliminará colores lotes"
-            params[:lote][:colores_lotes_attributes].delete(k)
-          end  
-        end
+            # "bool" es asignada como false para evitar que se repitan las consultas
+            # contra la base de datos del ciclo anterior
+            bool = false
+            @remove = false
+        else
+          params[:lote][:colores_lotes_attributes].delete(k)
+          @remove = true
+        end  
       end
-      puts "despues"
-      Rails.logger.info("PARAMS: #{params.inspect}")
+      # end
+      #Rails.logger.info("PARAMS: #{params.inspect}")
     end
     
     # Never trust parameters from the scary internet, only allow the white list through.

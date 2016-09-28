@@ -18,5 +18,15 @@
 //= require bootstrap_sb_admin_base_v2
 //= require turbolinks
 //= require_tree .
+document.addEventListener("turbolinks:before-cache", function() {
+  var tablelotes = $('#lotes').DataTable();
+  var tablecontrol = $('#control').DataTable();
+  var tableclientes = $('#t_clientes').DataTable();
+  var tables2 = $('.tablas2').DataTable();
+	tablelotes.destroy();
+	tablecontrol.destroy();
+	tableclientes.destroy();
+	tables2.destroy();
+})
 
 

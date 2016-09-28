@@ -93,8 +93,11 @@ $(document).on 'turbolinks:load', ->
   $('table').keyup '.cantidad1', ->
     sum = 0
     $('.cantidad1').each ->
-      n = parseInt(@value)
-      sum += n
+      if @value.trim() == ''
+        $(this).val 0
+      else
+        n = parseInt(@value)
+        sum += n
       return
     $('#total1').val String(sum)
     $('.total1').val String(sum)
@@ -103,8 +106,11 @@ $(document).on 'turbolinks:load', ->
   $('table').keyup '.cantidad2', ->
     sum = 0
     $('.cantidad2').each ->
-      n = parseInt(@value)
-      sum += n
+      if @value.trim() == ''
+        $(this).val 0
+      else
+        n = parseInt(@value)
+        sum += n
       return
     $('#total2').val String(sum)
     $('.total2').val String(sum)
@@ -113,8 +119,11 @@ $(document).on 'turbolinks:load', ->
   $('table').keyup '.cantidad3', ->
     sum = 0
     $('.cantidad3').each ->
-      n = parseInt(@value)
-      sum += n
+      if @value.trim() == ''
+        $(this).val 0
+      else
+        n = parseInt(@value)
+        sum += n
       return
     $('#total3').val String(sum)
     $('.total3').val String(sum)
@@ -123,8 +132,11 @@ $(document).on 'turbolinks:load', ->
   $('table').keyup '.cantidad4', ->
     sum = 0
     $('.cantidad4').each ->
-      n = parseInt(@value)
-      sum += n
+      if @value.trim() == ''
+        $(this).val 0
+      else
+        n = parseInt(@value)
+        sum += n
       return
     $('#total4').val String(sum)
     $('.total4').val String(sum)
@@ -133,8 +145,11 @@ $(document).on 'turbolinks:load', ->
   $('table').keyup '.cantidad5', ->
     sum = 0
     $('.cantidad5').each ->
-      n = parseInt(@value)
-      sum += n
+      if @value.trim() == ''
+        $(this).val 0
+      else
+        n = parseInt(@value)
+        sum += n
       return
     $('#total5').val String(sum)
     $('.total5').val String(sum)
@@ -143,8 +158,11 @@ $(document).on 'turbolinks:load', ->
   $('table').keyup '.cantidad6', ->
     sum = 0
     $('.cantidad6').each ->
-      n = parseInt(@value)
-      sum += n
+      if @value.trim() == ''
+        $(this).val 0
+      else
+        n = parseInt(@value)
+        sum += n
       return
     $('#total6').val String(sum)
     $('.total6').val String(sum)
@@ -153,8 +171,11 @@ $(document).on 'turbolinks:load', ->
   $('table').keyup '.cantidad7', ->
     sum = 0
     $('.cantidad7').each ->
-      n = parseInt(@value)
-      sum += n
+      if @value.trim() == ''
+        $(this).val 0
+      else
+        n = parseInt(@value)
+        sum += n
       return
     $('#total7').val String(sum)
     $('.total7').val String(sum)
@@ -163,8 +184,11 @@ $(document).on 'turbolinks:load', ->
   $('table').keyup '.cantidad8', ->
     sum = 0
     $('.cantidad8').each ->
-      n = parseInt(@value)
-      sum += n
+      if @value.trim() == ''
+        $(this).val 0
+      else
+        n = parseInt(@value)
+        sum += n
       return
     $('#total8').val String(sum)
     $('.total8').val String(sum)
@@ -173,8 +197,11 @@ $(document).on 'turbolinks:load', ->
   $('table').keyup '.cantidad9', ->
     sum = 0
     $('.cantidad9').each ->
-      n = parseInt(@value)
-      sum += n
+      if @value.trim() == ''
+        $(this).val 0
+      else
+        n = parseInt(@value)
+        sum += n
       return
     $('#total9').val String(sum)
     $('.total9').val String(sum)
@@ -201,8 +228,11 @@ $(document).on 'turbolinks:load', ->
   valHReq = ->
     cantidad = $("#lote_cantidad").val()
     meta = $("#lote_meta").val()
-    total = parseInt(cantidad) / parseInt(meta)
-    total = Math.round total
+    if meta > 0
+      total = parseInt(cantidad) / parseInt(meta)
+      total = Math.round total
+    else
+      total = 0
     $("#lote_h_req").val(total)
   
   $('table').keyup ->

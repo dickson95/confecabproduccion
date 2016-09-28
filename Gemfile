@@ -70,12 +70,10 @@ gem 'cancancan', '~> 1.10'
 # usada para pintar dataTables de acuerdo con el rol que se presenta
 gem 'gon'
 
-# Grupo de gemas para exportar a excel
-gem 'rubyzip', '~> 1.1.0'
+# Grupo de gemas para exportar a excel  
 gem 'axlsx', '2.1.0.pre'
 gem 'axlsx_rails'
 
 # Gema para exportar a PDF
 gem 'wicked_pdf'
-gem 'wkhtmltopdf-binary'
 

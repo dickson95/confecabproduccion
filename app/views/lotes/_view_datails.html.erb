@@ -11,9 +11,10 @@
     <div class="modal-body">
       <div class="panel panel-info">
         <div class="panel-heading">
-          <%= @lote.lote.referencia.referencia%>
+          Referencia: <%= @lote.lote.referencia.referencia%>
         </div>
         <div class="panel-body">
+          <!--Detalla de cantidades-->
           <div class="panel panel-default">
             <div class="panel-heading">
               Detalle de cantidades
@@ -96,6 +97,7 @@
               </div>
             </div>
           </div>
+          <!--Cliente, y lote-->
           <div class="row">
             <p class="col-sm-3  text-left">
               <strong>OP:</strong>
@@ -114,6 +116,8 @@
               <%= @lote.lote.tipo_prenda.nil? ? "-" : "#{@lote.lote.tipo_prenda.tipo}"%>
             </p>
           </div>
+
+          <!--Facturación-->
           <div class="row">
             <p class="col-md-6">
               <strong>Número de factura:</strong>
@@ -125,6 +129,7 @@
             </p>
           </div>
           <hr>
+
           <!--Insumos-->
           <div class="row">
             <div class="col-md-6">
@@ -150,6 +155,8 @@
                 </div>
               </div>              
             </div>
+
+            <!--Integración-->
             <div class="col-md-6">
               <div class="panel panel-default">
                 <div class="panel-heading">Integración</div>
@@ -171,15 +178,15 @@
           <div class="row">
             <p class="col-sm-4 text-left">
               <strong>Proceso:</strong>
-              <%= @lote.estado.estado %>
+              <%=@lote.estado.estado %>
             </p>
             <p class="col-sm-4 text-center">
-              <strong>Entrada a este proceso:</strong> <br>
+              <strong>Entrada a este proceso:</strong><br>
               <%=I18n::localize(@lote.fecha_ingreso, :format => "%d de %B de %Y") %>
             </p>
             <p class="col-sm-4 text-right">
               <strong>Proceso adicional:</strong>
-              <%lote.sub_estado.nil? ? "-" : "#{@lote.sub_estado.sub_estado}"%>
+              <%=@lote.sub_estado.nil? ? "-" : "#{@lote.sub_estado.sub_estado}"%>
             </p>
           </div>
         </div>
@@ -200,8 +207,7 @@
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       <% if can? :manage, Lote %>
         <div class="btn-group">
-          <%= link_to edit_lote_path(@lote.lote, :commit => "edit", :estado_id => @lote.estado.id), 
-          class: "btn btn-primary" do |l|%>
+          <%= link_to edit_lote_path(@lote.lote, :commit => "edit", :estado_id => @lote.estado.id, :sub_id => @lote.sub_estado.nil? ? "" : "#{@lote.sub_estado.id}"), class: "btn btn-primary" do |l|%>
             <%=content_tag :i, "", :class => "fa fa-pencil"%>
             Editar
           <%end%>

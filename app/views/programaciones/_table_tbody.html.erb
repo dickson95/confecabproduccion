@@ -6,7 +6,7 @@
 			<td><%=check_box_tag "lotes[#{programacion.fetch(9)}]", programacion.fetch(9)%></td>
 			<td class="col-xs-2"><%=programacion.fetch(0)%></td>
 			<td class="col-xs-1"><%=programacion.fetch(1)%></td>
-			<td style="width: 3.5em;">
+			<td style="width: 4.5em;">
 			<%if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
 				<%=text_field_tag "secuencia[#{programacion.fetch(9)}[sec]]", "", class:"form-control", :value => programacion.fetch(2)%>
 				<%=hidden_field_tag "secuencia[#{programacion.fetch(9)}[id]]", programacion.fetch(9)%>
