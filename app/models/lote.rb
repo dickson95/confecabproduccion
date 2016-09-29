@@ -14,7 +14,7 @@ class Lote < ApplicationRecord
   #
   #
   #Validaciones
-  validates_presence_of :cliente
+  validates_presence_of :cliente, :control_lotes
   validates :referencia, :empresa, presence: true
   
   
