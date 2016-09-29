@@ -16,7 +16,7 @@
           <% # form nuevo  %>
             <%= c.input_field  :sub_estado_id, class: "form-control",
             :collection => @sub_estados, :value_method => :id, 
-            :include_blank => true, :selected => params[:sub_id]%>
+            :include_blank =>  true, :selected => params[:sub_id]%>
           
             <div class="input-group-btn">
               <%= link_to '...', add_remote_data_path(:place => "form_lote_sub_estado"),

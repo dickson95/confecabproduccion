@@ -88,7 +88,6 @@ class LotesController < ApplicationController
   def create
     @lote = Lote.new(lote_params)
     respond_to do |format|
-      
       if @lote.save
         @lote = ControlLote.last
         ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user)  
@@ -117,18 +116,28 @@ class LotesController < ApplicationController
               "control_lotes.id", "control_lotes.sub_estado_id", 
               "control_lotes.id").last
     # Id del estado en variable est_id
+    puts "estado actual del lote #{lote.fetch(0)} y este el nuevo #{params[:lote][:control_lotes_attributes][:'0'][:estado_id]}"
     est_id = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
     if lote.fetch(0) == est_id.to_i
+      # Si ninguna de las dos condiciones sigueintes se cumple no se crea nada en el historial
+
       # Id del subestado en variable sub_id
       sub_id = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
+
       if sub_id == ""
+        # si el sub id no tiene nada desde el parámetro se asigna 0 para la comparación
         sub_id = 0
       end
+      puts "sub estado viejo #{lote.fetch(3)}, y nuevo #{sub_id}"
       if lote.fetch(3) != sub_id.to_i
+        # En caso de que el subestado sea diferente al anterior se crea uno nuevo
         boolean = true
+        puts "Información: Creando un nuevo registro en el historial..."
       end
+
     else
       boolean = true
+      puts "Información: Creando un nuevo registro completamente nuevo en el historial..."
     end
     
     # Actualizar fecha salida, responsable de salida, minutos del historial
@@ -346,6 +355,7 @@ class LotesController < ApplicationController
     
     # Never trust parameters from the scary internet, only allow the white list through.
     def lote_params
+      sub_id_value
       params.require(:lote).permit(:empresa, :color_prenda, 
       :no_remision, :no_factura, :cliente_id, :tipo_prenda_id, :prioridad, 
       :op, :fecha_entrada,  :fin_insumos, :obs_insumos, :meta, :h_req,
@@ -359,6 +369,7 @@ class LotesController < ApplicationController
     
     # Parámetros para solo guardar actualizaciones para la ficha del lote
     def lote_params_u
+      sub_id_value
       params.require(:lote).permit(:empresa, :color_prenda, 
       :no_remision, :no_factura, :fin_insumos, :obs_insumos, 
       :obs_integracion, :fin_integracion, :precio_u,  :meta, :h_req,
@@ -369,6 +380,12 @@ class LotesController < ApplicationController
       merge(respon_edicion_id: current_user, referencia_id: set_referencia)
     end
     
+    def sub_id_value
+      if params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id] == ""
+        params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id] = "0"
+      end
+    end
+
     def referencia_params
       params.require(:lote).permit(:referencia)
     end

@@ -3,7 +3,6 @@ class Ability
 
   def initialize(user)
     user ||= User.new # guest user
-    print "\nAsignación de permiso a usuario segun rol\n"
     if user.has_rol? :admin
       can :manage, :all
     elsif user.has_rol? :coor_tiempos
