@@ -15,8 +15,7 @@ class Lote < ApplicationRecord
   #
   #Validaciones
   validates_presence_of :cliente
-  validates :empresa, :referencia,
-              presence: true
+  validates :referencia, :empresa, presence: true
   
   
   def categorias_colores_for_form

@@ -80,12 +80,6 @@ class LotesController < ApplicationController
         end
       end
     end
-=begin
-    respond_to do |format|
-      format.js{render 'ajaxResults'}
-      format.html
-    end
-=end
   end
   
 
@@ -93,7 +87,6 @@ class LotesController < ApplicationController
   # POST /lotes.json
   def create
     @lote = Lote.new(lote_params)
-    puts @lote
     respond_to do |format|
       
       if @lote.save
@@ -101,6 +94,7 @@ class LotesController < ApplicationController
         ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user)  
         format.html{ redirect_to lotes_path }
       else
+
         set_tipo_prenda
         if @remove
           @colores_lotes = @lote.colores_lotes.build
@@ -247,20 +241,8 @@ class LotesController < ApplicationController
     end
     
     def set_referencia
-      id = 0
-      Referencia.where(:referencia => params[:lote][:referencia]).limit(1).each do |r|
-        id = r.id
-      end
-      
-      # Si la referencia no existe se crea una referencia nueva
-      if id == 0
-        ref = Referencia.new(referencia_params)
-        ref.save
-        Referencia.where(:referencia => params[:lote][:referencia]).limit(1).each do |r|
-          id = r.id
-        end
-      end
-      id
+      id = Referencia.find_or_create_by(:referencia => params[:lote][:referencia])
+      id.id
     end
     
     def set_color
@@ -274,6 +256,11 @@ class LotesController < ApplicationController
 
       # Zona de acción en caso de que las validaciones correspondientes 
       # sean inválidas
+      # remove: Indica si debe armarse de nuevo el formulario de detalles de cantidades
+      # colores: Toma los colores de los parámetros antes de que sean analizados para
+      # que no se pierdan para la vista
+      # totales: totales relativos por color
+      # totales_tallas: totales por talla
       @remove = false
       @colores = Array.new
       @totales = Array.new

@@ -15,7 +15,6 @@
     %>
     
         <%= f.error_notification %>
-        <%=@lote.errors.full_messages%>
         
 <!--inicio form-inputs-->
       <div class="form-inputs">
@@ -41,7 +40,7 @@
               <div class="col-sm-4">
                   <%if params[:action] != 'edit' %>
                       <%= f.input :referencia, input_html: { style: 'text-transform:uppercase;',
-                    autocomplete: 'off'}%>
+                    autocomplete: 'off', value: @lote.referencia.nil? ? "" : @lote.referencia.referencia}%>
                   <%else %>
                     <%= f.input :referencia, :readonly => true, 
                     input_html: { style: 'text-transform:uppercase;', 
@@ -82,11 +81,8 @@
                 </div>
               </div>
               <div class="col-sm-4">
-                <div style="padding-top: 15px; padding-bottom: 19px;">
-                  <%=f.label :empresa_cab%><br>
-                  <%= f.collection_radio_buttons :empresa, [['CAB', 'CAB'],[ 'D&C','D&C']],
-                  :first, :last, item_wrapper_class: 'radio-inline', checked: 'CAB',
-                  label: false, item_wrapper_tag: :div %>
+                <div>
+                  <%=f.input :empresa, collection: [['CAB', 'CAB'],[ 'D&C','D&C']]%>
                 </div>
               </div>
               <div class="col-sm-4" style="padding-top:15px">
@@ -150,13 +146,9 @@
             <div class="col-lg-12">
               <div class="col-md-4">
                 <div>
-                  <%if @lote.fecha_entrada.nil?%>
                     <%= f.input :fecha_entrada, as: "string", 
-                    input_html: {:value => I18n::localize(Time.zone.utc_to_local(Time.new) + 60, :format => "%Y-%m-%d")},
+                    input_html: {:value => @lote.fecha_entrada.nil? ? I18n::localize(Time.zone.utc_to_local(Time.new) + 60, :format => "%Y-%m-%d") : @lote.fecha_entrada},
                     readonly: true, label: 'Entró a insumos el:'  %>
-                  <%else%>
-                  <%=f.input :fecha_entrada, as: "string", disabled: :disabled%>
-                  <%end%>
                 </div>
                 <div>
                   <%= f.input :fecha_entrega, 
