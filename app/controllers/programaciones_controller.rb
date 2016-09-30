@@ -32,7 +32,7 @@ class ProgramacionesController < ApplicationController
 	def generate_program
 		# Actualizar los lotes con programación id null
 		Lote.where("programacion_id IS NULL and empresa = ?", params[:empresa])
-			.update(:programacion_id => params[:id])
+		.update(:programacion_id => params[:id])
 		# Establecer las programaciones
 		set_programaciones
 		respond_to do |format|
@@ -43,9 +43,9 @@ class ProgramacionesController < ApplicationController
 	# Abrir ventana modal para poder añadir lotes a la programación
 	def modal_open
 		@lotes_to_program = Lote.joins(:referencia)
-								.where("lotes.programacion_id IS NULL and lotes.empresa = ?", 
-									params[:empresa])
-								.pluck("lotes.id", "referencias.referencia")
+		.where("lotes.programacion_id IS NULL and lotes.empresa = ?", 
+			params[:empresa])
+		.pluck("lotes.id", "referencias.referencia")
 		@programacion = params[:month]
 		respond_to do |format|
 			format.js
@@ -107,22 +107,22 @@ class ProgramacionesController < ApplicationController
 
 	# Exportar archivos a excel 
 	def export_excel
-    	render xlsx: "export_excel", filename: "Programacion.xlsx"
-    
+		render xlsx: "export_excel", filename: "Programacion.xlsx"
+
 	end
 
 	# Exportar archivos a PDF
 	def export_pdf
 		respond_to do |format|
 			format.pdf do
-			  render :pdf => "export_pdf",
-		      :disposition => "inline",
-		      :orientation => 'Landscape',
-		      :template => "programaciones/programacion.pdf.erb",
-		      :layout => "layout_pdf.html.erb"
+				render :pdf => "export_pdf",
+				:disposition => "inline",
+				:orientation => 'Landscape',
+				:template => "programaciones/programacion.pdf.erb",
+				:layout => "layout_pdf.html.erb"
 			end 
-		  format.html
-	    end
+			format.html
+		end
 	end
 
 	private
@@ -147,9 +147,9 @@ class ProgramacionesController < ApplicationController
 			# en _table_body.html.erb y para imprimir la primera vez en el index
 			empresa = params[:empresa] == "CAB" ? true : false
 			@programacion = Programacion
-				.where("extract(year_month from programaciones.mes) = ? and empresa = ?", 
+			.where("extract(year_month from programaciones.mes) = ? and empresa = ?", 
 				params[:month], empresa)
-				.pluck(:id)
+			.pluck(:id)
 		end
 
 		def no_empty_program
@@ -160,4 +160,4 @@ class ProgramacionesController < ApplicationController
 			@new_programacion = Lote.new			
 		end
 
-end
+	end

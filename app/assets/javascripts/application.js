@@ -16,8 +16,6 @@
 //= require jquery-ui/datepicker
 //= require autocomplete-rails
 //= require bootstrap_sb_admin_base_v2
-//= require rails.validations
-//= require rails.validations.simple_form
 //= require turbolinks
 //= require_tree .
 document.addEventListener("turbolinks:before-cache", function() {

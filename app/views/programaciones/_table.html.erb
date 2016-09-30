@@ -1,6 +1,7 @@
 
 <%=form_tag remove_from_programing_path(params[:month], :empresa => params[:empresa]), remote: true do%>
 <%disabled = Programacion.interfaz @no_empty_program, @programaciones%>
+<%$colspan = 8%>
 <table class="table" id="<%=mes%>t">
 	<caption>
 		<div class="pull-left">
@@ -36,15 +37,17 @@
 			<th>Sec</th>
 			<th>Referencia</th>
 			<th>Cant</th>
+			<%if @rol_form == "coor_tiempos" || @rol_form == "admin" || @rol_form == "gerente"%>
+			<%$colspan = 10%>
 			<th>Precio</th>
 			<th>Total</th>
+			<%end%>
 			<th>Meta</th>
 			<th>Horas</th>
-			<th>I</th>
 		</tr>
 
 	</thead>
-	<%=render partial: "table_tbody"%>
+	<%=render partial: "table_tbody", colspan: $colspan%>
 	<%if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
 	<tfoot>
 		<tr>
@@ -53,7 +56,7 @@
 					<p></p>
 				</div>
 			</td>
-			<td colspan="9" style="margin-right:0px; padding-right:0px;">
+			<td colspan="<%=$colspan - 2%>" style="margin-right:0px; padding-right:0px;">
 				<div class="pull-right">
 					<%=submit_tag "Retirar", class:"btn btn-warning disabled-btn", disabled: disabled.fetch(0)%>
 					<%=link_to "Añadir", modal_open_path(params[:month], :empresa => params[:empresa]), class:"btn btn-default #{disabled.fetch(1) ? 'disabled' : ''}", remote: true, id: "add-lote" %>

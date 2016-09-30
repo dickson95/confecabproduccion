@@ -97,10 +97,10 @@ class LotesController < ApplicationController
         ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user)  
         format.html{ redirect_to lotes_path }
       else
-        if !op
-          @lote.errors.add :op, "Ya existe la op"
-        end
         set_tipo_prenda
+        if !op
+          @lote.errors.add :op, "Ya existe la OP"
+        end
         if @remove
           @colores_lotes = @lote.colores_lotes.build
           (0..8).each{|n| @cantidades = @colores_lotes.cantidades.build } 
@@ -160,7 +160,6 @@ class LotesController < ApplicationController
     end
     # Respuesta a la solicitud de actualización
     respond_to do |format|
-      
       if @lote.update(boolean ? lote_params : lote_params_u )
         if boolean
           ult = ControlLote.last
@@ -170,7 +169,8 @@ class LotesController < ApplicationController
         format.html{ redirect_to lotes_path }
         flash[:success] = "Lote actualizado correctamente"
       else
-        format.js { render 'ajaxResultsValidates' }
+        set_tipo_prenda
+        format.html { render :edit }
         format.json { render json: @lote.errors, status: :unprocessable_entity }
       end
     end
@@ -280,80 +280,80 @@ class LotesController < ApplicationController
       @colores = Array.new
       @totales = Array.new
       @totales_tallas = Array.new
-      params[:lote][:colores_lotes_attributes].each do |k, v| 
-        @colores.push v[:color_id]
-        puts v[:total_id]
-        @totales.push v[:total_id]
+      colores = params[:lote][:colores_lotes_attributes]
+        colores.each do |k, v| 
+          @colores.push v[:color_id]
+          puts v[:total_id]
+          @totales.push v[:total_id]
 
-        if recorrer_una
-          v[:cantidades_attributes].each do |k2, v2|
-            @totales_tallas.push v2[:total_id]
-          end
-          recorrer_una = false
-        end
-      end
-      
-      # Decisión para retirar o no el array del color, retira los colores que no tienen
-      # descripción
-      # col_bool = params[:lote][:colores_lotes_attributes].reject!{|k, v| v[:color_id]==""}
-      
-      # if !col_bool.empty?
-      params[:lote][:colores_lotes_attributes].each do |k, v|
-        cont = 0
-
-        # Validar que entre los 9 parámetros hay algún número distinto de 0
-        # si así es, se dejan los parámetro intactos
-        params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes].each do |k2, v2|
-          if v2[:cantidad] == "0" && cont < 9
-            cont += 1
-          else
-            break
+          if recorrer_una
+            v[:cantidades_attributes].each do |k2, v2|
+              @totales_tallas.push v2[:total_id]
+            end
+            recorrer_una = false
           end
         end
+        
+        # Decisión para retirar o no el array del color, retira los colores que no tienen
+        # descripción
+      if !colores.nil?
+        colores.each do |k, v|
+          cont = 0
 
-        # Si el contador es menor a 8 significa que en los 9 campos hay un número distinto
-        # de 0, es decir, máximos se encuentran 8 ceros
-        if cont < 8
-          color_id = Color.find_or_create_by(:color =>
-          params[:lote][:colores_lotes_attributes][:"#{k}"][:color_id])
-          v['color_id'] = color_id.id
-          
-          total_colores_id = Total.find_or_create_by(:total =>
-          params[:lote][:colores_lotes_attributes][:"#{k}"][:total_id])
-          v['total_id'] = total_colores_id.id
-          
-          
-          i = 0
-          # Recorrer parámetros de cantidades_attributes para asignar el total real
-          
+          # Validar que entre los 9 parámetros hay algún número distinto de 0
+          # si así es, se dejan los parámetro intactos
           params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes].each do |k2, v2|
-            
-            if bool
-              # Se hace revisión de la primara fila de totales y se establecen
-              # en la base de datos y en el array de totales
-              total_cantidades_id = Total.find_or_create_by(:total => 
-              params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes][:"#{k2}"][:total_id])
-              v2['total_id'] = total_cantidades_id.id
-              totales.push(v2['total_id'])
-              
+            if v2[:cantidad] == "0" && cont < 9
+              cont += 1
             else
-              # Con el fin de evitar más consultas sobre la base de datos
-              # se usa el array para poder establecer el parámetro total_id
-              
-              v2['total_id'] = totales.fetch(i)
-              i = i + 1
-              
+              break
             end
           end
+
+          # Si el contador es menor a 8 significa que en los 9 campos hay un número distinto
+          # de 0, es decir, máximos se encuentran 8 ceros
+          if cont < 8
+            color_id = Color.find_or_create_by(:color =>
+            params[:lote][:colores_lotes_attributes][:"#{k}"][:color_id])
+            v['color_id'] = color_id.id
             
-            # "bool" es asignada como false para evitar que se repitan las consultas
-            # contra la base de datos del ciclo anterior
-            bool = false
-            @remove = false
-        else
-          params[:lote][:colores_lotes_attributes].delete(k)
-          @remove = true
-        end  
+            total_colores_id = Total.find_or_create_by(:total =>
+            params[:lote][:colores_lotes_attributes][:"#{k}"][:total_id])
+            v['total_id'] = total_colores_id.id
+            
+            
+            i = 0
+            # Recorrer parámetros de cantidades_attributes para asignar el total real
+            
+            params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes].each do |k2, v2|
+              
+              if bool
+                # Se hace revisión de la primara fila de totales y se establecen
+                # en la base de datos y en el array de totales
+                total_cantidades_id = Total.find_or_create_by(:total => 
+                params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes][:"#{k2}"][:total_id])
+                v2['total_id'] = total_cantidades_id.id
+                totales.push(v2['total_id'])
+                
+              else
+                # Con el fin de evitar más consultas sobre la base de datos
+                # se usa el array para poder establecer el parámetro total_id
+                
+                v2['total_id'] = totales.fetch(i)
+                i = i + 1
+                
+              end
+            end
+              
+              # "bool" es asignada como false para evitar que se repitan las consultas
+              # contra la base de datos del ciclo anterior
+              bool = false
+              @remove = false
+          else
+            params[:lote][:colores_lotes_attributes].delete(k)
+            @remove = true
+          end  
+        end
       end
       # end
       #Rails.logger.info("PARAMS: #{params.inspect}")

@@ -86,4 +86,12 @@ class Programacion < ApplicationRecord
 		end
 		
 	end
+
+	# Roles que pueden ver los precios de la programación
+	def self.price(rol)
+		price = false
+		if rol == "coor_tiempos" || rol == "admin" || rol == "gerente"
+			price = true
+		end
+	end
 end
