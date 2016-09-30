@@ -36,6 +36,19 @@ class Lote < ApplicationRecord
     self[:op] = val.upcase
   end
   
+  # Definir si existe el valor de la op pero permitiendo valores nulos
+  # no se utiliza otro método porque ya existen registros que incumplen la 
+  # restricción de unico
+  # Retorna true si la op no existe y puede ser creada
+  def self.op_exist(op)
+    if op != ""
+      val = Lote.where(:op => op).pluck(:op)
+      return val.empty? ? true : false
+    else
+      true
+    end
+  end
+
   #Método del 02/08/2016
   # Calcula los minutos de un proceso en cada uno de los estados en los que este
   # puede estar.

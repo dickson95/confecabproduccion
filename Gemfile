@@ -77,3 +77,6 @@ gem 'axlsx_rails'
 # Gema para exportar a PDF
 gem 'wicked_pdf'
 
+# Gema para las validaciones del lado del cliente
+gem 'client_side_validations', github: 'DavyJonesLocker/client_side_validations', branch: 'rails5'
+gem 'client_side_validations-simple_form', github: 'DavyJonesLocker/client_side_validations-simple_form', branch: 'rails5'

@@ -144,7 +144,7 @@ es-CO:
       not_an_integer: debe ser un entero
       odd: debe ser un número impar
       required: debe existir
-      taken: ya ha sido tomado
+      taken: "Ya existe la OP"
       too_long:
         one: es demasiado largo (máximo 1 caracter)
         other: es demasiado largo (máximo %{count} caracteres)

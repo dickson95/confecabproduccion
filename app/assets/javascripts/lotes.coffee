@@ -249,39 +249,6 @@ $(document).on 'turbolinks:load', ->
     
   $("#lote_meta").keyup ->
     valHReq()
-    
-  # Validación del formulario
-  $('#lote_referencia').keyup ->
-    referencia = $('#lote_referencia')
-    if referencia.val().trim() == ""
-      $("#fa-check").remove()
-      referencia.parent().parent().parent()
-      .removeClass("has-error has-success has-feedback")
-      .addClass("has-error has-feedback")
-      referencia.parent()
-      .append("<span id='fa-check' class='fa fa-times form-control-feedback'></span>")
-    else
-      $("#fa-check").remove()
-      referencia.parent().parent().parent()
-      .removeClass("has-error has-success has-feedback")
-      .addClass("has-success has-feedback")
-      referencia.parent()
-      .append("<span id='fa-check' class='fa fa-check form-control-feedback'></span>")
-      
-  $("#lote_cliente_id").click ->
-    cliente = $("#lote_cliente_id")
-    if cliente.val().trim() == ""
-      cliente.parent().removeClass("has-error has-success")
-      .addClass("has-error")
-      cliente.parent().children(".input-group-btn").children()
-      .removeClass("btn-default btn-danger btn-outline btn-success")
-      .addClass("btn-outline btn-danger")
-    else
-      cliente.parent().removeClass("has-error has-success")
-      .addClass("has-success")
-      cliente.parent().children(".input-group-btn").children()
-      .removeClass("btn-default btn-danger btn-success")
-      .addClass("btn-outline btn-success")
       
   return
   # Fin del document ready

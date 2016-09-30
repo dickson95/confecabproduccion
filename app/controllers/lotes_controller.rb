@@ -86,14 +86,20 @@ class LotesController < ApplicationController
   # POST /lotes
   # POST /lotes.json
   def create
+    # Definir si la op existe. Retorna true si puede ser creada
+    op = Lote.op_exist params[:lote][:op]
     @lote = Lote.new(lote_params)
+    valid = @lote.valid?
     respond_to do |format|
-      if @lote.save
+      if valid && op
+        @lote.save
         @lote = ControlLote.last
         ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user)  
         format.html{ redirect_to lotes_path }
       else
-
+        if !op
+          @lote.errors.add :op, "Ya existe la op"
+        end
         set_tipo_prenda
         if @remove
           @colores_lotes = @lote.colores_lotes.build
