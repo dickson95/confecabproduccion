@@ -1,5 +1,5 @@
 class LotesController < ApplicationController
-  
+
   # Acciones primarias
   before_action :set_color, only: [:create, :update]
   before_action :set_tipo_prenda, only: [:new, :edit]
@@ -105,6 +105,8 @@ class LotesController < ApplicationController
           @colores_lotes = @lote.colores_lotes.build
           (0..8).each{|n| @cantidades = @colores_lotes.cantidades.build } 
         end
+        params[:estado_id] = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
+        params[:sub_id] = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
         format.html { render :new }
         format.json { render json: @lote.errors, status: :unprocessable_entity }
       end
@@ -117,10 +119,10 @@ class LotesController < ApplicationController
     boolean = false
     # Se consulta el último estado del lote para ser comparado con el actual
     lote = ControlLote.where(lote_id: params[:id]).joins(:estado)
-              .order("control_lotes.id desc").limit(1)
-              .pluck("estados.id", "control_lotes.fecha_ingreso",
-              "control_lotes.id", "control_lotes.sub_estado_id", 
-              "control_lotes.id").last
+    .order("control_lotes.id desc").limit(1)
+    .pluck("estados.id", "control_lotes.fecha_ingreso",
+      "control_lotes.id", "control_lotes.sub_estado_id", 
+      "control_lotes.id").last
     # Id del estado en variable est_id
     puts "estado actual del lote #{lote.fetch(0)} y este el nuevo #{params[:lote][:control_lotes_attributes][:'0'][:estado_id]}"
     est_id = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
@@ -156,20 +158,29 @@ class LotesController < ApplicationController
       updated.each{|u| $up = u.fecha_salida}
       min = Lote.minutos_proceso(lote.fetch(1), $up)
       ControlLote.where(:id => lote.fetch(2)).update(min_u: min,
-      resp_salida_id: current_user)
+        resp_salida_id: current_user)
     end
     # Respuesta a la solicitud de actualización
+    op = Lote.op_exist params[:lote][:op], :lote_id => params[:id], :action => params[:action]
+    valid = @lote.valid?
     respond_to do |format|
-      if @lote.update(boolean ? lote_params : lote_params_u )
+      if op && valid
+        @lote.update(boolean ? lote_params : lote_params_u )
         if boolean
           ult = ControlLote.last
           ControlLote.where(:id => ult).update(resp_ingreso_id: current_user, 
-          fecha_salida: est_id == "5" ? time : nil, resp_salida_id: est_id == "5" ? current_user : nil)
+            fecha_salida: est_id == "5" ? time : nil, resp_salida_id: est_id == "5" ? current_user : nil)
         end
         format.html{ redirect_to lotes_path }
         flash[:success] = "Lote actualizado correctamente"
       else
         set_tipo_prenda
+        if !op
+          @lote.errors.add :op, "Ya existe la OP"
+        end
+        
+        params[:estado_id] = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
+        params[:sub_id] = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
         format.html { render :edit }
         format.json { render json: @lote.errors, status: :unprocessable_entity }
       end
@@ -188,7 +199,7 @@ class LotesController < ApplicationController
     min = Lote.minutos_proceso(lote.fecha_ingreso, lote.fecha_salida)
     
     ControlLote.where(:id => id).update(min_u: min, 
-    resp_salida_id: current_user)
+      resp_salida_id: current_user)
     estado = 0
     men = nil
     case params[:btn]
@@ -204,13 +215,13 @@ class LotesController < ApplicationController
       when '5' # completar
         estado = 5
         men = "completado"
-    end
+      end
     # Asignación de parámetros para el nuevo control a registrar. Responsable
     # por el movimiento
     @control_lote = ControlLote.new(:lote_id => params[:id], :estado_id => estado, 
-    :fecha_ingreso => time, :resp_ingreso_id => current_user, :fecha_salida => estado == 5 ? time : nil,
-    :resp_salida_id => estado == 5 ? current_user : nil)
- 
+      :fecha_ingreso => time, :resp_ingreso_id => current_user, :fecha_salida => estado == 5 ? time : nil,
+      :resp_salida_id => estado == 5 ? current_user : nil)
+
     respond_to do |format|
       # Nuevo estado en el historial de los lotes
       if @control_lote.save
@@ -236,6 +247,8 @@ class LotesController < ApplicationController
     end
   end
 
+  # -------------------------------------------------------------------------#
+  # Métodos privados
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_lote
@@ -281,24 +294,22 @@ class LotesController < ApplicationController
       @totales = Array.new
       @totales_tallas = Array.new
       colores = params[:lote][:colores_lotes_attributes]
-        colores.each do |k, v| 
-          @colores.push v[:color_id]
-          puts v[:total_id]
-          @totales.push v[:total_id]
+      colores.each do |k, v| 
+        @colores.push v[:color_id]
+        @totales.push v[:total_id]
 
-          if recorrer_una
-            v[:cantidades_attributes].each do |k2, v2|
-              @totales_tallas.push v2[:total_id]
-            end
-            recorrer_una = false
+        if recorrer_una
+          v[:cantidades_attributes].each do |k2, v2|
+            @totales_tallas.push v2[:total_id]
           end
+          recorrer_una = false
         end
-        
+      end
+
         # Decisión para retirar o no el array del color, retira los colores que no tienen
         # descripción
-      if !colores.nil?
-        colores.each do |k, v|
-          cont = 0
+          colores.each do |k, v|
+            cont = 0
 
           # Validar que entre los 9 parámetros hay algún número distinto de 0
           # si así es, se dejan los parámetro intactos
@@ -314,11 +325,11 @@ class LotesController < ApplicationController
           # de 0, es decir, máximos se encuentran 8 ceros
           if cont < 8
             color_id = Color.find_or_create_by(:color =>
-            params[:lote][:colores_lotes_attributes][:"#{k}"][:color_id])
+              params[:lote][:colores_lotes_attributes][:"#{k}"][:color_id])
             v['color_id'] = color_id.id
             
             total_colores_id = Total.find_or_create_by(:total =>
-            params[:lote][:colores_lotes_attributes][:"#{k}"][:total_id])
+              params[:lote][:colores_lotes_attributes][:"#{k}"][:total_id])
             v['total_id'] = total_colores_id.id
             
             
@@ -326,12 +337,12 @@ class LotesController < ApplicationController
             # Recorrer parámetros de cantidades_attributes para asignar el total real
             
             params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes].each do |k2, v2|
-              
+
               if bool
                 # Se hace revisión de la primara fila de totales y se establecen
                 # en la base de datos y en el array de totales
                 total_cantidades_id = Total.find_or_create_by(:total => 
-                params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes][:"#{k2}"][:total_id])
+                  params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes][:"#{k2}"][:total_id])
                 v2['total_id'] = total_cantidades_id.id
                 totales.push(v2['total_id'])
                 
@@ -344,17 +355,16 @@ class LotesController < ApplicationController
                 
               end
             end
-              
+
               # "bool" es asignada como false para evitar que se repitan las consultas
               # contra la base de datos del ciclo anterior
               bool = false
               @remove = false
-          else
-            params[:lote][:colores_lotes_attributes].delete(k)
-            @remove = true
-          end  
-        end
-      end
+            else
+              params[:lote][:colores_lotes_attributes].delete(k)
+              @remove = true
+            end  
+          end
       # end
       #Rails.logger.info("PARAMS: #{params.inspect}")
     end
@@ -363,13 +373,13 @@ class LotesController < ApplicationController
     def lote_params
       sub_id_value
       params.require(:lote).permit(:empresa, :color_prenda, 
-      :no_remision, :no_factura, :cliente_id, :tipo_prenda_id, :prioridad, 
-      :op, :fecha_entrada,  :fin_insumos, :obs_insumos, :meta, :h_req,
-      :obs_integracion, :fin_integracion, :cantidad, :precio_u, :precio_t,
-      :fecha_revision, :fecha_entrega, :control_lotes_attributes => [:id, 
-      :sub_estado_id, :lote_id, :fecha_ingreso, :fecha_salida, :estado_id, :_destroy],
-      :colores_lotes_attributes => [:id, :color_id, :lote_id, :total_id, :_destroy, 
-      :cantidades_attributes =>[:id, :categoria_id, :total_id, :cantidad, :_destroy]]).
+        :no_remision, :no_factura, :cliente_id, :tipo_prenda_id, :prioridad, 
+        :op, :fecha_entrada,  :fin_insumos, :obs_insumos, :meta, :h_req,
+        :obs_integracion, :fin_integracion, :cantidad, :precio_u, :precio_t,
+        :fecha_revision, :fecha_entrega, :control_lotes_attributes => [:id, 
+          :sub_estado_id, :lote_id, :fecha_ingreso, :fecha_salida, :estado_id, :_destroy],
+          :colores_lotes_attributes => [:id, :color_id, :lote_id, :total_id, :_destroy, 
+            :cantidades_attributes =>[:id, :categoria_id, :total_id, :cantidad, :_destroy]]).
       merge(respon_edicion_id: current_user, referencia_id: set_referencia)
     end
     
@@ -377,12 +387,12 @@ class LotesController < ApplicationController
     def lote_params_u
       sub_id_value
       params.require(:lote).permit(:empresa, :color_prenda, 
-      :no_remision, :no_factura, :fin_insumos, :obs_insumos, 
-      :obs_integracion, :fin_integracion, :precio_u,  :meta, :h_req,
-      :cliente_id, :tipo_prenda_id, :prioridad, :op, :fecha_entrada,
-      :fecha_revision, :fecha_entrega,:cantidad,  :precio_t,
-      :colores_lotes_attributes => [:id, :color_id, :lote_id, :total_id, :_destroy, 
-      :cantidades_attributes =>[:id, :categoria_id, :total_id, :cantidad, :_destroy]]).
+        :no_remision, :no_factura, :fin_insumos, :obs_insumos, 
+        :obs_integracion, :fin_integracion, :precio_u,  :meta, :h_req,
+        :cliente_id, :tipo_prenda_id, :prioridad, :op, :fecha_entrada,
+        :fecha_revision, :fecha_entrega,:cantidad,  :precio_t,
+        :colores_lotes_attributes => [:id, :color_id, :lote_id, :total_id, :_destroy, 
+          :cantidades_attributes =>[:id, :categoria_id, :total_id, :cantidad, :_destroy]]).
       merge(respon_edicion_id: current_user, referencia_id: set_referencia)
     end
     
@@ -395,4 +405,4 @@ class LotesController < ApplicationController
     def referencia_params
       params.require(:lote).permit(:referencia)
     end
-end
+  end

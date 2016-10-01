@@ -38,7 +38,15 @@ wrap_text_subtitles = wb.styles.add_style (
 	}
 )
 
-text = wb.styles.add_style :types => [:string]
+text = wb.styles.add_style ({
+		:alignment => { :horizontal => :left },
+		:border => { :style => :thin, :color => "00" }
+	})
+money = wb.styles.add_style({
+		:format_code => '$0,000', :border => Axlsx::STYLE_THIN_BORDER,
+		:border => { :style => :thin, :color => "00" }
+	
+})
 border =  wb.styles.add_style :border => { :style => :thin, :color => "00" }
 # Celdas a imprimir
 wb.add_worksheet(:name  => "Programación") do |sheet|
@@ -46,6 +54,8 @@ wb.add_worksheet(:name  => "Programación") do |sheet|
 	sheet.add_row ["","","","","","","",""], :style => wrap_text_title
 	# Combinar celdas
 	sheet.merge_cells("A1:I2")
+
+	# Céldas con texto enriquecido para los subtítulos de la tabla
 	rt = Axlsx::RichText.new
 	rt1 = Axlsx::RichText.new
 	rt2 = Axlsx::RichText.new
@@ -79,6 +89,8 @@ wb.add_worksheet(:name  => "Programación") do |sheet|
 			rt7,
 			rt8,
 		], :style => wrap_text_subtitles
+
+	# Datos que se vana imprimir
   @programaciones.each do |programacion|
     sheet.add_row [
     	programacion.fetch(0), 
@@ -93,7 +105,10 @@ wb.add_worksheet(:name  => "Programación") do |sheet|
     ], :style => border
   end
 
+  # Dar un estilo diferente a cada columna	
   sheet.col_style 3, text
+  sheet.col_style 5, money
+  sheet.col_style 6, money
 
   # Especificar ancho de cada columna
   sheet.column_widths 20, nil, nil, nil, nil, nil, nil, nil, nil

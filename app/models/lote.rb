@@ -14,7 +14,7 @@ class Lote < ApplicationRecord
   #
   #
   #Validaciones
-  validates_presence_of :cliente, :control_lotes
+  validates_presence_of :cliente, :control_lotes, :colores_lotes
   validates :referencia, :empresa, presence: true
   
   
@@ -40,10 +40,17 @@ class Lote < ApplicationRecord
   # no se utiliza otro método porque ya existen registros que incumplen la 
   # restricción de unico
   # Retorna true si la op no existe y puede ser creada
-  def self.op_exist(op)
+  def self.op_exist(op, options={})
+    # Opciones por defecto que el método acepta
+    default_options = {:action => "",:lote_id => nil} 
     if op != ""
-      val = Lote.where(:op => op).pluck(:op)
-      return val.empty? ? true : false
+      $val
+      if options[:action].eql?("edit") || options[:action].eql?("update")
+        $val = Lote.where("op = ? and id <> ?", op, options[:lote_id]).pluck(:op)
+      else
+        $val = Lote.where(:op => op).pluck(:op)
+      end
+      return $val.empty? ? true : false
     else
       true
     end

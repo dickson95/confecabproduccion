@@ -16,6 +16,7 @@
     %>
     
         <%= f.error_notification %>
+        <%=@lote.errors.full_messages%>
 <!--inicio form-inputs-->
       <div class="form-inputs">
 <!--#########################################################################-->
@@ -38,7 +39,7 @@
                     autocomplete: 'off', autofocus: true} %>
               </div>
               <div class="col-sm-4">
-                  <%if params[:action] != 'edit' %>
+                  <%if !params[:action].eql?('edit') && !params[:action].eql?('update') %>
                       <%= f.input :referencia, input_html: { style: 'text-transform:uppercase;',
                     autocomplete: 'off', value: @lote.referencia.nil? ? "" : @lote.referencia.referencia}%>
                   <%else %>
@@ -106,11 +107,12 @@
       <!--#########################################################################--> 
               <div class="row">
                 <div class="col-md-12">
-                  <div class="panel">
-                    <div class="panel-heading panel-default">
-                      <h4>Cantidades por talla</h4>
-                    </div>
-                  </div>
+                    <h4>Cantidades por talla</h4>
+                    <span class="text-danger">
+                    <%if !@lote.errors[:colores_lotes].empty?%>
+                      Por favor ingrese el color y al menos una cantidad
+                    <%end%>
+                    </span>
                 </div>
               </div>
               <div class="row">
@@ -126,6 +128,7 @@
                         <%row = @colores.nil? ? 1 : @colores.length%>
                         <%i = 0%>
                         <%=f.fields_for :colores_lotes do |color_lote|%>
+                        <%puts i%>
                           <tr>
                             <% if bool%>
                               <th scope="rowgroup" rowspan="<%=row%>" style="padding:0; margin:0;" 
@@ -236,20 +239,23 @@
                   <h3>Insumos del lote</h3>
                 </div>
                 <div class="col-lg-6">
-                  <%if !@lote.cliente.nil?%>
                     <div class="col-lg-3">
-                      <h3>Cliente</h3>
-                      <p>
-                        <%=@lote.cliente.cliente%>
-                      </p>
+                      <%if !@lote.cliente.nil?%>
+                        <h3>Cliente</h3>
+                        <p>
+                          <%=@lote.cliente.cliente%>
+                        </p>
+                      <%end%>
                     </div>
                     <div class="col-lg-3">
-                      <h3>Referencia</h3>
-                      <p>
-                        <%= @lote.referencia.referencia%>
-                      </p>
+                      <%if !@lote.referencia.nil?%>
+                        <h3>Referencia</h3>
+                        <p>
+                          <%= @lote.referencia.referencia%>
+                        </p>
+                      <%end%>
                     </div>
-                  <%end%>
+                  
                 </div>
               </div>
             </div>
