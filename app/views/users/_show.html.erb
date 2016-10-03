@@ -7,22 +7,51 @@
       <h4 class="modal-title" id="myModalLabel"><%=@user.name%></h4>
     </div>
     <div class="modal-body">
-      <p>
-        <strong>Teléfono:</strong>
-        <%= @user.telefono %>
-      </p>
-      <p>
-        <strong>Correo:</strong>
-        <%= @user.email %>
-      </p>
-      <p>
-        <strong>Cédula:</strong>
-        <%= @user.username %>
-      </p>
-      <p>
-        <strong>Último ingreso:</strong>
-        <%= I18n::localize(@user.current_sign_in_at, :format => "%d de %B a las %I:%M %p" ) %>
-      </p>
+      <table class="table">
+        <tbody>
+          <tr>
+            <th class="col-sm-6">Teléfono:</th>
+            <td class="col-sm-6"><%= @user.telefono %></td>
+          </tr>
+          <tr>
+            <th class="col-sm-6">Correo:</th>
+            <td class="col-sm-6"><%= @user.email %></td>
+          </tr>
+          <tr>
+            <th class="col-sm-6">Cédula:</th>
+            <td class="col-sm-6"><%= @user.username %></td>
+          </tr>
+          <tr>
+            <th class="col-sm-6">Tipo de permiso:</th>
+            <td class="col-sm-6">
+              <p class="text-left col-sm-6" id="current_rol">
+              <% @user.roles.each do |ru| %>
+                <%=ru.name.capitalize%>
+              <%end%>
+              </p>
+              <p class="text-right col-sm-6">
+              <%if @rol_form.eql?("admin") || @rol_form.eql?("coor_tiempos")%>
+                <%if @user.id != 1%>
+                  <%=link_to edit_user_path(@user), :title => "Cambiar permiso", remote: true do%>
+                    <%=content_tag :i, "", :class => "fa fa-pencil"%>
+                  <%end%>
+                <%end%>
+              <%end%>
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" id="edit_permission" style="display: none;">
+            </td>
+          </tr>
+          <tr>
+            <th class="col-sm-6">Último ingreso:</th>
+            <td class="col-sm-6">
+            <%= I18n::localize(@user.current_sign_in_at, :format => "%d de %B a las %I:%M %p" ) %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

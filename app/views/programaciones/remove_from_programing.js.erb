@@ -18,5 +18,7 @@
 	<%end%>
 
 <%elsif params[:commit] == "Ordenar"%>
-	$("#<%=month%>t").find("tbody").replaceWith("<%=j render partial: "table_tbody", locals:{mes: month}%>");
+	<%price = Programacion.price @rol_form%>
+	<%price ? $colspan = 10 : $colspan = 8%>
+	$("#<%=month%>t").find("tbody").replaceWith("<%=j render partial: "table_tbody", locals:{mes: month, colspan: $colspan}%>");
 <%end%>

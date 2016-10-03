@@ -1,2 +1,12 @@
-$("#myModal").html("<%= escape_javascript(render 'users/show') %>");
-$("#myModal").modal('toggle');
+<%if params[:action].eql?("show")%>
+	$("#myModal").html("<%= escape_javascript(render 'users/show') %>");
+	$("#myModal").modal('toggle');
+<%elsif params[:action].eql?("edit")%>
+	$("#edit_permission").html("<%= j render 'form_permission'%>");
+	$("#edit_permission").slideDown(600);
+<%elsif params[:action].eql?("update")%>
+	$("#edit_permission").children().slideUp(600);
+	$("#edit_permission").hide();
+	console.log("<%=@new_rol.last.capitalize%>");
+	$("#current_rol").text("<%=@new_rol.last.capitalize%>")
+<%end%>

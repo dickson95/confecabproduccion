@@ -13,7 +13,9 @@
 		<%@meses.each do |mes|%>
 		<div id="<%=mes%>" class="tab-pane fade <%=mes == mes_active ? "in active" : ""%>">
 			<%if mes == mes_active%>
+				<div class="table-responsive">
 				<%=render "table", mes: mes%>
+				</div>
 			<%end%>
 		</div>	
 		<%end%>

@@ -60,7 +60,7 @@ gem 'simple_form'
 gem 'bootstrap_sb_admin_base_v2'
 gem 'jquery-ui-rails'
 gem 'jquery-timepicker-addon-rails'
-gem 'rails4-autocomplete'
+gem 'rails-jquery-autocomplete'
 
 # Autenticación y control
 gem 'devise'

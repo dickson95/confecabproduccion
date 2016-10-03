@@ -1,16 +1,14 @@
 <%= simple_form_for @user, url: create_user_path do |f|%>
     <%= f.error_notification %>
     <div class="form-inputs">
-      <%= f.input :email, required: true, autofocus: true, label: "Correo electrónico" %>
-      <%= f.input :name, required: true, label: "Nombre" %>
+      <%= f.input :email, required: true, autofocus: true, label: "Correo electrónico (Usuario de acceso)" %>
+      <%= f.input :name, required: true, label: "Nombre y apellido" %>
       <%= f.input :telefono, label: "Teléfono" %>
-      <%= f.input :username, required: true, label: "Cédula"%>
+      <%= f.input :username, required: true, label: "Cédula (Usuario de acceso)"%>
       <%= f.input :password, required: true, hint: ("#{@minimum_password_length} 
       characters minimum" if @minimum_password_length), label: "Contraseña" %>
       <%= f.input :password_confirmation, required: true, label: "Confirme contraseña" %>
-    </div>
-        <%= f.collection_select :rol_ids, Rol.all, :id, :name, {:class => "selectpicker"}, {multiple: true}%>
-    <div>
+      <%= f.input :rol_ids, :collection => Rol.all, :value_method => :id, label: "Tipo de permiso"%>
       <p>* Campos requridos</p>
     </div>
     <div class="form-actions text-right">

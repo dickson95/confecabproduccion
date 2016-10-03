@@ -1,0 +1,85 @@
+<div class="row">
+  <div class="panel">
+    <div class="panel-heading panel-primary">
+      <h3>Integración de lote</h3>
+    </div>
+  </div>
+</div>
+<!--Otros roles Primera fila-->
+<div class="row">
+  <div class="col-sm-9">
+    <div class="col-sm-4">
+      <%= f.input :op, input_html: { style: 'text-transform:uppercase;', autocomplete: 'off', autofocus: true} %>
+    </div>
+    <div class="col-sm-4">
+      <%if !params[:action].eql?('edit') && !params[:action].eql?('update') %>
+      <%= f.input :referencia, input_html: { style: 'text-transform:uppercase;',autocomplete: 'off', value: @lote.referencia.nil? ? "" : @lote.referencia.referencia}%>
+      <%else %>
+      <%= f.input :referencia, :readonly => true, input_html: { style: 'transform:uppercase;', autocomplete: 'off', value: "#{@lote.referencia.referencia}"}%>
+      <% end %>
+    </div>
+    <div class="col-sm-4">
+      <%  if params[:action] != 'edit' %>
+      <div class="input-group">
+        <%= f.input :cliente do %>
+        <%= f.input_field  :cliente_id, class: "form-control", :collection => @clientes, :value_method => :id, :include_blank => "-- seleccione cliente --"%>
+        <div class="input-group-btn">
+          <%= link_to '...', add_remote_data_path(:place => "form_lote_cliente"),{:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-primary", :title => "Nuevo cliente"} %>
+        </div>
+        <% end %>
+      </div>
+      <div id="error_div_cliente" class="text-danger"></div>
+      <%  else %>
+      <%= f.association :cliente, :disabled => :disabled %>
+      <%  end %>
+    </div>
+    <div class="col-sm-4">
+      <div class="input-group">
+        <%= f.input :tipo_prenda_id,  label: "Descripción" do %>
+        <%= f.input_field  :tipo_prenda_id, class: "form-control", :collection => @tipos_prendas, :value_method => :id, :include_blank => "-- seleccione descripción --" %>
+        <div class="input-group-btn">
+          <%= link_to '...', add_remote_data_path(:place => "form_lote_tipo_prenda"),{:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#myModal',  :class => "btn btn-primary", :title => "Nueva descripción"} %>
+        </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div>
+        <%=f.input :empresa, collection: [['CAB', 'CAB'],[ 'D&C','D&C']]%>
+      </div>
+    </div>
+    <div class="col-sm-4" style="padding-top:15px">
+      <%=f.label :fin_integracion_true, label: "¿Ingreso completado?"%><br>
+      <%= f.collection_radio_buttons :fin_integracion, [[true, 'Sí'], [false, 'No']], :first, :last, {item_wrapper_class: 'radio-inline',  item_wrapper_tag: :div, checked: true} %>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <%= f.input :obs_integracion, input_html:{:style => "height: 110px"}, :label => 'Notas de integración'%>
+  </div>
+</div>
+<!--Otros roles Fin primera fila-->
+<!--Otros roles Segunda fila-->
+<hr>
+
+<!--#########################################################################-->
+<!--_________________________Detalle de cantidades___________________________-->
+<!--#########################################################################--> 
+<div class="row">
+  <div class="col-md-12">
+    <h4>Cantidades por talla</h4>
+    <span class="text-danger">
+      <%if !@lote.errors[:colores_lotes].empty?%>
+      Por favor ingrese el color y al menos una cantidad
+      <%end%>
+    </span>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+    <div class="table-responsive">
+      <!--Inicio de tabla-->
+      <%=render "form_zone_detalle_cantidades", f: f%>
+      <!--fin de tabla-->
+    </div>
+  </div>
+</div>

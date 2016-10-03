@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   # Rutas de los usuarios
   devise_for :users
   resources :users, except: :create
-  post 'users/create_user' => 'users#create', as: :create_user
+  post 'users/new' => 'users#create', as: :create_user
   
   # Rutas del historial de lotes
   resources :control_lotes

@@ -4,7 +4,7 @@ class LotesController < ApplicationController
   before_action :set_color, only: [:create, :update]
   before_action :set_tipo_prenda, only: [:new, :edit]
   before_action :referencia_params, only: [:set_referencia]
-  before_action :set_lote, only: [:show, :edit, :update, :destroy]
+  before_action :set_lote, only: [:edit, :update, :destroy]
   before_action :set_lote_u, only: [:view_datails]
   before_action :set_talla, only: [:view_datails, :new, :edit, :create, :update]
   
@@ -43,13 +43,6 @@ class LotesController < ApplicationController
       format.js{render 'ajaxResults'}
       format.html
     end
-  end
-  
-  
-  # GET /lotes/1
-  # GET /lotes/1.json
-  def show
-    @control_lotes = ControlLote.all
   end
 
   # GET /lotes/new
@@ -119,12 +112,11 @@ class LotesController < ApplicationController
     boolean = false
     # Se consulta el último estado del lote para ser comparado con el actual
     lote = ControlLote.where(lote_id: params[:id]).joins(:estado)
-    .order("control_lotes.id desc").limit(1)
-    .pluck("estados.id", "control_lotes.fecha_ingreso",
-      "control_lotes.id", "control_lotes.sub_estado_id", 
-      "control_lotes.id").last
+            .order("control_lotes.id desc").limit(1)
+            .pluck("estados.id", "control_lotes.fecha_ingreso",
+              "control_lotes.id", "control_lotes.sub_estado_id", 
+              "control_lotes.id").last
     # Id del estado en variable est_id
-    puts "estado actual del lote #{lote.fetch(0)} y este el nuevo #{params[:lote][:control_lotes_attributes][:'0'][:estado_id]}"
     est_id = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
     if lote.fetch(0) == est_id.to_i
       # Si ninguna de las dos condiciones sigueintes se cumple no se crea nada en el historial
@@ -136,37 +128,40 @@ class LotesController < ApplicationController
         # si el sub id no tiene nada desde el parámetro se asigna 0 para la comparación
         sub_id = 0
       end
-      puts "sub estado viejo #{lote.fetch(3)}, y nuevo #{sub_id}"
       if lote.fetch(3) != sub_id.to_i
         # En caso de que el subestado sea diferente al anterior se crea uno nuevo
         boolean = true
         puts "Información: Creando un nuevo registro en el historial..."
       end
-
     else
       boolean = true
-      puts "Información: Creando un nuevo registro completamente nuevo en el historial..."
+      puts "Información: Creando un registro completamente nuevo en el historial..."
     end
-    
-    # Actualizar fecha salida, responsable de salida, minutos del historial
-    if boolean
-      puts "actualización de usuario de salida, tiempo y demás"
-      time = Time.new()
-      updated = ControlLote.where(:id => lote.fetch(2)).update(fecha_salida: time)
-      #Método de minutos
-      $up
-      updated.each{|u| $up = u.fecha_salida}
-      min = Lote.minutos_proceso(lote.fetch(1), $up)
-      ControlLote.where(:id => lote.fetch(2)).update(min_u: min,
-        resp_salida_id: current_user)
-    end
-    # Respuesta a la solicitud de actualización
+    @has_programing = Lote.has_programing params[:id], est_id
+
+    # op no puede ser validada con el uniquenesess del modelo por que debe permitir valores nil
+    # y añadir un index que permita nulls no es opción por que ya existen campos que
+    # incumplen con esta condicion y no se pueden eliminar
     op = Lote.op_exist params[:lote][:op], :lote_id => params[:id], :action => params[:action]
     valid = @lote.valid?
+
+
+    # Respuesta a la solicitud de actualización
     respond_to do |format|
-      if op && valid
+      if op && valid && @has_programing && @color_blank
         @lote.update(boolean ? lote_params : lote_params_u )
         if boolean
+          # Actualizar fecha salida, responsable de salida, minutos del historial
+          time = Time.new()
+          updated = ControlLote.where(:id => lote.fetch(2)).update(fecha_salida: time)
+          #Método de minutos
+          $up
+          updated.each{|u| $up = u.fecha_salida}
+          min = Lote.minutos_proceso(lote.fetch(1), $up)
+          ControlLote.where(:id => lote.fetch(2)).update(min_u: min,
+            resp_salida_id: current_user)
+          
+          # Actualizar responsable de ingreso en el último historial
           ult = ControlLote.last
           ControlLote.where(:id => ult).update(resp_ingreso_id: current_user, 
             fecha_salida: est_id == "5" ? time : nil, resp_salida_id: est_id == "5" ? current_user : nil)
@@ -175,12 +170,18 @@ class LotesController < ApplicationController
         flash[:success] = "Lote actualizado correctamente"
       else
         set_tipo_prenda
+        if !@has_programing  
+          @lote.errors.add :control_lotes
+        end
         if !op
           @lote.errors.add :op, "Ya existe la OP"
         end
-        
+        if !@color_blank
+          @lote.errors.add :colores_lotes
+        end
         params[:estado_id] = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
         params[:sub_id] = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
+        
         format.html { render :edit }
         format.json { render json: @lote.errors, status: :unprocessable_entity }
       end
@@ -190,16 +191,6 @@ class LotesController < ApplicationController
   # Pasar entre los distintos estados del lote y registrar las fechas de salida
   # de un estado, la de entrada al siguiente y un responsable por acción
   def cambio_estado
-    time = Time.new()
-    #Actualización de fecha para el último estado
-    id = ControlLote.where(["lote_id=?", params[:id]]).maximum(:id)
-    ControlLote.where(:id => id).update(fecha_salida: time)
-    lote = ControlLote.find(id)
-    #método de minutos
-    min = Lote.minutos_proceso(lote.fecha_ingreso, lote.fecha_salida)
-    
-    ControlLote.where(:id => id).update(min_u: min, 
-      resp_salida_id: current_user)
     estado = 0
     men = nil
     case params[:btn]
@@ -215,23 +206,44 @@ class LotesController < ApplicationController
       when '5' # completar
         estado = 5
         men = "completado"
-      end
-    # Asignación de parámetros para el nuevo control a registrar. Responsable
-    # por el movimiento
-    @control_lote = ControlLote.new(:lote_id => params[:id], :estado_id => estado, 
-      :fecha_ingreso => time, :resp_ingreso_id => current_user, :fecha_salida => estado == 5 ? time : nil,
-      :resp_salida_id => estado == 5 ? current_user : nil)
+    end
 
-    respond_to do |format|
-      # Nuevo estado en el historial de los lotes
-      if @control_lote.save
-        format.html { redirect_to lotes_path }
-        flash[:info] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}." 
-        format.json { render :index, status: :ok, location: @control_lote }
-      else
-        @lotes = ControlLote.select(:lote_id).map(&:lote_id).uniq
-        format.html { render :index }
-        format.json { render json: @control_lote.errors, status: :unprocessable_entity }
+    has_programing = Lote.has_programing params[:id], estado
+
+    if has_programing
+      time = Time.new()
+      #Actualización de fecha para el último estado
+      id = ControlLote.where(["lote_id=?", params[:id]]).maximum(:id)
+      ControlLote.where(:id => id).update(fecha_salida: time)
+      lote = ControlLote.find(id)
+      #método de minutos
+      min = Lote.minutos_proceso(lote.fecha_ingreso, lote.fecha_salida)
+      
+      ControlLote.where(:id => id).update(min_u: min, 
+        resp_salida_id: current_user)
+
+      # Asignación de parámetros para el nuevo control a registrar. Responsable
+      # por el movimiento
+      @control_lote = ControlLote.new(:lote_id => params[:id], :estado_id => estado, 
+        :fecha_ingreso => time, :resp_ingreso_id => current_user, :fecha_salida => estado == 5 ? time : nil,
+        :resp_salida_id => estado == 5 ? current_user : nil)
+
+      respond_to do |format|
+        # Nuevo estado en el historial de los lotes
+        if @control_lote.save
+          format.html { redirect_to lotes_path }
+          flash[:info] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}." 
+          format.json { render :index, status: :ok, location: @control_lote }
+        else
+          @lotes = ControlLote.select(:lote_id).map(&:lote_id).uniq
+          format.html { render :index }
+          format.json { render json: @control_lote.errors, status: :unprocessable_entity }
+        end
+      end
+    else
+      respond_to do |format|
+        format.html {redirect_to lotes_path}
+        flash[:warning] = "El lote no tiene programación, no se puede confeccionar"
       end
     end
   end
@@ -290,26 +302,30 @@ class LotesController < ApplicationController
       # totales: totales relativos por color
       # totales_tallas: totales por talla
       @remove = false
+      @color_blank = true
       @colores = Array.new
       @totales = Array.new
       @totales_tallas = Array.new
       colores = params[:lote][:colores_lotes_attributes]
-      colores.each do |k, v| 
-        @colores.push v[:color_id]
-        @totales.push v[:total_id]
 
-        if recorrer_una
-          v[:cantidades_attributes].each do |k2, v2|
-            @totales_tallas.push v2[:total_id]
+      if !colores.nil?
+        colores.each do |k, v| 
+
+          if recorrer_una
+            v[:cantidades_attributes].each do |k2, v2|
+              @totales_tallas.push v2[:total_id]
+            end
+            recorrer_una = false
           end
-          recorrer_una = false
-        end
-      end
 
-        # Decisión para retirar o no el array del color, retira los colores que no tienen
-        # descripción
-          colores.each do |k, v|
-            cont = 0
+          @colores.push v[:color_id]
+          @totales.push v[:total_id]
+        end
+
+          # Decisión para retirar o no el array del color, retira los colores que no tienen
+          # descripción
+        colores.each do |k, v|
+          cont = 0
 
           # Validar que entre los 9 parámetros hay algún número distinto de 0
           # si así es, se dejan los parámetro intactos
@@ -322,20 +338,25 @@ class LotesController < ApplicationController
           end
 
           # Si el contador es menor a 8 significa que en los 9 campos hay un número distinto
-          # de 0, es decir, máximos se encuentran 8 ceros
+          # de 0, es decir, máximos se encuentran 8 ceros y cumple con la validación de que 
+          # exista un número mayor a 0
           if cont < 8
+
+            if v[:color_id] == ""
+              @color_blank = false
+            end
             color_id = Color.find_or_create_by(:color =>
               params[:lote][:colores_lotes_attributes][:"#{k}"][:color_id])
             v['color_id'] = color_id.id
-            
+          
             total_colores_id = Total.find_or_create_by(:total =>
               params[:lote][:colores_lotes_attributes][:"#{k}"][:total_id])
             v['total_id'] = total_colores_id.id
-            
-            
+          
+          
             i = 0
             # Recorrer parámetros de cantidades_attributes para asignar el total real
-            
+          
             params[:lote][:colores_lotes_attributes][:"#{k}"][:cantidades_attributes].each do |k2, v2|
 
               if bool
@@ -356,16 +377,17 @@ class LotesController < ApplicationController
               end
             end
 
-              # "bool" es asignada como false para evitar que se repitan las consultas
-              # contra la base de datos del ciclo anterior
-              bool = false
-              @remove = false
-            else
-              params[:lote][:colores_lotes_attributes].delete(k)
-              @remove = true
-            end  
-          end
-      # end
+            # "bool" es asignada como false para evitar que se repitan las consultas
+            # contra la base de datos del ciclo anterior
+            bool = false
+            @remove = false
+          else
+            # Sino se cumple la condición de existir un número mayor a 0
+            params[:lote][:colores_lotes_attributes].delete(k)
+            @remove = true
+          end  
+        end
+      end
       #Rails.logger.info("PARAMS: #{params.inspect}")
     end
     

@@ -1,0 +1,17 @@
+<script type="text/javascript">
+	$("#cancelar").click(function(e){
+		$("#edit_permission").children().remove();
+		$("#edit_permission").hide();
+		e.preventDefault(); 
+	});
+</script>
+<%= simple_form_for @user, remote: true do |f|%>
+    <%= f.error_notification %>
+    <div class="text-left col-sm-6">
+    	<%= f.input :rol_ids, :collection => Rol.all, :value_method => :id, label: false, class: "input-sm"%>
+	</div>
+	<div class="text-right col-sm-6">
+  		<%= f.button :submit, "Aceptar", class: "btn-sm" %>
+  		<%= link_to 'Cancelar', "#", class:"btn btn-sm btn-outline btn-primary", :id => "cancelar"%>
+    </div>
+<%end%>

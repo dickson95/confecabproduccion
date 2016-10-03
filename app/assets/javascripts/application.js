@@ -12,8 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui/autocomplete
 //= require jquery-ui/datepicker
+//= require jquery-ui/autocomplete
 //= require autocomplete-rails
 //= require bootstrap_sb_admin_base_v2
 //= require turbolinks

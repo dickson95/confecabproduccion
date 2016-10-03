@@ -1,10 +1,11 @@
 <td class="col-lg-1 color" style="padding:0; margin:0;">
     <fieldset>
         <div class="input-group">
-            <%=f.autocomplete_field  :color_id, 
-            autocomplete_color_color_lotes_path, 
-            label: false, :value => col, 
-            class: "form-control input-sm", :title => "Color"%>
+            <%=f.input  :color_id, 
+            :url => autocomplete_color_color_lotes_path, 
+            :as => :autocomplete, label: false,
+            input_html: {class: "input-sm",:value => col, :title => "Color",
+                :placeholder => "Color"}%>
             <%=f.hidden_field :_destroy %>
         </div>
     </fieldset>

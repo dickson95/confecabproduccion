@@ -1,8 +1,31 @@
 class User < ApplicationRecord
-  
+  # RELACIONES
+  has_and_belongs_to_many :roles
+  has_many :control_lotes, class_name: 'ControlLote', primary_key: 'id', foreign_key: 'resp_ingreso_id'
+  has_many :control_lotes, class_name: 'ControlLote', primary_key: 'id', foreign_key: 'resp_salida_id'
+  has_many :lotes, class_name: 'Lote', primary_key: 'id', foreign_key: 'respon_insumos_id'
+  has_many :lotes, class_name: 'Lote', primary_key: 'id', foreign_key: 'respon_edicion_id'
+
+
   # Validaciones
-  validates :name, :username, presence: true
-  
+  validates :name, :presence => {:message => "El nombre y apellido deben estar"}
+  validates :email, 
+            :presence => {:message => "Ingrese un correo electrónico"},
+            :uniqueness => {
+              :case_sensitive => false,
+              :message => "Este correo ya existe"
+            }
+  validates :username,
+            :numericality => { 
+              only_integer: true,
+              :message => "La cédula no es válida (Solo números)"
+            },
+            :uniqueness => {
+              :case_sensitive => false,
+              :message => "Esta cédula ya existe"
+            }
+  validates :rol_ids, :presence => {:message => "Por favor seleccione un permiso"}
+
   # AUTENTICACIÓN
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -10,13 +33,6 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable, 
          :authentication_keys => [:login]
   attr_accessor :login
-  
-  # RELACIONES
-  has_and_belongs_to_many :roles
-  has_many :control_lotes, class_name: 'ControlLote', primary_key: 'id', foreign_key: 'resp_ingreso_id'
-  has_many :control_lotes, class_name: 'ControlLote', primary_key: 'id', foreign_key: 'resp_salida_id'
-  has_many :lotes, class_name: 'Lote', primary_key: 'id', foreign_key: 'respon_insumos_id'
-  has_many :lotes, class_name: 'Lote', primary_key: 'id', foreign_key: 'respon_edicion_id'
   
   
   

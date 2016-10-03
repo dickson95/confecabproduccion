@@ -210,4 +210,13 @@ class Lote < ApplicationRecord
     str = str.reverse
   end
   
+  # Determinar si el lote tiene una programación y puede pasar a la confección
+  def self.has_programing(id, estado)
+    if (estado.to_i).between?(3, 5)
+      lote = Lote.find(id)
+      return !lote.programacion_id.nil? ? true : false
+    else
+      true
+    end
+  end
 end
