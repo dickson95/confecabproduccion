@@ -1,34 +1,7 @@
 <!--Panel introducción a insumos-->
-<div class="panel">
-  <div class="panel-heading panel-primary">
-    <div class="row">
-      <div class="col-lg-6">
-        <h3>Insumos del lote</h3>
-      </div>
-      <div class="col-lg-6">
-        <div class="col-lg-3">
-          <%if !@lote.cliente.nil?%>
-          <h3>Cliente</h3>
-          <p>
-            <%=@lote.cliente.cliente%>
-          </p>
-          <%end%>
-        </div>
-        <div class="col-lg-3">
-          <%if !@lote.referencia.nil?%>
-          <h3>Referencia</h3>
-          <p>
-            <%= @lote.referencia.referencia%>
-          </p>
-          <%end%>
-        </div>
-
-      </div>
-    </div>
-  </div>
-</div>
+<div style="margin-top: 20px;"></div>
 <!--Fin panel introducción a insumos-->
-<%if @rol_form == "aux_insumos" && params[:action]=="edit"%>
+<%if @rol_form == "aux_insumos" && (params[:action]=="edit" || params[:action]=="update")%>
 <%= f.hidden_field :referencia, :value => "#{@lote.referencia.referencia}"%>
 <%end%>
 <!--Fila insumos-->

@@ -11,7 +11,10 @@ Rails.application.routes.draw do
   get 'programaciones/export_excel', to: 'programaciones#export_excel', as: :export_excel
   get 'programaciones/export_pdf', to: 'programaciones#export_pdf', as: :export_pdf
   get 'programaciones/modal_open/:month', to: 'programaciones#modal_open', as: :modal_open
-  get 'programaciones/', to: 'programaciones#index', as: :programaciones
+  resources :programaciones, only:[:index] do 
+    post 'update_row_order', on: :collection
+  end
+
 
   # Rutas de los usuarios
   devise_for :users

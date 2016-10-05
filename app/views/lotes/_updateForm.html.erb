@@ -1,13 +1,7 @@
-<%= simple_form_for(@lote, wrapper: :vertical_input_group,
-        wrapper_mappings: {
-          check_boxes: :horizontal_radio_and_checkboxes,
-          radio_buttons: :horizontal_radio_and_checkboxes,
-          file: :horizontal_file_input,
-          boolean: :horizontal_boolean
-        }) do |f| %>
+<%= simple_form_for(@lote) do |f| %>
         <% # Recarga de formulario para los tipos de prendas %>
         <%if params[:place] == "form_lote_response"%>
-          <%= f.input :tipo_prenda_id,  label: "Descripción" do %>
+          <%= f.input :tipo_prenda_id,  label: "Descripción", wrapper: :vertical_input_group do %>
             <%= f.input_field  :tipo_prenda_id, class: "form-control",
             :collection => @tipos_prendas, :selected => @tipo_prenda.id ,
             :value_method => :id, :label => false, :include_blank => "-- seleccione descripción --" %>

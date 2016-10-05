@@ -1,0 +1,7 @@
+<%=form_tag remove_from_programing_path(params[:month], :empresa => params[:empresa]), remote: true do%>
+	<table class="table table-bordered table-striped sortable" id="<%="#{year}#{mes[:number]}"%>t">
+		<%if mes[:number] == @mes_active%>
+			<%=render "table"%>
+		<%end%>
+	</table>
+<%end%>

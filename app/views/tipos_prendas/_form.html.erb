@@ -18,12 +18,11 @@
         <div class="form-inputs">
           <%= f.input :tipo, label: "Descripción"%>
         </div>
-        <div id="errors_div" class="text-danger"></div>
         
           <div class="modal-footer">
             <div class="form-actions">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <%= f.button :submit, :value => "Aceptar", data:{:dismiss_with => "Guardando"} %>
+              <%= f.submit :submit, :value => "Aceptar", 'data-disable-with' => "Guardando..." %>
             </div>
           </div>
       <% end %>
@@ -39,7 +38,7 @@
     </div>
     
      <div class="form-actions text-right">
-        <%= f.button :submit, :value => "Aceptar", data:{:disabled_with => "Guardando"} %>
+        <%= f.button :submit, :value => "Aceptar", 'data-disable-with' => "Guardando..."%>
         <%= link_to 'Cancelar', tipos_prendas_path, class:"btn btn-outline btn-primary" %>
       </div>
   <% end %>

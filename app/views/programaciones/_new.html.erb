@@ -6,7 +6,11 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th>&#x2713;</th>
+							<th style="cursor: help;">
+								<p data-html="true" data-toggle="popover" data-placement="left" title="Añadir a la programación" data-content='Aquí se muestran referencias de lotes que no están programados. Selecciona en los recuadros de abajo los que quieres añadir y da click en aceptar'>
+									<i class="fa fa-check-square-o" title="Cómo retirar"></i>
+								</p>
+							</th>
 							<th class="text-right">Referencia</th>
 						</tr>
 					</thead>
@@ -24,6 +28,7 @@
 								<td><%=check_box_tag "lotes[]", "#{lote.fetch(0)}"%></td>
 								<td class="text-right">
 									<%=hidden_field_tag 'month', @programacion%>
+									<%=hidden_field_tag 'empresa', params[:empresa]%>
 									<%=lote.fetch(1)%>
 								</td>
 							</tr>
@@ -42,3 +47,6 @@
 		
 	</div>
 </div>
+<script type="text/javascript">
+	$('[data-toggle="popover"]').popover();
+</script>

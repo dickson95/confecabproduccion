@@ -1,6 +1,6 @@
 <%# add navigation links_ul to this file %>
 <%if user_signed_in?%>
-<li title="<%=current_user.name%>"><%= link_to current_user.name, edit_user_registration_path%></li>
+<%=nav_link current_user.name, edit_user_registration_path, { title: current_user.name},{class: "fa fa-user fa-fw"}%>
 <%end%>
 <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#" 

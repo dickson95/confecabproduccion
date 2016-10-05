@@ -1,14 +1,11 @@
 <%price = Programacion.price @rol_form%>
 	<%@lotes.each do |lote|%>
 		<%lote.each do |l|%>
-			<tr>
+			<tr  data-item-id=<%= "#{l.id}" %> class="item">
 				<td><%=check_box_tag "lotes[#{l.id}]", l.id%></td>
-				<td class="col-xs-2"><%=l.cliente.cliente%></td>
-				<td class="col-xs-1"><%=l.tipo_prenda.tipo%></td>
-				<td style="width: 4.3em;">
-					<%=text_field_tag "secuencia[#{l.id}[sec]]", "", class:"form-control", :value => l.secuencia%>
-					<%=hidden_field_tag "secuencia[#{l.id}[id]]", l.id%>
-				</td>
+				<td><%=@estados["#{l.id}"]%></td>
+				<td><%=l.cliente.cliente%></td>
+				<td><%=l.tipo_prenda.tipo%></td>
 				<td><%=l.referencia.referencia%></td>
 				<td><%=l.cantidad%></td>
 				<%if price%>

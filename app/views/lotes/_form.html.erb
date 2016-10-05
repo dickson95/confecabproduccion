@@ -9,11 +9,33 @@
     end
     %>
     <%action = params[:action]%>
-    <%= simple_form_for(@lote, :url => action=="edit" || action=="update" ? lote_path(:place => place) : lotes_path(:place => place), wrapper: :vertical_input_group) do |f|%>
-
+    <%= simple_form_for(@lote, :url => action=="edit" || action=="update" ? lote_path(:place => place) : lotes_path(:place => place), validate: true) do |f|%>
+    <div class="row page-header">
+      <div class="col-md-3 text-left">
+        <%if action.eql?("edit") || action.eql?("update")%>
+        <h3>Editar</h3>
+        <%else%>
+        <h3>Nuevo</h3>
+        <%end%>
+      </div>
+      <div class="col-md-5 text-center text-muted">
+        <p>
+          <%if !@lote.cliente.nil?%>
+          <%=@lote.cliente.cliente%> -
+          <%end%>
+          <%if !@lote.referencia.nil?%>
+          <%= @lote.referencia.referencia%>
+          <%end%>
+        </p>
+      </div>
+      <div class="col-md-4 text-right">
+        <%= f.button :submit, :value => 'Aceptar', data:{:disable_with => "Guardando"}, class: 'btn-default', :id =>"lote_guardar" %>
+        <%= link_to 'Cancelar', lotes_path, class: 'btn btn-outline btn-primary' %>
+      </div>
+    </div>
     <%= f.error_notification %>
-    <%=@lote.errors.full_messages%>
 
+    <!--inicio form-inputs-->
     <div class="form-inputs">
       <ul class="nav nav-tabs">
         <% if @rol_form != "aux_insumos"%>
@@ -21,15 +43,15 @@
         <%end%>
 
         <% if @rol_form != "coor_integracion"%>
-        <li><a data-toggle="tab" href="#insumos">Insumos</a></li>
+        <li class=<%=@rol_form.eql?("aux_insumos") ? "active" : ""%>><a data-toggle="tab" href="#insumos">Insumos</a></li>
         <%end%>
 
         <% if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
         <li><a data-toggle="tab" href="#facturacion">Facturación</a></li>
         <%end%>
       </ul>
-      <!--inicio form-inputs-->
-      <div class="content-tab">
+
+      <div class="tab-content">
         <div id="integracion" class="tab-pane fade in active">
           <% # Integración %>
           <% if @rol_form != "aux_insumos"%>
@@ -37,7 +59,7 @@
           <%end%>
         </div>
 
-        <div id="insumos" class="tab-pane fade">
+        <div id="insumos" class="tab-pane fade <%=@rol_form.eql?("aux_insumos") ? "in active" : ""%>">
           <% # Insumos %>
           <% if @rol_form != "coor_integracion"%>
           <%=render "form_zone_insumos", f: f%>
@@ -79,9 +101,7 @@
             </div>
           </div>
           <div class="form-actions text-right">
-            <%= f.button :submit, :value => 'Aceptar',
-            data:{:disable_with => "Guardando"}, class: 'btn-default',
-            :id =>"lote_guardar" %>
+            <%= f.button :submit, :value => 'Aceptar', data:{:disable_with => "Guardando"}, class: 'btn-default', :id =>"lote_guardar" %>
             <%= link_to 'Cancelar', lotes_path, class: 'btn btn-outline btn-primary' %>
           </div>
           <div class="panel">

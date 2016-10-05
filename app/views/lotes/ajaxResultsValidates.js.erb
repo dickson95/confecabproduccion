@@ -1,42 +1,34 @@
-<% # Fallas en la validación de los campor %>
+<% # Fallas en la validación de los campos %>
 
+
+<% # (DESCRIPCIÓN) Ingreso y actualización del cliente %>
 <%if params[:place] == "form_lote_response"%>
+    $("#help-descripcion").remove()
     $("#alert").show();
-    $("#errors_div").html("<%= @tipo_prenda.errors[:tipo] %>");
-    $("#tipo_prenda_tipo").parent().addClass("has-error");
+    message = "<span class='help-block' id='help-descripcion'><%=@tipo_prenda.errors[:tipo].first%></span>"
+    $("#tipo_prenda_tipo").parent().addClass("has-error").append(message);
+
+
+<% # (CLIENTE) Ingreso y actualización del cliente %>
 <%elsif params[:place] == "form_lote_cliente_response"%>
+    $(".help-cliente").remove()
     $("#alert").show();
-    $("#cliente_email").parent().addClass("has-error");
-    $("#cliente_cliente").parent().addClass("has-error");
-    $("#error_div_cliente").html("<%= @cliente.errors[:cliente] %>");
-    $("#error_div_email").html("<%= @cliente.errors[:email] %>");
-<%elsif params[:place] =="form_edit_lote"%>
-    $('#form_collapse').html("<%= escape_javascript(render 'form', lote: @lote)%>")
-<%elsif params[:place] =="form_edit_lote_response"%>
-    $("#alert").show();
-    $("#errors_full").html("<%= @lote.errors.full_messages %>");
-    <%if !@lote.errors[:referencia].empty?%>
-        $("#error_div_referencia").html("<%= @lote.errors[:referencia] %>");
-        $("#lote_referencia").parent().addClass("has-error");
-    <%end%>
-    <%if !@lote.errors[:empresa].empty?%>
-        $("#error_div_empresa").html("<%= @lote.errors[:empresa] %>");
-        $("#lote_empresa").parent().addClass("has-error");
-    <%end%>
-    <%if !@lote.errors[:cliente].empty?%>
-        $("#error_div_cliente").html("<%= @lote.errors[:cliente] %>");
-        $("#lote_cliente_id").parent().addClass("has-error");
-    <%end%>
+    message_email = "<span class='help-block help-cliente'><%=@cliente.errors[:email].first%></span>"
+    message_cliente = "<span class='help-block help-cliente'><%=@cliente.errors[:cliente].first%></span>"
+    $("#cliente_email").parent().addClass("has-error").append(message_email);
+    $("#cliente_cliente").parent().addClass("has-error").append(message_email);
+    
+
+
+<% # (SUB PROCESOS) Ingreso y actualización del cliente %>
 <%elsif params[:place] == "form_lote_sub_estado_response"%>
-    <%puts "respuesta"%>
+    $(".help-sub-proceso").remove()
+    message = "<span class='help-block help-sub-proceso'>No puede estar en blanco</span>"
     $("#alert").show();
     <%if !@sub_estado.errors[:sub_estado].empty?%>
-        $("#sub_estado_sub_estado").parent().addClass("has-error");
-        $("#error_sub_div").html("No puede estar en blanco");
+        $("#sub_estado_sub_estado").parent().addClass("has-error").append(message);
     <%end%>
-    <%puts "estados #{@sub_estado.errors[:estado]}"%>
     <%if !@sub_estado.errors[:estado].empty?%>
-        $("#sub_estado_estado_id").parent().addClass("has-error");
-        $("#error_estado_div").html("No puede estar en blanco");
+        $("#sub_estado_estado_id").parent().addClass("has-error").append(message);
     <%end%>
 <%end%>

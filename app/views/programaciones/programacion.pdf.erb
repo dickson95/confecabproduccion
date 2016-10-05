@@ -1,16 +1,14 @@
-<table class="table">
+<table class="table table-bordered">
 <%date = Programacion.date_split params[:month]%>
-<%month = date[:month]%>
-<%month = @meses.fetch(month.to_i - 1)%>
+<%month = @meses[date[:month]]%>
 <%price = Programacion.price @rol_form%>
 	<caption>
-			<h2>Programación de <%=month%></h2>
+			<h2>Programación de <%=month[:string]%></h2>
 	</caption>
 	<thead>
 		<tr>
 			<th>Cliente</th>
 			<th>Descripción</th>
-			<th>Sec</th>
 			<th>Referencia</th>
 			<th>Cant</th>
 			<%if price%>
@@ -20,14 +18,12 @@
 			<th>Meta</th>
 			<th>Horas</th>
 		</tr>
-
 	</thead>
 	<tbody>
 		<%@programaciones.each do |programacion|%>
 		<tr style="height: 25px;">
 			<td style="padding:0; margin:0;"><%=programacion.fetch(0)%></td>
 			<td style="padding:0; margin:0;"><%=programacion.fetch(1)%></td>
-			<td style="padding:0; margin:0;"><%=programacion.fetch(2)%></td>
 			<td style="padding:0; margin:0;"><%=programacion.fetch(3)%></td>
 			<td style="padding:0; margin:0;"><%=programacion.fetch(4)%></td>
 			<%if price%>

@@ -1,6 +1,5 @@
-<li>
-    <a href="/" title="Lotes" class="item"><i class="fa fa-fw fa-dashboard fa-fw"></i>&nbsp;&nbsp;Lotes</a>
-</li>
+
+<%=nav_link "Lotes", lotes_path, {class: "item", title: "Lotes"}, {class: "fa fa-dashboard fa-fw"}  %>
 <li id="programaciones" data-turbolinks-permanent>
     <%date_current = Time.new%>
 	<%=link_to "#" do%>
@@ -9,30 +8,18 @@
         <%=content_tag :span, "", :class => "fa arrow"%>
 	<%end%>
     <ul class="nav nav-second-level collapse">
-        <li>
-            <%=link_to "Confecab", programaciones_path(:month => date_current.strftime("%Y%m"), :empresa => "CAB")%>
-        </li>
-        <li>
-            <%=link_to "Diseños", programaciones_path(:month => date_current.strftime("%Y%m"), :empresa => "D&C")%>
-        </li>
+        <%=nav_link "Confecab", programaciones_path(:empresa => "CAB"), {title: "Confecab"} %>
+        <%=nav_link "Diseños", programaciones_path(:empresa => "D&C"), {title: "Diseños y camisas"} %>
     </ul>
 </li>
 <%if (can? :manage, ControlLote) || (can? :read, ControlLote)  %>
-<li>
-    <a href="/control_lotes" title="Historial" class="item"><i class="fa fa-history"></i>&nbsp;&nbsp;&nbsp;Historial</a>
-</li>
+<%=nav_link "Historial", control_lotes_path, {class: "item", title: "Historial"}, {class: "fa fa-history fa-fw"}%>
 <%end%>
 
 <% if (can? :manage, Referencia) || (can? :read, Referencia) %>
-<li>
-    <a href="/tipos_prendas" title="Tablas" class="item"><i class="fa fa-table fa-fw"></i>&nbsp;Tablas</a>
-</li>
+<%=nav_link "Tablas", tipos_prendas_path, {class: "item", title: "Tablas"}, {class: "fa fa-table fa-fw"}%>
 <%end%>
+
 <%if (can? :manage, User) || (can? :read, User)%>
-<li>
-    <%=link_to users_path, :title => "Usuarios", class: "item" do%>
-        <%=content_tag :i, "", :class => "fa fa-users"%>
-        &nbsp;Usuarios
-    <%end%>
-</li>
+<%=nav_link "Usuarios", users_path, {class: "item", title: "Usuarios"}, {class: "fa fa-users fa-fw"} %>
 <%end%>

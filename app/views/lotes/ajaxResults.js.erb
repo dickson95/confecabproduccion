@@ -1,34 +1,39 @@
-<% #Acciones %>
-
+<% # Respuestas correctas %>
+<% # (DESCRIPCIÓN) Ingreso y actualización de la descripción de la prenda %>
 <% if params[:place] == "form_lote_tipo_prenda"%>
     $("#myModal").html("<%= escape_javascript(render 'tipos_prendas/form') %>"); 
+
 <%elsif params[:place] == "form_lote_response"%>
     var updatedTipos = $('#lote_tipo_prenda_id', $('<%= j render "lotes/updateForm" %>'));
-    console.log(updatedTipos);
     $('#lote_tipo_prenda_id').replaceWith(updatedTipos);
     $('#myModal').modal('toggle');
+
+
+<% # (CLIENTE) Ingreso y actualización del cliente %>
 <%elsif params[:place] == "form_lote_cliente"%>
     $("#myModal").html("<%= escape_javascript(render 'clientes/form') %>");
+
 <%elsif params[:place] == "form_lote_cliente_response"%>
     var updatedClientes = $('#lote_cliente_id', $('<%= j render "lotes/updateForm" %>'));
     $('#lote_cliente_id').replaceWith(updatedClientes);
     $('#myModal').modal('toggle');
-<%elsif params[:place] == "form_email_cliente"%>
-    $("#myModal").html("<%= escape_javascript(render 'clientes/form') %>");
-<%elsif params[:place] =="form_email_cliente_response"%>
-    $('#myModal').modal('toggle');
-<%elsif params[:place] =="form_new_lote"%>
-    $('#form_collapse').html("<%= escape_javascript(render 'form', lote: @lote)%>");
-<%elsif params[:place] =="form_edit_lote"%>
-    $('#form_collapse').html("<%= escape_javascript(render 'form', lote: @lote)%>");
+
+
+
+<% # (SUB PROCESO) Ingreso y actualización del cliente %>
 <%elsif params[:place] == "form_lote_sub_estado"%>
     $("#myModal").html("<%= escape_javascript(render 'sub_estados/form', sub_estado: @sub_estado) %>");
     $('#myModal').modal('toggle');
+
 <%elsif params[:place] == "form_lote_sub_estado_response"%>
     var updatedFormEst = $('#lote_control_lotes_attributes_0_sub_estado_id', $('<%= j render 'lotes/updateForm' %>'));
     $('#lote_control_lotes_attributes_0_sub_estado_id').replaceWith(updatedFormEst);
     $('#myModal').modal('toggle');
+
+
+<% # (DETALLES) Ingreso y actualización del cliente %>
 <%elsif params[:place] =="form_edit_lote_response" || params[:place] =="form_new_lote_response"%>
     $("#myModal").html("<%= escape_javascript(render 'lotes/view_datails', lote: @lote) %>");
     $("#myModal").modal('toggle');
+
 <%end%>

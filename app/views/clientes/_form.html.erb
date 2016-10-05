@@ -17,11 +17,9 @@
         </div>
         <div class="form-inputs">
           <%= f.input :cliente, autofocus: true%>
-          <div id="error_div_cliente" class="text-danger"></div>
           <%= f.input :telefono %>
           <%= f.input :direccion %>
           <%= f.input :email %>
-          <div id="error_div_email" class="text-danger"></div>
         </div>
       
         <div class="modal-footer">
@@ -79,7 +77,7 @@
   </div>
 </div>
 <%else%>
-  <%= simple_form_for(@cliente) do |f| %>
+  <%= simple_form_for(@cliente, validate: true) do |f| %>
     <%= f.error_notification %>
   
     <div class="form-inputs">

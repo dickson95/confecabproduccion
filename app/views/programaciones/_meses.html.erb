@@ -1,22 +1,18 @@
 <%date = Programacion.date_split params[:month] %>
-<%mes_active = @meses.fetch(date[:month].to_i - 1)%>
+<%@mes_active = @meses[date[:month]][:number]%>
 <div id="<%=year%>" class="tab-pane fade in active"> 
 	<!--Meses-->
-	<ul class="nav nav-tabs nav-justified" role="tablist">
-		<%cont_mes = 1%>
-		<%@meses.each do |mes|%>
-		<li class="tab_mes <%=mes == mes_active ? "active" : ""%>" id='<%="#{year}#{cont_mes < 10 ? "0#{cont_mes}" : cont_mes}"%>'><%= link_to mes, program_table_path("#{year}#{cont_mes < 10 ? "0#{cont_mes}" : cont_mes}", :empresa => params[:empresa]), method: :post, remote: true%></li>
-		<%cont_mes += 1%>
+	<ul class="nav nav-tabs" role="tablist">
+		<%@meses.each do |k, v|%>
+		<li class="tab_mes <%=v[:number] == @mes_active ? "active" : ""%>" id='<%="#{year}#{v[:number]}"%>'><%= link_to v[:string], program_table_path("#{year}#{v[:number]}", :empresa => params[:empresa]), method: :post, remote: true%></li>
 		<%end%>	
 	</ul>
 	<div class="tab-content">
-		<%@meses.each do |mes|%>
-		<div id="<%=mes%>" class="tab-pane fade <%=mes == mes_active ? "in active" : ""%>">
-			<%if mes == mes_active%>
-				<div class="table-responsive">
-				<%=render "table", mes: mes%>
-				</div>
-			<%end%>
+		<%@meses.each do |k, v|%>
+		<div id="<%="#{year}#{v[:number]}p"%>" class="tab-pane fade <%=v[:number] == @mes_active ? "in active" : ""%>">
+			<div class="table-responsive">
+			<%=render partial: "head_table", locals:{mes: v, year: year}%>
+			</div>
 		</div>	
 		<%end%>
 	</div>

@@ -5,205 +5,220 @@
         <span aria-hidden="true">&times;</span>
       </button>
       <h4 class="modal-title" id="myModalLabel">
-        Detalles
+        REFERENCIA: <%= @lote.lote.referencia.referencia%>
       </h4>
     </div>
     <div class="modal-body">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          Referencia: <%= @lote.lote.referencia.referencia%>
-        </div>
-        <div class="panel-body">
-          <!--Detalla de cantidades-->
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              Detalle de cantidades
-            </div>
-            <div class="panel-body">
-              <div class="table-responsive">
-                <table class="table table-hover">
-                  <thead>
-                    <tr class="small">
-                      <th rowspan="3" class="text-center">Cantidad Corte</th>
-                      <th rowspan="3">Tallas</th>
-                      <%cont = 0%>
-                      <%@tallas.each do |talla|%>
-                        <% if cont == 0%>
-                          <th class="col-lg-1"><%=talla.talla%></th>
-                        <%end%>
-                        <%cont == 2 ? cont = 0 : cont = cont + 1%>
-                      <%end%>
-                      <th rowspan="3">
-                        Total colores
-                      </th>
-                    </tr>
-                    <tr class="small">
-                      <%cont = 0%>
-                      <%@tallas.each do |talla|%>
-                        <% if cont == 1%>
-                          <th class="col-lg-1"><%=talla.talla%></th>
-                        <%end%>
-                        <%cont == 2 ? cont = 0 : cont = cont + 1%>
-                      <%end%>
-                    </tr>
-                    <tr class="small">
-                      <%cont = 0%>
-                      <%@tallas.each do |talla|%>
-                        <% if cont == 2%>
-                          <th class="col-lg-1"><%=talla.talla%></th>
-                        <%end%>
-                        <%cont == 2 ? cont = 0 : cont = cont + 1%>
-                      <%end%>
-                      
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <%totales = Array.new%>
-                    <%@lote.lote.colores_lotes.each do |color|%>
-                    <tr>
-                      <td rowspan="1">Colores</td>
-                      <td><%=color.color.nil? ? "COLOR" : color.color.color%></td>
-                      <%color.cantidades.each do |cantidad|%>
-                        <td>
-                          <%=cantidad.cantidad%>
-                          <% totales.push cantidad.total.total%>
-                        </td>
-                      <%end%>
-                      <td><%=color.total.total%></td>
-                    </tr>
-                    <%end%>
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <td colspan="2">Totales tallas</td>
-                      <%if totales.empty?%>
-                        <%(0..9).each do |i|%>
-                          <td></td>
-                        <%end%>
-                      <%else%>
-                          <%(0..8).each do |i|%>
-                          <td><%=totales.fetch i%></td>
-                        <%end%>
-                      <%end%>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
-            </div>
-            <div class="panel-footer">
-              <div class="text-right">
-                Unidades totales
-                <%=@lote.lote.cantidad%>
-              </div>
-            </div>
-          </div>
-          <!--Cliente, y lote-->
-          <div class="row">
-            <p class="col-sm-3  text-left">
-              <strong>OP:</strong>
-              <%= @lote.lote.op %>
-            </p>
-            <p class="col-sm-4 text-center">
-              <strong>Cliente:</strong>
-              <%= @lote.lote.cliente.cliente %>
-            </p>
-            <p class="col-sm-2 text-center">
-              <strong>Empresa:</strong>
-              <%= @lote.lote.empresa %>
-            </p>
-            <p class="col-sm-3 text-right">
-              <strong>Descripción:</strong>
-              <%= @lote.lote.tipo_prenda.nil? ? "-" : "#{@lote.lote.tipo_prenda.tipo}"%>
-            </p>
-          </div>
-
-          <!--Facturación-->
-          <div class="row">
-            <p class="col-md-6">
-              <strong>Número de factura:</strong>
-              <%= @lote.lote.no_factura %>
-            </p>
-            <p class="col-md-6">
-              <strong>Número de remisión:</strong>
-              <%= @lote.lote.no_remision%>
-            </p>
-          </div>
-          <hr>
-
-          <!--Insumos-->
-          <div class="row">
-            <div class="col-md-6">
-              <div class="panel panel-default">
-                <div class="panel-heading">Insumos</div>
-                <div class="panel-body">
-                  <p class="col-sm-6">
-                    <strong>Fecha de revisión:</strong><br>
-                    <%= @lote.lote.fecha_revision%>
-                  </p>
-                  <p class="col-sm-6">
-                    <strong>Fecha de entrega:</strong><br>
-                    <%= @lote.lote.fecha_entrega %>
-                  </p>
-                  <p class="col-sm-6">
-                    <strong>Observaciones:</strong><br>
-                    <%= @lote.lote.obs_insumos %>
-                  </p>
-                  <p  class="col-sm-6">
-                    <strong>Listos:</strong>
-                    <%@lote.lote.fin_insumos ? "Si" : "No"%>
-                  </p>
-                </div>
-              </div>              
-            </div>
-
-            <!--Integración-->
-            <div class="col-md-6">
-              <div class="panel panel-default">
-                <div class="panel-heading">Integración</div>
-                <div class="panel-body">
-                  <p class="col-sm-6">
-                    <strong>Observaciones:</strong><br>
-                    <%= @lote.lote.obs_integracion %>
-                  </p>
-                  <p class="col-sm-6">
-                    <strong>Listo:</strong>
-                    <%= @lote.lote.fin_integracion ? "Si" : "No" %>
-                  </p>
-                </div>
-              </div> 
-            </div>
-          </div>
-          <hr>
-          <!--Procesos-->
-          <div class="row">
-            <p class="col-sm-4 text-left">
-              <strong>Proceso:</strong>
-              <%=@lote.estado.estado %>
-            </p>
-            <p class="col-sm-4 text-center">
-              <strong>Entrada a este proceso:</strong><br>
-              <%=I18n::localize(@lote.fecha_ingreso, :format => "%d de %B de %Y") %>
-            </p>
-            <p class="col-sm-4 text-right">
-              <strong>Proceso adicional:</strong>
-              <%=@lote.sub_estado.nil? ? "-" : "#{@lote.sub_estado.sub_estado}"%>
-            </p>
-          </div>
-        </div>
-        <!--panel body-->
-        <div class="panel-footer">
-          <p class="text-center">
-            <strong>Última edición:</strong>
-            El <%= I18n::localize @lote.lote.updated_at, :format => "%d de %b" %> 
-            por <%= @lote.lote.respon_edicion_id.name %>
-          </p>
-        </div>
-        <!--Panel footer-->
+      
+      <!--Detalla de cantidades-->
+      <div class="table-responsive">
+          <table class="table table-bordered">
+            <caption>Detalle de cantidades</caption>
+            <thead>
+              <tr class="">
+                <th rowspan="3" class="text-center">Cantidad Corte</th>
+                <th rowspan="3">Tallas</th>
+                <%cont = 0%>
+                <%@tallas.each do |talla|%>
+                  <% if cont == 0%>
+                    <th class="col-lg-1 small"><%=talla.talla%></th>
+                  <%end%>
+                  <%cont == 2 ? cont = 0 : cont = cont + 1%>
+                <%end%>
+                <th rowspan="3">
+                  Total colores
+                </th>
+              </tr>
+              <tr class="small">
+                <%cont = 0%>
+                <%@tallas.each do |talla|%>
+                  <% if cont == 1%>
+                    <th class="col-lg-1"><%=talla.talla%></th>
+                  <%end%>
+                  <%cont == 2 ? cont = 0 : cont = cont + 1%>
+                <%end%>
+              </tr>
+              <tr class="small">
+                <%cont = 0%>
+                <%@tallas.each do |talla|%>
+                  <% if cont == 2%>
+                    <th class="col-lg-1"><%=talla.talla%></th>
+                  <%end%>
+                  <%cont == 2 ? cont = 0 : cont = cont + 1%>
+                <%end%>
+                
+              </tr>
+            </thead>
+            <tbody>
+              <%totales = Array.new%>
+              <%@lote.lote.colores_lotes.each do |color|%>
+              <tr>
+                <th rowspan="1">Colores</th>
+                <td><%=color.color.nil? ? "COLOR" : color.color.color%></td>
+                <%color.cantidades.each do |cantidad|%>
+                  <td>
+                    <%=cantidad.cantidad%>
+                    <% totales.push cantidad.total.total%>
+                  </td>
+                <%end%>
+                <td><%=color.total.total%></td>
+              </tr>
+              <%end%>
+            </tbody>
+            <tfoot>
+              <tr class="active">
+                <th colspan="2">Totales tallas</th>
+                <%if totales.empty?%>
+                  <%(0..9).each do |i|%>
+                    <td></td>
+                  <%end%>
+                <%else%>
+                    <%(0..8).each do |i|%>
+                    <td><%=totales.fetch i%></td>
+                  <%end%>
+                <%end%>
+                <th><%=@lote.lote.cantidad%></th>
+              </tr>
+            </tfoot>
+          </table>
       </div>
-      <!--Panel-->
+        
+      <!--Cliente, y lote-->
+      <div class="row">
+        <p class="col-md-3  text-left">
+          <strong>OP:</strong>
+          <%= @lote.lote.op %>
+        </p>
+        <p class="col-md-4 text-left">
+          <strong>Cliente:</strong>
+          <%= @lote.lote.cliente.cliente %>
+        </p>
+        <p class="col-md-2 text-left">
+          <strong>Empresa:</strong>
+          <%= @lote.lote.empresa %>
+        </p>
+        <p class="col-md-3 text-left">
+          <strong>Descripción:</strong>
+          <%= @lote.lote.tipo_prenda.nil? ? "-" : "#{@lote.lote.tipo_prenda.tipo}"%>
+        </p>
+      </div>
+      <hr>
+      <!--Facturación-->
+      <div class="row">
+        <p class="col-md-3 text-left">
+          <strong>Fecha de entrada:</strong><br>
+          <% f_entrada = ControlLote.where(lote_id: @lote.lote.id).pluck(:fecha_ingreso).min%>
+          <%=I18n::localize(f_entrada, :format => "%d de %b/%y")%>
+        </p>
+        <p class="col-md-3 text-left">
+          <strong>Fecha de salida:</strong><br>
+          <%=@lote.estado.id==5 ? l(@lote.fecha_salida, format: "%d de %b/%y") : "No ha salido"%>
+        </p>
+        <p class="col-md-3 text-left">
+          <strong>Meta por hora:</strong>
+          <%=@lote.lote.meta%>
+        </p>
+        <p class="col-md-3 text-left">
+          <strong>Horas totales:</strong>
+          <%=@lote.lote.h_req%>
+        </p>
+      </div>
+
+      <!--Facturación-->
+      <%if @rol_form.eql?("coor_tiempos") || @rol_form.eql?("gerente") || @rol_form.eql?("admin") %>
+      <hr>
+      <div class="row">
+        <p class="col-md-3 text-left">
+          <strong>Número de factura:</strong>
+          <%= @lote.lote.no_factura %>
+        </p>
+        <p class="col-md-3 text-left">
+          <strong>Número de remisión:</strong>
+          <%= @lote.lote.no_remision%>
+        </p>
+        <p class="col-md-3 text-left">
+          <strong>Precio unitario:</strong>
+          <%= Money.new("#{@lote.lote.precio_u}00", "USD").format %>
+        </p>
+        <p class="col-md-3 text-left">
+          <strong>Precio total:</strong>
+          <%= Money.new("#{@lote.lote.precio_t}", "USD").format%>
+        </p>
+      </div>
+      <%end%>
+
+      <!--Insumos-->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">Insumos</div>
+            <div class="panel-body">
+              <p class="col-sm-6">
+                <strong>Fecha de revisión:</strong><br>
+                <%= @lote.lote.fecha_revision%>
+              </p>
+              <p class="col-sm-6">
+                <strong>Fecha de entrega:</strong><br>
+                <%= @lote.lote.fecha_entrega %>
+              </p>
+              <p class="col-sm-6">
+                <strong>Observaciones:</strong><br>
+                <%= @lote.lote.obs_insumos %>
+              </p>
+              <p  class="col-sm-6">
+                <strong>Listos:</strong>
+                <%= @lote.lote.fin_insumos ? "Si" : "No"%>
+              </p>
+            </div>
+          </div>              
+        </div>
+
+        <!--Integración-->
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">Integración</div>
+            <div class="panel-body">
+              <p class="col-sm-6">
+                <strong>Observaciones:</strong><br>
+                <%= @lote.lote.obs_integracion %>
+              </p>
+              <p class="col-sm-6">
+                <strong>Listo:</strong>
+                <%= @lote.lote.fin_integracion ? "Si" : "No" %>
+              </p>
+            </div>
+          </div> 
+        </div>
+      </div>
+      <hr>
+      <!--Procesos-->
+      <div class="row">
+        <p class="col-sm-3 text-left">
+          <strong>Proceso:</strong>
+          <%=@lote.estado.estado %>
+        </p>
+        <p class="col-sm-3 text-left">
+          <strong>Entrada a este proceso:</strong><br>
+          <%=I18n::localize(@lote.fecha_ingreso, :format => "%d de %B de %Y") %>
+        </p>
+        <p class="col-sm-3 text-left">
+          <strong>Proceso adicional:</strong>
+          <%=@lote.sub_estado.nil? ? "-" : "#{@lote.sub_estado.sub_estado}"%>
+        </p>
+        <p class="col-md-3 text-left">
+          <strong>Tiempo de proceso:</strong>
+          <%= ControlLote.where(lote_id: @lote.lote.id).sum(:min_u) %>
+        </p>
+      </div>
+      
     </div>
     <!--Body modal-->
     <div class="modal-footer">
+      <p class="text-left pull-left">
+        <strong>Última edición:</strong>
+        El <%= I18n::localize @lote.lote.updated_at, :format => "%d de %b" %> 
+        por <%= @lote.lote.respon_edicion_id.name %>
+      </p>
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       <% if can? :manage, Lote %>
         <div class="btn-group">
@@ -211,35 +226,7 @@
             <%=content_tag :i, "", :class => "fa fa-pencil"%>
             Editar
           <%end%>
-          <%
-            btn = nil
-            men = nil
-            boolean = true
-            case @lote.estado.id
-              when 1
-                btn = 'integrar'
-                men = 'Integrar'
-              when 2
-                btn = 'confe'
-                men = 'Confeccionar'
-              when 3
-                btn = 'terminar'
-                men = 'Terminar'
-              when 4
-                btn = 'completar'
-                men = 'Completar'
-              else 
-                boolean = false
-            end
-                
-          %>
-          <% if boolean%>
-            <%= link_to cambio_estado_path(@lote.lote, :btn => btn), 
-            class: "btn btn-primary" do |l|%>
-              <%=content_tag :i, "", :class => "fa fa-forward"%>
-              <%=men%>
-            <%end%>
-          <%end%>
+          <%=next_state cambio_estado_path(@lote.lote), @lote.estado.id, {:class => "btn btn-primary"}, {:class => "fa fa-forward"}%>
         </div>
       <%end%>
     </div>

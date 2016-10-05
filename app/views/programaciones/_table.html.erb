@@ -1,62 +1,67 @@
-
-<%=form_tag remove_from_programing_path(params[:month], :empresa => params[:empresa]), remote: true do%>
 <%disabled = Programacion.interfaz @no_empty_program, @programaciones%>
 <%$colspan = 8%>
-<table class="table" id="<%=mes%>t">
 	<caption>
 		<div class="pull-left">
 			<h4>Programación de <%=params[:empresa]%></h4>
 		</div>
 		<!--Opciones de exportación-->
-		<div class="row pull-right text-right">
-			<div class="col-sm-5 col-sm-offset-1">
-				<div class="dropdown">
+		<div class="pull-right text-right">
+				<p style="cursor: help;" class="btn" data-html="true" data-toggle="popover" data-placement="bottom" title="Cómo ordenar" data-content="Para ordenar solo has click con el mouse sobre la fila y a arrastras hacia donde la quieres">
+				<i class="fa fa-question-circle" title="Cómo ordenar"></i>
+				</p>
+				<div class="dropdown pull-right">
 					<button type="button" class="btn btn-primary dropdown-toggle disabled-btn" data-toggle="dropdown" <%=disabled.fetch(0) ? 'disabled' : ''%>>Exportar&nbsp;<i class="caret"></i></button>
 					<ul class="dropdown-menu pull-right">
 						<li>
-							<%=link_to "Excel", export_excel_path(format: "xlsx", :month => params[:month], :empresa => params[:empresa])%>
+							<%=link_to export_excel_path(format: "xlsx", :month => params[:month], :empresa => params[:empresa]) do%>
+								<%=content_tag :i ,"",:class => "fa fa-file-excel-o"%>
+								Excel
+							<%end%>
 						</li>
 						<li>
-							<%=link_to "PDF", export_pdf_path(format: "pdf",:month => params[:month], :empresa => params[:empresa])%>
+							<%=link_to export_pdf_path(format: "pdf",:month => params[:month], :empresa => params[:empresa]) do%>
+								<%=content_tag :i ,"",:class => "fa fa-file-pdf-o"%>
+								PDF
+							<%end%>
 						</li>
 					</ul>	
-				</div>
 			</div>
-			<%if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
-			<div class="col-sm-6">
-				<%=submit_tag "Ordenar", class:"btn btn-default disabled-btn", disabled: disabled.fetch(0)%>
-			</div>
-			<%end%>
 		</div>
 	</caption>
 	<thead>
 		<tr>
-			<th>&#x2713;</th>
-			<th>Cliente</th>
-			<th>Descripción</th>
-			<th>Sec</th>
-			<th>Referencia</th>
-			<th>Cant</th>
+			<th style="width: 30px; min-width: 30px; cursor: help;">
+				<p data-html="true" data-toggle="popover" data-placement="bottom" title="Retirar de programación" data-content='Selecciona los lotes deseados y has click en el botón "Retirar" para no incluirlos en la programación'>
+					<i class="fa fa-check-square-o" title="Cómo retirar"></i>
+				</p>
+			</th>
+			<th class="col-md-1">Estado</th>
+			<th class="col-md-2" style="min-width: 170px;">Cliente</th>
+			<th class="col-md-2">Descripción</th>
+			<th class="col-md-2" style="min-width: 100px;">Referencia</th>
+			<th class="col-md-1">Cant</th>
 			<%if @rol_form == "coor_tiempos" || @rol_form == "admin" || @rol_form == "gerente"%>
 			<%$colspan = 10%>
-			<th>Precio</th>
-			<th>Total</th>
+			<th class="col-md-1">Precio</th>
+			<th class="col-md-1">Total</th>
 			<%end%>
-			<th>Meta</th>
+			<th style="width: 60px; min-width: 30px;">Meta</th>
 			<th>Horas</th>
 		</tr>
 
 	</thead>
 	<%=render partial: "table_tbody", colspan: $colspan%>
+
 	<%if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
 	<tfoot>
 		<tr>
-			<td colspan="2">
+			<td colspan="7">
 				<div>
-					<p></p>
+					<p class="col-md-2"><strong>Horas:</strong>  <%=@hours%></p>
+					<p class="col-md-4"><strong>Precio total:</strong> <%=@total%></p>
 				</div>
 			</td>
-			<td colspan="<%=$colspan - 2%>" style="margin-right:0px; padding-right:0px;">
+			<td colspan="<%=$colspan - 7%>" style="margin-right:0px; padding-right:0px;">
 				<div class="pull-right">
 					<%=submit_tag "Retirar", class:"btn btn-warning disabled-btn", disabled: disabled.fetch(0)%>
 					<%=link_to "Añadir", modal_open_path(params[:month], :empresa => params[:empresa]), class:"btn btn-default #{disabled.fetch(1) ? 'disabled' : ''}", remote: true, id: "add-lote" %>
@@ -65,6 +70,4 @@
 		</tr>
 	</tfoot>
 	<%end%>
-</table>
-<%end%>
 

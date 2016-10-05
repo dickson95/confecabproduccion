@@ -1,12 +1,4 @@
 <%content_for :title do "Nuevo lote" end%>
-<div class="row page-header">
-    <div class="pull-left">
-       <h2>Nuevo Lote</h2> 
-    </div>
-    <div class="pull-right margin">
-        <%= link_to 'Cancelar', lotes_path, class: 'btn btn-outline btn-primary' %>
-    </div>
-</div>
 <%= render 'form', lote: @lote %>
 
 

@@ -18,7 +18,8 @@ class User < ApplicationRecord
   validates :username,
             :numericality => { 
               only_integer: true,
-              :message => "La cédula no es válida (Solo números)"
+              :greater_than_or_equal_to => 0,
+              :message => "La cédula no es válida (Solo números y positivos)"
             },
             :uniqueness => {
               :case_sensitive => false,

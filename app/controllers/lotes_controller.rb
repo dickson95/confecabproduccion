@@ -1,5 +1,5 @@
 class LotesController < ApplicationController
-
+  include LotesHelper
   # Acciones primarias
   before_action :set_color, only: [:create, :update]
   before_action :set_tipo_prenda, only: [:new, :edit]
@@ -17,8 +17,12 @@ class LotesController < ApplicationController
   # GET /lotes
   # GET /lotes.json
   def index
-    @lotes = ControlLote.pluck(:lote_id).uniq
-    # ControlLote.find(@lotes) # Hacer una consulta con los datos que toma @lotes
+    @lotes = Lote.joins([control_lotes: [:estado]], :referencia).where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)").pluck("lotes.id","referencias.referencia", "lotes.op","control_lotes.estado_id","control_lotes.fecha_ingreso","estados.estado","control_lotes.sub_estado_id","lotes.tipo_prenda_id")    
+    $lotes_id = Lote.pluck(:id)
+    @sums =  ControlLote.where(lote_id: $lotes_id).group(:lote_id).sum(:min_u)
+    @fechas_ingreso = ControlLote.select("fecha_ingreso").where(lote_id: $lotes_id).group(:lote_id)
+    @tipos_prendas = TipoPrenda.hash_ids
+
   end
   
   def view_datails
@@ -80,20 +84,14 @@ class LotesController < ApplicationController
   # POST /lotes.json
   def create
     # Definir si la op existe. Retorna true si puede ser creada
-    op = Lote.op_exist params[:lote][:op]
     @lote = Lote.new(lote_params)
-    valid = @lote.valid?
     respond_to do |format|
-      if valid && op
-        @lote.save
+      if @lote.save        
         @lote = ControlLote.last
-        ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user)  
+        ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user, fecha_ingreso:  Time.new)  
         format.html{ redirect_to lotes_path }
       else
         set_tipo_prenda
-        if !op
-          @lote.errors.add :op, "Ya existe la OP"
-        end
         if @remove
           @colores_lotes = @lote.colores_lotes.build
           (0..8).each{|n| @cantidades = @colores_lotes.cantidades.build } 
@@ -139,17 +137,9 @@ class LotesController < ApplicationController
     end
     @has_programing = Lote.has_programing params[:id], est_id
 
-    # op no puede ser validada con el uniquenesess del modelo por que debe permitir valores nil
-    # y añadir un index que permita nulls no es opción por que ya existen campos que
-    # incumplen con esta condicion y no se pueden eliminar
-    op = Lote.op_exist params[:lote][:op], :lote_id => params[:id], :action => params[:action]
-    valid = @lote.valid?
-
-
     # Respuesta a la solicitud de actualización
     respond_to do |format|
-      if op && valid && @has_programing && @color_blank
-        @lote.update(boolean ? lote_params : lote_params_u )
+      if @lote.update(boolean ? lote_params : lote_params_u ) && @has_programing && @color_blank
         if boolean
           # Actualizar fecha salida, responsable de salida, minutos del historial
           time = Time.new()
@@ -163,7 +153,7 @@ class LotesController < ApplicationController
           
           # Actualizar responsable de ingreso en el último historial
           ult = ControlLote.last
-          ControlLote.where(:id => ult).update(resp_ingreso_id: current_user, 
+          ControlLote.where(:id => ult).update(resp_ingreso_id: current_user, fecha_ingreso: time,
             fecha_salida: est_id == "5" ? time : nil, resp_salida_id: est_id == "5" ? current_user : nil)
         end
         format.html{ redirect_to lotes_path }
@@ -172,9 +162,6 @@ class LotesController < ApplicationController
         set_tipo_prenda
         if !@has_programing  
           @lote.errors.add :control_lotes
-        end
-        if !op
-          @lote.errors.add :op, "Ya existe la OP"
         end
         if !@color_blank
           @lote.errors.add :colores_lotes
@@ -191,23 +178,9 @@ class LotesController < ApplicationController
   # Pasar entre los distintos estados del lote y registrar las fechas de salida
   # de un estado, la de entrada al siguiente y un responsable por acción
   def cambio_estado
-    estado = 0
-    men = nil
-    case params[:btn]
-      when '2' # integrar
-        estado = 2
-        men = "integración"
-      when '3' # confeccionar
-        estado = 3
-        men = "confección"
-      when '4' # terminar
-        estado = 4
-        men = "terminación"
-      when '5' # completar
-        estado = 5
-        men = "completado"
-    end
-
+    next_state_lote = next_state "", params[:btn]
+    estado = next_state_lote[:state]
+    men = next_state_lote[:message]
     has_programing = Lote.has_programing params[:id], estado
 
     if has_programing

@@ -9,7 +9,6 @@
         <th title="Proceso actual">Estado</th>
         <th title="Descripción de la prenda">Descripción</th>
         <th></th>
-        <th></th>
       </tr>
     <%else #Verificación de rol para insumos%>
       <tr>
@@ -21,9 +20,6 @@
           <th title="Salida de la empresa">Día salida</th>
           <th title="Minutos durante los procesos">Tiempo total</th>
           <th></th>
-          <% if can? :manage, Lote %>
-          <th></th>
-          <% end %>
       </tr>
     <%end #Verificación de rol %>
   </thead>
@@ -36,158 +32,101 @@
     #debe revisar los detalles del lote
     #
     %>
-    <% @lotes.reverse_each do |id|%>
-      <%
-          # "clote" es un indicador de ControlLote. Sin embargo el objetivo es 
-          # imprimir los datos de los lotes y no los controles. Para lograrlo
-          # se obtiene un único resultado con cada consulta en control lote y mediante
-          # la relación se accede a toda la información necesaria de lote.
-          # Al ser el nombre del objeto contenido en "clote" también lote,
-          # sumo como razón para sólo poner la "c" al principio y no todo el
-          # nombre.
-          clote = ControlLote.where(lote_id: id)
-                                  .joins(:estado, [lote: [:referencia]])
-                                  .order("control_lotes.id desc").limit(1)
-                                  .pluck(
-                                    "lotes.id",
-                                    "referencias.referencia", 
-                                    "lotes.op",
-                                    "control_lotes.estado_id",
-                                    "control_lotes.fecha_ingreso",
-                                    "estados.estado",
-                                    "control_lotes.sub_estado_id",
-                                    "lotes.tipo_prenda_id"
-                                  ).last
-      %>
-      <%
-        # men: Variable para almacenar el mensaje de los attr title
-        # estado: Se encarga de determinar cual es el estado siguiente del proceso
-        # boolean: En caso de que el lote esté terminado esta variable dice 
-        #          si se construye o no el botón para el siguiente proceso
-          men = nil
-          estado = nil
-          boolean = true
-          case clote.fetch 3
-            when 1
-              men = 'Integrar'
-              estado = 2
-            when 2
-              men = 'Confeccionar'
-              estado = 3
-            when 3
-              men = 'Terminar'
-              estado = 4
-            when 4
-              men = 'Completar'
-              estado = 5
-            else 
-              boolean = false
-          end
-                    
-      %>
+    <%i = 0%>
+    <% @lotes.each do |lote|%>
       <%if @rol_form ==("aux_insumos")#Verificación de rol insumos%>
         <tr>
             <!--Esto ve el auxiliar de insumos-->
-            <td><%= clote.fetch 0 %></td>
-            <td  title="Referencia del lote"><%= clote.fetch 1 %></td>
-            <td title="OP"><%= clote.fetch 2 %></td>
-            <td title="Fecha de ingreso a estado"><%=l(clote.fetch(4), format: "%d de %b")%></td>
-            <td title="Estado"><%=clote.fetch 5%></td> 
-              <%if clote.fetch(7).nil?%>
+            <td><%= lote.fetch 0 %></td>
+            <td  title="Referencia del lote"><%= lote.fetch 1 %></td>
+            <td title="OP"><%= lote.fetch 2 %></td>
+            <td title="Fecha de ingreso a estado"><%=l(lote.fetch(4), format: "%d de %b")%></td>
+            <td title="Estado"><%=lote.fetch 5%></td> 
+            <%if lote.fetch(7).nil?%>
             <td title="Descripción de la prenda">-</td>
-              <%else%>
-            <td title="Descripción de la prenda"><%= TipoPrenda.where(:id => clote.fetch(7)).pluck(:tipo).last %></td>
-              <%end%>
-            <!--inicio de los botones de gestión-->
-            <td>
-            <%= link_to  view_datails_path(clote.fetch(0)), {:remote => true, 
-              :class => "btn btn-primary", "data-target" => "#myModal", :title => "Ver detalles"} do
-              %>
-                <%=content_tag :i, "", :class => "fa fa-list-alt"%>
-              <%end%>
-            </td>
-              <% if can? :manage, Lote %>
-              <!--Integración-->
-            <td>
-              
-                <div class="btn-group">
-                  <% # El parámetro sub_id será usado para establecer el subestado
-                     # en el formulario de edición%>
-                  <%= link_to edit_lote_path(clote.fetch(0), :sub_id => clote.fetch(6), 
-                    :estado_id => clote.fetch(3), :place => "form_edit_lote"), 
-                    { :class => "btn btn-info", :title => 'Editar'}  do%>
-                      <%=content_tag :i, "", :class => "fa fa-pencil"%>    
-                  <%end%>
-                  
-                  <% if boolean%>
-                      <%= link_to cambio_estado_path(clote.fetch(0), :btn => estado), 
-                        :title => men, class: "btn btn-primary" do%>
-                          <%=content_tag :i, "", :class => "fa fa-forward"%>
+            <%else%>
+            <% # Optimizar esto en helper y con un hash como en el historial de los lotes %>
+            <td title="Descripción de la prenda"><%= @tipos_prendas[lote.fetch(7)]%></td>
+            <%end%>
+            <!--Integración-->
+            <td style="padding: 1px;">
+              <div class="dropdown">
+                <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%=lote.fetch(0)%>"></i>
+                <ul class="dropdown-menu pull-right" aria-labelledby="lote_<%=lote.fetch(0)%>">
+                  <li>
+                    <%= link_to  view_datails_path(lote.fetch(0)), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
+                      <%=content_tag :i, "", :class => "fa fa-list-alt fa-fw"%>
+                      Detalles
+                    <%end%>
+                  </li>
+
+                  <% if can? :manage, Lote %>
+                  <li>
+                    <%= link_to edit_lote_path(lote.fetch(0), :sub_id => lote.fetch(6), :estado_id => lote.fetch(3), :place => "form_edit_lote"), { :title => 'Editar'}  do%>
+                          <%=content_tag :i, "", :class => "fa fa-pencil fa-fw"%>   
+                          Editar 
                       <%end%>
-                  <%end%>
-                </div>
+                  </li>
+                  <li>
+                    <%=next_state cambio_estado_path(lote.fetch(0)), lote.fetch(3), {}, {:class => "fa fa-forward fa-fw"}%>
+                  </li>
+                  <% end %>
+                </ul>
+              </div>
             </td>
-              <%else #confirmación de abilidad%>
-            <td></td>
-            <td></td>
-              <% end %>
         </tr>
       <%else #resto de roles%>
         <tr>
           <!--Esto ve el auxiliar de insumos-->
-          <td><%= clote.fetch 0 %></td>
-          <td title="Referencia del lote"><%= clote.fetch 1 %></td>
-          <td title="OP de lote"><%= clote.fetch 2 %></td>
+          <td><%= lote.fetch 0 %></td>
+          <td title="Referencia del lote"><%= lote.fetch 1 %></td>
+          <td title="OP de lote"><%= lote.fetch 2 %></td>
           <!--fechas de ingreso a empresa-->
           <td title="Ingreso a la empresa">
-            <% f_entrada = ControlLote.where(lote_id: id).pluck(:fecha_ingreso).min%>
-            <%=I18n::localize(f_entrada, :format => "%d de %b")%>
+            <%=I18n::localize(@fechas_ingreso[i].fecha_ingreso, :format => "%d de %b")%>
+            <%i += 1%>
           </td>
-          <%if clote.fetch(3)==5%>
-          <td title="Salida de la empresa"><%= l(clote.fetch(4), format: "%d de %b") %></td>
+          <%if lote.fetch(3)==5%>
+          <td title="Salida de la empresa"><%= l(lote.fetch(4), format: "%d de %b") %></td>
           <%else%>
           <td title="Salida de la empresa">-</td>
           <%end%>
-          <td title="Minutos durante los procesos"><%= ControlLote.where(lote_id: id).sum(:min_u) %></td>
+          <td title="Minutos durante los procesos"><%= @sums[lote.fetch(0)] %></td>
           <!--inicio de los botones de gestión-->
-          <td>
-            <!---->
-            <div class="btn-group">
-              <%= link_to  view_datails_path(clote.fetch(0)), {:remote => true, 
-              :class => "btn btn-primary", "data-target" => "#myModal", :title => "Ver detalles"} do
-              %>
-                <%=content_tag :i, "", :class => "fa fa-list-alt"%>
-              <%end%>
-            <% if can? :manage, Lote %>
-                  
-                  <% # El parámetro sub_id será usado para establecer el subestado
-                     # en el formulario de edición%>
-                  <%= link_to edit_lote_path(clote.fetch(0), :sub_id => clote.fetch(6), 
-                    :estado_id => clote.fetch(3), :place => "form_edit_lote"), 
-                    { :class => "btn btn-info", :title => 'Editar'}  do%>
-                      <%=content_tag :i, "", :class => "fa fa-pencil"%>    
+          <td style="padding: 1px;">
+            <div class="dropdown">
+              <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%=lote.fetch(0)%>"></i>
+              <ul class="dropdown-menu pull-right" aria-labelledby="lote_<%=lote.fetch(0)%>">
+                <li>
+                  <%= link_to  view_datails_path(lote.fetch(0)), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
+                    <%=content_tag :i, "", :class => "fa fa-list-alt fa-fw"%>
+                    Detalles
                   <%end%>
-                  
-                  <% if boolean%>
-                      <%= link_to cambio_estado_path(clote.fetch(0), :btn => estado), 
-                        :title => men, class: "btn btn-primary" do%>
-                          <%=content_tag :i, "", :class => "fa fa-forward"%>
-                      <%end%>
+                </li>
+
+                <% if can? :manage, Lote %>
+                <li>
+                  <%= link_to edit_lote_path(lote.fetch(0), :sub_id => lote.fetch(6), :estado_id => lote.fetch(3), :place => "form_edit_lote"), { :title => 'Editar'}  do%>
+                        <%=content_tag :i, "", :class => "fa fa-pencil fa-fw"%>   
+                        Editar 
+                    <%end%>
+                </li>
+                <li>
+                  <%=next_state cambio_estado_path(lote.fetch(0)), lote.fetch(3), {}, {:class => "fa fa-forward fa-fw"}%>
+                </li>
+                <li class="divider"></li>
+                <li>
+                  <%= link_to lote_path(lote.fetch(0)), method: :delete,
+                    data: { confirm: 'Si elimina este registro no podrá recuperarlo. ¿Está
+                    realmente seguro?' }, :title => "Eliminar", :remote => true do %>
+                      <%=content_tag :i, "", :class => "fa fa-trash-o"%>
+                      Eliminar
                   <%end%>
-                </div>
-              </td>
-              <td>
-                <%= link_to lote_path(clote.fetch(0)), method: :delete,
-                  data: { confirm: 'Si elimina este registro no podrá recuperarlo. ¿Está
-                  realmente seguro?' }, class:'btn btn-danger', :title => "Eliminar" do %>
-                    <% content_tag :i, "", :class => "fa fa-trash-o"%>
-                <%end%>
-              </td>
-            <%else%>
-              <% # Etiquetas en caso de que el rol no pueda administrar los lotes %>
-                  </div>
-                </td>
-            <% end %>
+                </li>
+                <% end %>
+              </ul>
+            </div> 
+          </td>
         </tr>
       <%end #Verificación de rol%>
     <%end #Fin ciclo de @lotes%>

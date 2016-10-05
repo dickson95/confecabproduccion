@@ -67,7 +67,8 @@ gem 'devise'
 gem 'cancancan', '~> 1.10'
 
 
-# usada para pintar dataTables de acuerdo con el rol que se presenta
+# Pasar datos desde el controlador a el coffeescript con esta gema
+# https://github.com/gazay/gon
 gem 'gon'
 
 # Grupo de gemas para exportar a excel  
@@ -77,3 +78,8 @@ gem 'axlsx_rails'
 # Gema para exportar a PDF
 gem 'wicked_pdf'
 
+# Validaciones del lado del cliente con gem 'client_side_validations'
+gem 'client_side_validations', github: 'DavyJonesLocker/client_side_validations', branch: 'rails5'
+gem 'client_side_validations-simple_form', github: 'DavyJonesLocker/client_side_validations-simple_form', branch: 'rails5'
+
+gem 'money'

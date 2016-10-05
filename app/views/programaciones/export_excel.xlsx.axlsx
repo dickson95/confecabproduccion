@@ -2,8 +2,7 @@ wb = xlsx_package.workbook
 price = Programacion.price @rol_form
 # Configuración del mes de la programación
 date = Programacion.date_split params[:month]
-month = date[:month]
-month = @meses.fetch(month.to_i - 1)
+month = @meses[date[:month]]
 
 # Centrar celdas
 wrap_text_title = wb.styles.add_style(
@@ -50,15 +49,14 @@ money = wb.styles.add_style({
 border =  wb.styles.add_style :border => { :style => :thin, :color => "00" }
 # Celdas a imprimir
 wb.add_worksheet(:name  => "Programación") do |sheet|
-	sheet.add_row ["PROGRAMACIÓN MES #{month.upcase} DE #{date[:year]}","","","","","","",""], :style => wrap_text_title
-	sheet.add_row ["","","","","","","",""], :style => wrap_text_title
+	sheet.add_row ["PROGRAMACIÓN MES #{month[:string].upcase} DE #{date[:year]}","","","","","",""], :style => wrap_text_title
+	sheet.add_row ["","","","","","",""], :style => wrap_text_title
 	# Combinar celdas
-	sheet.merge_cells("A1:I2")
+	sheet.merge_cells("A1:H2")
 
 	# Céldas con texto enriquecido para los subtítulos de la tabla
 	rt = Axlsx::RichText.new
 	rt1 = Axlsx::RichText.new
-	rt2 = Axlsx::RichText.new
 	rt3 = Axlsx::RichText.new
 	rt4 = Axlsx::RichText.new
 	rt5 = Axlsx::RichText.new
@@ -68,7 +66,6 @@ wb.add_worksheet(:name  => "Programación") do |sheet|
 
 	rt.add_run('CLIENTE', :b => true)
 	rt1.add_run('DESCRIPCIÓN', :b => true)
-	rt2.add_run('SECU', :b => true)
 	rt3.add_run('REFERENCIA', :b => true)
 	rt4.add_run('CANT', :b => true)
 	if price
@@ -81,7 +78,6 @@ wb.add_worksheet(:name  => "Programación") do |sheet|
 	sheet.add_row [
 			rt,
 			rt1,
-			rt2,
 			rt3,
 			price ? rt4 : nil,
 			price ? rt5 : nil,
@@ -95,7 +91,6 @@ wb.add_worksheet(:name  => "Programación") do |sheet|
     sheet.add_row [
     	programacion.fetch(0), 
     	programacion.fetch(1), 
-    	programacion.fetch(2),
     	programacion.fetch(3), 
     	programacion.fetch(4), 
     	price ? programacion.fetch(5) : nil,
@@ -106,11 +101,13 @@ wb.add_worksheet(:name  => "Programación") do |sheet|
   end
 
   # Dar un estilo diferente a cada columna	
-  sheet.col_style 3, text
+  sheet.col_style 2, text
+
+  # Formato moneda para las columnas de los precios
+  sheet.col_style 4, money
   sheet.col_style 5, money
-  sheet.col_style 6, money
 
   # Especificar ancho de cada columna
-  sheet.column_widths 20, nil, nil, nil, nil, nil, nil, nil, nil
+  sheet.column_widths 20, nil, nil, nil, nil, nil, nil, nil
 end
 

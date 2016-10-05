@@ -38,7 +38,7 @@ class TiposPrendasController < ApplicationController
           @tipo_prenda = TipoPrenda.last
           format.js {render "/lotes/ajaxResults"}
         else
-          format.html { redirect_to @tipo_prenda}
+          format.html { redirect_to tipos_prendas_path}
           flash[:success] = "Descripción creada correctamente"
           format.json { render :show, status: :created, location: @tipo_prenda }
         end
@@ -60,7 +60,7 @@ class TiposPrendasController < ApplicationController
   def update
     respond_to do |format|
       if @tipo_prenda.update(tipo_prenda_params)
-        format.html { redirect_to @tipo_prenda}
+        format.html { redirect_to tipos_prendas_path}
         flash[:success] = "Descripción actualizada"
         format.json { render :show, status: :ok, location: @tipo_prenda }
       else

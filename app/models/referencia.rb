@@ -7,6 +7,6 @@ class Referencia < ApplicationRecord
     end
     
     def referencia=(val)
-        self[:referencia] = val.upcase
+      self[:referencia] = val.upcase
     end
 end

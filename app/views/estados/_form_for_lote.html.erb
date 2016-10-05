@@ -5,7 +5,7 @@
       <%=!@has_programing ? "El lote no tiene programación. Seleccione otro proceso" : ""%>
       </p>
     <%end%>
-    <%= f.fields_for :control_lotes, @lote.errors.empty? || action ? @lote.control_lotes.build : nil do |c| %>
+    <%= f.fields_for :control_lotes, @lote.errors.empty? || action ? @lote.control_lotes.build : nil,  validate: true do |c| %>
       <%= c.hidden_field :lote %>
       <div class="col-md-4">
         <%= c.input :fecha_ingreso, as: "string", 
@@ -14,7 +14,7 @@
       </div>
       <div class="col-md-4">
         <%= c.association :estado, :selected => params[:estado_id], 
-        collection: Estado.all, label: 'Parte del proceso', :include_blank => true %>
+        collection: params[:action].eql?("new") || params[:action].eql?("create") ? Estado.where("id < 3") :Estado.all, label: 'Parte del proceso', :include_blank => true %>
       </div>
       <% # Sección del subestado %>
       <div class="col-md-4">

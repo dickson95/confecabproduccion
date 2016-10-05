@@ -12,12 +12,18 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery-ui/sortable
+//= require jquery-ui/effect-highlight
 //= require jquery-ui/datepicker
 //= require jquery-ui/autocomplete
 //= require autocomplete-rails
 //= require bootstrap_sb_admin_base_v2
+//= require rails.validations
+//= require rails.validations.simple_form
 //= require turbolinks
 //= require_tree .
+
+
 document.addEventListener("turbolinks:before-cache", function() {
   var tablelotes = $('#lotes').DataTable();
   var tablecontrol = $('#control').DataTable();
@@ -28,5 +34,6 @@ document.addEventListener("turbolinks:before-cache", function() {
 	tableclientes.destroy();
 	tables2.destroy();
 })
+
 
 

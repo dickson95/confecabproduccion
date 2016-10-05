@@ -3,33 +3,25 @@
 		<% # Control en caso de que la programación esté vacía %>
 		<%if (@no_empty_program == false && !@programaciones.empty?) || (@no_empty_program && !@programaciones.empty?)%>
 		<%@programaciones.each do |programacion|%>
-		<tr>
+		<tr style="cursor: pointer;" data-item-id=<%= "#{programacion.fetch(9)}" %> class="<%=manage(@rol_form) ? "item": ""%>">
 			<td><%=check_box_tag "lotes[#{programacion.fetch(9)}]", programacion.fetch(9)%></td>
-			<td class="col-xs-2"><%=programacion.fetch(0)%></td>
-			<td class="col-xs-1"><%=programacion.fetch(1)%></td>
-			<td style="width: 4.3em;">
-			<%if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
-				<%=text_field_tag "secuencia[#{programacion.fetch(9)}[sec]]", "", class:"form-control", :value => programacion.fetch(2)%>
-				<%=hidden_field_tag "secuencia[#{programacion.fetch(9)}[id]]", programacion.fetch(9)%>
-			<%else%>
-				<%=programacion.fetch(2)%>
-			<%end%>
-			</td>
-			<td><%=programacion.fetch(3)%></td>
-			<td><%=programacion.fetch(4)%></td>
+			<td class="col-md-1"><%=@estados["#{programacion.fetch(9)}"]%></td>
+			<td class="col-md-2"><%=programacion.fetch(0)%></td>
+			<td class="col-md-2"><%=programacion.fetch(1)%></td>
+			<td class="col-md-2"><%=programacion.fetch(3)%></td>
+			<td  class="col-md-1"><%=programacion.fetch(4)%></td>
 			<%if price%>
-			<td><%=Lote.str_pesos programacion.fetch(5)%></td>
-			<td><%=Lote.str_pesos programacion.fetch(6)%></td>
+			<td  class="col-md-1"><%=Money.new("#{programacion.fetch(5)}00").format %></td>
+			<td class="col-md-1"><%=Money.new("#{programacion.fetch(6)}00").format%></td>
 			<%end%>
-			<td><%=programacion.fetch(7)%></td>
+			<td style="width: 60px; min-width: 60px;"><%=programacion.fetch(7)%></td>
 			<td><%=programacion.fetch(8)%></td>
 		</tr>
 		<%end%>
 		<%elsif @no_empty_program && @programaciones.empty?%>
-
 		<tr id="row_generate">
 			<td colspan="11" class="text-center">
-			<%if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
+			<%if manage @rol_form%>
 				No existe programación para este mes<br>
 				¿Desea generarla?
 				<%=link_to "Generar programación", generate_path(@programacion, :month => params[:month], :empresa => params[:empresa]), 
@@ -48,3 +40,6 @@
 		<%end%>
 		<% # Fin de control para las programaciones vacías %>
 	</tbody>
+<script type="text/javascript">
+	$('[data-toggle="popover"]').popover();
+</script>

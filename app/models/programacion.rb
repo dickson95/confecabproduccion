@@ -3,9 +3,38 @@ class Programacion < ApplicationRecord
   	# Relaciones
 	has_many :lotes
 
+
 	###
   	# Métodos del modelo
 	
+	# Hash de meses como string y number
+	def self.meses
+		{
+			"01" => {:string => "Enero", :number => "01"},
+			"02" => {:string => "Febrero", :number => "02"},
+			"03" => {:string => "Marzo", :number => "03"},
+			"04" => {:string => "Abril", :number => "04"},
+			"05" => {:string => "Mayo", :number => "05"},
+			"06" => {:string => "Junio", :number => "06"},
+			"07" => {:string => "Julio", :number => "07"},
+			"08" => {:string => "Agosto", :number => "08"},
+			"09" => {:string => "Septiembre", :number => "09"},
+			"10" => {:string => "Octubre", :number => "10"},
+			"11" => {:string => "Noviembre", :number => "11"},
+			"12" => {:string => "Diciembre", :number => "12"}
+		}
+
+	end
+
+	def self.states_lotes(programacion)
+		states_arr = Lote.joins([control_lotes: [:estado]]).where("lotes.programacion_id = ? and control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)", programacion).pluck("lotes.id","estados.estado")
+		states = Hash.new
+		states_arr.each do |e|
+			states["#{e.fetch(0)}"] = e.fetch(1)
+		end
+		return states
+	end
+
 	# Método que determina si hay una programación existente para el mes solicitado.
 	# Retorna true en caso de no encontrar nada en la consulta
 	def self.new_old_programacion (month, empresa)
@@ -22,7 +51,7 @@ class Programacion < ApplicationRecord
 	def self.date_split(year_month)
 		year = year_month[0..3]
 		month = year_month[4, 5]
-		y_m = {:year => year, :month => month}
+		{:year => year, :month => month}
 	end
 	
 	
@@ -31,9 +60,7 @@ class Programacion < ApplicationRecord
 	def self.set_year_program(empresa, month)
 		empresa_f = empresa == "CAB" ? true : false
 		desicion = self.new_old_programacion month, empresa_f
-		puts "desición tomada #{desicion}"
 		if desicion
-			puts "Debe crearse una nueva programación"
 			# date_split retorna un hash con el año y el mes
 			date = self.date_split month
 
@@ -41,7 +68,6 @@ class Programacion < ApplicationRecord
 			timelocal = Time.local(date[:year], date[:month])
 
 			# Crear la programación para el mes seleccionado
-			puts "voy a crearla"
 			programacion = self.new(:mes => timelocal, :empresa => empresa_f)
 			programacion.save
 		end

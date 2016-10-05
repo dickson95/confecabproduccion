@@ -1,4 +1,6 @@
 class Lote < ApplicationRecord
+  # Ordenar lista de acuerdo al campo de la secuencia
+
   #Relaciones
   belongs_to :programacion, optional: true
   belongs_to :referencia
@@ -16,13 +18,45 @@ class Lote < ApplicationRecord
   #Validaciones
   validates_presence_of :cliente, :control_lotes, :colores_lotes
   validates :referencia, :empresa, presence: true
+  validate :major_date_to_today, :op_uniquenesses
   
-  
-  def categorias_colores_for_form
-    collection = categorias_colores.where(ave_id: id)
-	  collection.any? ? collection : categorias_colores.build
+
+  def op_uniquenesses
+    if op != ""
+      if id.nil?
+        $val = Lote.where(:op => op).pluck(:op)
+      else
+        $val = Lote.where("op = ? and id <> ?", op, id).pluck(:op)
+      end
+      $val.empty? ? true : errors.add(:op, "Ya existe esta OP")
+    else
+      true
+    end 
+  end
+
+  def major_date_to_today
+    if !fecha_revision.blank? && fecha_revision > Date.today
+      errors.add(:fecha_revision, "La fecha no debe ser mayor a hoy")
+    end
+    if !fecha_entrega.blank? && fecha_entrega > Date.today
+      errors.add(:fecha_entrega, "La fecha no debe ser mayor a hoy")
+    end
+  end
+
+  # Determinar si el lote tiene una programación y puede pasar a la confección
+  def self.has_programing(id, estado)
+    if (estado.to_i).between?(3, 5)
+      lote = Lote.find(id)
+      return !lote.programacion_id.nil? ? true : false
+    else
+      true
+    end
   end
   
+
+
+
+
   #
   #
   #Métodos
@@ -210,13 +244,5 @@ class Lote < ApplicationRecord
     str = str.reverse
   end
   
-  # Determinar si el lote tiene una programación y puede pasar a la confección
-  def self.has_programing(id, estado)
-    if (estado.to_i).between?(3, 5)
-      lote = Lote.find(id)
-      return !lote.programacion_id.nil? ? true : false
-    else
-      true
-    end
-  end
+  
 end

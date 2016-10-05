@@ -20,35 +20,15 @@
       <tbody>
         <% @control_lotes.each do |control_lote| %>
           <tr>
-            <td class="col-xs-1" title="Referencia">
-              <% if control_lote.lote.referencia != nil %>
-                <%= control_lote.lote.referencia.referencia %>
-              <% end %>
-            </td>
-            <%  if control_lote.sub_estado.nil? == false %>
-              <td title="Proceso adicional"><%= control_lote.sub_estado.sub_estado %></td>
-            <% else %>
-              <td title="Proceso adicional">-</td>
-            <% end %>
-            <td title="OP"><%= control_lote.lote.op %></td>
-            <td class="col-xs-2" title="Fecha de entrada"><%= I18n::localize(control_lote.fecha_ingreso, :format => "%d de %b %H:%M ") %></td>
-            <% if control_lote.fecha_salida.nil? %>
-              <td title="Fecha de entrada">-</td>
-            <% else %>
-              <td class="col-xs-2" title="Fecha de salida"><%= I18n::localize(control_lote.fecha_salida, :format => "%d de %b %H:%M ") %></td>
-            <% end  %>
-            <td title="Estado"><%= control_lote.estado.estado %></td>
-            <td class="col-xs-1" title="Minutos"><%= control_lote.min_u %></td>
-            <%if control_lote.resp_ingreso_id.nil?%>
-              <td></td>
-            <%else%>
-              <td  class="col-xs-2" title="Responsable de ingreso"><%= control_lote.resp_ingreso_id.name %></td>
-            <%end%>
-            <%if control_lote.resp_salida_id.nil?%>
-              <td title="Responsable de salida">-</td>
-            <%else%>
-              <td class="col-xs-2" title="Responsable de salida"><%= control_lote.resp_salida_id.name %></td>
-            <%end%>
+            <td class="col-xs-1" title="Referencia"><%= control_lote.fetch(1) %></td>
+            <td title="Proceso adicional"><%=sub_process control_lote.fetch(2) %></td>
+            <td title="OP"><%= control_lote.fetch(3) %></td>
+            <td class="col-xs-2" title="Fecha de entrada"><%= format_date control_lote.fetch(4) %></td>
+            <td class="col-xs-2" title="Fecha de salida"><%= format_date control_lote.fetch(5)%></td>
+            <td title="Estado"><%= control_lote.fetch(6) %></td>
+            <td class="col-xs-1" title="Minutos"><%= control_lote.fetch(7) %></td>
+            <td class="col-xs-2" title="Responsable de ingreso"><%=control_lote.fetch(8)%> </td>
+            <td title="Responsable de salida"><%=respon_exit control_lote.fetch(9)%></td>
           </tr>
         <% end %>
       </tbody>

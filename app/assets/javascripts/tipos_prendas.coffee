@@ -5,7 +5,7 @@ $(document).on 'turbolinks:load', ->
   
   if !gon.rol_user
     $('#t_clientes').DataTable
-      'scrollY': '581px'
+      'scrollY': '400px'
       'paging': false
       language:
         processing: 'Cargando...'
@@ -25,7 +25,7 @@ $(document).on 'turbolinks:load', ->
                   ]
   else
     $('#t_clientes').DataTable
-      'scrollY': '581px'
+      'scrollY': '400px'
       'scrollCollapse': true
       'paging': false
       language:
@@ -44,9 +44,7 @@ $(document).on 'turbolinks:load', ->
                       'orderable': false
                     }
                   ]
-  
   $('.dataTables_filter label').after $('#t_clientes_filter label input[type="search"]').detach()
-  
   $('.tablas2').DataTable
       'scrollY': '190px'
       'scrollCollapse': true
