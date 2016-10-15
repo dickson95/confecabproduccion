@@ -16,4 +16,13 @@ class ControlLote < ApplicationRecord
   def name
     self.lote.referencia.referencia
   end
+
+  def self.hash_ids
+    result = ControlLote.select("lote_id, fecha_ingreso").where("control_lotes.fecha_ingreso = (SELECT MIN(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)")
+    hash_ids = Hash.new
+    result.each do |r|
+      hash_ids[r.lote_id] = r.fecha_ingreso
+    end
+    return hash_ids
+  end
 end

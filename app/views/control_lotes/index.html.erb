@@ -1,4 +1,4 @@
-<% content_for :title do  "Historial" end%>
+<% content_for :title do  "Historial" end %>
 <p id="notice"><%= notice %></p>
   <h1 class="page-header">Historial de movimiento de los lotes</h1>
   <div class="table-responsive"> 
@@ -24,10 +24,10 @@
             <td title="Proceso adicional"><%=sub_process control_lote.fetch(2) %></td>
             <td title="OP"><%= control_lote.fetch(3) %></td>
             <td class="col-xs-2" title="Fecha de entrada"><%= format_date control_lote.fetch(4) %></td>
-            <td class="col-xs-2" title="Fecha de salida"><%= format_date control_lote.fetch(5)%></td>
+            <td class="col-xs-2" title="Fecha de salida"><%= format_date control_lote.fetch(5) %></td>
             <td title="Estado"><%= control_lote.fetch(6) %></td>
             <td class="col-xs-1" title="Minutos"><%= control_lote.fetch(7) %></td>
-            <td class="col-xs-2" title="Responsable de ingreso"><%=control_lote.fetch(8)%> </td>
+            <td class="col-xs-2" title="Responsable de ingreso"><%=control_lote.fetch(8) %> </td>
             <td title="Responsable de salida"><%=respon_exit control_lote.fetch(9)%></td>
           </tr>
         <% end %>

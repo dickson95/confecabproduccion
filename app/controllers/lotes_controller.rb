@@ -20,7 +20,7 @@ class LotesController < ApplicationController
     @lotes = Lote.joins([control_lotes: [:estado]], :referencia).where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)").pluck("lotes.id","referencias.referencia", "lotes.op","control_lotes.estado_id","control_lotes.fecha_ingreso","estados.estado","control_lotes.sub_estado_id","lotes.tipo_prenda_id")    
     $lotes_id = Lote.pluck(:id)
     @sums =  ControlLote.where(lote_id: $lotes_id).group(:lote_id).sum(:min_u)
-    @fechas_ingreso = ControlLote.select("fecha_ingreso").where(lote_id: $lotes_id).group(:lote_id)
+    @fechas_ingreso = ControlLote.hash_ids
     @tipos_prendas = TipoPrenda.hash_ids
 
   end

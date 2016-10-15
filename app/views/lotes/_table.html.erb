@@ -32,7 +32,6 @@
     #debe revisar los detalles del lote
     #
     %>
-    <%i = 0%>
     <% @lotes.each do |lote|%>
       <%if @rol_form ==("aux_insumos")#Verificación de rol insumos%>
         <tr>
@@ -83,8 +82,7 @@
           <td title="OP de lote"><%= lote.fetch 2 %></td>
           <!--fechas de ingreso a empresa-->
           <td title="Ingreso a la empresa">
-            <%=I18n::localize(@fechas_ingreso[i].fecha_ingreso, :format => "%d de %b")%>
-            <%i += 1%>
+            <%=I18n::localize(@fechas_ingreso[lote.fetch 0], :format => "%d de %b")%>
           </td>
           <%if lote.fetch(3)==5%>
           <td title="Salida de la empresa"><%= l(lote.fetch(4), format: "%d de %b") %></td>

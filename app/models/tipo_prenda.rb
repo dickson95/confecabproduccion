@@ -8,10 +8,10 @@ class TipoPrenda < ApplicationRecord
     end
 
     def self.hash_ids
-    	tipos = select("id, tipo")
+    	result = select("id, tipo").as_json
     	hash_ids = Hash.new
-    	tipos.each do |t|
-    		hash_ids[t.id] = t.tipo
+    	result.each do |r|
+    		hash_ids[r["id"]] = r["tipo"]
     	end
     	return hash_ids
     end
