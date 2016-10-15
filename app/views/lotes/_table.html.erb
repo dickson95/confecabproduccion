@@ -1,134 +1,14 @@
 <table class="table table-striped table-hover" id="lotes" width="100%">
   <thead>
-    <%if @rol_form ==("aux_insumos")%>
       <tr>
         <th title="Identificador">#</th>
-        <th title="Referencia del lote">Referencia</th>
-        <th title="OP de lote">OP</th>
-        <th title="Fecha de ingreso a estado">Fecha</th>
-        <th title="Proceso actual">Estado</th>
-        <th title="Descripción de la prenda">Descripción</th>
-        <th></th>
+        <th class="col-md-2" style="min-width: 140px;" title="Cliente">Cliente</th>
+        <th class="col-md-2" style="min-width: 80px;" title="Referencia">Referencia</th>
+        <th class="col-md-2" title="OP de lote">OP</tsh>
+        <th class="col-md-2" title="Cantidad">Cantidad</th>
+        <th class="col-md-2" title="Descripción de la prenda">Descripción</th>
+        <th style="max-width: 40px;"></th>
       </tr>
-    <%else #Verificación de rol para insumos%>
-      <tr>
-          <!--Columnas de integración-->
-          <th title="Identificador">#</th>
-          <th title="Referencia del lote">Referencia</th>
-          <th title="OP de lote">OP</th>
-          <th title="Ingreso a la empresa">Día ingreso</th>
-          <th title="Salida de la empresa">Día salida</th>
-          <th title="Minutos durante los procesos">Tiempo total</th>
-          <th></th>
-      </tr>
-    <%end #Verificación de rol %>
   </thead>
-  
-  <tbody>
-    <%
-    #
-    #La distribució a continuación es solo para comodidad 
-    #de los usuarios, si alguno quiere ver todos los datos solo
-    #debe revisar los detalles del lote
-    #
-    %>
-    <%i = 0%>
-    <% @lotes.each do |lote|%>
-      <%if @rol_form ==("aux_insumos")#Verificación de rol insumos%>
-        <tr>
-            <!--Esto ve el auxiliar de insumos-->
-            <td><%= lote.fetch 0 %></td>
-            <td  title="Referencia del lote"><%= lote.fetch 1 %></td>
-            <td title="OP"><%= lote.fetch 2 %></td>
-            <td title="Fecha de ingreso a estado"><%=l(lote.fetch(4), format: "%d de %b")%></td>
-            <td title="Estado"><%=lote.fetch 5%></td> 
-            <%if lote.fetch(7).nil?%>
-            <td title="Descripción de la prenda">-</td>
-            <%else%>
-            <% # Optimizar esto en helper y con un hash como en el historial de los lotes %>
-            <td title="Descripción de la prenda"><%= @tipos_prendas[lote.fetch(7)]%></td>
-            <%end%>
-            <!--Integración-->
-            <td style="padding: 1px;">
-              <div class="dropdown">
-                <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%=lote.fetch(0)%>"></i>
-                <ul class="dropdown-menu pull-right" aria-labelledby="lote_<%=lote.fetch(0)%>">
-                  <li>
-                    <%= link_to  view_datails_path(lote.fetch(0)), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
-                      <%=content_tag :i, "", :class => "fa fa-list-alt fa-fw"%>
-                      Detalles
-                    <%end%>
-                  </li>
-
-                  <% if can? :manage, Lote %>
-                  <li>
-                    <%= link_to edit_lote_path(lote.fetch(0), :sub_id => lote.fetch(6), :estado_id => lote.fetch(3), :place => "form_edit_lote"), { :title => 'Editar'}  do%>
-                          <%=content_tag :i, "", :class => "fa fa-pencil fa-fw"%>   
-                          Editar 
-                      <%end%>
-                  </li>
-                  <li>
-                    <%=next_state cambio_estado_path(lote.fetch(0)), lote.fetch(3), {}, {:class => "fa fa-forward fa-fw"}%>
-                  </li>
-                  <% end %>
-                </ul>
-              </div>
-            </td>
-        </tr>
-      <%else #resto de roles%>
-        <tr>
-          <!--Esto ve el auxiliar de insumos-->
-          <td><%= lote.fetch 0 %></td>
-          <td title="Referencia del lote"><%= lote.fetch 1 %></td>
-          <td title="OP de lote"><%= lote.fetch 2 %></td>
-          <!--fechas de ingreso a empresa-->
-          <td title="Ingreso a la empresa">
-            <%=I18n::localize(@fechas_ingreso[i].fecha_ingreso, :format => "%d de %b")%>
-            <%i += 1%>
-          </td>
-          <%if lote.fetch(3)==5%>
-          <td title="Salida de la empresa"><%= l(lote.fetch(4), format: "%d de %b") %></td>
-          <%else%>
-          <td title="Salida de la empresa">-</td>
-          <%end%>
-          <td title="Minutos durante los procesos"><%= @sums[lote.fetch(0)] %></td>
-          <!--inicio de los botones de gestión-->
-          <td style="padding: 1px;">
-            <div class="dropdown">
-              <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%=lote.fetch(0)%>"></i>
-              <ul class="dropdown-menu pull-right" aria-labelledby="lote_<%=lote.fetch(0)%>">
-                <li>
-                  <%= link_to  view_datails_path(lote.fetch(0)), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
-                    <%=content_tag :i, "", :class => "fa fa-list-alt fa-fw"%>
-                    Detalles
-                  <%end%>
-                </li>
-
-                <% if can? :manage, Lote %>
-                <li>
-                  <%= link_to edit_lote_path(lote.fetch(0), :sub_id => lote.fetch(6), :estado_id => lote.fetch(3), :place => "form_edit_lote"), { :title => 'Editar'}  do%>
-                        <%=content_tag :i, "", :class => "fa fa-pencil fa-fw"%>   
-                        Editar 
-                    <%end%>
-                </li>
-                <li>
-                  <%=next_state cambio_estado_path(lote.fetch(0)), lote.fetch(3), {}, {:class => "fa fa-forward fa-fw"}%>
-                </li>
-                <li class="divider"></li>
-                <li>
-                  <%= link_to lote_path(lote.fetch(0)), method: :delete,
-                    data: { confirm: 'Si elimina este registro no podrá recuperarlo. ¿Está
-                    realmente seguro?' }, :title => "Eliminar", :remote => true do %>
-                      <%=content_tag :i, "", :class => "fa fa-trash-o"%>
-                      Eliminar
-                  <%end%>
-                </li>
-                <% end %>
-              </ul>
-            </div> 
-          </td>
-        </tr>
-      <%end #Verificación de rol%>
-    <%end #Fin ciclo de @lotes%>
-  </tbody>
+  <%=render "table_tbody"%>
 </table>

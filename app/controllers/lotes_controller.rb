@@ -17,10 +17,10 @@ class LotesController < ApplicationController
   # GET /lotes
   # GET /lotes.json
   def index
-    @lotes = Lote.joins([control_lotes: [:estado]], :referencia).where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)").pluck("lotes.id","referencias.referencia", "lotes.op","control_lotes.estado_id","control_lotes.fecha_ingreso","estados.estado","control_lotes.sub_estado_id","lotes.tipo_prenda_id")    
+    @lotes = Lote.joins([control_lotes: [:estado]], :referencia, :cliente).where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)").pluck("lotes.id", "clientes.cliente", "referencias.referencia", "lotes.op", "lotes.cantidad", "lotes.tipo_prenda_id","control_lotes.estado_id","control_lotes.sub_estado_id")    
     $lotes_id = Lote.pluck(:id)
     @sums =  ControlLote.where(lote_id: $lotes_id).group(:lote_id).sum(:min_u)
-    @fechas_ingreso = ControlLote.select("fecha_ingreso").where(lote_id: $lotes_id).group(:lote_id)
+    @fechas_ingreso = ControlLote.hash_ids
     @tipos_prendas = TipoPrenda.hash_ids
 
   end
@@ -85,16 +85,28 @@ class LotesController < ApplicationController
   def create
     # Definir si la op existe. Retorna true si puede ser creada
     @lote = Lote.new(lote_params)
+    invalid = false
     respond_to do |format|
-      if @lote.save        
-        @lote = ControlLote.last
-        ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user, fecha_ingreso:  Time.new)  
-        format.html{ redirect_to lotes_path }
+      if @color_blank
+        if @lote.save
+          @lote = ControlLote.last
+          ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user, fecha_ingreso:  Time.new)  
+          format.html{ redirect_to lotes_path }
+        else
+          invalid = true
+        end
       else
+        invalid = true
+      end
+      if invalid
         set_tipo_prenda
+        puts @lote.errors.full_messages
         if @remove
           @colores_lotes = @lote.colores_lotes.build
           (0..8).each{|n| @cantidades = @colores_lotes.cantidades.build } 
+        end
+        if !@color_blank
+          @lote.errors.add :colores_lotes      
         end
         params[:estado_id] = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
         params[:sub_id] = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
@@ -272,6 +284,7 @@ class LotesController < ApplicationController
       # remove: Indica si debe armarse de nuevo el formulario de detalles de cantidades
       # colores: Toma los colores de los parámetros antes de que sean analizados para
       # que no se pierdan para la vista
+      # color_blank: Retorna true si hay un color
       # totales: totales relativos por color
       # totales_tallas: totales por talla
       @remove = false
@@ -291,7 +304,7 @@ class LotesController < ApplicationController
             recorrer_una = false
           end
 
-          @colores.push v[:color_id]
+          @colores.push v[:color]
           @totales.push v[:total_id]
         end
 
@@ -315,12 +328,12 @@ class LotesController < ApplicationController
           # exista un número mayor a 0
           if cont < 8
 
-            if v[:color_id] == ""
+            if v[:color] == ""
               @color_blank = false
             end
             color_id = Color.find_or_create_by(:color =>
-              params[:lote][:colores_lotes_attributes][:"#{k}"][:color_id])
-            v['color_id'] = color_id.id
+              params[:lote][:colores_lotes_attributes][:"#{k}"][:color])
+            v[:color_id] = color_id.id
           
             total_colores_id = Total.find_or_create_by(:total =>
               params[:lote][:colores_lotes_attributes][:"#{k}"][:total_id])

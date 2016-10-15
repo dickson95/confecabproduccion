@@ -9,7 +9,7 @@
     end
     %>
     <%action = params[:action]%>
-    <%= simple_form_for(@lote, :url => action=="edit" || action=="update" ? lote_path(:place => place) : lotes_path(:place => place), validate: true) do |f|%>
+    <%= simple_form_for(@lote, :url => action=="edit" || action=="update" ? lote_path(:place => place) : lotes_path(:place => place)) do |f|%>
     <div class="row page-header">
       <div class="col-md-3 text-left">
         <%if action.eql?("edit") || action.eql?("update")%>

@@ -109,8 +109,7 @@ class Programacion < ApplicationRecord
 		else
 			booleans.push false
 			booleans.push false
-		end
-		
+		end	
 	end
 
 	# Roles que pueden ver los precios de la programación
@@ -119,6 +118,12 @@ class Programacion < ApplicationRecord
 		price = false
 		if rol == "coor_tiempos" || rol == "admin" || rol == "gerente"
 			price = true
+		end
+	end
+
+	def self.sort_manually(ids)
+		ids.each do |k, v|
+			Lote.update(k.to_i, :secuencia => v.to_i)
 		end
 	end
 end

@@ -79,13 +79,17 @@ class ProgramacionesController < ApplicationController
 
 	# Remover uno o varios lotes de la programación
 	def remove_from_programing
-		@lotes = Array.new
-		if !params[:lotes].nil?
-			params[:lotes].each do |lote|
-				Lote.where(:id => lote)
-				.update(:programacion_id => nil)
-				@lotes.push lote
+		if params[:commit] == "Retirar"
+			@lotes = Array.new
+			if !params[:lotes].nil?
+				params[:lotes].each do |lote|
+					Lote.where(:id => lote)
+					.update(:programacion_id => nil)
+					@lotes.push lote
+				end
 			end
+		elsif params[:commit] == "Ordenar"
+			Programacion.sort_manually params[:programacion][:secuencia]
 		end
 		set_programaciones
 		no_empty_program
@@ -95,6 +99,7 @@ class ProgramacionesController < ApplicationController
 			format.js
 		end	
 	end
+
 
 	# Ordenar tabla
 	def update_row_order	
@@ -106,19 +111,21 @@ class ProgramacionesController < ApplicationController
 
 	# Exportar archivos a excel 
 	def export_excel
-		render xlsx: "export_excel", filename: "Programacion.xlsx"
+		date = Programacion.date_split(params[:month])
+		render xlsx: "export_excel", filename: "#{params[:empresa]} de #{@meses[date[:month]][:string]}.xlsx"
 
 	end
 
 	# Exportar archivos a PDF
 	def export_pdf
+		date = Programacion.date_split(params[:month])
 		respond_to do |format|
 			format.pdf do
-				render :pdf => "export_pdf",
-				:disposition => "inline",
+				render :pdf => "#{params[:empresa]} de #{@meses[date[:month]][:string]}",
 				:orientation => 'Landscape',
-				:template => "programaciones/programacion.pdf.erb",
-				:layout => "layout_pdf.html.erb"
+				:template => "programaciones/programacion.pdf",
+				:layout => "layout_pdf.html.erb",
+				:title => "#{params[:empresa]} de #{@meses[date[:month]][:string]}"
 			end 
 			format.html
 		end
@@ -152,7 +159,7 @@ class ProgramacionesController < ApplicationController
 		end
 
 		def programacion_params
-			params.require(:programacion).permit(:updated_positions => [:lote_id, :position])
+			params.require(:programacion).permit(:secuencia => [], :updated_positions => [:lote_id, :position])
 		end
 
 		# Sumar las horas y el precio total.
@@ -163,7 +170,6 @@ class ProgramacionesController < ApplicationController
 		end
 
 		def states_lotes
-			puts "set"
 			@estados = Programacion.states_lotes(@programacion.first)
 		end
 	end
