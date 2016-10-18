@@ -86,7 +86,7 @@ class LotesController < ApplicationController
     # Definir si la op existe. Retorna true si puede ser creada
     @lote = Lote.new(lote_params)
     respond_to do |format|
-      if @lote.save        
+      if @lote.save  && @color_blank     
         @lote = ControlLote.last
         ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user, fecha_ingreso:  Time.new)  
         format.html{ redirect_to lotes_path }
@@ -95,6 +95,9 @@ class LotesController < ApplicationController
         if @remove
           @colores_lotes = @lote.colores_lotes.build
           (0..8).each{|n| @cantidades = @colores_lotes.cantidades.build } 
+        end
+        if !@color_blank
+          @lote.errors.add :colores_lotes
         end
         params[:estado_id] = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
         params[:sub_id] = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
