@@ -5,7 +5,7 @@ class ColorLote < ApplicationRecord
   belongs_to :total
   has_many :cantidades
   accepts_nested_attributes_for :cantidades, allow_destroy: true
-  
+
   # Métodos
   def colores_lotes_for_form
     collection = cantidades.where(lote_id: id)

@@ -5,19 +5,21 @@ class Lote < ApplicationRecord
   belongs_to :programacion, optional: true
   belongs_to :referencia
   belongs_to :cliente
-  belongs_to :tipo_prenda, optional: true
+  belongs_to :tipo_prenda
   belongs_to :respon_insumos_id, class_name: 'User', foreign_key: 'respon_insumos_id', optional: true
   belongs_to :respon_edicion_id, class_name: 'User', foreign_key: 'respon_edicion_id'
   has_many :control_lotes, :dependent => :destroy
   has_many :colores_lotes, :dependent => :destroy
+  has_and_belongs_to_many :colores
+
   accepts_nested_attributes_for :control_lotes, allow_destroy: true
   accepts_nested_attributes_for :colores_lotes, allow_destroy: true
   
   #
   #
   #Validaciones
-  validates_presence_of :cliente, :control_lotes, :colores_lotes
-  validates :referencia, :empresa, presence: true
+  validates_presence_of :cliente, :control_lotes, :colores_lotes, 
+  :tipo_prenda_id, :referencia, :empresa
   validate :major_date_to_today, :op_uniquenesses
   
 
@@ -52,10 +54,6 @@ class Lote < ApplicationRecord
       true
     end
   end
-  
-
-
-
 
   #
   #
