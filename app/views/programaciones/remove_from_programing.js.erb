@@ -1,19 +1,25 @@
 <%month = params[:month]%>
+<%if params[:commit] == "Ordenar"%>
+	console.log("#<%=month%>t")
+	$('#<%=month%>t').find("tbody").replaceWith("<%=j render "table_tbody"%>");
+<%elsif params[:commit] == "Retirar"%>
+	
 	<%@lotes.each do |id|%>
 	lote = $("#lotes_<%=id%>").closest("tr")
 	lote.remove();
 	<%end%>
 
-size_table = $('#<%=month%>t > tbody > tr').length;
-if (size_table < 1){
-	$('#<%=month%>t').find("tbody").replaceWith("<%=j render "table_tbody"%>");
-}
-<%if @no_empty_program%>
-	$("#add-lote").prop('disabled', false);
-	$("#add-lote").unbind('click');
-	$("#add-lote").removeClass("disabled");
-<%end%>
-foot = $("tfoot div p")
+	size_table = $('#<%=month%>t > tbody > tr').length;
+	if (size_table < 1){
+		$('#<%=month%>t').find("tbody").replaceWith("<%=j render "table_tbody"%>");
+	}
+	<%if @no_empty_program%>
+		$("#add-lote").prop('disabled', false);
+		$("#add-lote").unbind('click');
+		$("#add-lote").removeClass("disabled");
+	<%end%>
+	foot = $("tfoot div p")
 
-foot.first().html("<strong>Horas:</strong> <%=@hours%>")
-foot.last().html("<strong>Precio total:</strong> <%=@total%>")
+	foot.first().html("<strong>Horas:</strong> <%=@hours%>")
+	foot.last().html("<strong>Precio total:</strong> <%=@total%>")
+<%end%>

@@ -3,6 +3,7 @@
 		<%lote.each do |l|%>
 			<tr  data-item-id=<%= "#{l.id}" %> class="item">
 				<td><%=check_box_tag "lotes[#{l.id}]", l.id%></td>
+				<td><%=text_field_tag "programacion[secuencia][#{l.id}]", "", :value => l.secuencia, :style => "max-width: 3em;"%></td>
 				<td><%=@estados["#{l.id}"]%></td>
 				<td><%=l.cliente.cliente%></td>
 				<td><%=l.tipo_prenda.tipo%></td>

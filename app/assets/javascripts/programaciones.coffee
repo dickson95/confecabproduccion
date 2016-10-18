@@ -17,9 +17,11 @@ $(document).on "turbolinks:load", ->
     array = []
     table = "#"+$(this).attr("id")
     $(table+" > tbody > tr").each (i) ->
+    		sec = $(this).index() + 1
+    		$(this).find("input[type=text]").val(sec)
       array.push
         lote_id: $(this).data('item-id')
-        position: $(this).index() + 1
+        position: sec
       return
     position = ui.item.index() # this will not work with paginated items, as the index is zero on every page
     $.ajax(
@@ -28,7 +30,7 @@ $(document).on "turbolinks:load", ->
       dataType: 'json'
       data: { programacion: {updated_positions: array} }
     )
-	
+		
 
 	# Sortable para las tablas de la programación
 	$ ->
@@ -47,10 +49,15 @@ $(document).on "turbolinks:load", ->
 	      stop: (e, ui) ->
 	        ui.item.removeClass('active-item-shadow')
 	        # Resalta la fila indicada en la actualización
-	        ui.item.children('td').effect('highlight', {}, 1000)
+	        ui.item.addClass("success")
 
 	      update: fix_update
 	    )
+	    $('table').on "dblclick", "tbody > tr", ->
+	    	if $(this).hasClass("success")
+	    		$(this).removeClass("success")
+	    	else
+		    	$(this).addClass("success")
 
 
 	# nav tabs responsive

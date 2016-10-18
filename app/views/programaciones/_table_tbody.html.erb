@@ -3,15 +3,18 @@
 		<% # Control en caso de que la programación esté vacía %>
 		<%if (@no_empty_program == false && !@programaciones.empty?) || (@no_empty_program && !@programaciones.empty?)%>
 		<%@programaciones.each do |programacion|%>
-		<tr style="cursor: pointer;" data-item-id=<%= "#{programacion.fetch(9)}" %> class="<%=manage(@rol_form) ? "item": ""%>">
+		<tr style="cursor: pointer;" data-item-id=<%= "#{programacion.fetch(9)}" %> class="<%=manage(@rol_form) ? "item": ""%> ">
 			<td><%=check_box_tag "lotes[#{programacion.fetch(9)}]", programacion.fetch(9)%></td>
+			<%if can? :update, Programacion%>
+			<td><%=text_field_tag "programacion[secuencia][#{programacion.fetch(9)}]", "", :value => programacion.fetch(2), :style => "max-width: 3em;"%></td>
+			<%end%>
 			<td class="col-md-1"><%=@estados["#{programacion.fetch(9)}"]%></td>
 			<td class="col-md-2"><%=programacion.fetch(0)%></td>
 			<td class="col-md-2"><%=programacion.fetch(1)%></td>
 			<td class="col-md-2"><%=programacion.fetch(3)%></td>
 			<td  class="col-md-1"><%=programacion.fetch(4)%></td>
 			<%if price%>
-			<td  class="col-md-1"><%=Money.new("#{programacion.fetch(5)}00").format %></td>
+			<td  class="col-md-1"><%=Money.new("#{programacion.fetch(5)}00").format%></td>
 			<td class="col-md-1"><%=Money.new("#{programacion.fetch(6)}00").format%></td>
 			<%end%>
 			<td style="width: 60px; min-width: 60px;"><%=programacion.fetch(7)%></td>

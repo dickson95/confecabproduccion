@@ -11,6 +11,7 @@ class Ability
       can [:manage], [Lote, @programacion, ControlLote]
     elsif user.has_rol? :aux_insumos
       can [:read, :create, :update], Lote
+      can [:read], Programacion
     elsif user.has_rol? :gerente
       can :read, :all
     end
