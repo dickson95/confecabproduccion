@@ -1,0 +1,54 @@
+<% # Final de bloques marcado debajo de cada cierre %>
+
+<tbody>
+<%@lotes.each do |lote|%>
+  <tr>
+    <td><%= lote.fetch 0 %></td><!--id lote-->
+    <td><%= lote.fetch 1 %></td><!--Cliente-->
+    <td><%= lote.fetch 2 %></td><!--Referencia-->
+    <td><%= lote.fetch 3 %></td><!--Op-->
+    <td><%= lote.fetch 4 %></td><!--Cantidad-->
+    <td><%= @tipos_prendas[lote.fetch(5)]%></td><!--Descripción-->
+    <td style="padding: 1px;">
+      <div class="dropdown">
+        <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%=lote.fetch(0)%>"></i>
+        <ul class="dropdown-menu pull-right" aria-labelledby="lote_<%=lote.fetch(0)%>">
+          <li>
+            <%= link_to  view_datails_path(lote.fetch(0)), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
+            <%=content_tag :i, "", :class => "fa fa-list-alt fa-fw"%>
+            Detalles
+            <%end%>
+          </li>
+
+          <% if can? :update, Lote %>
+          <li>
+            <%= link_to edit_lote_path(lote.fetch(0), :sub_id => lote.fetch(7), :estado_id => lote.fetch(6), :place => "form_edit_lote"), { :title => 'Editar'}  do%>
+            <%=content_tag :i, "", :class => "fa fa-pencil fa-fw"%>   
+            Editar 
+            <%end%>
+          </li>
+          <li>
+            <%=next_state cambio_estado_path(lote.fetch(0)), lote.fetch(6), {}, {:class => "fa fa-forward fa-fw"}%>
+          </li>
+          <%end%>
+          <% # Puede editar %>
+
+          <% if can? :destroy, Lote %>
+          <li class="divider"></li>
+          <li>
+            <%= link_to lote_path(lote.fetch(0)), method: :delete, data: { confirm: 'Si elimina este registro no podrá recuperarlo. ¿Está realmente seguro?' }, :title => "Eliminar", :remote => true do %>
+            <%=content_tag :i, "", :class => "fa fa-trash-o"%>
+            Eliminar
+            <%end%>
+          </li>
+          <%end%>
+          <% # Puede eliminar %>
+        </ul>
+      </div>
+    </td><!--Admnistración-->
+  </tr>
+  <!--tr-->
+<%end%>
+<% # Fin del ciclo @lotes %>
+</tbody>
+<!--tbody-->

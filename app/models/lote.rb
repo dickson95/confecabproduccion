@@ -5,7 +5,7 @@ class Lote < ApplicationRecord
   belongs_to :programacion, optional: true
   belongs_to :referencia
   belongs_to :cliente
-  belongs_to :tipo_prenda,  optional: true
+  belongs_to :tipo_prenda, optional: true
   belongs_to :respon_insumos_id, class_name: 'User', foreign_key: 'respon_insumos_id', optional: true
   belongs_to :respon_edicion_id, class_name: 'User', foreign_key: 'respon_edicion_id'
   has_many :control_lotes, :dependent => :destroy

@@ -17,7 +17,7 @@ class LotesController < ApplicationController
   # GET /lotes
   # GET /lotes.json
   def index
-    @lotes = Lote.joins([control_lotes: [:estado]], :referencia).where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)").pluck("lotes.id","referencias.referencia", "lotes.op","control_lotes.estado_id","control_lotes.fecha_ingreso","estados.estado","control_lotes.sub_estado_id","lotes.tipo_prenda_id")    
+    @lotes = Lote.joins([control_lotes: [:estado]], :referencia, :cliente).where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)").pluck("lotes.id", "clientes.cliente", "referencias.referencia", "lotes.op", "lotes.cantidad", "lotes.tipo_prenda_id","control_lotes.estado_id","control_lotes.sub_estado_id")    
     $lotes_id = Lote.pluck(:id)
     @sums =  ControlLote.where(lote_id: $lotes_id).group(:lote_id).sum(:min_u)
     @fechas_ingreso = ControlLote.hash_ids

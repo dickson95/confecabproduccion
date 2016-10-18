@@ -106,19 +106,21 @@ class ProgramacionesController < ApplicationController
 
 	# Exportar archivos a excel 
 	def export_excel
-		render xlsx: "export_excel", filename: "Programacion.xlsx"
+		date = Programacion.date_split(params[:month])
+		render xlsx: "export_excel", filename: "#{params[:empresa]} de #{@meses[date[:month]][:string]}.xlsx"
 
 	end
 
 	# Exportar archivos a PDF
 	def export_pdf
+		date = Programacion.date_split(params[:month])
 		respond_to do |format|
 			format.pdf do
-				render :pdf => "export_pdf",
-				:disposition => "inline",
+				render :pdf => "#{params[:empresa]} de #{@meses[date[:month]][:string]}",
 				:orientation => 'Landscape',
-				:template => "programaciones/programacion.pdf.erb",
-				:layout => "layout_pdf.html.erb"
+				:template => "programaciones/programacion.pdf",
+				:layout => "layout_pdf.html.erb",
+				:title => "#{params[:empresa]} de #{@meses[date[:month]][:string]}"
 			end 
 			format.html
 		end
