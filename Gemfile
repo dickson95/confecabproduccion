@@ -82,4 +82,6 @@ gem 'wicked_pdf'
 gem 'client_side_validations', github: 'DavyJonesLocker/client_side_validations', branch: 'rails5'
 gem 'client_side_validations-simple_form', github: 'DavyJonesLocker/client_side_validations-simple_form', branch: 'rails5'
 
+# Formato de la moneda
 gem 'money'
+

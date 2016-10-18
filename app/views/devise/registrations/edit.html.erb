@@ -24,9 +24,6 @@
         <%= f.input :password, autocomplete: "off", label: "Contraseña",
         hint: "Deje este campo en blanco si no desea cambiar la contraseña", required: false %>
         <%= f.input :password_confirmation, required: false, label: "Confirme su contraseña" %>
-        <%if can? :manage, User%>
-        <%= f.collection_select :rol_ids, Rol.all, :id, :name, {}, {multiple: true} %>
-        <%end%>
         <%= f.input :current_password, label: "Contraseña actual",
         hint: "Ingrese su contraseña actual para confirmar los cambios", required: true %>
       </div>
