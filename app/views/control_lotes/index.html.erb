@@ -6,12 +6,12 @@
       <thead>
         <tr>
           <th title="Referencia">Referencia</th>
-          <th title="Proceso adicional">Proceso</th>
           <th title="OP">Op</th>
+          <th title="Proceso adicional">Proceso</th>
+          <th title="Estado">Proceso adicional</th>
           <th title="Fecha de entrada">Entrada</th>
           <th title="Fecha de salida">Salida</th>
-          <th title="Estado">Estado</th>
-          <th title="Minutos en este estado">Minutos</th>
+          <th title="Días">Días</th>
           <th title="Responsable de ingreso">Reponsable ingreso</th>
           <th title="Responsable de salida">Reponsable salida</th>
         </tr>
@@ -20,15 +20,15 @@
       <tbody>
         <% @control_lotes.each do |control_lote| %>
           <tr>
-            <td class="col-xs-1" title="Referencia"><%= control_lote.fetch(1) %></td>
-            <td title="Proceso adicional"><%=sub_process control_lote.fetch(2) %></td>
-            <td title="OP"><%= control_lote.fetch(3) %></td>
-            <td class="col-xs-2" title="Fecha de entrada"><%= format_date control_lote.fetch(4) %></td>
-            <td class="col-xs-2" title="Fecha de salida"><%= format_date control_lote.fetch(5) %></td>
-            <td title="Estado"><%= control_lote.fetch(6) %></td>
-            <td class="col-xs-1" title="Minutos"><%= control_lote.fetch(7) %></td>
-            <td class="col-xs-2" title="Responsable de ingreso"><%=control_lote.fetch(8) %> </td>
-            <td title="Responsable de salida"><%=respon_exit control_lote.fetch(9)%></td>
+            <td class="col-xs-1" title="Referencia"><%= control_lote.fetch(1) %></td><!--Referencia-->
+            <td title="OP"><%= control_lote.fetch(2) %></td><!--Op-->
+            <td title="Estado"><%= control_lote.fetch(3) %></td><!--Estado-->
+            <td title="Proceso adicional"><%=sub_process control_lote.fetch(4) %></td><!--Sub estado-->
+            <td class="col-xs-2" title="Fecha de entrada"><%= format_date control_lote.fetch(5) %></td><!--Fecha entrada-->
+            <td class="col-xs-2" title="Fecha de salida"><%= format_date control_lote.fetch(6) %></td><!--Fecha salida-->
+            <td class="col-xs-1" title="Días"><%= days control_lote.fetch(5), control_lote.fetch(6) %></td><!--Días-->
+            <td class="col-xs-2" title="Responsable de ingreso"><%=control_lote.fetch(7) %> </td><!--Responsable ingreso-->
+            <td title="Responsable de salida"><%=respon_exit control_lote.fetch(8)%></td><!--Responsable salida-->
           </tr>
         <% end %>
       </tbody>

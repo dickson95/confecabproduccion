@@ -25,4 +25,23 @@ class ControlLote < ApplicationRecord
     end
     return hash_ids
   end
+
+  # Retorna un hash con opciones de la resta de los días. (Méses, días, horas, minutos)
+  def self.date_operated(date_initial, date_final)    
+    {
+      :days => days_absolute(date_initial, date_final)
+    }
+  end
+
+  private
+    # Parametros
+    # d1: Día inicial 
+    # d2: Dia final
+    # return: Días absolutos entre dos fechas
+    def self.days_absolute(d1, d2)
+      di = d1 + 1.day 
+      di = Time.local(di.year, di.month, di.day)
+      df = Time.local(d2.year, d2.month, d2.day)
+      ((df - di) / (24 * 60 * 60)).ceil + 2
+    end
 end

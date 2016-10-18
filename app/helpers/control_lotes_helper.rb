@@ -24,4 +24,12 @@ module ControlLotesHelper
 			"-"
 		end
 	end
+
+	def days(day1, day2)
+		if !day2.nil?
+			ControlLote.date_operated(day1, day2)[:days]
+		else
+			"-"
+		end
+	end
 end
