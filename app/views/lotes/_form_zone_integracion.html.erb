@@ -1,3 +1,5 @@
+<%company = session[:selected_company] ? "CAB" : "D&C"%>
+<%=f.hidden_field :empresa, :value => company%>
 <div style="margin-top: 20px;"></div>
 <!--Otros roles Primera fila-->
 <div class="row">
@@ -27,9 +29,6 @@
           <%= link_to '...', add_remote_data_path(:place => "form_lote_tipo_prenda"),{:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#myModal',  :class => "btn btn-primary", :title => "Nueva descripción"} %>
         </div>
         <% end %>
-    </div>
-    <div class="col-md-4">
-      <%=f.input :empresa, collection: [['CAB', 'CAB'],[ 'D&C','D&C']]%>
     </div>
     <div class="col-md-4" style="padding-top:15px">
       <%=f.label :fin_integracion_true, label: "¿Integración completado?"%><br>

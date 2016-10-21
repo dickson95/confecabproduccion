@@ -26,9 +26,9 @@ class Lote < ApplicationRecord
   def op_uniquenesses
     if op != ""
       if id.nil?
-        $val = Lote.where(:op => op).pluck(:op)
+        $val = Lote.where("op = ? and empresa = ?", op, empresa).pluck(:op)
       else
-        $val = Lote.where("op = ? and id <> ?", op, id).pluck(:op)
+        $val = Lote.where("op = ? and id <> ? and empresa = ?", op, id, empresa).pluck(:op)
       end
       $val.empty? ? true : errors.add(:op, "Ya existe esta OP")
     else

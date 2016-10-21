@@ -5,7 +5,8 @@ class ControlLotesController < ApplicationController
   # GET /control_lotes
   # GET /control_lotes.json
   def index
-    @control_lotes = ControlLote.joins([lote: [:referencia]], :estado, :resp_ingreso_id)
+    company = session[:selected_company]
+    @control_lotes = ControlLote.joins([lote: [:referencia]], :estado, :resp_ingreso_id).where("lotes.empresa = '#{company ? "CAB" : "D&C"}'")
     .pluck("control_lotes.id, referencias.referencia, lotes.op, estados.estado, control_lotes.sub_estado_id, 
       control_lotes.fecha_ingreso, control_lotes.fecha_salida,  users.name, 
       control_lotes.resp_salida_id")

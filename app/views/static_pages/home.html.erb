@@ -1,0 +1,30 @@
+<div class="row">
+	<div class="col-lg-12">
+		<h1 class="page-header">Selecciona la empresa</h1>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+		<form action="/pages/company">
+			<div class="panel panel-primary company_selected" data-company= true>
+				<div class="panel-heading text-center">
+					<h1>CONFECAB</h1>
+				</div>
+				<div class="panel-body text-center">
+					<%=image_tag('cab.png', size: '132x82', alt: "Confecab")%>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="col-md-6">
+		<div class="panel panel-primary company_selected" data-company= false  data-remote="true">
+			<div class="panel-heading text-center">
+				<h1>DISEÑOS Y CAMISAS</h1>
+			</div>
+			<div class="panel-body text-center">
+				<%=image_tag('dyc.jpg', size: '132x82', alt: "Diseños y camisas")%>
+			</div>
+		</div>
+	</div>
+</div>
+

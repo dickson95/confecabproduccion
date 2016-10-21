@@ -5,7 +5,8 @@
     <span class="icon-bar"></span>
     <span class="icon-bar"></span>
   </button>
-  <%= link_to 'PRODUCCIÓN', root_path, class: "navbar-brand", :title => 'Inicio de la aplicación' %>
+  <%company = session[:selected_company] ? "confecab" : "diseÑos y camisas"%>
+  <%= link_to company.upcase, root_path, class: "navbar-brand", :title => 'Inicio de la aplicación' %>
 </div>
 
 <ul class="nav navbar-top-links navbar-right"> 

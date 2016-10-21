@@ -31,7 +31,7 @@ class ClientesController < ApplicationController
       if @cliente.save
         if params[:place] == "form_lote_cliente_response"
           @lote = Lote.new
-          @clientes = Cliente.all
+          @clientes = Cliente.where(:empresa => session[:selected_company])
           @cliente = Cliente.last
           format.js {render "lotes/ajaxResults"}
         else
@@ -40,6 +40,7 @@ class ClientesController < ApplicationController
           format.json { render :show, status: :created, location: @cliente }
         end
       else
+        puts @cliente.errors.full_messages
         if params[:place] == "form_lote_cliente_response"
           format.html
           format.json { render json: @cliente.errors, status: :unprocessable_entity }
@@ -97,7 +98,9 @@ class ClientesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def cliente_params
-      params.require(:cliente).permit(:cliente, :telefono, :direccion, :email,
+      empresa = params[:cliente][:empresa]
+      params[:cliente][:empresa] = Cliente.to_boolean empresa
+      params.require(:cliente).permit(:cliente, :telefono, :direccion, :email, :empresa,
       :mensaje, :asunto)
     end
 end

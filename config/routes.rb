@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
+  get '/pages', to: 'static_pages#home', as: :home
   # Inicio de la aplicación
-  root :to => 'lotes#index'
+  root :to => 'static_pages#home'
   
   # Rutas para las programaciones
 

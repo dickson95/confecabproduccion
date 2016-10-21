@@ -17,9 +17,12 @@ class LotesController < ApplicationController
   # GET /lotes
   # GET /lotes.json
   def index
-    @lotes = Lote.joins([control_lotes: [:estado]], :referencia, :cliente).where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)").pluck("lotes.id", "clientes.cliente", "referencias.referencia", "lotes.op", "lotes.cantidad", "lotes.tipo_prenda_id","control_lotes.estado_id","control_lotes.sub_estado_id")    
-    $lotes_id = Lote.pluck(:id)
-    @sums =  ControlLote.where(lote_id: $lotes_id).group(:lote_id).sum(:min_u)
+    company = session[:selected_company]
+    @lotes = Lote.joins([control_lotes: [:estado]], :referencia, :cliente)
+    .where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes 
+      cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id) and lotes.empresa = '#{company ? "CAB" : "D&C"}'")
+    .pluck("lotes.id", "clientes.cliente", "referencias.referencia", "lotes.op", "lotes.cantidad", 
+      "lotes.tipo_prenda_id","control_lotes.estado_id","control_lotes.sub_estado_id")    
     @fechas_ingreso = ControlLote.hash_ids
     @tipos_prendas = TipoPrenda.hash_ids
 
@@ -100,7 +103,6 @@ class LotesController < ApplicationController
       end
       if invalid
         set_tipo_prenda
-        puts @lote.errors.full_messages
         if @remove
           @colores_lotes = @lote.colores_lotes.build
           (0..8).each{|n| @cantidades = @colores_lotes.cantidades.build } 
@@ -108,8 +110,9 @@ class LotesController < ApplicationController
         if !@color_blank
           @lote.errors.add :colores_lotes      
         end
-        params[:estado_id] = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
-        params[:sub_id] = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
+        control = params[:lote][:control_lotes_attributes][:'0']
+        params[:estado_id] = control[:estado_id]
+        params[:sub_id] = control[:sub_estado_id]
         format.html { render :new }
         format.json { render json: @lote.errors, status: :unprocessable_entity }
       end
@@ -253,7 +256,7 @@ class LotesController < ApplicationController
     end
     def set_tipo_prenda
       @tipos_prendas = TipoPrenda.all
-      @clientes = Cliente.all
+      @clientes = Cliente.where(:empresa => session[:selected_company])
       @sub_estados = SubEstado.all
     end
     

@@ -7,8 +7,7 @@ class TiposPrendasController < ApplicationController
   def index
     @tipos_prendas = TipoPrenda.all
     @sub_estados = SubEstado.all
-    @referencias = Referencia.all
-    @clientes = Cliente.all
+    @clientes = Cliente.where(:empresa => session[:selected_company])
   end
 
   # GET /tipos_prendas/1
