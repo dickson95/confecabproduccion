@@ -35,8 +35,9 @@ class ApplicationController < ActionController::Base
     if user_signed_in?
       if params[:company] == "true" || params[:company] == "false"
         puts "asignar selected"
-        session[:selected_company] = params[:company] 
+        session[:selected_company] = params[:company]=="true" ? true : false
       end
+      puts "empresa #{session[:selected_company]}"
       if session[:selected_company].nil?
         puts "selected nil"
         respond_to do |format|
