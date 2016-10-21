@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :rol_user
+  before_action :selected_company_global
   
   #Parámetros para el registro de usuarios con username y otros datos en devise
   def configure_permitted_parameters
@@ -19,12 +20,28 @@ class ApplicationController < ActionController::Base
   
   # Método con gon para poder usar el rol desde los coffeescripts
   def rol_user
-    if !current_user.nil?
+    if user_signed_in?
       gon.rol_user = current_user.has_rol? :gerente
       @rol_form = nil
       rol = current_user.roles
       (rol).each do |s|
         @rol_form = s.name
+      end
+    end
+  end
+
+  # Determina que empresa es con la que va a funcionar el sistema
+  def selected_company_global
+    if user_signed_in?
+      if params[:company] == "true" || params[:company] == "false"
+        puts "asignar selected"
+        session[:selected_company] = params[:company] 
+      end
+      if session[:selected_company].nil?
+        puts "selected nil"
+        respond_to do |format|
+          format.html {render "static_pages/home"}
+        end
       end
     end
   end

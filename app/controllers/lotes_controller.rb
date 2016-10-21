@@ -17,6 +17,7 @@ class LotesController < ApplicationController
   # GET /lotes
   # GET /lotes.json
   def index
+    puts session[:selected_company]
     @lotes = Lote.joins([control_lotes: [:estado]], :referencia, :cliente).where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)").pluck("lotes.id", "clientes.cliente", "referencias.referencia", "lotes.op", "lotes.cantidad", "lotes.tipo_prenda_id","control_lotes.estado_id","control_lotes.sub_estado_id")    
     $lotes_id = Lote.pluck(:id)
     @sums =  ControlLote.where(lote_id: $lotes_id).group(:lote_id).sum(:min_u)
@@ -108,8 +109,9 @@ class LotesController < ApplicationController
         if !@color_blank
           @lote.errors.add :colores_lotes      
         end
-        params[:estado_id] = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
-        params[:sub_id] = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
+        control = params[:lote][:control_lotes_attributes][:'0']
+        params[:estado_id] = control[:estado_id]
+        params[:sub_id] = control[:sub_estado_id]
         format.html { render :new }
         format.json { render json: @lote.errors, status: :unprocessable_entity }
       end
