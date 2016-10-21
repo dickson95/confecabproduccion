@@ -23,6 +23,7 @@ class LotesController < ApplicationController
       cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id) and lotes.empresa = '#{company ? "CAB" : "D&C"}'")
     .pluck("lotes.id", "clientes.cliente", "referencias.referencia", "lotes.op", "lotes.cantidad", 
       "lotes.tipo_prenda_id","control_lotes.estado_id","control_lotes.sub_estado_id", "lotes.precio_u", "lotes.precio_t")    
+
     @fechas_ingreso = ControlLote.hash_ids
     @tipos_prendas = TipoPrenda.hash_ids
   end
