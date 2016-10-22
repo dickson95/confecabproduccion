@@ -9,7 +9,7 @@
     <td><%= lote.fetch 3 %></td><!--Op-->
     <td><%= lote.fetch 4 %></td><!--Cantidad-->
     <td><%= @tipos_prendas[lote.fetch(5)]%></td><!--Descripción-->
-    <td style="padding: 1px;">
+    <td style="padding: 1px;" class="text-right">
       <div class="dropdown">
         <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%=lote.fetch(0)%>"></i>
         <ul class="dropdown-menu pull-right" aria-labelledby="lote_<%=lote.fetch(0)%>">

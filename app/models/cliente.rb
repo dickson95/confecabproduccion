@@ -1,8 +1,13 @@
 class Cliente < ApplicationRecord
-    
-    validates :cliente, :email, presence: true
-    
-    def name
-        self.cliente
-    end
+	
+	validates :cliente, presence: true
+	validates :empresa, inclusion: { in: [ true, false ] }
+	
+	def name
+		self.cliente
+	end
+	
+	def self.to_boolean(str)
+		str == "true"
+	end
 end

@@ -16,6 +16,7 @@
           Verifique la información de los datos
         </div>
         <div class="form-inputs">
+          <%= f.hidden_field :empresa, :value => session[:selected_company] %>
           <%= f.input :cliente, autofocus: true%>
           <%= f.input :telefono %>
           <%= f.input :direccion %>
@@ -81,6 +82,7 @@
     <%= f.error_notification %>
   
     <div class="form-inputs">
+      <%= f.hidden_field :empresa, :value => session[:selected_company] %>
       <%= f.input :cliente %>
       <%= f.input :telefono %>
       <%= f.input :direccion %>

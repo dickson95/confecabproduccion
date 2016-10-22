@@ -9,9 +9,11 @@
         <div class="text-right">
           <%if @rol_form ==("coor_integracion") || @rol_form ==("admin") || 
           @rol_form ==("coor_tiempos")%>
+          <h1>
             <%= link_to new_lote_path, {:title => "Nuevo lote"} do %>
-              <%= content_tag :i, "", :class => "fa fa-plus fa-3x "%>
+              <%= content_tag :i, "", :class => "fa fa-plus"%>
             <%end%>
+          </h1>
           <%end%>
         </div>
       </div>

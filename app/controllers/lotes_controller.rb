@@ -256,7 +256,7 @@ class LotesController < ApplicationController
     end
     def set_tipo_prenda
       @tipos_prendas = TipoPrenda.all
-      @clientes = Cliente.all
+      @clientes = Cliente.where(:empresa => session[:selected_company])
       @sub_estados = SubEstado.all
     end
     

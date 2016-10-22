@@ -4,7 +4,7 @@
           <%= f.input :tipo_prenda_id,  label: "Descripción", wrapper: :vertical_input_group do %>
             <%= f.input_field  :tipo_prenda_id, class: "form-control",
             :collection => @tipos_prendas, :selected => @tipo_prenda.id ,
-            :value_method => :id, :label => false, :include_blank => "-- seleccione descripción --" %>
+            :value_method => :id, :label => false %>
             <div class="input-group-btn">
               <%= link_to '...', add_remote_data_path(:place => "form_lote_tipo_prenda"),{:remote => true, 
               'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-default"} %>

@@ -34,12 +34,9 @@ class ApplicationController < ActionController::Base
   def selected_company_global
     if user_signed_in?
       if params[:company] == "true" || params[:company] == "false"
-        puts "asignar selected"
         session[:selected_company] = params[:company]=="true" ? true : false
       end
-      puts "empresa #{session[:selected_company]}"
       if session[:selected_company].nil?
-        puts "selected nil"
         respond_to do |format|
           format.html {render "static_pages/home"}
         end
