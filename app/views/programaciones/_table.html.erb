@@ -1,8 +1,10 @@
 <%disabled = Programacion.interfaz @no_empty_program, @programaciones%>
+<%month = Programacion.date_split params[:month]%>
 <%$colspan = 9%>
 	<caption>
 		<div class="pull-left">
-			<h4>Programación de <%=params[:empresa]%></h4>
+		<%puts @meses%>
+			<h4>Programación de <%=@meses[month[:month]][:string]%></h4>
 		</div>
 		<!--Opciones de exportación-->
 		<div class="pull-right text-right">
