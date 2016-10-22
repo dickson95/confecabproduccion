@@ -4,15 +4,10 @@
 <%@lotes.each do |lote|%>
   <tr>
     <td><%= lote.fetch 0 %></td><!--id lote-->
-    <td><%= lote.fetch 1 %></td><!--Cliente-->
-    <td><%= lote.fetch 2 %></td><!--Referencia-->
-    <td><%= lote.fetch 3 %></td><!--Op-->
-    <td><%= lote.fetch 4 %></td><!--Cantidad-->
-    <td><%= @tipos_prendas[lote.fetch(5)]%></td><!--Descripción-->
-    <td style="padding: 1px;" class="text-right">
+    <td style="padding: 1px;">
       <div class="dropdown">
         <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%=lote.fetch(0)%>"></i>
-        <ul class="dropdown-menu pull-right" aria-labelledby="lote_<%=lote.fetch(0)%>">
+        <ul class="dropdown-menu" aria-labelledby="lote_<%=lote.fetch(0)%>">
           <li>
             <%= link_to  view_datails_path(lote.fetch(0)), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
             <%=content_tag :i, "", :class => "fa fa-list-alt fa-fw"%>
@@ -46,6 +41,11 @@
         </ul>
       </div>
     </td><!--Admnistración-->
+    <td><%= lote.fetch 1 %></td><!--Cliente-->
+    <td><%= lote.fetch 2 %></td><!--Referencia-->
+    <td><%= lote.fetch 3 %></td><!--Op-->
+    <td><%= lote.fetch 4 %></td><!--Cantidad-->
+    <td><%= @tipos_prendas[lote.fetch(5)]%></td><!--Descripción-->
   </tr>
   <!--tr-->
 <%end%>

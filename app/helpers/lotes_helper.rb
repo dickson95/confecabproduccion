@@ -30,7 +30,7 @@ module LotesHelper
             men = {:view => 'Completar', :controller => "terminación"}
           when 5
             boolean = false
-            state_final = 5
+            state_final = 6
             men = {:controller => "completado"}
           else
             boolean = false
