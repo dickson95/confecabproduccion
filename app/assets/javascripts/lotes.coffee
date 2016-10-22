@@ -31,6 +31,14 @@ $(document).on 'turbolinks:load', ->
                     }
                   ]  
   $('.dataTables_filter label').after $('.dataTables_filter label input[type="search"]').detach()
+  
+  $('.dropdown').on 'show.bs.dropdown', (e) ->
+    $(this).find('.dropdown-menu').first().stop(true, true).slideDown()
+    return
+    
+  $('.dropdown').on 'hide.bs.dropdown', (e) ->
+    $(this).find('.dropdown-menu').first().stop(true, true).slideUp()
+    return
 
   # Inputs con fecha administrada por parte de jQuery
   minimumDate = ->
