@@ -10,6 +10,12 @@ module LotesHelper
         data: { id: id, fields: fields.gsub("\n", "")}, :title => "Más cantidades"
     end
 
+    def date_form_value(lote)
+        if !@lote.programacion.nil?
+            I18n::localize(@lote.programacion.mes, :format => "%B %Y")
+        end
+    end
+
     # Cambio de estados. Las opciones son todas las disponibles en el helper link_to
     def next_state(route, state, link_to_options=nil, content_tag_options=nil, options=nil)
         state_final = nil

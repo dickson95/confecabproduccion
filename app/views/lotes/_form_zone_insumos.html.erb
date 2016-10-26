@@ -12,12 +12,12 @@
         <%= f.input :fecha_entrada, as: "string", input_html: {:value => @lote.fecha_entrada.nil? ? I18n::localize(Time.zone.utc_to_local(Time.new) + 60, :format => "%Y-%m-%d") : @lote.fecha_entrada}, readonly: true, label: 'Entró a insumos el:'  %>
       </div>
       <div>
-        <%= f.input :fecha_entrega, as: "string", input_html: { class: "datepicker", :autocomplete => "off" } %>
+        <%= f.input :fecha_entrega, as: "string", input_html: {data:{calendar: "true"}, class: "datepicker", :autocomplete => "off" } %>
       </div>
     </div>
     <div class="col-md-4">
       <div>
-        <%= f.input :fecha_revision, as: "string", input_html: { class: "datepicker", :autocomplete => "off"  }%>
+        <%= f.input :fecha_revision, as: "string", input_html: {data:{calendar: "true"}, class: "datepicker", :autocomplete => "off"  }%>
       </div>
       <div style="padding-top:15px">
         <%= f.label :fin_insumos_true, label: "¿Insumos listos?"%> <br>

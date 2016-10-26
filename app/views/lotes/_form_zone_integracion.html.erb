@@ -30,8 +30,16 @@
         </div>
         <% end %>
     </div>
+    <div class="col-md-4">
+       <%= f.association :programacion, as: "string", input_html: { :autocomplete => "off", :value => date_form_value(@lote), data:{calendar: "false"}} %>
+    </div> 
+    <style type="text/css">
+      .hide-calendar .ui-datepicker-calendar {
+        display: none;
+      }
+    </style>
     <div class="col-md-4" style="padding-top:15px">
-      <%=f.label :fin_integracion_true, label: "¿Integración completado?"%><br>
+      <%=f.label :fin_integracion_true, label: "¿Tiene lista la integración?"%><br>
       <%= f.collection_radio_buttons :fin_integracion, [[true, 'Sí'], [false, 'No']], :first, :last, {item_wrapper_class: 'radio-inline',  item_wrapper_tag: :div, checked: true} %>
     </div>
   </div>

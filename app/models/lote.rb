@@ -22,7 +22,8 @@ class Lote < ApplicationRecord
   :tipo_prenda_id, :referencia, :empresa
   validate :major_date_to_today, :op_uniquenesses
   
-
+  # La op debe ser única, permitir nil, validar por empresa y trabajar con los 
+  # campos que antes de esta validación incumplian con el requerimiento
   def op_uniquenesses
     if op != ""
       if id.nil?
@@ -36,6 +37,7 @@ class Lote < ApplicationRecord
     end 
   end
 
+  # Validar que la fecha no sea mayor a la de hoy
   def major_date_to_today
     if !fecha_revision.blank? && fecha_revision > Date.today
       errors.add(:fecha_revision, "La fecha no debe ser mayor a hoy")
@@ -44,6 +46,7 @@ class Lote < ApplicationRecord
       errors.add(:fecha_entrega, "La fecha no debe ser mayor a hoy")
     end
   end
+
 
   # Determinar si el lote tiene una programación y puede pasar a la confección
   def self.has_programing(id, estado)
@@ -68,6 +71,25 @@ class Lote < ApplicationRecord
     self[:op] = val.upcase
   end
   
+  def programacion_id=(val)
+    self[:programacion_id] = set_programacion(val)
+  end
+
+  def set_programacion(val)
+    if val.strip != ""
+      date = val.split(" ")
+      month_number = split_date_on_space(date[0]) 
+      Programacion.set_year_program empresa, date[1]+month_number
+      empresa_f = empresa == "CAB" ? true : false
+      puts "consulta"
+      programing = Programacion.where("extract(year_month from programaciones.mes) = ? and programaciones.empresa = ?",
+            date[1]+month_number, empresa_f).limit(1)
+      programing[0].id
+    else
+      puts "nil"
+      nil
+    end  
+  end
   # Definir si existe el valor de la op pero permitiendo valores nulos
   # no se utiliza otro método porque ya existen registros que incumplen la 
   # restricción de unico
@@ -231,7 +253,8 @@ class Lote < ApplicationRecord
     cont = 0
     str = nil
     num.reverse_each do |e|  
-    	if cont == 2 
+    	if 
+        cont == 2 
     		e = e+","
     		cont = 0
     	else
@@ -242,5 +265,17 @@ class Lote < ApplicationRecord
     str = str.reverse
   end
   
+  private 
+    def split_date_on_space(str)
+      @meses = Programacion.meses
+      $month
+      @meses.each do |k, v|
+        if v.has_value?(str)
+          $month = v[:number]
+          break
+        end
+      end
+      return $month
+    end
   
 end
