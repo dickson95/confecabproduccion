@@ -96,7 +96,7 @@ class Lote < ApplicationRecord
       end
     end  
   end
-
+  
   def self.multiplication(numbers)
     result = 1
     numbers.each do |number|
@@ -115,6 +115,7 @@ class Lote < ApplicationRecord
       return str
     end
   end
+
   # Definir si existe el valor de la op pero permitiendo valores nulos
   # no se utiliza otro método porque ya existen registros que incumplen la 
   # restricción de unico
