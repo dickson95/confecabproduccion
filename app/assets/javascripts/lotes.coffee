@@ -43,8 +43,7 @@ $(document).on 'turbolinks:load', ->
   # Inputs con fecha administrada por parte de jQuery
   minimumDate = ->
     $("#lote_fecha_entrada").val()
-  
-  
+
   # Doc: http://api.jqueryui.com/datepicker/
   $("input.datepicker").each (i) ->
     $(this).datepicker
@@ -53,6 +52,8 @@ $(document).on 'turbolinks:load', ->
       "Octubre", "Noviembre", "Diciembre" ]
       dayNamesMin: [ "do","lu","ma","mi","ju","vi","sa" ]
       showButtonPanel: true
+      beforeShow: (el, dp) -> 
+        $('#ui-datepicker-div').toggleClass('hide-calendar', $(el).is('[data-calendar="false"]'))
       currentText: "Hoy"
       closeText: "x"
       dateFormat: "yy-mm-dd"
@@ -61,8 +62,37 @@ $(document).on 'turbolinks:load', ->
       altField: $(this).next()
       maxDate: '0'
       minDate: minimumDate()
+  set_up = true
+
+  # funcion para impedir que se establesca la fecha cuando se borra o se tabula en el campo
+  $("#lote_programacion_id").on "keyup", ->
+    if $(this).val().trim() == ""
+      $(this).datepicker( "refresh" )  
+      set_up = false
   
-    
+  $("#lote_programacion_id").datepicker
+      monthNames: [ "Enero", "Febrero", "Marzo", "Abril", 
+      "Mayo", "Junio", "Julio", "Agosto", "Septiembre", 
+      "Octubre", "Noviembre", "Diciembre" ]
+      monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", 
+      "May", "Jun", "Jul", "Ago", "Sep", 
+      "Oct", "Nov", "Dic" ]
+      beforeShow: (el, dp) -> 
+        $('#ui-datepicker-div').toggleClass('hide-calendar', $(el).is('[data-calendar="false"]'))
+      changeMonth: true
+      changeYear: true
+      closeText: "Aceptar"
+      currentText: "Hoy"
+      dateFormat: "MM yy"
+      minDate: '0'
+      onClose: (dateText, inst) -> 
+        if set_up
+          $(this).datepicker('setDate', new Date(inst.selectedYear, inst.selectedMonth, 1))
+        else
+          set_up = true
+      showButtonPanel: true
+
+
   $('.cantidad').click ->
     color = $('#color_all').val()
     $('.color_uniq').val color

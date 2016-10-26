@@ -88,7 +88,7 @@ class LotesController < ApplicationController
   def create
     # Definir si la op existe. Retorna true si puede ser creada
     @lote = Lote.new(lote_params)
-    invalid = false
+    puts @lote.programacion
     respond_to do |format|
       if @color_blank
         if @lote.save
@@ -155,6 +155,7 @@ class LotesController < ApplicationController
     # Respuesta a la solicitud de actualización
     respond_to do |format|
       if @lote.update(boolean ? lote_params : lote_params_u ) && @has_programing && @color_blank
+        puts "programaci´no #{@lote.programacion}"
         if boolean
           # Actualizar fecha salida, responsable de salida, minutos del historial
           time = Time.new()
@@ -273,6 +274,11 @@ class LotesController < ApplicationController
       id.id
     end
     
+    def set_programing
+
+      Programacion.new_old_programacion 
+    end
+
     def set_color
       # Totales: Array para los totales por tallas
       totales = Array.new
@@ -383,9 +389,9 @@ class LotesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def lote_params
       sub_id_value
-      params.require(:lote).permit(:empresa, :color_prenda, 
+      params.require(:lote).permit(:empresa, :color_prenda, :programacion_id,
         :no_remision, :no_factura, :cliente_id, :tipo_prenda_id, :prioridad, 
-        :op, :fecha_entrada,  :fin_insumos, :obs_insumos, :meta, :h_req,
+        :op, :fecha_entrada,  :fin_insumos, :obs_insumos, :meta, :h_req, 
         :obs_integracion, :fin_integracion, :cantidad, :precio_u, :precio_t,
         :fecha_revision, :fecha_entrega, :control_lotes_attributes => [:id, 
           :sub_estado_id, :lote_id, :fecha_ingreso, :fecha_salida, :estado_id, :_destroy],
@@ -397,11 +403,11 @@ class LotesController < ApplicationController
     # Parámetros para solo guardar actualizaciones para la ficha del lote
     def lote_params_u
       sub_id_value
-      params.require(:lote).permit(:empresa, :color_prenda, 
+      params.require(:lote).permit(:empresa, :color_prenda, :programacion_id,
         :no_remision, :no_factura, :fin_insumos, :obs_insumos, 
         :obs_integracion, :fin_integracion, :precio_u,  :meta, :h_req,
         :cliente_id, :tipo_prenda_id, :prioridad, :op, :fecha_entrada,
-        :fecha_revision, :fecha_entrega,:cantidad,  :precio_t,
+        :fecha_revision, :fecha_entrega,:cantidad,  :precio_t, :programacion,
         :colores_lotes_attributes => [:id, :color_id, :lote_id, :total_id, :_destroy, 
           :cantidades_attributes =>[:id, :categoria_id, :total_id, :cantidad, :_destroy]]).
       merge(respon_edicion_id: current_user, referencia_id: set_referencia)

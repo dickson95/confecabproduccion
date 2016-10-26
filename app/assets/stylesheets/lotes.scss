@@ -8,3 +8,8 @@
         overflow: visible;
     }
 }
+
+#date-programing, .datepicker{
+	position: relative; 
+	z-index: 100000;
+}

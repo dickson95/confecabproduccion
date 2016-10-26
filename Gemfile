@@ -59,7 +59,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'simple_form'
 gem 'bootstrap_sb_admin_base_v2'
 gem 'jquery-ui-rails'
-gem 'jquery-timepicker-addon-rails'
 gem 'rails-jquery-autocomplete'
 
 # Autenticación y control

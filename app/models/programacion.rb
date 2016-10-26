@@ -2,7 +2,10 @@ class Programacion < ApplicationRecord
   	###
   	# Relaciones
 	has_many :lotes
-
+	# Getter and setter
+	def name
+		self.mes
+	end
 
 	###
   	# Métodos del modelo
@@ -44,7 +47,7 @@ class Programacion < ApplicationRecord
 		if $programacion.empty?
 			boolean = true
 		end
-		boolean
+		return boolean
 	end
 
 	# Retorna un hash con el año y el mes
@@ -56,7 +59,7 @@ class Programacion < ApplicationRecord
 	
 	
 	# Crea el año y mes en caso de que estos no existan para la programación
-
+	# Retorna true en caso de haber creado una nueva programación
 	def self.set_year_program(empresa, month)
 		empresa_f = empresa == "CAB" ? true : false
 		desicion = self.new_old_programacion month, empresa_f
