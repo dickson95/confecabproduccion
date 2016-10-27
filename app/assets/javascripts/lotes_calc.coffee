@@ -27,6 +27,6 @@ $(document).on "turbolinks:load", ->
 				format_price_u = undefined
 			else if format_price_u != undefined
 				$(this).val(format_price_u)
-				format_price_u = undefined				
+				format_price_u = undefined
 	return
 	# "Fin document turbolinks:load"
