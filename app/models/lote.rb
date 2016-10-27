@@ -109,7 +109,10 @@ class Lote < ApplicationRecord
       return str
     end
   end
+<<<<<<< HEAD
 
+=======
+>>>>>>> Ingresar precios desde el index de lotes
   # Definir si existe el valor de la op pero permitiendo valores nulos
   # no se utiliza otro método porque ya existen registros que incumplen la 
   # restricción de unico
