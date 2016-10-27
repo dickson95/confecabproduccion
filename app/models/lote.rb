@@ -90,6 +90,25 @@ class Lote < ApplicationRecord
       nil
     end  
   end
+
+  def self.multiplication(numbers)
+    result = 1
+    numbers.each do |number|
+      result *= number.to_i
+    end
+    return result
+  end
+
+  def self.functional_format(str)
+    if /\D/.match(str)
+      # Expresión que coincide con el punto del string y cualquier número hacia la derecha que encuentre
+      str = str.gsub /[.]\d+/, ''
+      # Expresión que coincide con cualquier caracter que no sea numérico
+      return str.gsub /\D/,''
+    else
+      return str
+    end
+  end
   # Definir si existe el valor de la op pero permitiendo valores nulos
   # no se utiliza otro método porque ya existen registros que incumplen la 
   # restricción de unico

@@ -44,8 +44,10 @@
     <td><%= lote.fetch 1 %></td><!--Cliente-->
     <td><%= lote.fetch 2 %></td><!--Referencia-->
     <td><%= lote.fetch 3 %></td><!--Op-->
-    <td><%= lote.fetch 4 %></td><!--Cantidad-->
+    <td data-cantidad="<%= lote.fetch 4 %>"><%= lote.fetch 4 %></td><!--Cantidad-->
     <td><%= @tipos_prendas[lote.fetch(5)]%></td><!--Descripción-->
+    <td style="padding: 1px;"><input type="text" name="precio_unitario" data-lote="<%=lote.fetch 0%>" value="<%=Money.new("#{lote.fetch 8}00").format%>" class="form-control input-sm lote_precio_unitario" min="0"></td><!--Precio unitario-->
+    <td class="total"><%= Money.new("#{lote.fetch 9}00").format %></td><!--Precio total-->
   </tr>
   <!--tr-->
 <%end%>

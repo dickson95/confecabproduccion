@@ -243,6 +243,7 @@ $(document).on 'turbolinks:load', ->
 
 
 
+
   # Reorganizamiento cuando la pantalla se encoge
   $(window).resize ->
     element = $("form div").first().children("div")
@@ -254,7 +255,6 @@ $(document).on 'turbolinks:load', ->
       element.first().addClass("text-left").removeClass("text-center")
       element.last().prev().removeClass("text-left pull-left").addClass("text-center")
       element.last().removeClass("pull-right")
-
 
   return
   # Fin del document ready

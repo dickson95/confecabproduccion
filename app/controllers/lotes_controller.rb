@@ -22,10 +22,9 @@ class LotesController < ApplicationController
     .where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes 
       cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id) and lotes.empresa = '#{company ? "CAB" : "D&C"}'")
     .pluck("lotes.id", "clientes.cliente", "referencias.referencia", "lotes.op", "lotes.cantidad", 
-      "lotes.tipo_prenda_id","control_lotes.estado_id","control_lotes.sub_estado_id")    
+      "lotes.tipo_prenda_id","control_lotes.estado_id","control_lotes.sub_estado_id", "lotes.precio_u", "lotes.precio_t")    
     @fechas_ingreso = ControlLote.hash_ids
     @tipos_prendas = TipoPrenda.hash_ids
-
   end
   
   def view_datails
@@ -248,6 +247,19 @@ class LotesController < ApplicationController
     end
   end
 
+  # POST /lotes/:id/total_price
+  def total_price
+    lote_price = params.require(:lote).permit( :amount, :unit_price)
+    lote_price[:unit_price] = Lote.functional_format lote_price[:unit_price]
+    price_total = Lote.multiplication(lote_price.values)  
+    format_price_u = Money.new("#{lote_price[:unit_price]}00").format
+    format_price_t = Money.new("#{price_total}00").format
+    Lote.update(params[:id].to_i, :precio_u => lote_price[:unit_price], :precio_t => price_total)
+    @prices = {:total => format_price_t, :unit => format_price_u}
+    respond_to do |format|
+      format.json{render json: @prices}
+    end
+  end
   # -------------------------------------------------------------------------#
   # Métodos privados
   private
