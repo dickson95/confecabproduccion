@@ -15,7 +15,7 @@
       </th>
       <%bool = false%>
       <%end%>
-      <%=render partial: 'color_lote_fields', locals: {col: @colores.nil? ? "" : @colores.fetch(i), total: @totales.nil? ? "" : @totales.fetch(i), f: color_lote, b: false }%>
+      <%=render partial: 'color_lote_fields', locals: {col: @colores.nil? ? "" : @colores.fetch(i), total: @totales.nil? ? nil : @totales.fetch(i), f: color_lote, b: false }%>
     </tr>
     <% i += 1 %>
     <%end%>

@@ -23,6 +23,16 @@
 //= require turbolinks
 //= require_tree .
 
+$(document).on("turbolinks:load", function(){
+	$('.dropdown').on('show.bs.dropdown', function(e) {
+    $(this).find('.dropdown-menu').first().stop(true, true).slideDown()
+  })
+    
+  $('.dropdown').on('hide.bs.dropdown', function(e){
+    $(this).find('.dropdown-menu').first().stop(true, true).slideUp()
+  })
+})
+
 
 document.addEventListener("turbolinks:before-cache", function() {
   var tablelotes = $('#lotes').DataTable();
