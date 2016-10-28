@@ -1,4 +1,3 @@
-<%price = Programacion.price @rol_form%>
 	<%@lotes.each do |lote|%>
 		<%lote.each do |l|%>
 			<tr  data-item-id=<%= "#{l.id}" %> class="item">
@@ -9,7 +8,7 @@
 				<td><%=l.tipo_prenda.tipo%></td>
 				<td><%=l.referencia.referencia%></td>
 				<td><%=l.cantidad%></td>
-				<%if price%>
+				<%if can? :prices, Lote%>
 				<td><%=Money.new("#{l.precio_u}00").format%></td>
 				<td><%=Money.new("#{l.precio_t}00").format%></td>
 				<%end%>

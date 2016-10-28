@@ -1,6 +1,5 @@
 <%month = params[:month]%>
 <%if params[:commit] == "Ordenar"%>
-	console.log("#<%=month%>t")
 	$('#<%=month%>t').find("tbody").replaceWith("<%=j render "table_tbody"%>");
 <%elsif params[:commit] == "Retirar"%>
 	

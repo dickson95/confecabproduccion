@@ -125,7 +125,7 @@
       </div>
 
       <!--Facturación-->
-      <%if @rol_form.eql?("coor_tiempos") || @rol_form.eql?("gerente") || @rol_form.eql?("admin") %>
+      <%if can? :prices, Lote %>
       <hr>
       <div class="row">
         <p class="col-md-3 text-left">
