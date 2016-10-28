@@ -1,10 +1,10 @@
 @media (max-width: 767px) {
-    .table-responsive .dropdown-menu {
-        position: static !important;
+    .table-responsive{
+        overflow: auto;
     }
 }
 @media (min-width: 768px) {
-    .table-responsive {
+    .table-responsive{
         overflow: visible;
     }
 }
