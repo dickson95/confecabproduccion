@@ -35,7 +35,7 @@ class ProgramacionesController < ApplicationController
 	def generate_program
 		# Actualizar los lotes con programación id null
 		Lote.where("programacion_id IS NULL and empresa = ?", params[:empresa])
-		.update(:programacion_id => params[:id])
+		.update(:programacion_id => params[:id].to_i)
 		# Establecer las programaciones
 		set_programaciones
 		states_lotes

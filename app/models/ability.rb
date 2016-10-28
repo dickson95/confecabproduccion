@@ -9,6 +9,7 @@ class Ability
       can :manage, :all
     elsif user.has_rol? :coor_integracion
       can [:manage], [Lote, Programacion, ControlLote]
+      cannot :total_price, Lote
     elsif user.has_rol? :aux_insumos
       can [:read, :create, :update], Lote
       can [:read], Programacion
