@@ -76,18 +76,24 @@ class Lote < ApplicationRecord
   end
 
   def set_programacion(val)
-    if val.strip != ""
-      date = val.split(" ")
-      month_number = split_date_on_space(date[0]) 
-      Programacion.set_year_program empresa, date[1]+month_number
-      empresa_f = empresa == "CAB" ? true : false
-      puts "consulta"
-      programing = Programacion.where("extract(year_month from programaciones.mes) = ? and programaciones.empresa = ?",
-            date[1]+month_number, empresa_f).limit(1)
-      programing[0].id
+    class_val = val.class
+    puts class_val
+    puts val
+    if class_val == Fixnum || class_val == NilClass
+      puts "programación"
+      return val
     else
-      puts "nil"
-      nil
+      if val.strip != ""
+        date = val.split(" ")
+        month_number = split_date_on_space(date[0]) 
+        Programacion.set_year_program empresa, date[1]+month_number
+        empresa_f = empresa == "CAB" ? true : false
+        programing = Programacion.where("extract(year_month from programaciones.mes) = ? and programaciones.empresa = ?",
+              date[1]+month_number, empresa_f).limit(1)
+        return programing[0].id
+      else
+        return nil
+      end
     end  
   end
   
