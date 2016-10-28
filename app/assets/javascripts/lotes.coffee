@@ -31,14 +31,6 @@ $(document).on 'turbolinks:load', ->
                     }
                   ]  
   $('.dataTables_filter label').after $('.dataTables_filter label input[type="search"]').detach()
-  
-  $('.dropdown').on 'show.bs.dropdown', (e) ->
-    $(this).find('.dropdown-menu').first().stop(true, true).slideDown()
-    return
-    
-  $('.dropdown').on 'hide.bs.dropdown', (e) ->
-    $(this).find('.dropdown-menu').first().stop(true, true).slideUp()
-    return
 
   # Inputs con fecha administrada por parte de jQuery
   minimumDate = ->
@@ -116,6 +108,7 @@ $(document).on 'turbolinks:load', ->
     $('.cantidad1').each ->
         n = parseInt(@value)
         sum += n
+    if isNaN(sum) then sum = 0
     $('#total1').val String(sum)
     $('.total1').val String(sum)
     return
@@ -125,6 +118,7 @@ $(document).on 'turbolinks:load', ->
     $('.cantidad2').each ->
         n = parseInt(@value)
         sum += n
+    if isNaN(sum) then sum = 0
     $('#total2').val String(sum)
     $('.total2').val String(sum)
     return
@@ -134,6 +128,7 @@ $(document).on 'turbolinks:load', ->
     $('.cantidad3').each ->
         n = parseInt(@value)
         sum += n
+    if isNaN(sum) then sum = 0
     $('#total3').val String(sum)
     $('.total3').val String(sum)
     return
@@ -143,6 +138,7 @@ $(document).on 'turbolinks:load', ->
     $('.cantidad4').each ->
         n = parseInt(@value)
         sum += n
+    if isNaN(sum) then sum = 0
     $('#total4').val String(sum)
     $('.total4').val String(sum)
     return
@@ -152,6 +148,7 @@ $(document).on 'turbolinks:load', ->
     $('.cantidad5').each ->
         n = parseInt(@value)
         sum += n
+    if isNaN(sum) then sum = 0
     $('#total5').val String(sum)
     $('.total5').val String(sum)
     return
@@ -161,6 +158,7 @@ $(document).on 'turbolinks:load', ->
     $('.cantidad6').each ->
         n = parseInt(@value)
         sum += n
+    if isNaN(sum) then sum = 0
     $('#total6').val String(sum)
     $('.total6').val String(sum)
     return
@@ -170,6 +168,7 @@ $(document).on 'turbolinks:load', ->
     $('.cantidad7').each ->
         n = parseInt(@value)
         sum += n
+    if isNaN(sum) then sum = 0
     $('#total7').val String(sum)
     $('.total7').val String(sum)
     return
@@ -179,6 +178,7 @@ $(document).on 'turbolinks:load', ->
     $('.cantidad8').each ->
         n = parseInt(@value)
         sum += n
+    if isNaN(sum) then sum = 0
     $('#total8').val String(sum)
     $('.total8').val String(sum)
     return
@@ -188,6 +188,7 @@ $(document).on 'turbolinks:load', ->
     $('.cantidad9').each ->
         n = parseInt(@value)
         sum += n
+    if isNaN(sum) then sum = 0
     $('#total9').val String(sum)
     $('.total9').val String(sum)
     return
@@ -235,10 +236,12 @@ $(document).on 'turbolinks:load', ->
     valHReq()
       
   # Impedir campos numéricos en blanco
-  $(".numeric").keyup ->
-      if @value.trim() == ''
-        $(this).val 0
-      return
+  $('.numeric').on 'focus focusout', ->
+      if $(this).val() == '0'
+        $(this).val('')
+      else if $(this).val().trim() == ''
+        $(this).val('0')
+
     return
 
 

@@ -36,7 +36,7 @@
     <fieldset>
         <div class="input-group">
             <%=f.input :total_id, readonly: true, label: false, wrapper: false,
-            input_html:{class: "input-sm", :value => total, :title => "Total relativo"}%>
+            input_html:{class: "input-sm", :value => total.nil? ? "0" : total, :title => "Total relativo"}%>
         </div>
     </fieldset>
 </td>
