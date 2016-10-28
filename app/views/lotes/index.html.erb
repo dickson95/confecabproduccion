@@ -6,12 +6,11 @@
         <h4>Lotes</h4>
       </div>
       <div class="col-sm-2 text-right">
-          <%if @rol_form ==("coor_integracion") || @rol_form ==("admin") || 
-          @rol_form ==("coor_tiempos")%>
-            <%= link_to new_lote_path, {:title => "Nuevo lote"} do %>
-              <%= content_tag :i, "", :class => "fa fa-plus fa-3x"%>
-            <%end%>
+        <%if can? :create, Lote%>
+          <%= link_to new_lote_path, {:title => "Nuevo lote"} do %>
+            <%= content_tag :i, "", :class => "fa fa-plus fa-3x"%>
           <%end%>
+        <%end%>
       </div>
     </div>
 

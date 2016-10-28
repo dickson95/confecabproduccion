@@ -1,5 +1,4 @@
 wb = xlsx_package.workbook
-price = Programacion.price @rol_form
 # Configuración del mes de la programación
 date = Programacion.date_split params[:month]
 month = @meses[date[:month]]
@@ -68,7 +67,7 @@ wb.add_worksheet(:name  => "Programación") do |sheet|
 	rt1.add_run('DESCRIPCIÓN', :b => true)
 	rt3.add_run('REFERENCIA', :b => true)
 	rt4.add_run('CANT', :b => true)
-	if price
+	if (can? :prices, Lote)
 		rt5.add_run('PRECIO', :b => true)
 		rt6.add_run('TOTAL', :b => true)
 	end
@@ -79,8 +78,8 @@ wb.add_worksheet(:name  => "Programación") do |sheet|
 			rt,
 			rt1,
 			rt3,
-			price ? rt4 : nil,
-			price ? rt5 : nil,
+			(can? :prices, Lote) ? rt4 : nil,
+			(can? :prices, Lote) ? rt5 : nil,
 			rt6,
 			rt7,
 			rt8,
@@ -93,8 +92,8 @@ wb.add_worksheet(:name  => "Programación") do |sheet|
     	programacion.fetch(1), 
     	programacion.fetch(3), 
     	programacion.fetch(4), 
-    	price ? programacion.fetch(5) : nil,
-    	price ? programacion.fetch(6) : nil, 
+    	(can? :prices, Lote) ? programacion.fetch(5) : nil,
+    	(can? :prices, Lote) ? programacion.fetch(6) : nil, 
     	programacion.fetch(7), 
     	programacion.fetch(8)
     ], :style => border

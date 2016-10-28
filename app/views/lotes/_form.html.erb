@@ -38,15 +38,16 @@
     <!--inicio form-inputs-->
     <div class="form-inputs">
       <ul class="nav nav-tabs">
-        <% if @rol_form != "aux_insumos"%>
+        <%rol =  current_user.roles[0].name%>
+        <% if !current_user.has_rol? rol%>
         <li class="active"><a data-toggle="tab" href="#integracion">Integración</a></li>
         <%end%>
 
-        <% if @rol_form != "coor_integracion"%>
+        <% if !current_user.has_rol? rol%>
         <li class=<%=@rol_form.eql?("aux_insumos") ? "active" : ""%>><a data-toggle="tab" href="#insumos">Insumos</a></li>
         <%end%>
 
-        <% if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
+        <% if can? :prices, Lote%>
         <li><a data-toggle="tab" href="#facturacion">Facturación</a></li>
         <%end%>
       </ul>
