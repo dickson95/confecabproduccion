@@ -1,7 +1,7 @@
 <!--Panel introducción a insumos-->
 <div style="margin-top: 20px;"></div>
 <!--Fin panel introducción a insumos-->
-<%if @rol_form == "aux_insumos" && (params[:action]=="edit" || params[:action]=="update")%>
+<%if (params[:action]=="edit" || params[:action]=="update")%>
 <%= f.hidden_field :referencia, :value => "#{@lote.referencia.referencia}"%>
 <%end%>
 <!--Fila insumos-->

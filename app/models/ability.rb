@@ -4,9 +4,11 @@ class Ability
   def initialize(user)
     user ||= User.new # guest user
 
-    alias_action :total_price, :to => :prices
-    alias_action :view_details, :show, :to => :read
-    alias_action :edit, :update, :to => :billing
+    alias_action :read, :to => :prices   # Permiso de lectura para los precios
+    alias_action :total_price, :update, :to => :prices_update   # Permiso de escritura para los precios
+    alias_action :update, :to => :billing                 # Permiso de escritura para los facturación
+    alias_action :create, :update, :to => :integracion
+    alias_action :update, :to => :insumos
 
     if user.has_rol? :admin
       can :manage, :all
@@ -20,18 +22,23 @@ class Ability
       can :manage, [Programacion, ControlLote, Lote]
       can :create, [Cliente, TipoPrenda, SubEstado]
       can :read, Cliente
-      cannot :prices, Lote
-    elsif user.has_rol? :aux_insumos
+      can :integracion, Lote
+      cannot [:prices, :prices_update, :insumos, :billing], Lote
       can [:read, :update], Lote
+    elsif user.has_rol? :aux_insumos
+      can [:read, :update, :insumos, :cambio_estado], Lote
       can [:read, :export], Programacion
       can :read, [ControlLote, Cliente]
+      cannot [:prices, :prices_update, :integracion, :billing], Lote
+      can [:read, :update], Lote
     elsif user.has_rol? :gerente
       can :read, :all
       can [:read, :export], Programacion
       can :prices, Lote
       cannot :manage, [Referencia, Talla, Rol]
     elsif user.has_rol? :aux_facturacion
-      can [:read, :billing], Lote
+      can [:read, :billing, :prices], Lote
+      can :read, Cliente
     end
   end
 end

@@ -38,43 +38,43 @@
     <!--inicio form-inputs-->
     <div class="form-inputs">
       <ul class="nav nav-tabs">
-        <% if !current_user.has_rol? :aux_insumos%>
+        <% if can? :integracion, Lote%>
         <li class="active"><a data-toggle="tab" href="#integracion">Integración</a></li>
         <%end%>
 
-        <% if !current_user.has_rol? :coor_integracion%>
+        <% if can? :insumos, Lote%>
         <li class=<%=(current_user.has_rol? :aux_insumos) ? "active" : ""%>><a data-toggle="tab" href="#insumos">Insumos</a></li>
         <%end%>
 
-        <% if can? :prices, Lote%>
-        <li><a data-toggle="tab" href="#facturacion">Facturación</a></li>
+        <% if can? :billing, Lote%>
+        <li class=<%=(current_user.has_rol? :aux_facturacion) ? "active" : ""%>><a data-toggle="tab" href="#facturacion">Facturación</a></li>
         <%end%>
       </ul>
 
       <div class="tab-content">
+
+        <% if can? :integracion, Lote%>
         <div id="integracion" class="tab-pane fade in active">
           <% # Integración %>
-          <% if !current_user.has_rol? :aux_insumos%>
           <%=render "form_zone_integracion", f: f%>
-          <%end%>
         </div>
+        <%end%>
 
+        <% if can? :insumos, Lote%>
         <div id="insumos" class="tab-pane fade <%=(current_user.has_rol? :aux_insumos) ? "in active" : ""%>">
           <% # Insumos %>
-          <% if !current_user.has_rol? :coor_integracion%>
           <%=render "form_zone_insumos", f: f%>
-          <%end%>
         </div>
+        <%end%>
 
-        <% if can? :prices, Lote %>
-        <div id="facturacion" class="tab-pane fade">
+        <% if can? :billing, Lote %>
+        <div id="facturacion" class="tab-pane fade <%=(current_user.has_rol? :aux_facturacion) ? "in active" : ""%>">
           <% # Facturacion %>
           <%=render "form_zone_facturacion", f: f%>
         </div>
         <%end%>
       </div>
-
-
+      <%if can? :cambio_estado, Lote%>
       <!--____Detalle de estado_______________________________-->
 
       <div class="row" id="form_lote_estado_update">
@@ -91,7 +91,7 @@
         </div>
       </div>
       <!--____Fin detalle de estado_____________________________-->
-
+      <%end%>
 
       <!--____Form submit_________________________________-->
       <div class="row">

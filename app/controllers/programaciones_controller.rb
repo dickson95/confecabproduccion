@@ -35,7 +35,7 @@ class ProgramacionesController < ApplicationController
 	def generate_program
 		# Actualizar los lotes con programación id null
 		Lote.where("programacion_id IS NULL and empresa = ?", params[:empresa])
-		.update(:programacion_id => params[:id].to_i)
+		.update(:programacion_id => params[:id].to_i, :respon_edicion_id => current_user)
 		# Establecer las programaciones
 		set_programaciones
 		states_lotes
@@ -64,7 +64,7 @@ class ProgramacionesController < ApplicationController
 			params[:lotes].each do |lote|
 				lote = Lote
 				.where(:id => lote)
-				.update(:programacion_id => @programacion.fetch(0))
+				.update(:programacion_id => @programacion.fetch(0), :respon_edicion_id => current_user)
 				@lotes.push lote
 			end
 		end
@@ -84,7 +84,7 @@ class ProgramacionesController < ApplicationController
 			if !params[:lotes].nil?
 				params[:lotes].each do |lote|
 					Lote.where(:id => lote)
-					.update(:programacion_id => nil)
+					.update(:programacion_id => nil, :respon_edicion_id => current_user)
 					@lotes.push lote
 				end
 			end
@@ -104,7 +104,7 @@ class ProgramacionesController < ApplicationController
 	# Ordenar tabla
 	def update_row_order	
 		programacion_params[:updated_positions].each do |k, v|
-			Lote.update(v[:lote_id].to_i, :secuencia => v[:position])
+			Lote.update(v[:lote_id].to_i, :secuencia => v[:position], :respon_edicion_id => current_user)
 		end
 	    head :no_content # this is a POST action, updates sent via AJAX, no view rendered
 	end

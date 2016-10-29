@@ -1,3 +1,6 @@
+<%if (params[:action]=="edit" || params[:action]=="update")%>
+<%= f.hidden_field :referencia, :value => "#{@lote.referencia.referencia}"%>
+<%end%>
 <div style="margin-top: 20px;"></div>
 <div class="row">
   <div class="col-lg-12">
@@ -7,14 +10,17 @@
     <div class="col-md-3">
       <%= f.input :no_factura, label: "Número de factura" %>
     </div>
+    <%if can? :prices_update, Lote%>
     <div class="col-md-3">
       <%= f.input :precio_u, label: "Precio unitario" %>
     </div>
     <div class="col-md-3">
       <%= f.input :precio_t, label: "Precio total", readonly: true %>
     </div>
+    <%end%>
   </div>
 </div>
+<%if can? :prices_update, Lote%>
 <div class="row">
   <div class="col-lg-12">
     <div class="col-md-3">
@@ -25,3 +31,4 @@
     </div>
   </div>
 </div>
+<%end%>
