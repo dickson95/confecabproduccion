@@ -38,13 +38,12 @@
     <!--inicio form-inputs-->
     <div class="form-inputs">
       <ul class="nav nav-tabs">
-        <%rol =  current_user.roles[0].name%>
-        <% if !current_user.has_rol? rol%>
+        <% if !current_user.has_rol? :aux_insumos%>
         <li class="active"><a data-toggle="tab" href="#integracion">Integración</a></li>
         <%end%>
 
-        <% if !current_user.has_rol? rol%>
-        <li class=<%=@rol_form.eql?("aux_insumos") ? "active" : ""%>><a data-toggle="tab" href="#insumos">Insumos</a></li>
+        <% if !current_user.has_rol? :coor_integracion%>
+        <li class=<%=(current_user.has_rol? :aux_insumos) ? "active" : ""%>><a data-toggle="tab" href="#insumos">Insumos</a></li>
         <%end%>
 
         <% if can? :prices, Lote%>
@@ -55,19 +54,19 @@
       <div class="tab-content">
         <div id="integracion" class="tab-pane fade in active">
           <% # Integración %>
-          <% if @rol_form != "aux_insumos"%>
+          <% if !current_user.has_rol? :aux_insumos%>
           <%=render "form_zone_integracion", f: f%>
           <%end%>
         </div>
 
-        <div id="insumos" class="tab-pane fade <%=@rol_form.eql?("aux_insumos") ? "in active" : ""%>">
+        <div id="insumos" class="tab-pane fade <%=(current_user.has_rol? :aux_insumos) ? "in active" : ""%>">
           <% # Insumos %>
-          <% if @rol_form != "coor_integracion"%>
+          <% if !current_user.has_rol? :coor_integracion%>
           <%=render "form_zone_insumos", f: f%>
           <%end%>
         </div>
 
-        <% if @rol_form == "coor_tiempos" || @rol_form == "admin"%>
+        <% if can? :prices, Lote %>
         <div id="facturacion" class="tab-pane fade">
           <% # Facturacion %>
           <%=render "form_zone_facturacion", f: f%>

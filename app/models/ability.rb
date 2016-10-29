@@ -18,7 +18,8 @@ class Ability
       can :manage, [Programacion, User, ControlLote, Lote, SubEstado, Cliente, TipoPrenda]
     elsif user.has_rol? :coor_integracion
       can :manage, [Programacion, ControlLote, Lote]
-      can :create, [Cliente, TipoPrenda]
+      can :create, [Cliente, TipoPrenda, SubEstado]
+      can :read, Cliente
       cannot :prices, Lote
     elsif user.has_rol? :aux_insumos
       can [:read, :update], Lote

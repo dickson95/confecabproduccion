@@ -26,10 +26,13 @@ Rails.application.routes.draw do
   # Rutas de los lotes
   post 'lotes/:id/total_price' => 'lotes#total_price', :as => :lote_total_price
   get "lotes/add_remote_data" => 'lotes#add_remote_data', :as => :add_remote_data
-  get "lotes/view_datails/:id" => 'lotes#view_datails', :as => :view_datails
   resources :lotes do
     get :autocomplete_color_color, :on => :collection
+<<<<<<< HEAD
     resources :control_lotes
+=======
+    get :view_datails
+>>>>>>> Usar ability para mostrar las páginas
   end
   
   get 'lotes/cambio_estado/:id', 
@@ -40,7 +43,9 @@ Rails.application.routes.draw do
   get "clientes/send_email" => 'clientes#send_email', :as => :send_email
   resources :clientes
   resources :referencias 
-  resources :tipos_prendas
+  resources :tipos_prendas, except: :index
+  get "/tablas", to: "tipos_prendas#index" , as: "tablas"
+
   resources :tallas
   resources :roles
   

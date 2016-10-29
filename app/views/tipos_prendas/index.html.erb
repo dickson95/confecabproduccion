@@ -6,7 +6,7 @@
         <h4>Descripción de prenda</h4>
       </div>
       <div class="col-sm-2 text-right">
-        <% if can? :manage, TipoPrenda %>
+        <% if can? :create, TipoPrenda %>
           <%= link_to new_tipo_prenda_path, :title => "Nueva descripción" do %>
            <%= content_tag(:i, "", :class => "fa fa-plus fa-3x") %>
           <%end%>
@@ -19,7 +19,7 @@
       <thead>
         <tr>
           <th title="Descripción">Descripción</th>
-          <% if can? :manage, TipoPrenda %>
+          <% if can? :create, TipoPrenda %>
           <th></th>
           <%end%>
         </tr>
@@ -28,7 +28,7 @@
         <% @tipos_prendas.each do |tipo_prenda| %>
         <tr>
           <td title="Descripción"><%= tipo_prenda.tipo %></td>
-          <% if can? :manage, TipoPrenda %>
+          <% if can? :update, TipoPrenda %>
           <td class="col-xs-4">
             <div class="btn-group">
               <%= link_to edit_tipo_prenda_path(tipo_prenda), :title =>"Editar",
@@ -43,4 +43,5 @@
       </tbody>
     </table>
   </div>
+  <%end%>
 </div>

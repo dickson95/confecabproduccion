@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :rol_user
   before_action :selected_company_global
   
   #Parámetros para el registro de usuarios con username y otros datos en devise
@@ -16,18 +15,6 @@ class ApplicationController < ActionController::Base
   #Respuesta a la excepción lanzada por cancan cuando no hay autorización
   rescue_from CanCan::AccessDenied do |exception|
     render :file => "#{Rails.root}/public/404.html", :status => 404, :layout =>false
-  end
-  
-  # Método con gon para poder usar el rol desde los coffeescripts
-  def rol_user
-    if user_signed_in?
-      gon.rol_user = current_user.has_rol? :gerente
-      @rol_form = nil
-      rol = current_user.roles
-      (rol).each do |s|
-        @rol_form = s.name
-      end
-    end
   end
 
   # Determina que empresa es con la que va a funcionar el sistema
