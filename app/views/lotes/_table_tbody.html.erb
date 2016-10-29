@@ -9,7 +9,7 @@
         <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%=lote.fetch(0)%>"></i>
         <ul class="dropdown-menu" aria-labelledby="lote_<%=lote.fetch(0)%>">
           <li>
-            <%= link_to  view_datails_path(lote.fetch(0)), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
+            <%= link_to  lote_view_datails_path(lote.fetch(0)), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
             <%=content_tag :i, "", :class => "fa fa-list-alt fa-fw"%>
             Detalles
             <%end%>

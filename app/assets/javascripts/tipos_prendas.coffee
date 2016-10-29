@@ -16,6 +16,7 @@ $(document).on 'turbolinks:load', ->
         paginate:
           previous: 'Anterior' 
           next: 'Siguiente'
+          
   $('#tipos').parent().addClass('table-responsive')
   $('.dataTables_filter label').after $('#tipos_filter label input[type="search"]').detach()
   return

@@ -5,7 +5,7 @@
         <h4>Procesos adicionales</h4>
       </div>
       <div class="col-sm-2 text-right">
-        <% if can? :manage, SubEstado %>
+        <% if can? :create, SubEstado %>
           <%= link_to new_sub_estado_path, :title => "Nuevo proceso" do %>
             <%= content_tag :i, "", :class => "fa fa-plus fa-3x" %>
           <%end%>

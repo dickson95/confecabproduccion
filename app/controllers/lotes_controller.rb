@@ -1,6 +1,7 @@
 class LotesController < ApplicationController
   include LotesHelper
   # Acciones primarias
+  before_action :rol_user, only: [:create, :update, :edit, :new]
   before_action :set_color, only: [:create, :update]
   before_action :set_tipo_prenda, only: [:new, :edit]
   before_action :referencia_params, only: [:set_referencia]
@@ -274,7 +275,7 @@ class LotesController < ApplicationController
     end
     
     def set_lote_u
-      @lote = ControlLote.where(lote_id: params[:id]).max
+      @lote = ControlLote.where(lote_id: params[:lote_id]).max
     end
     
     def set_talla
@@ -433,5 +434,16 @@ class LotesController < ApplicationController
 
     def referencia_params
       params.require(:lote).permit(:referencia)
+    end
+
+    # Método con gon para poder usar el rol desde los coffeescripts
+    def rol_user
+      if user_signed_in?
+        @rol_form = nil
+        rol = current_user.roles
+        (rol).each do |s|
+          @rol_form = s.name
+        end
+      end
     end
   end
