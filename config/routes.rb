@@ -28,12 +28,10 @@ Rails.application.routes.draw do
   get "lotes/add_remote_data" => 'lotes#add_remote_data', :as => :add_remote_data
   resources :lotes do
     get :autocomplete_color_color, :on => :collection
-<<<<<<< HEAD
-    resources :control_lotes
-=======
     get :view_datails
->>>>>>> Usar ability para mostrar las páginas
+    resources :control_lotes
   end
+  
   get 'lotes/cambio_estado/:id', 
     to: 'lotes#cambio_estado', as: 'cambio_estado'
 
@@ -42,9 +40,7 @@ Rails.application.routes.draw do
   get "clientes/send_email" => 'clientes#send_email', :as => :send_email
   resources :clientes
   resources :referencias 
-  resources :tipos_prendas, except: :index
-  get "/tablas", to: "tipos_prendas#index" , as: "tablas"
-
+  resources :tipos_prendas
   resources :tallas
   resources :roles
   
