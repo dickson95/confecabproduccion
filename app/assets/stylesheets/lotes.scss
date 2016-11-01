@@ -1,12 +1,5 @@
-@media (max-width: 767px) {
-    .table-responsive{
-        overflow: auto;
-    }
-}
-@media (min-width: 768px) {
-    .table-responsive{
-        overflow: visible;
-    }
+.table-responsive{
+    overflow: auto;
 }
 
 #date-programing, .datepicker{
