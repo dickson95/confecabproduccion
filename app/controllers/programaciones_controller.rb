@@ -1,8 +1,8 @@
 class ProgramacionesController < ApplicationController
-	before_action :set_meses, except: [:modal_open, :update_row_order]
-	before_action :programacion_id, except: [:modal_open, :update_row_order]
+	before_action :set_meses, except: [:modal_open, :update_row_order, :update_meta_mensual]
+	before_action :programacion_id, except: [:modal_open, :update_row_order, :update_meta_mensual]
 	before_action :states_lotes, only: [:index, :program_table]
-	before_action :sum_totals, except: [:modal_open, :update_row_order]
+	before_action :sum_totals, except: [:modal_open, :update_row_order, :update_meta_mensual]
 	before_action :set_programaciones, only: [:index, :export_excel, :export_pdf]
 	before_action :no_empty_program, except: [:modal_open, :remove_from_programing, :add_lotes_to_programing]
 	after_action  :states_lotes, only: [:generate_program, :add_lotes_to_programing]
@@ -130,7 +130,18 @@ class ProgramacionesController < ApplicationController
 			format.html
 		end
 	end
-
+	
+	def update_meta_mensual
+		program_params = params.permit(:monthly_target, :programacion_id)
+		Programacion.where("empresa = ? and  EXTRACT(year_month from mes) = ?", 
+							session[:selected_company], program_params[:programacion_id])
+		.update(:meta_mensual => program_params[:monthly_target])
+		
+		respond_to do |format|
+			format.json{ head :no_content }
+		end
+	end
+	
 	private
 		def set_meses
 			@meses = Programacion.meses
@@ -139,7 +150,7 @@ class ProgramacionesController < ApplicationController
 		def set_programaciones
 			# Consulta necesaria para cargar todas las instancias de las vistas exstentes 
 			params[:action].eql?("index") ?	params[:month] = Time.new.strftime("%Y%m") : nil
-			@programaciones = Programacion.joins(lotes: [:cliente, :tipo_prenda, :referencia]).where("extract(year_month from programaciones.mes) = ? and lotes.empresa = ?",  params[:month], params[:empresa]).order("lotes.secuencia asc").pluck("clientes.cliente", "tipos_prendas.tipo", "lotes.secuencia", "referencias.referencia", "lotes.cantidad", "lotes.precio_u", "lotes.precio_t", "lotes.meta", "lotes.h_req","lotes.id")
+			@programaciones = Programacion.joins(lotes: [:cliente, :tipo_prenda, :referencia]).where("extract(year_month from programaciones.mes) = ? and lotes.empresa = ?",  params[:month], params[:empresa]).order("lotes.secuencia asc").pluck("clientes.cliente", "tipos_prendas.tipo", "lotes.secuencia", "referencias.referencia", "lotes.cantidad", "lotes.precio_u", "lotes.precio_t", "lotes.meta", "lotes.h_req", "lotes.id")
 		end
 
 		def programacion_id
@@ -164,9 +175,9 @@ class ProgramacionesController < ApplicationController
 
 		# Sumar las horas y el precio total.
 		def sum_totals
-			@hours = Lote.where(:programacion_id => @programacion.first).sum(:h_req)
 			@total = Lote.where(:programacion_id => @programacion.first).sum(:precio_t)
 			@total = Money.new("#{@total}00", "USD").format
+			@cantidades = Lote.where(:programacion_id => @programacion.first).sum(:cantidad)
 		end
 
 		def states_lotes

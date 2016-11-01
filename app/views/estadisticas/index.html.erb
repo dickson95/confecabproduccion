@@ -1,0 +1,36 @@
+<h1>Estadisticas#index</h1>
+<div class="row">
+    <div class="col-md-6">
+        <h2>Clientes último mes</h2>
+        <div id="cliente_mensual" style="height: 250px;"></div>
+    </div>
+    <div class="col-md-6">
+        <h2>Clientes del año actual</h2>
+        <div id="cliente_anual" style="height: 250px;"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    new Morris.Bar({
+      element: 'cliente_mensual',
+      data: [
+        <%@amount_monthly.each do |amount|%>
+        { cliente: '<%=amount.cliente.name%>', value: <%=amount.cantidad%>  },
+        <%end%>
+      ],
+      xkey: 'cliente',
+      ykeys: ['value'],
+      labels: ['Value']
+    });
+    new Morris.Bar({
+      element: 'cliente_anual',
+      data: [
+        <%@amount_annual.each do |amount|%>
+        { cliente: '<%=amount.cliente.name%>', value: <%=amount.cantidad%>  },
+        <%end%>
+      ],
+      xkey: 'cliente',
+      ykeys: ['value'],
+      labels: ['Value']
+    });
+</script>

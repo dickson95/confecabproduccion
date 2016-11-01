@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :estadisticas, only: [:index] 
+
   get '/pages', to: 'static_pages#home', as: :home
   # Inicio de la aplicación
   root :to => 'static_pages#home'
@@ -14,6 +16,7 @@ Rails.application.routes.draw do
   get 'programaciones/modal_open/:month', to: 'programaciones#modal_open', as: :modal_open
   resources :programaciones, only:[:index] do 
     post 'update_row_order', on: :collection
+    post :update_meta_mensual
   end
 
 

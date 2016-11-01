@@ -126,11 +126,12 @@ ActiveRecord::Schema.define(version: 20161103140755) do
 
   create_table "programaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.date     "mes"
-    t.integer  "horas",      default: 0
+    t.integer  "horas",        default: 0
     t.string   "costo"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.boolean  "empresa"
+    t.integer  "meta_mensual"
   end
 
   create_table "referencias", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

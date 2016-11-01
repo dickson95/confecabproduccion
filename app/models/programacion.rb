@@ -68,7 +68,7 @@ class Programacion < ApplicationRecord
 			date = self.date_split month
 
 			# Fecha con la que se va a generar la programación
-			timelocal = Time.local(date[:year], date[:month])
+			timelocal = Time.local(date[:year], date[:month], "01")
 
 			# Crear la programación para el mes seleccionado
 			programacion = self.new(:mes => timelocal, :empresa => empresa_f)
