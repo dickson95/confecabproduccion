@@ -202,7 +202,17 @@ class LotesController < ApplicationController
       format.xlsx { render xlsx: "export_excel", filename: "Lotes de #{company}"  }
     end
   end
-
+  
+  # POST /lotes/:lote_id/
+  def validate_op
+    op_param = params.permit(:op, :lote_id )
+    company = session[:selected_company] ? "CAB" : "D&C"
+    lote_id = op_param[:lote_id] == "undefinded" ? nil : op_param[:lote_id]
+    val_op = Lote.validate_op(op_param[:op], company, lote_id)
+    respond_to do |format|
+      format.json{ render json: val_op}
+    end
+  end
   # -------------------------------------------------------------------------#
   # Métodos privados
   private
@@ -210,6 +220,7 @@ class LotesController < ApplicationController
     def set_lote
       @lote = Lote.find(params[:id])
     end
+    
     def set_tipo_prenda
       @tipos_prendas = TipoPrenda.all
       @clientes = Cliente.where(:empresa => session[:selected_company])

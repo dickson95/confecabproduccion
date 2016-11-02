@@ -25,13 +25,20 @@ class Lote < ApplicationRecord
   # La op debe ser única, permitir nil, validar por empresa y trabajar con los 
   # campos que antes de esta validación incumplian con el requerimiento
   def op_uniquenesses
+    val = Lote.validate_op(op, empresa, id)
+    errors.add(:op, "Ya existe esta OP") if !val
+  end
+  
+  # Retorna true en caso de que la op sea válida, caso contrario false
+  def self.validate_op(op, empresa, id=nil)
     if op != ""
+      # si el id está nil siginifica que es un registro nuevo
       if id.nil?
         $val = Lote.where("op = ? and empresa = ?", op, empresa).pluck(:op)
       else
         $val = Lote.where("op = ? and id <> ? and empresa = ?", op, id, empresa).pluck(:op)
       end
-      $val.empty? ? true : errors.add(:op, "Ya existe esta OP")
+      $val.empty? ? true : false
     else
       true
     end 

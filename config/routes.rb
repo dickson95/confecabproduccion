@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     resources :control_lotes do 
       patch :update_cantidad, on: :member
     end
+    post :validate_op
   end
 
   # Otras rutas
