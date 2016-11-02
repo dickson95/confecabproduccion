@@ -22,8 +22,6 @@ Rails.application.routes.draw do
   resources :users, except: :create
   post 'users/new' => 'users#create', as: :create_user
   
-  # Rutas del historial de lotes
-  resources :control_lotes
   
   # Rutas de los lotes
   post 'lotes/:id/total_price' => 'lotes#total_price', :as => :lote_total_price
@@ -31,6 +29,7 @@ Rails.application.routes.draw do
   get "lotes/view_datails/:id" => 'lotes#view_datails', :as => :view_datails
   resources :lotes do
     get :autocomplete_color_color, :on => :collection
+    resources :control_lotes
   end
   get 'lotes/cambio_estado/:id', 
     to: 'lotes#cambio_estado', as: 'cambio_estado'

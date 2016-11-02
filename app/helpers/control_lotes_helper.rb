@@ -2,8 +2,8 @@ module ControlLotesHelper
 	# Sub proceso del historial
 	# sub_process(id_sub_proceso)
 	def sub_process(sub_process)
-		if sub_process > 0
-			@sub_estado[sub_process]
+		if !sub_process.nil?
+			@sub_estado[sub_process.id]
 		end
 	end
 
@@ -11,7 +11,7 @@ module ControlLotesHelper
 	# respon_exit(id_responsable)
 	def respon_exit(respon_exit)
 		if !respon_exit.nil?
-			@user[respon_exit]
+			@user[respon_exit.id]
 		end
 	end
 
