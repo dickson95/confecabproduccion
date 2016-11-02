@@ -1,0 +1,37 @@
+<% content_for :title do  "Historial" end %>
+<p id="notice"><%= notice %></p>
+  <h1 class="page-header">Historial de movimiento de los lotes</h1>
+  <div class="table-responsive"> 
+    <table class="table table-hover" id="control">
+      <thead>
+        <tr>
+          <th title="Referencia">Referencia</th>
+          <th title="OP">Op</th>
+          <th title="Proceso adicional">Proceso</th>
+          <th title="Estado">Proceso adicional</th>
+          <th title="Fecha de entrada">Entrada</th>
+          <th title="Fecha de salida">Salida</th>
+          <th title="Días">Días</th>
+          <th title="Responsable de ingreso">Reponsable ingreso</th>
+          <th title="Responsable de salida">Reponsable salida</th>
+        </tr>
+      </thead>
+    
+      <tbody>
+        <% @ciclo_lote.each do |control_lote| %>
+          <tr>
+            <td class="col-xs-1" title="Referencia"><%= control_lote.lote.referencia.referencia %></td><!--Referencia-->
+            <td title="OP"><%= control_lote.lote.op %></td><!--Op-->
+            <td title="Estado"><%= control_lote.estado.estado %></td><!--Estado-->
+            <td title="Proceso adicional"><%=sub_process control_lote.sub_estado %></td><!--Sub estado-->
+            <td class="col-xs-2" title="Fecha de entrada"><%= format_date control_lote.fecha_ingreso %></td><!--Fecha entrada-->
+            <td class="col-xs-2" title="Fecha de salida"><%= format_date control_lote.fecha_salida %></td><!--Fecha salida-->
+            <td class="col-xs-1" title="Días"><%= days control_lote.fecha_ingreso, control_lote.fecha_salida %></td><!--Días-->
+            <td class="col-xs-2" title="Responsable de ingreso"><%=control_lote.resp_ingreso_id.name %> </td><!--Responsable ingreso-->
+            <td title="Responsable de salida"><%=respon_exit control_lote.resp_salida_id%></td><!--Responsable salida-->
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= link_to "Atrás", lotes_path%>
+  </div>
