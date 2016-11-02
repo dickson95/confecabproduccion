@@ -6,13 +6,16 @@ class ControlLotesController < ApplicationController
   # GET /control_lotes.json
   def index
     company = session[:selected_company]
-    @control_lotes = ControlLote.joins([lote: [:referencia]], :estado, :resp_ingreso_id).where("lotes.empresa = '#{company ? "CAB" : "D&C"}'")
-    .pluck("control_lotes.id, referencias.referencia, lotes.op, estados.estado, control_lotes.sub_estado_id, 
-      control_lotes.fecha_ingreso, control_lotes.fecha_salida,  users.name, 
-      control_lotes.resp_salida_id")
+    @lote = Lote.find(control_lote_params[:lote_id])
+    @ciclo_lote = @lote.control_lotes
     @sub_estado = {}
     @sub_estados = SubEstado.all.each{ |e|  @sub_estado[e.id] = e.sub_estado}
     @user = {}
     @users = User.select("id, name").each{ |e|  @user[e.id] = e.name}
   end
+  
+  private
+    def control_lote_params
+      params.permit(:lote_id)
+    end
 end

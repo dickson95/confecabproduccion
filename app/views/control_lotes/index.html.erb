@@ -18,19 +18,20 @@
       </thead>
     
       <tbody>
-        <% @control_lotes.each do |control_lote| %>
+        <% @ciclo_lote.each do |control_lote| %>
           <tr>
-            <td class="col-xs-1" title="Referencia"><%= control_lote.fetch(1) %></td><!--Referencia-->
-            <td title="OP"><%= control_lote.fetch(2) %></td><!--Op-->
-            <td title="Estado"><%= control_lote.fetch(3) %></td><!--Estado-->
-            <td title="Proceso adicional"><%=sub_process control_lote.fetch(4) %></td><!--Sub estado-->
-            <td class="col-xs-2" title="Fecha de entrada"><%= format_date control_lote.fetch(5) %></td><!--Fecha entrada-->
-            <td class="col-xs-2" title="Fecha de salida"><%= format_date control_lote.fetch(6) %></td><!--Fecha salida-->
-            <td class="col-xs-1" title="Días"><%= days control_lote.fetch(5), control_lote.fetch(6) %></td><!--Días-->
-            <td class="col-xs-2" title="Responsable de ingreso"><%=control_lote.fetch(7) %> </td><!--Responsable ingreso-->
-            <td title="Responsable de salida"><%=respon_exit control_lote.fetch(8)%></td><!--Responsable salida-->
+            <td class="col-xs-1" title="Referencia"><%= control_lote.lote.referencia.referencia %></td><!--Referencia-->
+            <td title="OP"><%= control_lote.lote.op %></td><!--Op-->
+            <td title="Estado"><%= control_lote.estado.estado %></td><!--Estado-->
+            <td title="Proceso adicional"><%=sub_process control_lote.sub_estado %></td><!--Sub estado-->
+            <td class="col-xs-2" title="Fecha de entrada"><%= format_date control_lote.fecha_ingreso %></td><!--Fecha entrada-->
+            <td class="col-xs-2" title="Fecha de salida"><%= format_date control_lote.fecha_salida %></td><!--Fecha salida-->
+            <td class="col-xs-1" title="Días"><%= days control_lote.fecha_ingreso, control_lote.fecha_salida %></td><!--Días-->
+            <td class="col-xs-2" title="Responsable de ingreso"><%=control_lote.resp_ingreso_id.name %> </td><!--Responsable ingreso-->
+            <td title="Responsable de salida"><%=respon_exit control_lote.resp_salida_id%></td><!--Responsable salida-->
           </tr>
         <% end %>
       </tbody>
     </table>
+    <%= link_to "Atrás", lotes_path%>
   </div>
