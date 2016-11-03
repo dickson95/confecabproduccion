@@ -17,11 +17,17 @@ module ControlLotesHelper
 
 	# Formato de fecha
 	# format_date(parametro_fecha)
-	def format_date(date)
-		if !date.nil?
-			l(date, :format => "%d de %b %H:%M ")		
+	def range_date(date1, date2)
+		if !date2.nil?
+			with_month = nil
+			if date1.strftime("%m") == date2.strftime("%m")
+				with_month = l(date1, :format => "%d")
+			else
+				with_month = l(date1, :format => "%d de %b")
+			end
+			"#{with_month} - #{l(date2, :format => "%d de %b")}"
 		else
-			"-"
+			"#{l(date1, :format => "%d de %b")}"
 		end
 	end
 
