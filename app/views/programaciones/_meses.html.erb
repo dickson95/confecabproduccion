@@ -1,6 +1,5 @@
-<%date = Programacion.date_split params[:month] %>
 <%@mes_active = @meses[date[:month]][:number]%>
-<div id="<%=year%>" class="tab-pane fade in active"> 
+<div id="<%=year%>" class="tab-pane fade <%= year.to_s == date[:year] ? "in active" : ""%>"> 
 	<!--Meses-->
 	<ul class="nav nav-tabs" role="tablist">
 		<%@meses.each do |k, v|%>
