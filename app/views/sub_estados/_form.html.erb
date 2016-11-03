@@ -40,9 +40,9 @@
       <%= f.input :sub_estado, :label => "Proceso" %>
     </div>
   
-    <div class="form-actions">
+    <div class="form-actions text-right">
       <%= f.button :submit, :value => "Aceptar", data:{:dismiss_with => "Guardando"} %>
-      <%= link_to 'Cancelar', tipos_prendas_path, class:"btn btn-outline btn-primary" %>
+      <%= link_to 'Cancelar', sub_estados_path, class:"btn btn-outline btn-primary" %>
     </div>
   <% end %>
 <%end%>
