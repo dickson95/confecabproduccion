@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161022120545) do
+ActiveRecord::Schema.define(version: 20161103140755) do
 
   create_table "asignaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20161022120545) do
     t.datetime "updated_at",                                          null: false
     t.integer  "sub_estado_id",                           default: 0
     t.decimal  "min_u",           precision: 9, scale: 2
-    t.integer  "resp_ingreso_id",                         default: 9, null: false
+    t.integer  "resp_ingreso_id",                         default: 1, null: false
     t.integer  "resp_salida_id"
     t.index ["estado_id"], name: "index_control_lotes_on_estado_id", using: :btree
     t.index ["lote_id"], name: "index_control_lotes_on_lote_id", using: :btree
