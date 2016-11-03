@@ -6,8 +6,6 @@ class TiposPrendasController < ApplicationController
   # GET /tipos_prendas.json
   def index
     @tipos_prendas = TipoPrenda.all
-    @sub_estados = SubEstado.all
-    @clientes = Cliente.where(:empresa => session[:selected_company])
   end
 
   # GET /tipos_prendas/1

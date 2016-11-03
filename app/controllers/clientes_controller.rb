@@ -6,7 +6,7 @@ class ClientesController < ApplicationController
   # GET /clientes
   # GET /clientes.json
   def index
-    @clientes = Cliente.all
+    @clientes = Cliente.where(:empresa => session[:selected_company])
   end
 
   # GET /clientes/1

@@ -1,56 +1,8 @@
 <% content_for :title do  "Tablas" end%>
 <div class="row page-header">
   <div class="pull-left">
-    <h1>Tablas</h1>
+    <h1>Descripción de prendas</h1>
     <p class="text-muted">Clientes, procesos, descripción de prendas</p>
-  </div>
-<!--dropdown-->
-  <div class="text-right">
-    <div class="dropdown">
-      <a class="dropdown-toggle btn btn-default" data-toggle="dropdown" href="#" title="Configuración">
-          Configuración
-          <i class="fa fa-gear fa-fw"></i>  <i class="fa fa-caret-down"></i>
-      </a>
-      <ul class="dropdown-menu dropdown-messages pull-right">
-          <li>
-            <a>
-              <div id="on_cliente">
-                  <i class="fa fa-gears fa-fw"></i> Clientes
-              </div>
-            </a>
-          </li>
-          <li>
-            <a>
-              <div id="on_prenda">
-                  <i class="fa fa-gears fa-fw"></i> Descripción de prendas
-              </div>
-            </a>
-          </li>
-          <li>
-            <a>
-              <div id="on_proceso" >
-                  <i class="fa fa-gears fa-fw"></i> Procesos
-              </div>
-            </a>
-          </li>
-          <li class="divider"></li>
-          <li>
-              <a>
-                  <div id="all" >
-                      <i class="fa fa-gears fa-fw"></i> Ver todo
-                  </div>
-              </a>
-          </li>
-      </ul>
-      <!-- /.dropdown-alerts -->
-    </div>
-  </div>
-</div>
-
-<!--Panel de clientes-->
-<div class="row page-header" id="p_clientes" >
-  <div class="col-md-12">
-    <%= render 'clientes/index'%>
   </div>
 </div>
 <!--Tipos, subestados-->
@@ -108,12 +60,6 @@
           </table>
         </div>
       </div>
-    </section>
-  </div>
-  <div class="col-lg-6 page-header" id="p_estados">
-    <!--Panel de estados-->
-    <section>
-      <%= render 'sub_estados/index'%>
     </section>
   </div>
 </div>
