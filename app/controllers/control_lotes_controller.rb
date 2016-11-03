@@ -12,6 +12,11 @@ class ControlLotesController < ApplicationController
     @sub_estados = SubEstado.all.each{ |e|  @sub_estado[e.id] = e.sub_estado}
     @user = {}
     @users = User.select("id, name").each{ |e|  @user[e.id] = e.name}
+    respond_to do |format|
+      # En caso de que se acceda por la url directo se envía un mensaje indicando que hacer
+      format.html{redirect_to lotes_path, notice: "Seleccione el ciclo de un lote" }
+      format.js
+    end
   end
   
   private
