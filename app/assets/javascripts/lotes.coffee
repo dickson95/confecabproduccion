@@ -29,7 +29,8 @@ $(document).on 'turbolinks:load', ->
                       'targets': [ 1 ]
                       'orderable': false
                     }
-                  ]  
+                  ]
+  $("#lotes").parent().addClass("table-responsive")  
   $('.dataTables_filter label').after $('.dataTables_filter label input[type="search"]').detach()
 
   # Inputs con fecha administrada por parte de jQuery

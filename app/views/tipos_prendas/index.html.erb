@@ -1,65 +1,46 @@
 <% content_for :title do  "Tablas" end%>
-<div class="row page-header">
-  <div class="pull-left">
-    <h1>Descripción de prendas</h1>
-    <p class="text-muted">Clientes, procesos, descripción de prendas</p>
-  </div>
-</div>
-<!--Tipos, subestados-->
-<div class="row" id="tip_est">
-  <div class="col-lg-6 page-header" id="p_tipos_prendas">
-    <!--Panel de tipos prendas-->
-    <section>
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <div class="row">
-            <div class="col-sm-6">
-              <h4>Descripción de prenda</h4>
-            </div>
-            <div class="col-sm-6">
-              <div class="col-sm-offset-11">
-                <h4>
-                  <% if can? :manage, TipoPrenda %>
-                    <%= link_to new_tipo_prenda_path, :title => "Nueva descripción",
-                    class:"pull-right btn btn-primary btn-circle" do %>
-                      <%= content_tag :i, "", :class => "fa fa-plus" %>
-                    <%end%>
-                  <%end%>
-                </h4>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="panel-body">
-          <table class="table table-striped table-bordered table-hover tablas2">
-            <thead>
-              <tr>
-                <th title="Descripción">Descripción</th>
-                <% if can? :manage, TipoPrenda %>
-                <th></th>
-                <%end%>
-              </tr>
-            </thead>
-            <tbody>
-              <% @tipos_prendas.each do |tipo_prenda| %>
-                <tr>
-                  <td title="Descripción"><%= tipo_prenda.tipo %></td>
-                  <% if can? :manage, TipoPrenda %>
-                  <td class="col-xs-4">
-                    <div class="btn-group">
-                      <%= link_to edit_tipo_prenda_path(tipo_prenda), :title =>"Editar",
-                      class: "btn btn-primary" do%>
-                            <%= content_tag(:i, "", :class => "fa fa-pencil") %>
-                      <% end %>
-                    </div>
-                  </td>
-                  <%end%>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
+<div class="panel panel-default page-header">
+  <div class="panel-heading">
+    <div class="row">
+      <div class="col-xs-10">
+        <h4>Descripción de prenda</h4>
       </div>
-    </section>
+      <div class="col-sm-2 text-right">
+        <% if can? :manage, TipoPrenda %>
+          <%= link_to new_tipo_prenda_path, :title => "Nueva descripción" do %>
+           <%= content_tag(:i, "", :class => "fa fa-plus fa-3x") %>
+          <%end%>
+        <%end%>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <table class="table table-striped table-bordered table-hover" id="tipos">
+      <thead>
+        <tr>
+          <th title="Descripción">Descripción</th>
+          <% if can? :manage, TipoPrenda %>
+          <th></th>
+          <%end%>
+        </tr>
+      </thead>
+      <tbody>
+        <% @tipos_prendas.each do |tipo_prenda| %>
+        <tr>
+          <td title="Descripción"><%= tipo_prenda.tipo %></td>
+          <% if can? :manage, TipoPrenda %>
+          <td class="col-xs-4">
+            <div class="btn-group">
+              <%= link_to edit_tipo_prenda_path(tipo_prenda), :title =>"Editar",
+              class: "btn btn-primary" do%>
+              <%= content_tag(:i, "", :class => "fa fa-pencil") %>
+              <% end %>
+            </div>
+          </td>
+          <%end%>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </div>

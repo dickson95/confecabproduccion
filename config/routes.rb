@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     get :autocomplete_color_color, :on => :collection
     resources :control_lotes
   end
+  
   get 'lotes/cambio_estado/:id', 
     to: 'lotes#cambio_estado', as: 'cambio_estado'
 
