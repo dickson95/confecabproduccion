@@ -7,8 +7,8 @@
 		</div>
 		<!--Opciones de exportación-->
 		<div class="pull-right text-right">
-			<p style="cursor: help;" class="btn" data-html="true" data-toggle="popover" data-placement="bottom" title="Cómo ordenar" data-content="Para ordenar solo has click con el mouse sobre la fila y a arrastras hacia donde la quieres">
-			<i class="fa fa-question-circle" title="Cómo ordenar"></i>
+			<p style="cursor: help;" class="btn pull-left" data-html="true" data-toggle="popover" data-placement="bottom" title="Cómo ordenar" data-content="Para ordenar solo has click con el mouse sobre la fila y a arrastras hacia donde la quieres">
+				<i class="fa fa-question-circle" title="Cómo ordenar"></i>
 			</p>
 			<div class="dropdown pull-right">
 					<button type="button" class="btn btn-primary dropdown-toggle disabled-btn" data-toggle="dropdown" <%=disabled.fetch(0) ? 'disabled' : ''%>>Exportar&nbsp;<i class="caret"></i></button>
@@ -27,7 +27,7 @@
 						</li>
 					</ul>	
 			</div>
-			<div>
+			<div class="pull-left col-sm-1">
 				<%=submit_tag "Ordenar", class:"btn btn-default disabled-btn", disabled: disabled.fetch(0)%>
 			</div>
 		</div>

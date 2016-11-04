@@ -3,14 +3,18 @@
 	<!--Meses-->
 	<ul class="nav nav-tabs" role="tablist">
 		<%@meses.each do |k, v|%>
-		<li class="tab_mes <%=v[:number] == @mes_active ? "active" : ""%>" id='<%="#{year}#{v[:number]}"%>'><%= link_to v[:string], program_table_path("#{year}#{v[:number]}", :empresa => params[:empresa]), method: :post, remote: true%></li>
+		<% year_month = "#{year}#{v[:number]}" %>
+		<% active = params[:month] == year_month ? true : false%>
+		<li class="tab_mes <%= active ? "active" : ""%>" id='<%=year_month%>'><%= link_to v[:string], program_table_path(year_month, :empresa => params[:empresa]), method: :post, remote: true %></li>
 		<%end%>	
 	</ul>
 	<div class="tab-content">
-		<%@meses.each do |k, v|%>
-		<div id="<%="#{year}#{v[:number]}p"%>" class="tab-pane fade <%=v[:number] == @mes_active ? "in active" : ""%>">
+		<% @meses.each do |k, v| %>
+		<% year_month = "#{year}#{v[:number]}" %>
+		<% active = params[:month] == year_month ? true : false%>
+		<div id="<%="#{year_month}p"%>" class="tab-pane fade <%= active ? "in active" : ""%>">
 			<div class="table-responsive">
-			<%=render partial: "head_table", locals:{mes: v, year: year}%>
+			<%=render partial: "head_table", locals:{ year_month: year_month }%>
 			</div>
 		</div>	
 		<%end%>
