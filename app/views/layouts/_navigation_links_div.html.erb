@@ -1,8 +1,6 @@
 
 <%=nav_link "Lotes", lotes_path, {class: "item", title: "Lotes"}, {class: "fa fa-dashboard fa-fw"}  %>
-
 <%=nav_link "Programación", programaciones_path, {class: "item", title: "Lotes"}, {class: "fa fa-calendar fa-fw"}  %>
-
 <% if (can? :manage, Referencia) || (can? :read, Referencia) %>
 <%=nav_link "Tablas", tipos_prendas_path, {class: "item", title: "Tablas"}, {class: "fa fa-table fa-fw"}%>
 <%end%>
