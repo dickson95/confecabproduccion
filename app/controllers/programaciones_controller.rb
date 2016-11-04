@@ -73,7 +73,7 @@ class ProgramacionesController < ApplicationController
 		states_lotes
 		sum_totals
 		respond_to do |format|
-			format.js{render "modal_open"}
+			format.js{ render "modal_open" }
 		end		
 	end
 
@@ -148,6 +148,7 @@ class ProgramacionesController < ApplicationController
 		end
 
 		def set_programaciones
+			params[:empresa] = session[:selected_company] ? "CAB" : "D&C"
 			# Consulta necesaria para cargar todas las instancias de las vistas exstentes 
 			params[:action].eql?("index") ?	params[:month] = Time.new.strftime("%Y%m") : nil
 			@programaciones = Programacion.joins(lotes: [:cliente, :tipo_prenda, :referencia]).where("extract(year_month from programaciones.mes) = ? and lotes.empresa = ?",  params[:month], params[:empresa]).order("lotes.secuencia asc").pluck("clientes.cliente", "tipos_prendas.tipo", "lotes.secuencia", "referencias.referencia", "lotes.cantidad", "lotes.precio_u", "lotes.precio_t", "lotes.meta", "lotes.h_req", "lotes.id")

@@ -3,6 +3,11 @@ $(document).on "turbolinks:load", ->
 	$("ul.nav-tabs a").click (e)->
 		e.preventDefault()
 		$(this).closest("ul").find(".active").removeClass("active")
+		has = $(this).parent()
+		if has.hasClass('year') && has.hasClass('current')
+			year = $(this).text()
+			if !$('#'+year).find('div.tab-content div.active').length
+				$('#'+year).find('div.current').removeClass('in active').addClass('in active')
 
 
 	# Ancho de las columnas mientras es arrastrada la fila
@@ -44,11 +49,12 @@ $(document).on "turbolinks:load", ->
 	      helper: fixHelper
 
 	      sort: (e, ui) ->
-	        ui.item.addClass('active-item-shadow')
+	        ui.item.addClass('warning')
 
 	      stop: (e, ui) ->
 	        ui.item.removeClass('active-item-shadow')
 	        # Resalta la fila indicada en la actualización
+	        ui.item.removeClass("warning")
 	        ui.item.addClass("success")
 
 	      update: fix_update
