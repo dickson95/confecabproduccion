@@ -1,16 +1,18 @@
 <%date = Programacion.date_split params[:month] %>
 <ul class="nav nav-tabs" role="tablist">
+	<!--Años-->
 	<%@years.each do |year|%>
-		<li class=<%= year.to_s == date[:year] ? "active" : ""%>>
+		<li class="year <%= year.to_s == date[:year] ? "current active" : ""%>">
 			<a data-toggle="tab" href="#<%=year%>"><%=year%></a>
 		</li>
 	<%end%>	
 </ul>
-	<div class="tab-content">
-<%@years.each do |year|%>
-	  <%= render partial: "meses", locals: {year: year, date: date}%>
-<%end%>
-	</div>
+<!--Contenido de los años-->
+<div class="tab-content">
+	<%@years.each do |year|%>
+		<%= render partial: "meses", locals: { year: year, date: date }%>
+	<%end%>
+</div>
 
 <div class="modal fade" id="modal_add"  tabindex="-1" role="dialog" 
  aria-labelledby="modalAddLabe" aria-hidden="true"></div>
