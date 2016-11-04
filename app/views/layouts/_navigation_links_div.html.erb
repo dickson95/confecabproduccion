@@ -4,6 +4,4 @@
 <%if can? :read, Programacion%>
 <%=nav_link "Programación", programaciones_path(:empresa => company), {class: "item", title: "Lotes"}, {class: "fa fa-calendar fa-fw"}  %>
 <%end%>
-<%if (can? :read, User)%>
-<%=nav_link "Usuarios", users_path, {class: "item", title: "Usuarios"}, {class: "fa fa-users fa-fw"} %>
-<%end%>
+

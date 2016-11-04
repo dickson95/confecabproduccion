@@ -1,5 +1,5 @@
 $(document).on "turbolinks:load", ->
-		target = if !gon.rol_user then [ 1..4 ] else [ 1..3 ]
+		target = if gon.clientes then [ 1..4 ] else [ 1..3 ]
 		$('#clientes').DataTable
       language:
         processing: 'Cargando...'
