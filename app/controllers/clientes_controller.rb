@@ -6,6 +6,7 @@ class ClientesController < ApplicationController
   # GET /clientes
   # GET /clientes.json
   def index
+    gon.clientes = can?(:destroy, Cliente) || can?(:update, Cliente)
     @clientes = Cliente.where(:empresa => session[:selected_company])
   end
 

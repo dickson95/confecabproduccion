@@ -59,17 +59,19 @@
 	</thead>
 	<%=render partial: "table_tbody", colspan: $colspan%>
 
-	<%if can? :prices, Lote%>
+	
 	<tfoot>
 		<tr>
 			<td colspan="7">
+				<%if can? :prices, Lote%>
 				<div>
 					<p class="col-md-2"><strong>Horas:</strong>  <%=@hours%></p>
 					<p class="col-md-4"><strong>Precio total:</strong> <%=@total%></p>
 				</div>
+				<%end%>
 			</td>
 			<td colspan="<%=$colspan - 7%>" style="margin-right:0px; padding-right:0px;">
-				<%if can? :update, Lote%>
+				<%if can? :update, Programacion%>
 				<div class="pull-right">
 					<%=submit_tag "Retirar", class:"btn btn-warning disabled-btn", disabled: disabled.fetch(0)%>
 					<%=link_to "Añadir", modal_open_path(params[:month], :empresa => params[:empresa]), class:"btn btn-default #{disabled.fetch(1) ? 'disabled' : ''}", remote: true, id: "add-lote" %>
@@ -78,5 +80,5 @@
 			</td>
 		</tr>
 	</tfoot>
-	<%end%>
+	
 

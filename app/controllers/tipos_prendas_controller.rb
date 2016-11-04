@@ -1,11 +1,10 @@
 class TiposPrendasController < ApplicationController
+  load_and_authorize_resource :except  => [:index]
   before_action :set_tipo_prenda, only: [:show, :edit, :update, :destroy]
   #Solicitar prueba de permisos antes de cargar cualquier acción
-  load_and_authorize_resource :except  => [:index]
   # GET /tipos_prendas
   # GET /tipos_prendas.json
   def index
-    gon.clientes = can? :manage, Cliente
     @tipos_prendas = TipoPrenda.all
   end
 
