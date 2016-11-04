@@ -45,7 +45,7 @@
                 :title => "Editar mi perfil" do%>
                     <%=content_tag :i, "", :class => "fa fa-pencil" %>
                 <%end%>
-              <%elsif @rol_form != "gerente"%>
+              <%elsif can? :destroy, User%>
                 <%if user.id == 1%>
                   <%=link_to "",class: "btn btn-danger", :disabled => true,
                   :title => "El usuario administrador no se puede eliminar" do%>
