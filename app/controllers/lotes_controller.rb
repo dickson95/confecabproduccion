@@ -243,11 +243,7 @@ class LotesController < ApplicationController
   # DELETE /lotes/1.json
   def destroy
     @lote.destroy
-    respond_to do |format|
-      format.html { redirect_to lotes_url }
-      flash[:success] = "Registro eliminado con éxito."
-      format.json { head :no_content }
-    end
+    render partial: 'layouts/messages', flash: flash[:info]='Registro eliminado con éxito'
   end
 
   # POST /lotes/:id/total_price

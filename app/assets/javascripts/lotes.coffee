@@ -2,6 +2,11 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).on 'turbolinks:load', ->
+  
+  $('.delete').on 'ajax:success', (e, data, status, xhr) ->
+    $('#page-wrapper').prepend(data)
+    $(this).closest("tr").remove()
+
   # DataTables
   $('#lotes').DataTable
       language:
@@ -263,7 +268,4 @@ $(document).on 'turbolinks:load', ->
   return
   # Fin del document ready
   
-$ ->
-  $('.fa-trash-o').on 'ajax:success', (e, data, status, xhr) ->
-    $(this).closest("tr").remove()
 

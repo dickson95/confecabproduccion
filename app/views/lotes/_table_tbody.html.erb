@@ -41,7 +41,7 @@
           <% if can? :destroy, Lote %>
           <li class="divider"></li>
           <li>
-            <%= link_to lote_path(lote.fetch(0)), method: :delete, data: { confirm: 'Si elimina este registro no podrá recuperarlo. ¿Está realmente seguro?' }, :title => "Eliminar", :remote => true do %>
+            <%= link_to lote_path(lote.fetch(0)), :class => "delete", :method => :delete, data: { :confirm => 'Si elimina este registro no podrá recuperarlo. ¿Está realmente seguro?' }, :title => "Eliminar", :remote => true do %>
             <%=content_tag :i, "", :class => "fa fa-trash-o"%>
             Eliminar
             <%end%>
