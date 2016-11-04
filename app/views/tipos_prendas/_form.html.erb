@@ -16,13 +16,13 @@
           Verifique la información de los campos
         </div>
         <div class="form-inputs">
-          <%= f.input :tipo, label: "Descripción"%>
+          <%= f.input :tipo, label: "Descripción", input_html:{ style: 'text-transform:uppercase;' } %>
         </div>
         
           <div class="modal-footer">
             <div class="form-actions">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-              <%= f.submit :submit, :value => "Aceptar", 'data-disable-with' => "Guardando..." %>
+              <%= f.submit :submit, :value => "Aceptar", data:{ :disable_with => "Guardando..."}, :class => "btn btn-default" %>
             </div>
           </div>
       <% end %>
@@ -34,7 +34,7 @@
     <%= f.error_notification %>
   
     <div class="form-inputs">
-      <%= f.input :tipo, label: "Descrición" %>
+      <%= f.input :tipo, label: "Descrición", input_html:{ style: 'text-transform:uppercase;' } %>
     </div>
     
      <div class="form-actions text-right">

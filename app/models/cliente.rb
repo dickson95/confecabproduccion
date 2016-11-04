@@ -6,6 +6,10 @@ class Cliente < ApplicationRecord
 	def name
 		self.cliente
 	end
+
+	def cliente=(val)
+		self[:cliente] = val.upcase
+	end
 	
 	def self.to_boolean(str)
 		str == "true"

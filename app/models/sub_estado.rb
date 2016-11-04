@@ -4,4 +4,8 @@ class SubEstado < ApplicationRecord
     def name
         self.sub_estado
     end
+
+    def sub_estado=(val)
+    	self[:sub_estado] = val.upcase
+    end
 end

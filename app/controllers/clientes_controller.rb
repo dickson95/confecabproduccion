@@ -36,7 +36,7 @@ class ClientesController < ApplicationController
           @cliente = Cliente.last
           format.js {render "lotes/ajaxResults"}
         else
-          format.html { redirect_to @cliente }
+          format.html { redirect_to clientes_path }
           flash[:success] = "Cliente guardado con éxito."
           format.json { render :show, status: :created, location: @cliente }
         end
@@ -59,7 +59,7 @@ class ClientesController < ApplicationController
   def update
     respond_to do |format|
       if @cliente.update(cliente_params)
-        format.html { redirect_to @cliente }
+        format.html { redirect_to clientes_path }
         flash[:success] = "Actualización correcta."
         format.json { render :show, status: :ok, location: @cliente }
       else
