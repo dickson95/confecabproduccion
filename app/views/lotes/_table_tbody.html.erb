@@ -10,7 +10,7 @@
         <ul class="dropdown-menu" aria-labelledby="lote_<%=lote.fetch(0)%>">
           <li>
             <%= link_to  view_datails_path(lote.fetch(0)), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
-            <%=content_tag :i, "", :class => "fa fa-list-alt fa-fw"%>
+            <%=content_tag :i, "", :class => "fa fa-eye fa-fw"%>
             Detalles
             <%end%>
           </li>
@@ -23,13 +23,13 @@
           <% if can? :update, Lote %>
           <li class="divider"></li>
           <li>
-            <%= link_to edit_lote_path(lote.fetch(0), :sub_id => lote.fetch(7), :estado_id => lote.fetch(6), :place => "form_edit_lote"), { :title => 'Editar'}  do%>
-            <%=content_tag :i, "", :class => "fa fa-pencil fa-fw"%>   
+            <%= link_to edit_lote_path(lote.fetch(0), :place => "form_edit_lote"), { :title => 'Editar'}  do%>
+            <%=content_tag :i, "", :class => "fa fa-pencil fa-fw"%> 
             Editar 
             <%end%>
           </li>
           <li>
-            <%=next_state cambio_estado_path(lote.fetch(0)), lote.fetch(6), {}, {:class => "fa fa-forward fa-fw"}%>
+            <%=next_state cambio_estado_path(lote.fetch(0)), lote.fetch(6), {}, {:class => "fa fa-fast-forward fa-fw"}%>
           </li>
           <%end%>
           <% # Puede editar %>

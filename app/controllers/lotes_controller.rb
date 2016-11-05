@@ -87,7 +87,6 @@ class LotesController < ApplicationController
   def create
     # Definir si la op existe. Retorna true si puede ser creada
     @lote = Lote.new(lote_params)
-    puts @lote.programacion
     respond_to do |format|
       if @color_blank
         if @lote.save
@@ -118,72 +117,19 @@ class LotesController < ApplicationController
     end
   end
 
+
   # PATCH/PUT /lotes/1
   # PATCH/PUT /lotes/1.json
   def update
-    boolean = false
-    # Se consulta el último estado del lote para ser comparado con el actual
-    lote = ControlLote.where(lote_id: params[:id]).joins(:estado)
-            .order("control_lotes.id desc").limit(1)
-            .pluck("estados.id", "control_lotes.fecha_ingreso",
-              "control_lotes.id", "control_lotes.sub_estado_id", 
-              "control_lotes.id").last
-    # Id del estado en variable est_id
-    est_id = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
-    if lote.fetch(0) == est_id.to_i
-      # Si ninguna de las dos condiciones sigueintes se cumple no se crea nada en el historial
-
-      # Id del subestado en variable sub_id
-      sub_id = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
-
-      if sub_id == ""
-        # si el sub id no tiene nada desde el parámetro se asigna 0 para la comparación
-        sub_id = 0
-      end
-      if lote.fetch(3) != sub_id.to_i
-        # En caso de que el subestado sea diferente al anterior se crea uno nuevo
-        boolean = true
-        puts "Información: Creando un nuevo registro en el historial..."
-      end
-    else
-      boolean = true
-      puts "Información: Creando un registro completamente nuevo en el historial..."
-    end
-    @has_programing = Lote.has_programing params[:id], est_id
-
-    # Respuesta a la solicitud de actualización
     respond_to do |format|
-      if @lote.update(boolean ? lote_params : lote_params_u ) && @has_programing && @color_blank
-        puts "programaci´no #{@lote.programacion}"
-        if boolean
-          # Actualizar fecha salida, responsable de salida, minutos del historial
-          time = Time.new()
-          updated = ControlLote.where(:id => lote.fetch(2)).update(fecha_salida: time)
-          #Método de minutos
-          $up
-          updated.each{|u| $up = u.fecha_salida}
-          min = Lote.minutos_proceso(lote.fetch(1), $up)
-          ControlLote.where(:id => lote.fetch(2)).update(min_u: min,
-            resp_salida_id: current_user)
-          
-          # Actualizar responsable de ingreso en el último historial
-          ult = ControlLote.last
-          ControlLote.where(:id => ult).update(resp_ingreso_id: current_user, fecha_ingreso: time,
-            fecha_salida: est_id == "5" ? time : nil, resp_salida_id: est_id == "5" ? current_user : nil)
-        end
+      if @lote.update(lote_params_update) && @color_blank
         format.html{ redirect_to lotes_path }
         flash[:success] = "Lote actualizado correctamente"
       else
         set_tipo_prenda
-        if !@has_programing  
-          @lote.errors.add :control_lotes
-        end
         if !@color_blank
           @lote.errors.add :colores_lotes
         end
-        params[:estado_id] = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
-        params[:sub_id] = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
-        
         format.html { render :edit }
         format.json { render json: @lote.errors, status: :unprocessable_entity }
       end
@@ -283,7 +229,6 @@ class LotesController < ApplicationController
     end
     
     def set_programing
-
       Programacion.new_old_programacion 
     end
 
@@ -407,10 +352,8 @@ class LotesController < ApplicationController
             :cantidades_attributes =>[:id, :categoria_id, :total_id, :cantidad, :_destroy]]).
       merge(respon_edicion_id: current_user, referencia_id: set_referencia)
     end
-    
-    # Parámetros para solo guardar actualizaciones para la ficha del lote
-    def lote_params_u
-      sub_id_value
+
+    def lote_params_update
       params.require(:lote).permit(:empresa, :color_prenda, :programacion_id,
         :no_remision, :no_factura, :fin_insumos, :obs_insumos, 
         :obs_integracion, :fin_integracion, :precio_u,  :meta, :h_req,
@@ -420,7 +363,7 @@ class LotesController < ApplicationController
           :cantidades_attributes =>[:id, :categoria_id, :total_id, :cantidad, :_destroy]]).
       merge(respon_edicion_id: current_user, referencia_id: set_referencia)
     end
-    
+
     def sub_id_value
       if params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id] == ""
         params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id] = "0"

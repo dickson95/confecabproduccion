@@ -11,7 +11,7 @@ class Ability
       can [:manage], [Lote, Programacion, ControlLote]
       cannot :total_price, Lote
     elsif user.has_rol? :aux_insumos
-      can [:read, :create, :update], Lote
+      can [:read, :create, :update, :cambio_estado], Lote
       can [:read], Programacion
     elsif user.has_rol? :gerente
       can :read, :all

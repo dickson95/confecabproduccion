@@ -74,9 +74,9 @@
         <%end%>
       </div>
 
-
+      <% action = params[:action] %>
+      <% if action.eql?("new") || action.eql?("create") %>
       <!--____Detalle de estado_______________________________-->
-
       <div class="row" id="form_lote_estado_update">
         <div class="col-lg-12">
           <div class="panel">
@@ -87,11 +87,13 @@
         </div>
 
         <div class="col-lg-12">
-          <%=render 'estados/form_for_lote', f: f %>
+        <%= f.fields_for :control_lotes, @lote.control_lotes.build do |c| %>
+          <%=render 'estados/form_for_lote', c: c %>
+        <% end %>
         </div>
       </div>
       <!--____Fin detalle de estado_____________________________-->
-
+      <% end %>
 
       <!--____Form submit_________________________________-->
       <div class="row">

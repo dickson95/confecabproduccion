@@ -19,6 +19,19 @@ class ControlLotesController < ApplicationController
     end
   end
   
+  def new
+    @control_lote = ControlLote.new
+  end
+
+  def create    
+  end
+
+  def edit
+  end
+
+  def update    
+  end
+
   private
     def control_lote_params
       params.permit(:lote_id)
