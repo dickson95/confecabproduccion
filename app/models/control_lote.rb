@@ -10,11 +10,15 @@ class ControlLote < ApplicationRecord
   validates :estado, :fecha_ingreso, presence: true
   
   # Métodos
-  def name
-    self.estado
+  
+  def sub_estado_id=(val)
+    val = val.strip.eql?("") ? "0" : val
+    write_attribute(:sub_estado_id, val)
   end
-  def name
-    self.lote.referencia.referencia
+
+  def fecha_ingreso_input
+    return  I18n::localize( self.fecha_ingreso, :format => "%Y-%m-%d %H:%M:%S") if !self.fecha_ingreso.nil?
+    I18n::localize( Time.zone.utc_to_local(Time.new) + 60, :format => "%Y-%m-%d %H:%M:%S")
   end
 
   def self.hash_ids
@@ -26,11 +30,25 @@ class ControlLote < ApplicationRecord
     return hash_ids
   end
 
-  # Retorna un hash con opciones de la resta de los días. (Méses, días, horas, minutos)
+  # Retorna un hash con opciones de la resta de los días
   def self.date_operated(date_initial, date_final)    
     {
       :days => days_absolute(date_initial, date_final)
     }
+  end
+
+  def self.after_before(lote)
+    amount_lote = lote.cantidad
+    control_lotes = lote.control_lotes.sum(:cantidad)
+    if amount_lote < control_lotes
+      res = control_lotes - amount_lote
+      return "Sobran #{res}"
+    elsif amount_lote > control_lotes
+      res = amount_lote - control_lotes
+      return "Faltan #{res}"
+    else
+      return nil
+    end
   end
 
   private
