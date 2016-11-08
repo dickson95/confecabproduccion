@@ -1,0 +1,27 @@
+<% @years.each do |year| %>
+	<div class="row">
+		<div class="col-md-12">
+			<h4><%= year %></h4>
+			<div id="<%= year %>"></div>
+		</div>	
+	</div>
+<% end %>
+
+<script type="text/javascript">
+<% @year_clientes.each do |year, amount| %>
+	<% if !amount.empty? %>
+	new Morris.Bar({
+      element: '<%=year%>',
+      data: [
+      	<% amount.each do |a| %>
+        	{ cliente: '<%= a.cliente.name %>', value: <%= a.cantidad %>  },
+        <% end %>
+      ],
+      xkey: 'cliente',
+      ykeys: ['value'],
+      labels: ['Cantidad'],
+      resize: true
+    });
+	<% end %>
+<% end %>
+</script>

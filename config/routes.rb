@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :estadisticas, only: [:index] 
+  get 'estadisticas', to: 'estadisticas#index'
+  namespace :estadisticas do
+    get :clientes
+    get :programaciones
+  end
 
   get '/pages', to: 'static_pages#home', as: :home
   # Inicio de la aplicación
