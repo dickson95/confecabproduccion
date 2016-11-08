@@ -1,13 +1,22 @@
-<h1>Estadisticas#index</h1>
 <div class="row">
     <div class="col-md-6">
-        <h2>Clientes último mes</h2>
+        <h3>Clientes último mes</h3>
         <div id="cliente_mensual" style="height: 250px;"></div>
     </div>
     <div class="col-md-6">
-        <h2>Clientes del año actual</h2>
+        <h3>Clientes del año actual</h3>
         <div id="cliente_anual" style="height: 250px;"></div>
     </div>
+</div>
+<div class="row">
+  <div class="col-md-6">
+    <h3>Programación de este mes</h3>
+    <div id="programacion_mes" style="height: 250px;"></div>
+  </div>  
+  <div class="col-md-6">
+    <h3>Avance de plantas</h3>
+    <div id="relatives" style="height: 250px;"></div>
+  </div>
 </div>
 
 <script type="text/javascript">
@@ -20,7 +29,7 @@
       ],
       xkey: 'cliente',
       ykeys: ['value'],
-      labels: ['Value']
+      labels: ['Cantidad']
     });
     new Morris.Bar({
       element: 'cliente_anual',
@@ -31,6 +40,31 @@
       ],
       xkey: 'cliente',
       ykeys: ['value'],
-      labels: ['Value']
+      labels: ['Cantidad']
+    });
+    new Morris.Donut({
+      element: 'programacion_mes',
+      data: [
+        { label: 'Sin terminar', value: "<%=100 - @global_percente.round%>"  },
+        { label: 'Avance de mes', value: "<%=@global_percente.round%>"  }
+      ],
+      colors: [
+        "#D8DADC",
+        "#1868AE"
+      ],
+      formatter: function (value, data) { return value + '%'; }
+    });
+    new Morris.Bar({
+      element: 'relatives',
+      data: [
+        { planta: 'Planta de confección', value: <%=@confeccion_relative.round%>  },
+        { planta: 'Terminación', value: <%=@terminacion_relative.round%>  }
+      ],
+      xkey: 'planta',
+      ykeys: ['value'],
+      labels: ['Procentaje'],
+      hoverCallback: function (index, options, content, row) {
+        return 'Total: ' + row['value'] + "%";
+      }
     });
 </script>

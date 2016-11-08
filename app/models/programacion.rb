@@ -29,6 +29,7 @@ class Programacion < ApplicationRecord
 
 	end
 
+
 	def self.states_lotes(programacion)
 		states_arr = Lote.joins([control_lotes: [:estado]]).where("lotes.programacion_id = ? and control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)", programacion).pluck("lotes.id","estados.estado")
 		states = Hash.new
@@ -129,4 +130,29 @@ class Programacion < ApplicationRecord
 			Lote.update(k.to_i, :secuencia => v.to_i)
 		end
 	end
+
+	# Determinar el porcentaje de avance de la planta de confección de acuerdo
+	# con la programación, medido al 100% en cada caso
+	def self.percentage_planta(month, state, company)
+		# Recuperar cantidad de lotes que hay en el estado y programación solicitada
+		lotes = state_lotes_amount(month, state, company)
+		# Contar cuantos lotes hay en la programación
+		programacion = self.select(:id).where("EXTRACT(year_month from mes)=? and empresa = ?", month, company).limit 1
+		amount = self.find(programacion.first.id).lotes.count
+		# Porcentaje completado para la planta
+		return (lotes.to_f * 100) / amount.to_f
+	end
+
+
+
+	private
+
+		def self.state_lotes_amount(mes, estado, company)
+			Programacion.joins(lotes:[:control_lotes])
+			.where("EXTRACT(year_month from programaciones.mes)=? and 
+				control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) 
+				FROM control_lotes cl WHERE cl.estado_id = ? 
+				GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id) 
+				and programaciones.empresa=?", mes, estado, company).count
+		end
 end
