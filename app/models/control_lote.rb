@@ -26,7 +26,7 @@ class ControlLote < ApplicationRecord
     return hash_ids
   end
 
-  # Retorna un hash con opciones de la resta de los días. (Méses, días, horas, minutos)
+  # Retorna un hash con opciones de la resta de los días
   def self.date_operated(date_initial, date_final)    
     {
       :days => days_absolute(date_initial, date_final)

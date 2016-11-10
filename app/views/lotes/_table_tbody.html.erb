@@ -29,6 +29,12 @@
             <%end%>
           </li>
           <li>
+            <%= link_to new_lote_control_lote_path(lote.fetch(0)), { :title => 'Proceso nuevo'}  do%>
+            <%=content_tag :i, "", :class => "fa fa-plus fa-fw"%> 
+            Proceso nuevo 
+            <%end%>
+          </li>
+          <li>
             <%=next_state cambio_estado_path(lote.fetch(0)), lote.fetch(6), {}, {:class => "fa fa-fast-forward fa-fw"}%>
           </li>
           <%end%>

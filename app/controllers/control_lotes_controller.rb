@@ -1,12 +1,13 @@
 class ControlLotesController < ApplicationController
   #Solicitar prueba de permisos antes de cargar cualquier acción
   load_and_authorize_resource 
+  before_action :set_lote
+  before_action :sub_estados, only: :new
   
   # GET /control_lotes
   # GET /control_lotes.json
   def index
     company = session[:selected_company]
-    @lote = Lote.find(control_lote_params[:lote_id])
     @ciclo_lote = @lote.control_lotes
     @sub_estado = {}
     @sub_estados = SubEstado.all.each{ |e|  @sub_estado[e.id] = e.sub_estado}
@@ -23,7 +24,22 @@ class ControlLotesController < ApplicationController
     @control_lote = ControlLote.new
   end
 
-  def create    
+  def create
+    last_state_lote = @lote.control_lotes.last
+    last_state_lote.update(:resp_salida_id => current_user, 
+      :fecha_salida => control_lote_params[:fecha_ingreso] )
+    @control_lote = @lote.control_lotes.new(control_lote_params)
+    respond_to do |format|
+      if @control_lote.save
+        format.html { redirect_to lotes_path }
+        flash[:success] = "Proceso nuevo registrado"
+        format.json { render :index, status: :ok }
+      else
+        @sub_estados = SubEstado.all
+        format.html { render :new }
+        format.json { render json: @control_lote.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def edit
@@ -34,6 +50,15 @@ class ControlLotesController < ApplicationController
 
   private
     def control_lote_params
-      params.permit(:lote_id)
+      params.require(:control_lote).permit(:fecha_ingreso, :estado_id, :sub_estado_id,
+        :observaciones).merge(resp_ingreso_id: current_user)
+    end
+
+    def set_lote
+      @lote = Lote.find(params[:lote_id])
+    end
+
+    def sub_estados
+      @sub_estados = SubEstado.all
     end
 end
