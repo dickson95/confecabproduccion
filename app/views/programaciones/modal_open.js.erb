@@ -3,16 +3,9 @@
 	$("#modal_add").html("<%=j render partial: "new"%>");
 	$("#modal_add").modal("toggle");
 
-
-
-
 <%elsif @lotes.empty?%>
 	<% # Sección para cerrar modal %>
 	$("#modal_add").modal("toggle");
-
-
-
-
 
 <%else%>
 	<% # Añadir los nuevos lotes a la tabla y cerrar modal %>

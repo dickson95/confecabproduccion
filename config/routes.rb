@@ -8,15 +8,15 @@ Rails.application.routes.draw do
   # Esto implica reestructurar toda la forma como envío los datos al cliente ya que debo imprimir una lisa
   # de programaciones y tener el :id de cada una. Ademas cada que se cambie entre las pestañas hay que
   # cambiar la url para que coincida con el mes que le corresponde
-  post 'programaciones/program_table/:month', to: 'programaciones#program_table', as: :program_table                    # Obtener datos, es un get
-  post 'programaciones/generate_program/:id', to: 'programaciones#generate_program', as: :generate                      # Editar una parte concreta, es patch
-  post 'programaciones/add_lotes_to_program', to: 'programaciones#add_lotes_to_programing', as: :add_lotes_programing   # Para editar un atributo concreto; es patch
-  post 'programaciones/remove_from_programing/:month', to: 'programaciones#remove_from_programing', as: :remove_from_programing # Para editar un atributo concreto; es patch
-  get 'programaciones/export_excel', to: 'programaciones#export_excel', as: :export_excel   # Leer recurso; es get
-  get 'programaciones/export_pdf', to: 'programaciones#export_pdf', as: :export_pdf         # Leer recurso; es get
+  match 'programaciones/remove_from_programing/:month', to: 'programaciones#remove_from_programing', as: :remove_from_programing, via: [:post, :patch] # Para editar un atributo concreto; es patch
+  get 'programaciones/program_table/:month', to: 'programaciones#program_table', as: :program_table
   get 'programaciones/modal_open/:month', to: 'programaciones#modal_open', as: :modal_open  # Leer recurso; es get
   resources :programaciones, only:[:index] do 
     # Más información sobre collection http://guides.rubyonrails.org/routing.html#adding-collection-routes
+    get :export_pdf, on: :collection
+    get :export_excel, on: :collection
+    patch :generate, on: :member # Editar una parte concreta, es patch
+    patch :add_lotes_to_programing, as: :add_lotes, on: :collection # Para editar un atributo concreto; es patch
     post 'update_row_order', on: :collection 
   end
 

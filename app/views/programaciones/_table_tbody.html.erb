@@ -27,8 +27,8 @@
 			<%if manage @rol_form%>
 				No existe programación para este mes<br>
 				¿Desea generarla?
-				<%=link_to "Generar programación", generate_path(@programacion, :month => params[:month], :empresa => params[:empresa]), 
-				method: :post, remote: :true%>
+				<%=link_to "Generar programación", generate_programacion_path(@programacion, :month => params[:month], :empresa => params[:empresa]), 
+				method: :patch, remote: :true%>
 			<%else%>
 				No se ha generado ninguna programación
 			<%end%>

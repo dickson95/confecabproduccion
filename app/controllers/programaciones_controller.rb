@@ -5,7 +5,7 @@ class ProgramacionesController < ApplicationController
 	before_action :sum_totals, except: [:modal_open, :update_row_order]
 	before_action :set_programaciones, only: [:index, :export_excel, :export_pdf]
 	before_action :no_empty_program, except: [:modal_open, :remove_from_programing, :add_lotes_to_programing]
-	after_action  :states_lotes, only: [:generate_program, :add_lotes_to_programing]
+	after_action  :states_lotes, only: [:generate, :add_lotes_to_programing]
 	
 	def index
 		programacion = Programacion.set_year_program params[:empresa], params[:month]
@@ -31,8 +31,8 @@ class ProgramacionesController < ApplicationController
 	end
 
 	# Generar la programación
-	# POST /generate_program/:id
-	def generate_program
+	# POST /generate/:id
+	def generate
 		# Actualizar los lotes con programación id null
 		Lote.where("programacion_id IS NULL and empresa = ?", params[:empresa])
 		.update(:programacion_id => params[:id].to_i)

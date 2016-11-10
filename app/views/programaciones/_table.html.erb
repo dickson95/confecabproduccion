@@ -14,13 +14,13 @@
 					<button type="button" class="btn btn-primary dropdown-toggle disabled-btn" data-toggle="dropdown" <%=disabled.fetch(0) ? 'disabled' : ''%>>Exportar&nbsp;<i class="caret"></i></button>
 					<ul class="dropdown-menu pull-right">
 						<li>
-							<%=link_to export_excel_path(format: "xlsx", :month => params[:month], :empresa => params[:empresa]) do%>
+							<%=link_to export_excel_programaciones_path(format: "xlsx", :month => params[:month], :empresa => params[:empresa]) do%>
 								<%=content_tag :i ,"",:class => "fa fa-file-excel-o"%>
 								Excel
 							<%end%>
 						</li>
 						<li>
-							<%=link_to export_pdf_path(format: "pdf",:month => params[:month], :empresa => params[:empresa]) do%>
+							<%=link_to export_pdf_programaciones_path(format: "pdf",:month => params[:month], :empresa => params[:empresa]) do%>
 								<%=content_tag :i ,"",:class => "fa fa-file-pdf-o"%>
 								PDF
 							<%end%>
