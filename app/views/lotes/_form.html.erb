@@ -8,8 +8,9 @@
       place = "form_new_lote_response"
     end
     %>
-    <%action = params[:action]%>
-    <%= simple_form_for(@lote, :url => action=="edit" || action=="update" ? lote_path(:place => place) : lotes_path(:place => place)) do |f|%>
+    <% action = params[:action] %>
+    <% url = action=="edit" || action=="update" ? lote_path(:place => place) : lotes_path(:place => place) %>
+    <%= simple_form_for(@lote, :url => url) do |f|%>
     <div class="row page-header">
       <div class="col-md-3 text-left">
         <%if action.eql?("edit") || action.eql?("update")%>

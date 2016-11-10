@@ -11,15 +11,13 @@ $(document).on "turbolinks:load", ->
 			if unit_price.trim() == ""
 				unit_price = 0
 			input = $(this)
-			$.post("/lotes/"+id+"/total_price",{
-				lote: {
-					amount: amount,
-					unit_price: unit_price
-				}
-			}, 
-			(data, status) ->
-				input.closest("tr").find("td.total").text(data['total'])	
-				format_price_u = data['unit']
+			$.ajax(
+				type: "PATCH"
+				url: "/lotes/"+id+"/total_price",
+				data: { lote: { amount: amount, unit_price: unit_price } }, 
+				success: (data, status) ->
+					input.closest("tr").find("td.total").text(data['total'])	
+					format_price_u = data['unit']
 			)
 		).on "focusout", "input.lote_precio_unitario", ->
 			if $(this).val().trim() == ""

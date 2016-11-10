@@ -226,7 +226,7 @@
             <%=content_tag :i, "", :class => "fa fa-pencil"%>
             Editar
           <%end%>
-          <%=next_state cambio_estado_path(@lote.lote), @lote.estado.id, {:class => "btn btn-primary"}, {:class => "fa fa-forward"}%>
+          <%=next_state lote_cambio_estado_path(@lote.lote), @lote.estado.id, { :class => "btn btn-primary", :method => 'PATCH' }, {:class => "fa fa-forward"}%>
         </div>
       <%end%>
     </div>

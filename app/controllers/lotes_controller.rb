@@ -5,11 +5,10 @@ class LotesController < ApplicationController
   before_action :set_tipo_prenda, only: [:new, :edit]
   before_action :referencia_params, only: [:set_referencia]
   before_action :set_lote, only: [:edit, :update, :destroy]
-  before_action :set_lote_u, only: [:view_datails]
-  before_action :set_talla, only: [:view_datails, :new, :edit, :create, :update]
+  before_action :set_talla, only: [:view_details, :new, :edit, :create, :update]
   
   # Validación de autorización
-  load_and_authorize_resource :except  => [:view_datails]
+  load_and_authorize_resource :except  => [:view_details]
   
   # Autocompletado
   autocomplete :color, :color
@@ -27,27 +26,11 @@ class LotesController < ApplicationController
     @tipos_prendas = TipoPrenda.hash_ids
   end
   
-  def view_datails
+  def view_details
+    lote_id = params.permit(:lote_id)
+    @lote = ControlLote.where(lote_id: lote_id[:lote_id]).max
     respond_to do |format|
       format.js
-      format.html
-    end
-  end
-  
-  # Añadir las tablas especificadas acá desde le formulario de lote
-  def add_remote_data
-    if params[:place] == "form_lote_cliente"
-      @cliente = Cliente.new
-    elsif params[:place] == "form_email_cliente"
-      @cliente = Cliente.find(params[:cliente])
-    elsif params[:place] == "form_lote_tipo_prenda"
-      @tipo_prenda = TipoPrenda.new
-    elsif params[:place] == "form_lote_sub_estado"
-      @sub_estado = SubEstado.new
-    end
-    respond_to do |format|
-      format.js{render 'ajaxResults'}
-      format.html
     end
   end
 
@@ -87,7 +70,6 @@ class LotesController < ApplicationController
   def create
     # Definir si la op existe. Retorna true si puede ser creada
     @lote = Lote.new(lote_params)
-    puts @lote.programacion
     respond_to do |format|
       if @color_blank
         if @lote.save
@@ -196,12 +178,12 @@ class LotesController < ApplicationController
     next_state_lote = next_state "", params[:btn]
     estado = next_state_lote[:state]
     men = next_state_lote[:message]
-    has_programing = Lote.has_programing params[:id], estado
+    has_programing = Lote.has_programing params[:lote_id], estado
 
     if has_programing
       time = Time.new()
       #Actualización de fecha para el último estado
-      id = ControlLote.where(["lote_id=?", params[:id]]).maximum(:id)
+      id = ControlLote.where(["lote_id=?", params[:lote_id]]).maximum(:id)
       ControlLote.where(:id => id).update(fecha_salida: time)
       lote = ControlLote.find(id)
       #método de minutos
@@ -212,7 +194,7 @@ class LotesController < ApplicationController
 
       # Asignación de parámetros para el nuevo control a registrar. Responsable
       # por el movimiento
-      @control_lote = ControlLote.new(:lote_id => params[:id], :estado_id => estado, 
+      @control_lote = ControlLote.new(:lote_id => params[:lote_id], :estado_id => estado, 
         :fecha_ingreso => time, :resp_ingreso_id => current_user, :fecha_salida => estado == 5 ? time : nil,
         :resp_salida_id => estado == 5 ? current_user : nil)
 
@@ -243,14 +225,14 @@ class LotesController < ApplicationController
     render partial: 'layouts/messages', flash: flash[:info]='Registro eliminado con éxito'
   end
 
-  # POST /lotes/:id/total_price
+  # PATCH /lotes/:lote_id/total_price
   def total_price
     lote_price = params.require(:lote).permit( :amount, :unit_price)
     lote_price[:unit_price] = Lote.functional_format lote_price[:unit_price]
     price_total = Lote.multiplication(lote_price.values)  
     format_price_u = Money.new("#{lote_price[:unit_price]}00").format
     format_price_t = Money.new("#{price_total}00").format
-    Lote.update(params[:id].to_i, :precio_u => lote_price[:unit_price], :precio_t => price_total)
+    Lote.update(params[:lote_id].to_i, :precio_u => lote_price[:unit_price], :precio_t => price_total)
     @prices = {:total => format_price_t, :unit => format_price_u}
     respond_to do |format|
       format.json{render json: @prices}
@@ -267,10 +249,6 @@ class LotesController < ApplicationController
       @tipos_prendas = TipoPrenda.all
       @clientes = Cliente.where(:empresa => session[:selected_company])
       @sub_estados = SubEstado.all
-    end
-    
-    def set_lote_u
-      @lote = ControlLote.where(lote_id: params[:id]).max
     end
     
     def set_talla

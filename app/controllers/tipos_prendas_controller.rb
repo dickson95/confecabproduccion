@@ -18,6 +18,10 @@ class TiposPrendasController < ApplicationController
   # GET /tipos_prendas/new
   def new
     @tipo_prenda = TipoPrenda.new
+    respond_to do |format|
+      format.js{ render 'lotes/ajaxResults' }
+      format.html
+    end
   end
 
   # GET /tipos_prendas/1/edit
@@ -42,14 +46,9 @@ class TiposPrendasController < ApplicationController
           format.json { render :show, status: :created, location: @tipo_prenda }
         end
       else
-        if params[:place] == "form_lote_response"
-          format.html { render :new }
-          format.js {render "/lotes/ajaxResultsValidates"}
-          format.json { render json: @tipo_prenda.errors, status: :unprocessable_entity }
-        else
-          format.html { render :new }
-          format.json { render json: @tipo_prenda.errors, status: :unprocessable_entity }
-        end
+        format.html { render :new }
+        format.js {render "/lotes/ajaxResultsValidates"}
+        format.json { render json: @tipo_prenda.errors, status: :unprocessable_entity }
       end
     end
   end
