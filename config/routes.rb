@@ -17,7 +17,7 @@ Rails.application.routes.draw do
   resources :users, except: [:create] do 
     post 'new' => 'users#create', as: :create, on: :collection
   end
-  
+
   # Rutas de los lotes
   resources :lotes do
     get :autocomplete_color_color, :on => :collection
