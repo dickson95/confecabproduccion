@@ -16,6 +16,10 @@ class SubEstadosController < ApplicationController
   # GET /sub_estados/new
   def new
     @sub_estado = SubEstado.new
+    respond_to do |format|
+      format.js { render 'lotes/ajaxResults' }
+      format.html
+    end
   end
 
   # GET /sub_estados/1/edit
@@ -39,14 +43,9 @@ class SubEstadosController < ApplicationController
           flash[:success] = "Proceso registrado con éxito"
         end
       else
-        if params[:place] == "form_lote_sub_estado_response"
-          format.html { render :new }
-          format.js { render "lotes/ajaxResultsValidates" }
-          format.json { render json: @sub_estado.errors, status: :unprocessable_entity }
-        else
-          format.html { render :new }
-          format.json { render json: @sub_estado.errors, status: :unprocessable_entity }
-        end
+        format.html { render :new }
+        format.js { render "lotes/ajaxResultsValidates" }
+        format.json { render json: @sub_estado.errors, status: :unprocessable_entity }
       end
     end
   end

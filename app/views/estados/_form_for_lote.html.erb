@@ -25,7 +25,7 @@
             :include_blank =>  true, :selected => params[:sub_id]%>
           
             <div class="input-group-btn">
-              <%= link_to '...', add_remote_data_path(:place => "form_lote_sub_estado"),
+              <%= link_to '...', new_sub_estado_path(:place => "form_lote_sub_estado"),
               {:remote => true, :class => "btn btn-primary", :title => "Nuevo proceso"} %>
             </div>
         <% end %>

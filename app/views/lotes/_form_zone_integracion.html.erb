@@ -18,7 +18,7 @@
         <%= f.input :cliente, wrapper: :vertical_input_group do %>
         <%= f.input_field  :cliente_id, class: "form-control", :collection => @clientes, :value_method => :id, :include_blank => "-- seleccione cliente --"%>
         <div class="input-group-btn">
-          <%= link_to '...', add_remote_data_path(:place => "form_lote_cliente"),{:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-primary", :title => "Nuevo cliente"} %>
+          <%= link_to '...', new_cliente_path(:place => "form_lote_cliente"),{:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-primary", :title => "Nuevo cliente"} %>
         </div>
         <% end %>
     </div>
@@ -26,7 +26,7 @@
         <%= f.input :tipo_prenda_id,  label: "Descripción", wrapper: :vertical_input_group do %>
         <%= f.input_field  :tipo_prenda_id, class: "form-control", :collection => @tipos_prendas, :value_method => :id, :include_blank => "-- seleccione descripción --" %>
         <div class="input-group-btn">
-          <%= link_to '...', add_remote_data_path(:place => "form_lote_tipo_prenda"),{:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#myModal',  :class => "btn btn-primary", :title => "Nueva descripción"} %>
+          <%= link_to '...', new_tipo_prenda_path(:place => "form_lote_tipo_prenda"),{:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#myModal',  :class => "btn btn-primary", :title => "Nueva descripción"} %>
         </div>
         <% end %>
     </div>

@@ -18,6 +18,10 @@ class ClientesController < ApplicationController
   # GET /clientes/new
   def new
     @cliente = Cliente.new
+    respond_to do |format|
+      format.js{ render 'lotes/ajaxResults' }
+      format.html
+    end
   end
 
   # GET /clientes/1/edit
@@ -30,26 +34,16 @@ class ClientesController < ApplicationController
     @cliente = Cliente.new(cliente_params)
     respond_to do |format|
       if @cliente.save
-        if params[:place] == "form_lote_cliente_response"
-          @lote = Lote.new
-          @clientes = Cliente.where(:empresa => session[:selected_company])
-          @cliente = Cliente.last
-          format.js {render "lotes/ajaxResults"}
-        else
-          format.html { redirect_to @cliente }
-          flash[:success] = "Cliente guardado con éxito."
-          format.json { render :show, status: :created, location: @cliente }
-        end
+        @lote = Lote.new
+        @clientes = Cliente.where(:empresa => session[:selected_company])
+        @cliente = Cliente.last
+        format.js { render "lotes/ajaxResults" }
+        format.html { redirect_to @cliente, notice: "Cliente guardado con éxito."}
+        format.json { render :show, status: :created, location: @cliente }
       else
-        puts @cliente.errors.full_messages
-        if params[:place] == "form_lote_cliente_response"
-          format.html
-          format.json { render json: @cliente.errors, status: :unprocessable_entity }
-          format.js {render "/lotes/ajaxResultsValidates"}
-        else
-          format.html { render :new }
-          format.json { render json: @cliente.errors, status: :unprocessable_entity }
-        end
+        format.html { render :edit }
+        format.json { render json: @cliente.errors, status: :unprocessable_entity }
+        format.js { render "lotes/ajaxResultsValidates" }
       end
     end
   end
@@ -81,6 +75,7 @@ class ClientesController < ApplicationController
   end
   
   # Enviar correo electrónico por problemas con los insumos al cliente 
+=begin
   def send_email
     @cliente = Cliente.new(cliente_params)
     puts "Mensaje desde el parmámetro #{params[:mensaje]}"
@@ -90,6 +85,7 @@ class ClientesController < ApplicationController
       format.js {render "/lotes/ajaxResults"}
     end
   end
+=end
 
   private
     # Use callbacks to share common setup or constraints between actions.

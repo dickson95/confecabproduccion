@@ -6,7 +6,7 @@
             :collection => @tipos_prendas, :selected => @tipo_prenda.id ,
             :value_method => :id, :label => false %>
             <div class="input-group-btn">
-              <%= link_to '...', add_remote_data_path(:place => "form_lote_tipo_prenda"),{:remote => true, 
+              <%= link_to '...', new_tipo_prenda_path(:place => "form_lote_tipo_prenda"),{:remote => true, 
               'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-default"} %>
             </div>
           <% end %>
@@ -19,7 +19,7 @@
             :collection => @clientes, :label_method => false, 
             :value_method => :id, :selected => @cliente.id %>
             <div class="input-group-btn">
-              <%= link_to '...', add_remote_data_path(:place => "form_lote_cliente"),{:remote => true, 
+              <%= link_to '...', new_cliente_path(:place => "form_lote_cliente"),{:remote => true, 
               'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-default"} %>
             </div>
           <% end %>
@@ -31,7 +31,7 @@
                 :collection => @sub_estados, :value_method => :id, 
                 :selected => @sub_estado.id%>
               <div class="input-group-btn">
-                <%= link_to '...', add_remote_data_path(:place => "form_lote_sub_estado"),
+                <%= link_to '...', new_sub_estado_path(:place => "form_lote_sub_estado"),
                 {:remote => true, :class => "btn btn-default"} %>
               </div>
           <%end%>

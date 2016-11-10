@@ -13,12 +13,8 @@
 <%elsif params[:place] == "form_lote_cliente_response"%>
     $(".help-cliente").remove()
     $("#alert").show();
-    message_email = "<span class='help-block help-cliente'><%=@cliente.errors[:email].first%></span>"
     message_cliente = "<span class='help-block help-cliente'><%=@cliente.errors[:cliente].first%></span>"
-    $("#cliente_email").parent().addClass("has-error").append(message_email);
-    $("#cliente_cliente").parent().addClass("has-error").append(message_email);
-    
-
+    $("#cliente_cliente").parent().addClass("has-error").append(message_cliente);
 
 <% # (SUB PROCESOS) Ingreso y actualización del cliente %>
 <%elsif params[:place] == "form_lote_sub_estado_response"%>

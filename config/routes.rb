@@ -26,21 +26,17 @@ Rails.application.routes.draw do
   resources :users, except: :create
   post 'users/new' => 'users#create', as: :create_user # Debe ser ruta que pertenece a los users
   
-  # Rutas de los lotes
-  post 'lotes/:id/total_price' => 'lotes#total_price', :as => :lote_total_price
-  get "lotes/add_remote_data" => 'lotes#add_remote_data', :as => :add_remote_data
   resources :lotes do
     get :autocomplete_color_color, :on => :collection
-    get :view_datails
+    get :view_details # es método get, y parte de los lotes
+    patch :cambio_estado # Este es patch y debe pertenecer a los lotes
+    patch :total_price # esta es un patch y pertenece a los lotes
     resources :control_lotes
   end
-  
-  get 'lotes/cambio_estado/:id', 
-    to: 'lotes#cambio_estado', as: 'cambio_estado' # Este es patch y debe pertenecer a los lotes
 
   # Otras rutas
   resources :sub_estados
-  get "clientes/send_email" => 'clientes#send_email', :as => :send_email # debe pertenecer a los clientes y tener el id del cliente a quien se envía el correo
+  # get "clientes/send_email" => 'clientes#send_email', :as => :send_email # debe pertenecer a los clientes y tener el id del cliente a quien se envía el correo
   resources :clientes
   resources :referencias 
   resources :tipos_prendas
