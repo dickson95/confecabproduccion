@@ -125,7 +125,7 @@
       </div>
 
       <!--Facturación-->
-      <%if @rol_form.eql?("coor_tiempos") || @rol_form.eql?("gerente") || @rol_form.eql?("admin") %>
+      <%if can? :prices, Lote%>
       <hr>
       <div class="row">
         <p class="col-md-3 text-left">
@@ -220,7 +220,7 @@
         por <%= @lote.lote.respon_edicion_id.name %>
       </p>
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-      <% if can? :manage, Lote %>
+      <% if can? :update, Lote %>  
         <div class="btn-group">
           <%= link_to edit_lote_path(@lote.lote, :commit => "edit", :estado_id => @lote.estado.id, :sub_id => @lote.sub_estado.nil? ? "" : "#{@lote.sub_estado.id}"), class: "btn btn-primary" do |l|%>
             <%=content_tag :i, "", :class => "fa fa-pencil"%>
@@ -230,5 +230,6 @@
         </div>
       <%end%>
     </div>
+
   </div>
 </div>

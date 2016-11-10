@@ -1,1 +1,1 @@
-Cliente.update(:empresa => true)
+Rol.create(:name => "aux_facturacion")

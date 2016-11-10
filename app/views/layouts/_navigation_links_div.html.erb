@@ -1,11 +1,8 @@
 
+<% if can? :read, Lote %>
 <%=nav_link "Lotes", lotes_path, {class: "item", title: "Lotes"}, {class: "fa fa-dashboard fa-fw"}  %>
+<% end %>
+<% if can? :read, Programacion %>
 <%=nav_link "Programación", programaciones_path, {class: "item", title: "Lotes"}, {class: "fa fa-calendar fa-fw"}  %>
+<% end %>
 
-<% if (can? :manage, Referencia) || (can? :read, Referencia) %>
-<%=nav_link "Tablas", tipos_prendas_path, {class: "item", title: "Tablas"}, {class: "fa fa-table fa-fw"}%>
-<%end%>
-
-<%if (can? :manage, User) || (can? :read, User)%>
-<%=nav_link "Usuarios", users_path, {class: "item", title: "Usuarios"}, {class: "fa fa-users fa-fw"} %>
-<%end%>

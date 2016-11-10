@@ -1,13 +1,11 @@
 class TiposPrendasController < ApplicationController
+  load_and_authorize_resource :except  => [:index]
   before_action :set_tipo_prenda, only: [:show, :edit, :update, :destroy]
   #Solicitar prueba de permisos antes de cargar cualquier acción
-  load_and_authorize_resource :except  => [:create]
   # GET /tipos_prendas
   # GET /tipos_prendas.json
   def index
     @tipos_prendas = TipoPrenda.all
-    @sub_estados = SubEstado.all
-    @clientes = Cliente.where(:empresa => session[:selected_company])
   end
 
   # GET /tipos_prendas/1

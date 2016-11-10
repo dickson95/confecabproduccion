@@ -1,14 +1,14 @@
 class LotesController < ApplicationController
+  # Validación de autorización
+  load_and_authorize_resource :except  => [:view_details]
   include LotesHelper
   # Acciones primarias
+  before_action :rol_user, only: [:create, :update, :edit, :new]
   before_action :set_color, only: [:create, :update]
   before_action :set_tipo_prenda, only: [:new, :edit]
   before_action :referencia_params, only: [:set_referencia]
   before_action :set_lote, only: [:edit, :update, :destroy]
   before_action :set_talla, only: [:view_details, :new, :edit, :create, :update]
-  
-  # Validación de autorización
-  load_and_authorize_resource :except  => [:view_details]
   
   # Autocompletado
   autocomplete :color, :color
@@ -111,32 +111,34 @@ class LotesController < ApplicationController
               "control_lotes.id", "control_lotes.sub_estado_id", 
               "control_lotes.id").last
     # Id del estado en variable est_id
-    est_id = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
-    if lote.fetch(0) == est_id.to_i
-      # Si ninguna de las dos condiciones sigueintes se cumple no se crea nada en el historial
+    if !params[:lote][:control_lotes_attributes].nil?
+      est_id = params[:lote][:control_lotes_attributes][:'0'][:estado_id]
+      if lote.fetch(0) == est_id.to_i
+        # Si ninguna de las dos condiciones sigueintes se cumple no se crea nada en el historial
 
-      # Id del subestado en variable sub_id
-      sub_id = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
+        # Id del subestado en variable sub_id
+        sub_id = params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id]
 
-      if sub_id == ""
-        # si el sub id no tiene nada desde el parámetro se asigna 0 para la comparación
-        sub_id = 0
-      end
-      if lote.fetch(3) != sub_id.to_i
-        # En caso de que el subestado sea diferente al anterior se crea uno nuevo
+        if sub_id == ""
+          # si el sub id no tiene nada desde el parámetro se asigna 0 para la comparación
+          sub_id = 0
+        end
+        if lote.fetch(3) != sub_id.to_i
+          # En caso de que el subestado sea diferente al anterior se crea uno nuevo
+          boolean = true
+          puts "Información: Creando un nuevo registro en el historial..."
+        end
+      else
         boolean = true
-        puts "Información: Creando un nuevo registro en el historial..."
+        puts "Información: Creando un registro completamente nuevo en el historial..."
       end
+      @has_programing = Lote.has_programing params[:id], est_id
     else
-      boolean = true
-      puts "Información: Creando un registro completamente nuevo en el historial..."
+      @has_programing = true
     end
-    @has_programing = Lote.has_programing params[:id], est_id
-
     # Respuesta a la solicitud de actualización
     respond_to do |format|
       if @lote.update(boolean ? lote_params : lote_params_u ) && @has_programing && @color_blank
-        puts "programaci´no #{@lote.programacion}"
         if boolean
           # Actualizar fecha salida, responsable de salida, minutos del historial
           time = Time.new()
@@ -232,7 +234,7 @@ class LotesController < ApplicationController
     price_total = Lote.multiplication(lote_price.values)  
     format_price_u = Money.new("#{lote_price[:unit_price]}00").format
     format_price_t = Money.new("#{price_total}00").format
-    Lote.update(params[:lote_id].to_i, :precio_u => lote_price[:unit_price], :precio_t => price_total)
+    Lote.update(params[:id].to_i, :precio_u => lote_price[:unit_price], :precio_t => price_total, :respon_edicion_id => current_user)
     @prices = {:total => format_price_t, :unit => format_price_u}
     respond_to do |format|
       format.json{render json: @prices}
@@ -251,6 +253,10 @@ class LotesController < ApplicationController
       @sub_estados = SubEstado.all
     end
     
+    def set_lote_u
+      @lote = ControlLote.where(lote_id: params[:lote_id]).max
+    end
+
     def set_talla
       @tallas = Talla.all
     end
@@ -400,12 +406,25 @@ class LotesController < ApplicationController
     end
     
     def sub_id_value
-      if params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id] == ""
-        params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id] = "0"
+      if !params[:lote][:control_lotes_attributes].nil?
+        if params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id] == ""
+          params[:lote][:control_lotes_attributes][:'0'][:sub_estado_id] = "0"
+        end
       end
     end
 
     def referencia_params
       params.require(:lote).permit(:referencia)
+    end
+
+    # Método con gon para poder usar el rol desde los coffeescripts
+    def rol_user
+      if user_signed_in?
+        @rol_form = nil
+        rol = current_user.roles
+        (rol).each do |s|
+          @rol_form = s.name
+        end
+      end
     end
   end

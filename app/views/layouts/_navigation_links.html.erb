@@ -1,14 +1,13 @@
 <%# add navigation links_ul to this file %>
-<%if user_signed_in?%>
-<%=nav_link current_user.name, edit_user_registration_path, { title: current_user.name},{class: "fa fa-user fa-fw"}%>
-<%end%>
 <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#" 
         title="Cuenta de producción&#10;<%=current_user.name%>">
-        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+        <i class="fa fa-user fa-fw"></i>
+        <%= current_user.name %> 
+        <i class="fa fa-caret-down"></i>
     </a>
-    <ul class="dropdown-menu dropdown-user">
-        <li><a href="/users/edit"><i class="fa fa-gear fa-fw"></i> Actualizar datos</a>
+    <ul class="dropdown-menu">
+        <li><a href="/users/edit"><i class="fa fa-gear fa-fw"></i> Perfil</a>
         </li>
         <li class="divider"></li>
         <li>
@@ -19,5 +18,49 @@
         </li>
     </ul>
     <!-- /.dropdown-user -->
+</li>
+<li  class="dropdown">
+    <%=link_to "#", data:{:toggle => "dropdown"}, :class => "dropdown-toggle", :title => "Base de datos" do%>
+        <i class="fa fa-database fa-fw"></i>
+        Bases de datos<i class="fa fa-caret-down fa-fw"></i>
+    <%end%>
+    <ul class="dropdown-menu">
+        <% if can? :read, Cliente %>
+            <li>
+                <%=link_to clientes_path do%>
+                <i class="fa fa-list-alt fa-fw"></i>
+                Clientes
+                <%end%>
+            </li>
+        <% end %>
+        <% if (can? :read, User) %>
+        <li>
+            <%= link_to users_path, title: "Usuarios" do %>
+                <i class="fa fa-users fa-fw"></i>
+                Usuarios
+            <% end %>
+        </li>
+        <% end %>
+        <% if can?(:read, Cliente) && can?(:read, TipoPrenda)%>
+            <li class="divider"></li>
+        <% end %>
+        <% if can? :read, TipoPrenda %>
+        <li>
+            <%=link_to tipos_prendas_path do%>
+            <i class="fa fa-tags fa-fw"></i>
+            Descripción de prendas
+            <% end %>
+        </li>
+        <% end %>
+        <% if can? :read, SubEstado %>
+        <li>
+            <%= link_to sub_estados_path do %>
+                <i class="fa fa-cubes fa-fw"></i>
+                Procesos adicionales
+            <% end %>
+        </li>
+        <% end %>
+
+    </ul>
 </li>
 

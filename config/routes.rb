@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     get :autocomplete_color_color, :on => :collection
     get :view_details # es método get, y parte de los lotes
     patch :cambio_estado # Este es patch y debe pertenecer a los lotes
-    patch :total_price # esta es un patch y pertenece a los lotes
+    patch :total_price, on: :member # esta es un patch y pertenece a los lotes
     resources :control_lotes
   end
 

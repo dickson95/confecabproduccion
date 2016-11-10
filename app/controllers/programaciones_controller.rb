@@ -1,4 +1,5 @@
 class ProgramacionesController < ApplicationController
+	load_and_authorize_resource
 	before_action :empresa 
 	before_action :set_meses, except: [:modal_open, :update_row_order]
 	before_action :programacion_id, except: [:modal_open, :update_row_order]
@@ -9,7 +10,6 @@ class ProgramacionesController < ApplicationController
 	after_action  :states_lotes, only: [:generate, :add_lotes_to_programing]
 	
 	def index
-		puts @estados
 		programacion = Programacion.set_year_program @empresa, params[:month]
 		@years = Programacion.years_db
 		if programacion
@@ -21,7 +21,6 @@ class ProgramacionesController < ApplicationController
 	# Consultar las programaciones por mes y crear si es necesario
 	# GET /program_table/:month
 	def program_table
-		puts @estados
 		programacion  = Programacion.set_year_program @empresa, params[:month]
 		if programacion
 			programacion_id
@@ -66,7 +65,7 @@ class ProgramacionesController < ApplicationController
 			params[:lotes].each do |lote|
 				lote = Lote
 				.where(:id => lote)
-				.update(:programacion_id => @programacion.fetch(0))
+				.update(:programacion_id => @programacion.fetch(0), :respon_edicion_id => current_user)
 				@lotes.push lote
 			end
 		end
@@ -86,7 +85,7 @@ class ProgramacionesController < ApplicationController
 			if !params[:lotes].nil?
 				params[:lotes].each do |lote|
 					Lote.where(:id => lote)
-					.update(:programacion_id => nil)
+					.update(:programacion_id => nil, :respon_edicion_id => current_user)
 					@lotes.push lote
 				end
 			end
@@ -106,7 +105,7 @@ class ProgramacionesController < ApplicationController
 	# Ordenar tabla
 	def update_row_order	
 		programacion_params[:updated_positions].each do |k, v|
-			Lote.update(v[:lote_id].to_i, :secuencia => v[:position])
+			Lote.update(v[:lote_id].to_i, :secuencia => v[:position], :respon_edicion_id => current_user)
 		end
 	    head :no_content # this is a POST action, updates sent via AJAX, no view rendered
 	end

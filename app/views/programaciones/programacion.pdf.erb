@@ -1,7 +1,6 @@
 <table class="table table-bordered">
 <%date = Programacion.date_split params[:month]%>
 <%month = @meses[date[:month]]%>
-<%price = Programacion.price @rol_form%>
 	<caption>
 			<h2>Programación de <%=month[:string]%></h2>
 	</caption>
@@ -11,7 +10,7 @@
 			<th>Descripción</th>
 			<th>Referencia</th>
 			<th>Cant</th>
-			<%if price%>
+			<%if (can? :prices, Lote)%>
 			<th>Precio</th>
 			<th>Total</th>
 			<%end%>
@@ -26,7 +25,7 @@
 			<td style="padding:0; margin:0;"><%=programacion.fetch(1)%></td>
 			<td style="padding:0; margin:0;"><%=programacion.fetch(3)%></td>
 			<td style="padding:0; margin:0;"><%=programacion.fetch(4)%></td>
-			<%if price%>
+			<%if (can? :prices, Lote)%>
 			<td style="padding:0; margin:0;"><%=Lote.str_pesos programacion.fetch(5)%></td>
 			<td style="padding:0; margin:0;"><%=Lote.str_pesos programacion.fetch(6)%></td>
 			<%end%>

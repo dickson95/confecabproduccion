@@ -14,12 +14,15 @@
             Detalles
             <%end%>
           </li>
+          <% if can? :read, ControlLote %>
           <li>
             <%= link_to lote_control_lotes_path(lote.fetch(0)), {:remote => true, :title => "Ver ciclo de producción", :id => "lote_control_lote"} do%>
             <%=content_tag :i, "", :class => "fa fa-refresh fa-fw"%>
             Ciclo de producción
             <%end%>
           </li>
+          <% end %>
+          
           <% if can? :update, Lote %>
           <li class="divider"></li>
           <li>
@@ -28,9 +31,11 @@
             Editar 
             <%end%>
           </li>
+          <%if can? :cambio_estado, Lote%>
           <li>
             <%=next_state lote_cambio_estado_path(lote.fetch(0)), lote.fetch(6), {:method => 'PATCH'}, {:class => "fa fa-forward fa-fw"}%>
           </li>
+          <%end%>
           <%end%>
           <% # Puede editar %>
 
@@ -52,9 +57,9 @@
     <td><%= lote.fetch 3 %></td><!--Op-->
     <td data-cantidad="<%= lote.fetch 4 %>"><%= lote.fetch 4 %></td><!--Cantidad-->
     <td><%= @tipos_prendas[lote.fetch(5)]%></td><!--Descripción-->
-    <%if can? :total_price, Lote%>
+    <%if can? :prices, Lote%>
     <td style="padding: 1px;">
-    <%=content_tag :input, "", data:{:lote => lote.fetch(0)}, :value => Money.new("#{lote.fetch 8}00").format, :class => "form-control input-sm lote_precio_unitario", :disabled => (can? :update, Lote)? false : true%>
+    <%=content_tag :input, "", data:{:lote => lote.fetch(0)}, :value => Money.new("#{lote.fetch 8}00").format, :class => "form-control input-sm lote_precio_unitario", :disabled => (can? :prices_update, Lote)? false : true%>
     </td><!--Precio unitario-->
     <td class="total"><%= Money.new("#{lote.fetch 9}00").format %></td><!--Precio total-->
     <%end%>

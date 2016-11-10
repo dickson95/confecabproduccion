@@ -258,7 +258,7 @@ DEPENDENCIES
   axlsx_rails
   bootstrap_sb_admin_base_v2
   byebug
-  cancancan (~> 1.10)
+  cancancan (~> 1.15)
   capistrano (~> 3.6)
   capistrano-rails (~> 1.1)
   capistrano-rvm

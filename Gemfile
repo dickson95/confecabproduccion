@@ -63,7 +63,7 @@ gem 'rails-jquery-autocomplete'
 
 # Autenticación y control
 gem 'devise'
-gem 'cancancan', '~> 1.10'
+gem 'cancancan', '~> 1.15'
 
 
 # Pasar datos desde el controlador a el coffeescript con esta gema
