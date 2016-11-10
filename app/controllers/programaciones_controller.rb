@@ -1,4 +1,5 @@
 class ProgramacionesController < ApplicationController
+	before_action :empresa 
 	before_action :set_meses, except: [:modal_open, :update_row_order]
 	before_action :programacion_id, except: [:modal_open, :update_row_order]
 	before_action :states_lotes, only: [:index, :program_table]
@@ -8,7 +9,7 @@ class ProgramacionesController < ApplicationController
 	after_action  :states_lotes, only: [:generate, :add_lotes_to_programing]
 	
 	def index
-		programacion = Programacion.set_year_program params[:empresa], params[:month]
+		programacion = Programacion.set_year_program @empresa, params[:month]
 		@years = Programacion.years_db
 		if programacion
 			programacion_id
@@ -17,10 +18,10 @@ class ProgramacionesController < ApplicationController
 
 
 	# Consultar las programaciones por mes y crear si es necesario
-	# si hace falta, no combinarlo con otras funciones.
-	# POST /program_table/:month
+	# GET /program_table/:month
 	def program_table
-		programacion  = Programacion.set_year_program params[:empresa], params[:month]
+		puts @estados
+		programacion  = Programacion.set_year_program @empresa, params[:month]
 		if programacion
 			programacion_id
 		end
@@ -34,8 +35,8 @@ class ProgramacionesController < ApplicationController
 	# POST /generate/:id
 	def generate
 		# Actualizar los lotes con programación id null
-		Lote.where("programacion_id IS NULL and empresa = ?", params[:empresa])
-		.update(:programacion_id => params[:id].to_i, :respon_edicion_id => current_user)
+		Lote.where("programacion_id IS NULL and empresa = ?", @empresa)
+		.update(:programacion_id => params[:id].to_i)
 		# Establecer las programaciones
 		set_programaciones
 		states_lotes
@@ -49,7 +50,7 @@ class ProgramacionesController < ApplicationController
 	def modal_open
 		@lotes_to_program = Lote.joins(:referencia)
 		.where("lotes.programacion_id IS NULL and lotes.empresa = ?", 
-			params[:empresa])
+			@empresa)
 		.pluck("lotes.id", "referencias.referencia")
 		@programacion = params[:month]
 		respond_to do |format|
@@ -112,7 +113,7 @@ class ProgramacionesController < ApplicationController
 	# Exportar archivos a excel 
 	def export_excel
 		date = Programacion.date_split(params[:month])
-		render xlsx: "export_excel", filename: "#{params[:empresa]} de #{@meses[date[:month]][:string]}.xlsx"
+		render xlsx: "export_excel", filename: "#{@empresa} de #{@meses[date[:month]][:string]}.xlsx"
 
 	end
 
@@ -121,11 +122,11 @@ class ProgramacionesController < ApplicationController
 		date = Programacion.date_split(params[:month])
 		respond_to do |format|
 			format.pdf do
-				render :pdf => "#{params[:empresa]} de #{@meses[date[:month]][:string]}",
+				render :pdf => "#{@empresa} de #{@meses[date[:month]][:string]}",
 				:orientation => 'Landscape',
 				:template => "programaciones/programacion.pdf",
 				:layout => "layout_pdf.html.erb",
-				:title => "#{params[:empresa]} de #{@meses[date[:month]][:string]}"
+				:title => "#{@empresa} de #{@meses[date[:month]][:string]}"
 			end 
 			format.html
 		end
@@ -137,22 +138,21 @@ class ProgramacionesController < ApplicationController
 		end
 
 		def set_programaciones
-			params[:empresa] = session[:selected_company] ? "CAB" : "D&C"
 			# Consulta necesaria para cargar todas las instancias de las vistas exstentes 
 			params[:action].eql?("index") ?	params[:month] = Time.new.strftime("%Y%m") : nil
-			@programaciones = Programacion.joins(lotes: [:cliente, :tipo_prenda, :referencia]).where("extract(year_month from programaciones.mes) = ? and lotes.empresa = ?",  params[:month], params[:empresa]).order("lotes.secuencia asc").pluck("clientes.cliente", "tipos_prendas.tipo", "lotes.secuencia", "referencias.referencia", "lotes.cantidad", "lotes.precio_u", "lotes.precio_t", "lotes.meta", "lotes.h_req","lotes.id")
+			@programaciones = Programacion.joins(lotes: [:cliente, :tipo_prenda, :referencia]).where("extract(year_month from programaciones.mes) = ? and lotes.empresa = ?",  params[:month], @empresa).order("lotes.secuencia asc").pluck("clientes.cliente", "tipos_prendas.tipo", "lotes.secuencia", "referencias.referencia", "lotes.cantidad", "lotes.precio_u", "lotes.precio_t", "lotes.meta", "lotes.h_req","lotes.id")
 		end
 
 		def programacion_id
 			params[:action].eql?("index") ?	params[:month] = Time.new.strftime("%Y%m") : nil
 			# Consultar id de la programación para el enlace de generar la programación
 			# en _table_body.html.erb y para imprimir la primera vez en el index
-			empresa = params[:empresa] == "CAB" ? true : false
+			empresa = session[:selected_company]
 			@programacion = Programacion.where("extract(year_month from programaciones.mes) = ? and empresa = ?", params[:month], empresa).pluck(:id)
 		end
 
 		def no_empty_program
-			@no_empty_program = Programacion.lotes_for_program params[:empresa]
+			@no_empty_program = Programacion.lotes_for_program @empresa
 		end
 
 		def new_programacion
@@ -172,5 +172,9 @@ class ProgramacionesController < ApplicationController
 
 		def states_lotes
 			@estados = Programacion.states_lotes(@programacion.first)
+		end
+
+		def empresa
+			@empresa = session[:selected_company] ? "CAB" : "D&C"
 		end
 	end

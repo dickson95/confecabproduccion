@@ -1,4 +1,4 @@
-<%=form_tag remove_from_programing_path(year_month, :empresa => params[:empresa]), remote: true do%>
+<%=form_tag remove_from_programing_path(year_month), remote: true do%>
 	<table class="table table-bordered table-striped sortable" id="<%=year_month%>t">
 		<%if params[:month] == year_month %>
 			<%=render "table"%>

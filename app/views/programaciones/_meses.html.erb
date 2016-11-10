@@ -5,7 +5,7 @@
 		<%@meses.each do |k, v|%>
 		<% year_month = "#{year}#{v[:number]}" %>
 		<% active = params[:month] == year_month ? true : false%>
-		<li class="tab_mes <%= active ? "active" : ""%>" id='<%=year_month%>'><%= link_to v[:string], program_table_path(year_month, :empresa => params[:empresa]), method: :post, remote: true %></li>
+		<li class="tab_mes <%= active ? "active" : ""%>" id='<%=year_month%>'><%= link_to v[:string], program_table_path(year_month), remote: true %></li>
 		<%end%>	
 	</ul>
 	<div class="tab-content">

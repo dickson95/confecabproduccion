@@ -14,13 +14,13 @@
 					<button type="button" class="btn btn-primary dropdown-toggle disabled-btn" data-toggle="dropdown" <%=disabled.fetch(0) ? 'disabled' : ''%>>Exportar&nbsp;<i class="caret"></i></button>
 					<ul class="dropdown-menu pull-right">
 						<li>
-							<%=link_to export_excel_programaciones_path(format: "xlsx", :month => params[:month], :empresa => params[:empresa]) do%>
+							<%=link_to export_excel_programaciones_path(format: "xlsx", :month => params[:month]) do%>
 								<%=content_tag :i ,"",:class => "fa fa-file-excel-o"%>
 								Excel
 							<%end%>
 						</li>
 						<li>
-							<%=link_to export_pdf_programaciones_path(format: "pdf",:month => params[:month], :empresa => params[:empresa]) do%>
+							<%=link_to export_pdf_programaciones_path(format: "pdf",:month => params[:month]) do%>
 								<%=content_tag :i ,"",:class => "fa fa-file-pdf-o"%>
 								PDF
 							<%end%>
@@ -74,7 +74,7 @@
 				<%if can? :update, Programacion%>
 				<div class="pull-right">
 					<%=submit_tag "Retirar", class:"btn btn-warning disabled-btn", disabled: disabled.fetch(0)%>
-					<%=link_to "Añadir", modal_open_path(params[:month], :empresa => params[:empresa]), class:"btn btn-default #{disabled.fetch(1) ? 'disabled' : ''}", remote: true, id: "add-lote" %>
+					<%=link_to "Añadir", modal_open_path(params[:month]), class:"btn btn-default #{disabled.fetch(1) ? 'disabled' : ''}", remote: true, id: "add-lote" %>
 				</div>
 				<%end%>
 			</td>

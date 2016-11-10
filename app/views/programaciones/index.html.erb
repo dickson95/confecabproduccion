@@ -1,4 +1,5 @@
-<%date = Programacion.date_split params[:month] %>
+<% content_for :title do "Programaciones" end %>
+<% date = Programacion.date_split params[:month] %>
 <ul class="nav nav-tabs" role="tablist">
 	<!--Años-->
 	<%@years.each do |year|%>

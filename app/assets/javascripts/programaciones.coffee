@@ -30,7 +30,7 @@ $(document).on "turbolinks:load", ->
       return
     position = ui.item.index() # this will not work with paginated items, as the index is zero on every page
     $.ajax(
-      type: 'POST'
+      type: 'PATCH'
       url: '/programaciones/update_row_order'
       dataType: 'json'
       data: { programacion: {updated_positions: array} }
