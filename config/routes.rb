@@ -23,8 +23,9 @@ Rails.application.routes.draw do
 
   # Rutas de los usuarios
   devise_for :users
-  resources :users, except: :create
-  post 'users/new' => 'users#create', as: :create_user # Debe ser ruta que pertenece a los users
+  resources :users, except: [:create] do 
+    post 'new' => 'users#create', as: :create, on: :collection
+  end
   
   resources :lotes do
     get :autocomplete_color_color, :on => :collection
