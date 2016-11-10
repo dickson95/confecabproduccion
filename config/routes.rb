@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     get :export_excel, on: :collection
     patch :generate, on: :member # Editar una parte concreta, es patch
     patch :add_lotes_to_programing, as: :add_lotes, on: :collection # Para editar un atributo concreto; es patch
-    post 'update_row_order', on: :collection 
+    patch :update_row_order, on: :collection 
   end
 
   # Rutas de los usuarios
