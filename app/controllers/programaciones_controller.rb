@@ -1,4 +1,5 @@
 class ProgramacionesController < ApplicationController
+	load_and_authorize_resource
 	before_action :empresa 
 	before_action :set_meses, except: [:modal_open, :update_row_order]
 	before_action :programacion_id, except: [:modal_open, :update_row_order]
@@ -20,7 +21,6 @@ class ProgramacionesController < ApplicationController
 	# Consultar las programaciones por mes y crear si es necesario
 	# GET /program_table/:month
 	def program_table
-		puts @estados
 		programacion  = Programacion.set_year_program @empresa, params[:month]
 		if programacion
 			programacion_id

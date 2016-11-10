@@ -30,7 +30,7 @@
               <%end%>
               </p>
               <p class="text-right col-sm-6">
-              <%if @rol_form.eql?("admin") || @rol_form.eql?("coor_tiempos")%>
+              <%if can? :update, User%>
                 <%if @user.id != 1%>
                   <%=link_to edit_user_path(@user), :title => "Cambiar permiso", remote: true do%>
                     <%=content_tag :i, "", :class => "fa fa-pencil"%>
@@ -47,7 +47,9 @@
           <tr>
             <th class="col-sm-6">Último ingreso:</th>
             <td class="col-sm-6">
+            <% if !@user.current_sign_in_at.nil? %>
             <%= I18n::localize(@user.current_sign_in_at, :format => "%d de %B a las %I:%M %p" ) %>
+            <% end %>
             </td>
           </tr>
         </tbody>

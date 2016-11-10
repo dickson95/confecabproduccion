@@ -1,4 +1,6 @@
 class LotesController < ApplicationController
+  # Validación de autorización
+  load_and_authorize_resource :except  => [:view_details]
   include LotesHelper
   # Acciones primarias
   before_action :rol_user, only: [:create, :update, :edit, :new]
@@ -7,9 +9,6 @@ class LotesController < ApplicationController
   before_action :referencia_params, only: [:set_referencia]
   before_action :set_lote, only: [:edit, :update, :destroy]
   before_action :set_talla, only: [:view_details, :new, :edit, :create, :update]
-  
-  # Validación de autorización
-  load_and_authorize_resource :except  => [:view_details]
   
   # Autocompletado
   autocomplete :color, :color

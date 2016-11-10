@@ -3,8 +3,8 @@
 		<%if (@no_empty_program == false && !@programaciones.empty?) || (@no_empty_program && !@programaciones.empty?)%>
 		<%@programaciones.each do |programacion|%>
 		<tr style="cursor: pointer;" data-item-id=<%= "#{programacion.fetch(9)}" %> class="<%=(can? :update, Lote) ? "item": ""%> ">
-			<td><%=check_box_tag "lotes[#{programacion.fetch(9)}]", programacion.fetch(9)%></td>
 			<%if can? :update, Programacion%>
+			<td><%=check_box_tag "lotes[#{programacion.fetch(9)}]", programacion.fetch(9)%></td>
 			<td><%=text_field_tag "programacion[secuencia][#{programacion.fetch(9)}]", "", :value => programacion.fetch(2), :style => "max-width: 3em;"%></td>
 			<%end%>
 			<td class="col-md-1"><%=@estados["#{programacion.fetch(9)}"]%></td>
@@ -23,7 +23,7 @@
 		<%elsif @no_empty_program && @programaciones.empty?%>
 		<tr id="row_generate">
 			<td colspan="11" class="text-center">
-			<%if can? :prices, Lote%>
+			<%if can? :generate, Programacion%>
 				No existe programación para este mes<br>
 				¿Desea generarla?
 				<%=link_to "Generar programación", generate_programacion_path(@programacion, :month => params[:month]), 

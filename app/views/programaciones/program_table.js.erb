@@ -5,4 +5,3 @@ $("div.tab-content").find(".tab-content").find(".active").removeClass("in active
 $("#<%=params[:month]%>t").children().remove();
 $("#<%=params[:month]%>t").append("<%= j render "table"%>");
 $("#<%=params[:month]%>p").addClass("in active");
-console.log("respuesta : <%=params[:month]%>")

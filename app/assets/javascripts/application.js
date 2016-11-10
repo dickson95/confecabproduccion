@@ -24,6 +24,11 @@
 //= require_tree .
 
 $(document).on("turbolinks:load", function(){
+  //Remover mensajes informativos
+  setTimeout(function() {
+    $("#notice").slideUp("normal", function() { $(this).remove(); } );
+  }, 7000);
+
 	$('.dropdown').on('show.bs.dropdown', function(e) {
     $(this).find('.dropdown-menu').first().stop(true, true).slideDown()
   })
