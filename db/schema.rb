@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161103140755) do
+ActiveRecord::Schema.define(version: 20161110151658) do
 
   create_table "asignaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -94,25 +94,25 @@ ActiveRecord::Schema.define(version: 20161103140755) do
     t.string   "empresa"
     t.string   "no_remision"
     t.string   "no_factura"
-    t.string   "op",                                          null: false
+    t.string   "op",                                             null: false
     t.date     "fecha_revision"
     t.date     "fecha_entrega"
     t.text     "obs_insumos",       limit: 65535
-    t.boolean  "fin_insumos"
+    t.boolean  "fin_insumos",                     default: true
     t.integer  "referencia_id"
-    t.integer  "cliente_id",                                  null: false
+    t.integer  "cliente_id",                                     null: false
     t.integer  "tipo_prenda_id"
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.integer  "meta",                            default: 0
     t.integer  "h_req",                           default: 0
     t.integer  "precio_u",                        default: 0
     t.integer  "precio_t",                        default: 0
     t.integer  "secuencia"
     t.text     "obs_integracion",   limit: 65535
-    t.boolean  "fin_integracion"
+    t.boolean  "fin_integracion",                 default: true
     t.integer  "respon_insumos_id"
-    t.integer  "respon_edicion_id",                           null: false
+    t.integer  "respon_edicion_id",                              null: false
     t.date     "fecha_entrada"
     t.integer  "cantidad",                        default: 0
     t.integer  "programacion_id"
@@ -126,11 +126,12 @@ ActiveRecord::Schema.define(version: 20161103140755) do
 
   create_table "programaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.date     "mes"
-    t.integer  "horas",      default: 0
+    t.integer  "horas",        default: 0
     t.string   "costo"
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.boolean  "empresa"
+    t.integer  "meta_mensual"
   end
 
   create_table "referencias", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
