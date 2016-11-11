@@ -5,7 +5,19 @@
 		</div>
 		<%= simple_form_for :export, url: export_excel_lotes_path(format: "xlsx"), method: 'GET' do |f| %>
 		<div class="modal-body">
-			<h5>Seleccione los campos que desea importar</h5>
+			<h4>Seleccione los campos que desea importar</h4>
+			<div class="well row" style="padding: 2px;">
+				<div class="col-xs-3">
+					<%= f.input :from, label: "Desde", required: false, input_html: { :class => "input-sm" } %>
+				</div>
+				<div class="col-xs-3">
+					<%= f.input :to, label: "Hasta", required: false, input_html: { :class => "input-sm" } %>
+				</div>
+
+				<div class="col-xs-6">
+					<%= f.input :clientes, collection: @clientes, required: false, input_html: { :class => "input-sm" } %>
+				</div>
+			</div>
 			<div class="row">
 				<div class="col-xs-6">
 					<%= f.input :op, as: :boolean, input_html: { :checked => true } %>
@@ -47,5 +59,39 @@
 <script type="text/javascript">
 	$("button[type=submit]").click(function(){
 		$("#myModal").modal("toggle");
-	})
+	});
+	$( function() {
+    var dateFormat = "mm/dd/yy",
+      from = $( "#export_from" ).datepicker({
+		      monthNames: [ "Enero", "Febrero", "Marzo", "Abril", 
+		      "Mayo", "Junio", "Julio", "Agosto", "Septiembre", 
+		      "Octubre", "Noviembre", "Diciembre" ],
+		      dayNamesMin: [ "do","lu","ma","mi","ju","vi","sa" ]
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+          from.datepicker( "option", "dateFormat", "yy/mm/dd" );
+        }),
+      to = $( "#export_to" ).datepicker({
+	      monthNames: [ "Enero", "Febrero", "Marzo", "Abril", 
+	      "Mayo", "Junio", "Julio", "Agosto", "Septiembre", 
+	      "Octubre", "Noviembre", "Diciembre" ],
+	      dayNamesMin: [ "do","lu","ma","mi","ju","vi","sa" ]
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
+        to.datepicker( "option", "dateFormat", "yy/mm/dd" );
+      });
+ 
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+ 
+      return date;
+    }
+  } );
 </script>

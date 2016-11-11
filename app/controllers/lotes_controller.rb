@@ -242,13 +242,20 @@ class LotesController < ApplicationController
   end
 
   def options_export
+    company = session[:selected_company] 
+    @clientes = Cliente.all.where(:empresa => company)
   end
 
   def export_excel
     # Hash con las claves y valores que fueron seleccionados
-    @keys = Lote.set_keys_query(permit_export)
+    @keys = Lote.set_keys_query permit_export
     company = session[:selected_company] ? "CAB" : "D&C"
-    @lotes = Lote.all.where(:empresa => company)
+    permit = Hash.new
+    permit[:from] = params[:export][:from]
+    permit[:to] = params[:export][:to]
+    permit[:clientes] = params[:export][:clientes]
+
+    @lotes = Lote.query_filtered permit, company
     company = session[:selected_company] ? "Confecab" : "Diseños y camisas"
     respond_to do |format|
       format.xlsx { render xlsx: "export_excel", filename: "Lotes de #{company}"  }
@@ -447,6 +454,6 @@ class LotesController < ApplicationController
       params.require(:export).permit(:no_remision, :no_factura, :op, :fecha_revision,
         :fecha_entrega, :obs_insumos, :fin_insumos, :referencia_id, :cliente_id, :tipo_prenda_id,
         :meta, :h_req, :precio_u, :precio_t, :secuencia, :obs_integracion, :fin_integracion,
-        :fecha_entrada, :cantidad, :programacion_id, :created_at,)
+        :fecha_entrada, :cantidad, :programacion_id, :created_at)
     end
   end

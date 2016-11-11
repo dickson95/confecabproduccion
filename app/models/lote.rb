@@ -274,6 +274,22 @@ class Lote < ApplicationRecord
     hash_keys.delete_if { |key, value| value == "0"}
   end  
   
+  def self.query_filtered(params, company)
+    from = params[:from]
+    to = params[:to]
+    customer = params[:clientes]
+    if !customer.strip.eql?("") && !from.strip.eql?("") && !to.strip.eql?("")
+      return Lote.where("empresa = ? AND cliente_id = ? AND created_at BETWEEN ? AND ?", company, customer.to_i, from, to )
+    end
+    if !from.strip.eql?("") && !to.strip.eql?("")
+      return Lote.where("empresa = ? AND created_at BETWEEN ? AND ?", company, from, to )
+    end
+    if !customer.strip.eql?("")
+      return Lote.where("empresa = ? AND cliente_id = ?", company, customer.to_i)
+    end
+    return Lote.where("empresa = ?", company)
+  end
+
   private 
     def split_date_on_space(str)
       @meses = Programacion.meses
