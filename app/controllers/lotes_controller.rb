@@ -71,7 +71,7 @@ class LotesController < ApplicationController
     # Definir si la op existe. Retorna true si puede ser creada
     @lote = Lote.new(lote_params)
     respond_to do |format|
-      if @color_blank
+      if @colore_blank
         if @lote.save
           @lote = ControlLote.last
           ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user, fecha_ingreso:  Time.new)  
@@ -240,6 +240,21 @@ class LotesController < ApplicationController
       format.json{render json: @prices}
     end
   end
+
+  def options_export
+  end
+
+  def export_excel
+    # Hash con las claves y valores que fueron seleccionados
+    @keys = Lote.set_keys_query(permit_export)
+    company = session[:selected_company] ? "CAB" : "D&C"
+    @lotes = Lote.all.where(:empresa => company)
+    company = session[:selected_company] ? "Confecab" : "Diseños y camisas"
+    respond_to do |format|
+      format.xlsx { render xlsx: "export_excel", filename: "Lotes de #{company}"  }
+    end
+  end
+
   # -------------------------------------------------------------------------#
   # Métodos privados
   private
@@ -426,5 +441,12 @@ class LotesController < ApplicationController
           @rol_form = s.name
         end
       end
+    end
+
+    def permit_export
+      params.require(:export).permit(:no_remision, :no_factura, :op, :fecha_revision,
+        :fecha_entrega, :obs_insumos, :fin_insumos, :referencia_id, :cliente_id, :tipo_prenda_id,
+        :meta, :h_req, :precio_u, :precio_t, :secuencia, :obs_integracion, :fin_integracion,
+        :fecha_entrada, :cantidad, :programacion_id, :created_at,)
     end
   end

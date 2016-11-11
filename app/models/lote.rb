@@ -269,27 +269,10 @@ class Lote < ApplicationRecord
       return acum
     end
   end
-  
-  # Mètodo de 10/08/2016 
-  # Toma un entero y retorna el mismo separado por comas para que se pueda ver 
-  # claramente la cantidad expresada en precio.
-  def self.str_pesos(num)
-    num = num.to_s
-    num = num.scan(/./)
-    cont = 0
-    str = nil
-    num.reverse_each do |e|  
-    	if 
-        cont == 2 
-    		e = e+","
-    		cont = 0
-    	else
-    		cont = cont + 1
-    	end
-    	str = "#{str}#{e}"
-    end 
-    str = str.reverse
-  end
+
+  def self.set_keys_query(hash_keys)
+    hash_keys.delete_if { |key, value| value == "0"}
+  end  
   
   private 
     def split_date_on_space(str)

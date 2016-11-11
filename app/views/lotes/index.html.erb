@@ -1,5 +1,12 @@
 <% content_for :title do  "Lotes" end%>
-<div class="panel panel-default page-header">
+<div class="well" style="margin-top: 20px; padding: 2px;">
+  <div class="text-right">
+    <%= link_to options_export_lotes_path, :remote => true, :class => "btn btn-default btn-sm", :id => "exportar", :title => "Exportar excel" do %>
+    <i class="fa fa-file-excel-o fa-fw" aria-hidden="true"></i>
+    <% end %>
+  </div>
+</div>
+<div class="panel panel-default">
   <div class="panel-heading">
     <div class="row">
       <div class="col-xs-10">
@@ -7,7 +14,7 @@
       </div>
       <div class="col-sm-2 text-right">
         <%if can? :create, Lote%>
-          <%= link_to new_lote_path, {:title => "Nuevo lote"} do %>
+          <%= link_to new_lote_path, { :title => "Nuevo lote" } do %>
             <%= content_tag :i, "", :class => "fa fa-plus fa-3x"%>
           <%end%>
         <%end%>
@@ -16,7 +23,7 @@
 
   </div>
   <div class="panel-body">
-        <%=render 'table' %>
+    <%=render 'table' %>
     <!--Fin de la lista-->
   </div>
   

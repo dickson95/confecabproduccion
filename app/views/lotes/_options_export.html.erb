@@ -1,0 +1,51 @@
+<div class="modal-dialog">
+	<div class="modal-content">
+		<div class="modal-header">
+			Opciones
+		</div>
+		<%= simple_form_for :export, url: export_excel_lotes_path(format: "xlsx"), method: 'GET' do |f| %>
+		<div class="modal-body">
+			<h5>Seleccione los campos que desea importar</h5>
+			<div class="row">
+				<div class="col-xs-6">
+					<%= f.input :op, as: :boolean, input_html: { :checked => true } %>
+					<%= f.input :cliente_id, as: :boolean, input_html: { :checked => true } %>
+					<%= f.input :referencia_id, as: :boolean, input_html: { :checked => true } %>
+					<%= f.input :cantidad, as: :boolean, input_html: { :checked => true } %>
+					<%= f.input :tipo_prenda_id, as: :boolean, label: 'Descripción', input_html: { :checked => true } %>
+					<%= f.input :created_at, as: :boolean, label: 'Fecha de ingreso', input_html: { :checked => true }%>
+					<%= f.input :no_remision, as: :boolean, label: 'Número de remisión' %>
+					<%= f.input :no_factura, as: :boolean, label: 'Número de factura' %>
+					<%= f.input :fecha_revision, as: :boolean, label: 'Día revisión de insumos' %>
+				</div>
+				<div class="col-xs-6">
+					<%= f.input :fecha_entrega, as: :boolean, label: 'Día entrega de insumos' %>
+					<%= f.input :obs_insumos, as: :boolean, label: 'Observaciones de los insumos' %>
+					<%= f.input :fin_insumos, as: :boolean, label: 'Insumos listos' %>
+					<%= f.input :precio_u, as: :boolean, label: 'Precio Unitario' %>
+					<%= f.input :precio_t, as: :boolean, label: 'Precio total' %>
+					<%= f.input :secuencia, as: :boolean, label: 'No. de secuencia en programación' %>
+					<%= f.input :obs_integracion, as: :boolean, label: 'Observaciones de integración' %>
+					<%= f.input :fin_integracion, as: :boolean, label: 'Integración lista' %>
+					<%= f.input :fecha_entrada, as: :boolean, label: 'Día recepción de insumos' %>
+					<%= f.input :programacion_id, as: :boolean, label: 'Programación' %>
+				</div>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<%= f.button :button, data:{ :dismiss => "modal" }, type: 'button' do %>
+				Cancelar
+			<% end %>
+			<%= f.button :button do %>
+				<i class="fa fa-file-excel-o" aria-hidden="true"></i>
+				Exportar
+			<% end %>
+		</div>
+		<% end %>
+	</div>
+</div>
+<script type="text/javascript">
+	$("button[type=submit]").click(function(){
+		$("#myModal").modal("toggle");
+	})
+</script>
