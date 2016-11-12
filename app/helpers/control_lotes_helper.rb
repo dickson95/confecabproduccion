@@ -39,7 +39,7 @@ module ControlLotesHelper
 		end
 	end
 
-	def colspan(pref)
+	def set_colspan(pref)
 		if !can?(:update, ControlLote)
 			pref -= 1
 		end

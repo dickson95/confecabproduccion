@@ -43,7 +43,7 @@ module LotesHelper
       men = ""
     end
     if boolean && params[:action] != "cambio_estado"
-      link_to_options[:title] = men
+      link_to_options[:title] = men[:view]
       link_to "#{route}?btn=#{state_final}", link_to_options do
         content_tag(:i, "", content_tag_options).html_safe + men[:view]
       end

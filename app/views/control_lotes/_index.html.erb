@@ -10,12 +10,12 @@
       <table class="table table-striped table-bordered">
         <thead>
           <tr class="bg-primary">
-            <th colspan="<%= colspan 5 %>">REFERENCIA: <%=@lote.referencia.referencia%></th>
+            <th colspan="<%= set_colspan 5 %>">REFERENCIA: <%=@lote.referencia.referencia%></th>
             <th colspan="4">OP: <%=@lote.op%></th>
           </tr>
           <tr class="bg-info">
             <% if can?(:update, ControlLote) || can?(:destroy, ControlLote) %>
-            <th colspan="<%= colspan 2 %>"></th>
+            <th colspan="<%= set_colspan 2 %>"></th>
             <% end %>
             <th>Proceso</th>
             <th>P.adicional</th>
@@ -57,7 +57,9 @@
       </table>
     </div>
     <div class="modal-footer">
-      <%=next_state cambio_estado_path(@lote), @lote.control_lotes.last.estado.id, {:class => "btn btn-primary"}, {:class => "fa fa-forward fa-fw"}%>
+      <% if can? :cambio_estado, Lote %>
+      <%=next_state lote_cambio_estado_path(@lote), @lote.control_lotes.last.estado.id, {:class => "btn btn-primary", method: "PATCH" }, {:class => "fa fa-forward fa-fw"}%>
+      <% end %>
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
     </div>
   </div>
