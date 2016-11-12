@@ -28,6 +28,7 @@
 <%elsif params[:place] == "form_lote_sub_estado_response"%>
     var updatedFormEst = $('#lote_control_lotes_attributes_0_sub_estado_id', $('<%= j render 'lotes/updateForm' %>'));
     $('#lote_control_lotes_attributes_0_sub_estado_id').replaceWith(updatedFormEst);
+    $('#control_lote_sub_estado_id').replaceWith(updatedFormEst);
     $('#myModal').modal('toggle');
 
 

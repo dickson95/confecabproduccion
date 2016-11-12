@@ -77,7 +77,6 @@
       </div>
       <%if can? :cambio_estado, Lote%>
       <!--____Detalle de estado_______________________________-->
-
       <div class="row" id="form_lote_estado_update">
         <div class="col-lg-12">
           <div class="panel">
@@ -88,7 +87,10 @@
         </div>
 
         <div class="col-lg-12">
-          <%=render 'estados/form_for_lote', f: f %>
+        <% build = params[:action] == "new" ? @lote.control_lotes.build : nil %>
+        <%= f.fields_for :control_lotes, build do |c| %>
+          <%=render partial: 'control_lotes/form_fields', locals: { c: c, col: 4 } %>
+        <% end %>
         </div>
       </div>
       <!--____Fin detalle de estado_____________________________-->

@@ -4,15 +4,15 @@
 <%@lotes.each do |lote|%>
   <tr>
     <td><%= lote.fetch 0 %></td><!--id lote-->
-    <td style="padding: 1px;">
-      <div class="dropdown">
-        <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%=lote.fetch(0)%>"></i>
+    <td style="padding: 0px;">
+      <div class="dropdown btn">
+        <i data-toggle="dropdown" class="fa fa-ellipsis-v" id="lote_<%=lote.fetch(0)%>"></i>
         <ul class="dropdown-menu" aria-labelledby="lote_<%=lote.fetch(0)%>">
           <li>
             <%= link_to  lote_view_details_path(lote.fetch(0)), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
-            <%=content_tag :i, "", :class => "fa fa-list-alt fa-fw"%>
+            <%= content_tag :i, "", :class => "fa fa-eye fa-fw" %>
             Detalles
-            <%end%>
+            <% end %>
           </li>
           <% if can? :read, ControlLote %>
           <li>
@@ -26,14 +26,24 @@
           <% if can? :update, Lote %>
           <li class="divider"></li>
           <li>
-            <%= link_to edit_lote_path(lote.fetch(0), :sub_id => lote.fetch(7), :estado_id => lote.fetch(6), :place => "form_edit_lote"), { :title => 'Editar'}  do%>
-            <%=content_tag :i, "", :class => "fa fa-pencil fa-fw"%>   
+            <%= link_to edit_lote_path(lote.fetch(0), :place => "form_edit_lote"), { :title => 'Editar'}  do%>
+            <%=content_tag :i, "", :class => "fa fa-pencil fa-fw"%> 
             Editar 
             <%end%>
           </li>
           <%if can? :cambio_estado, Lote%>
           <li>
+<<<<<<< HEAD
             <%=next_state lote_cambio_estado_path(lote.fetch(0)), lote.fetch(6), {:method => 'PATCH'}, {:class => "fa fa-forward fa-fw"}%>
+=======
+            <%= link_to new_lote_control_lote_path(lote.fetch(0)), { :title => 'Proceso nuevo'}  do%>
+            <%=content_tag :i, "", :class => "fa fa-plus fa-fw"%> 
+            Proceso nuevo 
+            <%end%>
+          </li>
+          <li>
+            <%=next_state cambio_estado_path(lote.fetch(0)), lote.fetch(6), {}, {:class => "fa fa-fast-forward fa-fw"}%>
+>>>>>>> control_lote_nuevos
           </li>
           <%end%>
           <%end%>
@@ -57,9 +67,15 @@
     <td><%= lote.fetch 3 %></td><!--Op-->
     <td data-cantidad="<%= lote.fetch 4 %>"><%= lote.fetch 4 %></td><!--Cantidad-->
     <td><%= @tipos_prendas[lote.fetch(5)]%></td><!--Descripción-->
+<<<<<<< HEAD
     <%if can? :prices, Lote%>
     <td style="padding: 1px;">
     <%=content_tag :input, "", data:{:lote => lote.fetch(0)}, :value => Money.new("#{lote.fetch 8}00").format, :class => "form-control input-sm lote_precio_unitario", :disabled => (can? :prices_update, Lote)? false : true%>
+=======
+    <%if can? :total_price, Lote%>
+    <td style="padding: 0px;">
+    <%=content_tag :input, "", data:{:lote => lote.fetch(0)}, :value => Money.new("#{lote.fetch 8}00").format, :class => "form-control input-sm lote_precio_unitario", :disabled => (can? :update, Lote)? false : true%>
+>>>>>>> control_lote_nuevos
     </td><!--Precio unitario-->
     <td class="total"><%= Money.new("#{lote.fetch 9}00").format %></td><!--Precio total-->
     <%end%>

@@ -68,7 +68,7 @@ class ClientesController < ApplicationController
   def destroy
     @cliente.destroy
     respond_to do |format|
-      format.html { redirect_to tipos_prendas_path }
+      format.html { redirect_to clientes_path }
       flash[:success] = "Cliente eliminado."
       format.json { head :no_content }
     end
