@@ -278,7 +278,7 @@ class LotesController < ApplicationController
     def set_lote_u
       @lote = ControlLote.where(lote_id: params[:lote_id]).max
     end
-    
+
     def set_talla
       @tallas = Talla.all
     end
