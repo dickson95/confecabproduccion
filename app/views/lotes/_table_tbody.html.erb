@@ -4,9 +4,9 @@
 <%@lotes.each do |lote|%>
   <tr>
     <td><%= lote.fetch 0 %></td><!--id lote-->
-    <td style="padding: 1px;">
-      <div class="dropdown">
-        <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%=lote.fetch(0)%>"></i>
+    <td style="padding: 0px;">
+      <div class="dropdown btn">
+        <i data-toggle="dropdown" class="fa fa-ellipsis-v" id="lote_<%=lote.fetch(0)%>"></i>
         <ul class="dropdown-menu" aria-labelledby="lote_<%=lote.fetch(0)%>">
           <li>
             <%= link_to  view_datails_path(lote.fetch(0)), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
@@ -59,7 +59,7 @@
     <td data-cantidad="<%= lote.fetch 4 %>"><%= lote.fetch 4 %></td><!--Cantidad-->
     <td><%= @tipos_prendas[lote.fetch(5)]%></td><!--Descripción-->
     <%if can? :total_price, Lote%>
-    <td style="padding: 1px;">
+    <td style="padding: 0px;">
     <%=content_tag :input, "", data:{:lote => lote.fetch(0)}, :value => Money.new("#{lote.fetch 8}00").format, :class => "form-control input-sm lote_precio_unitario", :disabled => (can? :update, Lote)? false : true%>
     </td><!--Precio unitario-->
     <td class="total"><%= Money.new("#{lote.fetch 9}00").format %></td><!--Precio total-->

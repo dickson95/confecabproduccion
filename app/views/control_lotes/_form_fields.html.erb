@@ -5,8 +5,7 @@
   readonly: true, label: 'Entró a este proceso el día'  %>
 </div>
 <div class="col-md-<%= col %>">
-  <%= c.association :estado, :selected => params[:estado_id], 
-  collection: Estado.all, label: 'Parte del proceso', :include_blank => true %>
+  <%= c.association :estado, label: 'Parte del proceso', :include_blank => true %>
 </div>
 <% # Sección del subestado %>
 <div class="col-md-<%= col %>">
@@ -14,7 +13,7 @@
   <% # form nuevo  %>
   <%= c.input_field  :sub_estado_id, class: "form-control",
   :collection => @sub_estados, :value_method => :id, 
-  :include_blank =>  true, :selected => params[:sub_id]%>
+  :include_blank =>  true %>
 
   <div class="input-group-btn">
     <%= link_to '...', add_remote_data_path(:place => "form_lote_sub_estado"),

@@ -108,9 +108,6 @@ class LotesController < ApplicationController
         if !@color_blank
           @lote.errors.add :colores_lotes      
         end
-        control = params[:lote][:control_lotes_attributes][:'0']
-        params[:estado_id] = control[:estado_id]
-        params[:sub_id] = control[:sub_estado_id]
         format.html { render :new }
         format.json { render json: @lote.errors, status: :unprocessable_entity }
       end

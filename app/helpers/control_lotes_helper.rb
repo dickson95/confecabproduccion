@@ -3,7 +3,7 @@ module ControlLotesHelper
 	# sub_process(id_sub_proceso)
 	def sub_process(sub_process)
 		if !sub_process.nil?
-			@sub_estado[sub_process.id]
+			@sub_estado[sub_process.id].upcase
 		end
 	end
 
@@ -37,5 +37,15 @@ module ControlLotesHelper
 		else
 			"-"
 		end
+	end
+
+	def colspan(pref)
+		if !can?(:update, ControlLote)
+			pref -= 1
+		end
+		if !can?(:destroy, ControlLote)
+			pref -= 1
+		end
+		return pref
 	end
 end
