@@ -24,7 +24,7 @@ class Ability
       can :create, [Cliente, TipoPrenda, SubEstado]
       can :read, Cliente
       can :integracion, Lote
-      cannot :destroy, ControlLote
+      cannot [:destroy, :update_cantidad], ControlLote
       cannot [:prices, :prices_update, :insumos, :billing], Lote
       can [:read, :update], Lote
     elsif user.has_rol? :aux_insumos
@@ -32,16 +32,17 @@ class Ability
       can [:read, :export, :program_table], Programacion
       can :read, [ControlLote, Cliente]
       can [:create, :update], ControlLote
+      cannot :update_cantidad, ControlLote
       can :create, SubEstado
       cannot [:prices, :prices_update, :integracion, :billing], Lote
       can [:read, :update], Lote
     elsif user.has_rol? :gerente
       can :read, :all
       can [:read, :export, :program_table], Programacion
-      can :prices, Lote
+      can [:export, :prices], Lote
       cannot :manage, [Referencia, Talla, Rol]
     elsif user.has_rol? :aux_facturacion
-      can [:read, :billing, :prices], Lote
+      can [:export, :read, :billing, :prices], Lote
       can :read, Cliente
     end
   end

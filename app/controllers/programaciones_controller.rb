@@ -140,7 +140,12 @@ class ProgramacionesController < ApplicationController
 			params[:empresa] = session[:selected_company] ? "CAB" : "D&C"
 			# Consulta necesaria para cargar todas las instancias de las vistas exstentes 
 			params[:action].eql?("index") ?	params[:month] = Time.new.strftime("%Y%m") : nil
-			@programaciones = Programacion.joins(lotes: [:cliente, :tipo_prenda, :referencia]).where("extract(year_month from programaciones.mes) = ? and lotes.empresa = ?",  params[:month], @empresa).order("lotes.secuencia asc").pluck("clientes.cliente", "tipos_prendas.tipo", "lotes.secuencia", "referencias.referencia", "lotes.cantidad", "lotes.precio_u", "lotes.precio_t", "lotes.meta", "lotes.h_req","lotes.id")
+			@programaciones = Programacion.joins(lotes: [:cliente, :tipo_prenda, :referencia])
+			.where("extract(year_month from programaciones.mes) = ? and lotes.empresa = ?",  
+				params[:month], @empresa).order("lotes.secuencia asc")
+			.pluck("clientes.cliente", "tipos_prendas.tipo", "lotes.secuencia", 
+				"referencias.referencia", "lotes.cantidad", "lotes.precio_u", "lotes.precio_t", 
+				"lotes.meta", "lotes.h_req","lotes.id")
 		end
 
 		def programacion_id

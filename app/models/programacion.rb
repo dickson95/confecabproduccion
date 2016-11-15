@@ -78,7 +78,7 @@ class Programacion < ApplicationRecord
 	
 	# Establece cuales son los años que hay en la tabla de las programaciones
 	def self.years_db 
-		@years = self.distinct.order(:mes).pluck("extract(year from mes)")
+		@years = self.distinct.pluck("extract(year from mes)")
 	end
 
 	# Establecer si hay lotes para hacer una nueva programación

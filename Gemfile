@@ -77,10 +77,8 @@ gem 'axlsx_rails'
 # Gema para exportar a PDF
 gem 'wicked_pdf'
 
-# Validaciones del lado del cliente con gem 'client_side_validations'
-gem 'client_side_validations', github: 'DavyJonesLocker/client_side_validations', branch: 'rails5'
-gem 'client_side_validations-simple_form', github: 'DavyJonesLocker/client_side_validations-simple_form', branch: 'rails5'
-
 # Formato de la moneda
 gem 'money'
 
+
+ruby "2.3.1"
