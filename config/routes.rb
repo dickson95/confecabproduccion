@@ -21,10 +21,15 @@ Rails.application.routes.draw do
   # Rutas de los lotes
   resources :lotes do
     get :autocomplete_color_color, :on => :collection
-    get :view_details # es método get, y parte de los lotes
-    patch :cambio_estado # Este es patch y debe pertenecer a los lotes
+    get :options_export, :on => :collection
+    get :export_excel, :on => :collection
+    get :view_details           # es método get, y parte de los lotes
+    patch :cambio_estado        # Este es patch y debe pertenecer a los lotes
     patch :total_price, on: :member # esta es un patch y pertenece a los lotes
-    resources :control_lotes
+    resources :control_lotes do 
+      patch :update_cantidad, on: :member
+    end
+    post :validate_op
   end
 
   # Otras rutas

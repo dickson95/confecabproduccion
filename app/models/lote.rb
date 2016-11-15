@@ -25,13 +25,20 @@ class Lote < ApplicationRecord
   # La op debe ser única, permitir nil, validar por empresa y trabajar con los 
   # campos que antes de esta validación incumplian con el requerimiento
   def op_uniquenesses
+    val = Lote.validate_op(op, empresa, id)
+    errors.add(:op, "Ya existe esta OP") if !val
+  end
+  
+  # Retorna true en caso de que la op sea válida, caso contrario false
+  def self.validate_op(op, empresa, id=nil)
     if op != ""
+      # si el id está nil siginifica que es un registro nuevo
       if id.nil?
         $val = Lote.where("op = ? and empresa = ?", op, empresa).pluck(:op)
       else
         $val = Lote.where("op = ? and id <> ? and empresa = ?", op, id, empresa).pluck(:op)
       end
-      $val.empty? ? true : errors.add(:op, "Ya existe esta OP")
+      $val.empty? ? true : false
     else
       true
     end 
@@ -269,28 +276,27 @@ class Lote < ApplicationRecord
       return acum
     end
   end
+
+  def self.set_keys_query(hash_keys)
+    hash_keys.delete_if { |key, value| value == "0"}
+  end  
   
-  # Mètodo de 10/08/2016 
-  # Toma un entero y retorna el mismo separado por comas para que se pueda ver 
-  # claramente la cantidad expresada en precio.
-  def self.str_pesos(num)
-    num = num.to_s
-    num = num.scan(/./)
-    cont = 0
-    str = nil
-    num.reverse_each do |e|  
-    	if 
-        cont == 2 
-    		e = e+","
-    		cont = 0
-    	else
-    		cont = cont + 1
-    	end
-    	str = "#{str}#{e}"
-    end 
-    str = str.reverse
+  def self.query_filtered(params, company)
+    from = params[:from]
+    to = params[:to]
+    customer = params[:clientes]
+    if !customer.strip.eql?("") && !from.strip.eql?("") && !to.strip.eql?("")
+      return Lote.where("empresa = ? AND cliente_id = ? AND created_at BETWEEN ? AND ?", company, customer.to_i, from, to )
+    end
+    if !from.strip.eql?("") && !to.strip.eql?("")
+      return Lote.where("empresa = ? AND created_at BETWEEN ? AND ?", company, from, to )
+    end
+    if !customer.strip.eql?("")
+      return Lote.where("empresa = ? AND cliente_id = ?", company, customer.to_i)
+    end
+    return Lote.where("empresa = ?", company)
   end
-  
+
   private 
     def split_date_on_space(str)
       @meses = Programacion.meses

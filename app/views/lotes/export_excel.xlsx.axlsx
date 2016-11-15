@@ -1,0 +1,17 @@
+wb = xlsx_package.workbook
+head = wb.styles.add_style :bg_color => "428BCA", :fg_color => "FF"
+
+# Retorna los nombres de las columnas en los títulos
+names = def_names @keys
+company = session[:selected_company] ? "Confecab" : "Diseños y camisas"
+ wb.add_worksheet(:name => "Lotes #{company}") do |sheet|
+    sheet.add_row names
+    @lotes.each do |lote|
+    	# Retorna claves con valores de cada atributo del lote para ser accedido si se solicita
+    	values = keys_lote(lote)
+
+    	row = values_lote(@keys.keys, values)
+    	sheet.add_row row
+    end
+    sheet.row_style 0, head
+ end

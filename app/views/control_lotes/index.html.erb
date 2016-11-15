@@ -1,0 +1,79 @@
+<div class="panel panel-default" style="margin-top: 20px">
+  <div class="panel-heading ">
+    <div class="row">
+      <h4 class="col-xs-10">Ciclo de producción</h4>
+      <div class = "col-sm-2 text-right">
+        <%= link_to new_lote_control_lote_path(@lote), :title => 'Proceso nuevo'  do %>
+          <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr class="bg-primary">
+          <th colspan="<%= set_colspan 5 %>">REFERENCIA: <%=@lote.referencia.referencia%></th>
+          <th colspan="<%= can?(:update_cantidad, ControlLote) ? "5" : "4" %>">OP: <%=@lote.op%></th>
+        </tr>
+        <tr class="bg-info">
+          <% if can?(:update, ControlLote) || can?(:destroy, ControlLote) %>
+          <th colspan="<%= set_colspan 2 %>"></th>
+          <% end %>
+          <th>Proceso</th>
+          <th>P.adicional</th>
+          <th class="col-xs-2">Ingreso-Salida</th>
+          <th class="col-xs-2" >Ingresado por</th>
+          <th class="col-xs-2" >Salida por</th>
+          <th>Días</th>
+          <th class="col-xs-3">Observaciones</th>
+          <% if can? :update_cantidad, ControlLote %>
+          <th>Cantidades</th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @control_lotes.each do |control_lote| %>
+          <tr>
+            <% if can? :update, ControlLote %>
+            <td>
+              <%= link_to edit_lote_control_lote_path(@lote, control_lote) do %>
+              <i class="fa fa-pencil" aria-hidden="true"></i>
+              <% end %>
+            </td>
+            <% end %>
+            <% if can? :destroy, ControlLote %>
+            <td>
+              <%= link_to lote_control_lote_path(@lote, control_lote), data:{:confirm => "¿Esta seguro de eliminar este proceso?"}, method: "delete" do %>
+              <i class="fa fa-trash" aria-hidden="true" style="color:red;"></i>
+              <% end %>
+            </td>
+            <% end %>
+            <td title="Proceso"><%= control_lote.estado.name.upcase %></td>
+            <td title="Proceso adicional"><%= sub_process control_lote.sub_estado %></td>
+            <td title="Fecha de ingreso"><%= range_date control_lote.fecha_ingreso, control_lote.fecha_salida %></td>
+            <td title="Responsable de ingreso"><%= control_lote.resp_ingreso_id.name %></td>
+            <td title="Responsable de salida"><%= respon_exit control_lote.resp_salida_id %></td>
+            <td title="Días en proceso"><%= days control_lote.fecha_ingreso, control_lote.fecha_salida %></td>
+            <td title="Observaciones"><%= control_lote.observaciones %></td>
+            <% if can? :update_cantidad, ControlLote %>
+            <td style="padding: 1px;">
+              <%= content_tag :input, "", data: { :control_id => control_lote.id }, :value => control_lote.cantidad, :type => "number", :class => "form-control input-sm cantidades" %>
+            </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel-footer text-right">
+    <strong>Cantidad total:</strong> <span><%= @lote.cantidad %></span> <br>
+    <strong>Cantidad en proceso:</strong> <span id="cantidad_proceso"><%= @control_lotes.sum(:cantidad) %></span>
+  </div>
+</div>
+<div class="text-right">
+  <%= link_to "Regresar", lotes_path %>
+  <% if can? :cambio_estado, Lote %>
+  <%=next_state lote_cambio_estado_path(@lote), @lote.control_lotes.last.estado.id, {:class => "btn btn-primary", method: "PATCH" }, {:class => "fa fa-forward fa-fw"}%>
+  <% end %>
+</div>

@@ -114,7 +114,6 @@ class ProgramacionesController < ApplicationController
 	def export_excel
 		date = Programacion.date_split(params[:month])
 		render xlsx: "export_excel", filename: "#{@empresa} de #{@meses[date[:month]][:string]}.xlsx"
-
 	end
 
 	# Exportar archivos a PDF

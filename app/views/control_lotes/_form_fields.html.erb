@@ -1,0 +1,26 @@
+    
+<div class="col-md-<%= col %>">
+  <%= c.input :fecha_ingreso, as: "string", 
+  input_html: {:value => fecha_ingreso_input },
+  readonly: true, label: 'Entró a este proceso el día'  %>
+</div>
+<div class="col-md-<%= col %>">
+  <%= c.association :estado, label: 'Parte del proceso', :include_blank => true %>
+</div>
+<% # Sección del subestado %>
+<div class="col-md-<%= col %>">
+  <%= c.input :sub_estado, :label => 'Proceso adicional',  wrapper: :vertical_input_group do %>
+  <% # form nuevo  %>
+  <%= c.input_field  :sub_estado_id, class: "form-control",
+  :collection => @sub_estados, :value_method => :id, 
+  :include_blank =>  true %>
+
+  <div class="input-group-btn">
+    <%= link_to '...', new_sub_estado_path(:place => "form_lote_sub_estado"),
+    {:remote => true, :class => "btn btn-primary", :title => "Nuevo proceso"} %>
+  </div>
+  <% end %>
+</div>
+<div class="col-md-12">
+  <%= c.input :observaciones %>
+</div>

@@ -8,11 +8,7 @@
       <%= f.input :op, input_html: { style: 'text-transform:uppercase;', autocomplete: 'off', autofocus: true} %>
     </div>
     <div class="col-md-4" style="max-height: 90px;">
-      <%if !params[:action].eql?('edit') && !params[:action].eql?('update') %>
-      <%= f.input :referencia, input_html: { style: 'text-transform:uppercase;', autocomplete: 'off', value: @lote.referencia.nil? ? "" : @lote.referencia.referencia}%>
-      <%else %>
-      <%= f.input :referencia, :readonly => false, input_html: { style: 'transform:uppercase;', autocomplete: 'off', value: "#{@lote.referencia.referencia}"}%>
-      <% end %>
+      <%= f.input :referencia, input_html: { style: 'text-transform:uppercase;', autocomplete: 'off', value: @lote.referencia.nil? ? "" : @lote.referencia.referencia }%>
     </div>
     <div class="col-md-4" style="min-height: 90px; max-height: 90px;">
         <%= f.input :cliente, wrapper: :vertical_input_group do %>

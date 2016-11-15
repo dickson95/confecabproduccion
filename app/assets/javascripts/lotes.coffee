@@ -250,9 +250,6 @@ $(document).on 'turbolinks:load', ->
 
     return
 
-
-
-
   # Reorganizamiento cuando la pantalla se encoge
   $(window).resize ->
     element = $("form div").first().children("div")

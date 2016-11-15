@@ -6,6 +6,6 @@ class Estado < ApplicationRecord
     
     # Métodos
     def name
-        self.estado
+        self.estado.upcase
     end
 end
