@@ -26,7 +26,9 @@ Rails.application.routes.draw do
     get :view_details           # es método get, y parte de los lotes
     patch :cambio_estado        # Este es patch y debe pertenecer a los lotes
     patch :total_price, on: :member # esta es un patch y pertenece a los lotes
-    resources :control_lotes
+    resources :control_lotes do 
+      patch :update_cantidad, on: :member
+    end
   end
 
   # Otras rutas

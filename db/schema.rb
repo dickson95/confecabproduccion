@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161110192812) do
+ActiveRecord::Schema.define(version: 20161115165152) do
 
   create_table "asignaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 20161110192812) do
     t.integer  "resp_ingreso_id",                                       default: 1, null: false
     t.integer  "resp_salida_id"
     t.text     "observaciones",   limit: 65535
+    t.integer  "cantidad",                                              default: 0
     t.index ["estado_id"], name: "index_control_lotes_on_estado_id", using: :btree
     t.index ["lote_id"], name: "index_control_lotes_on_lote_id", using: :btree
     t.index ["resp_ingreso_id"], name: "index_control_lotes_on_resp_ingreso_id", using: :btree

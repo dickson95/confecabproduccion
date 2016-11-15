@@ -16,8 +16,8 @@
           </li>
           <% if can? :read, ControlLote %>
           <li>
-            <%= link_to lote_control_lotes_path(lote.fetch(0)), {:remote => true, :title => "Ver ciclo de producción", :id => "lote_control_lote"} do%>
-            <%=content_tag :i, "", :class => "fa fa-refresh fa-fw"%>
+            <%= link_to lote_control_lotes_path(lote.fetch(0)), { :title => "Ver ciclo de producción", :id => "lote_control_lote"} do %>
+            <%= content_tag :i, "", :class => "fa fa-refresh fa-fw" %>
             Ciclo de producción
             <%end%>
           </li>

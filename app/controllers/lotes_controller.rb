@@ -72,7 +72,7 @@ class LotesController < ApplicationController
     # Definir si la op existe. Retorna true si puede ser creada
     @lote = Lote.new(lote_params)
     respond_to do |format|
-      if @colore_blank
+      if @color_blank
         if @lote.save
           @lote = ControlLote.last
           ControlLote.where(:id => @lote.id).update(resp_ingreso_id: current_user, fecha_ingreso:  Time.new)  
@@ -82,15 +82,13 @@ class LotesController < ApplicationController
         end
       else
         invalid = true
+        @lote.errors.add :colores_lotes  
       end
       if invalid
         set_tipo_prenda
         if @remove
           @colores_lotes = @lote.colores_lotes.build
           (0..8).each{|n| @cantidades = @colores_lotes.cantidades.build } 
-        end
-        if !@color_blank
-          @lote.errors.add :colores_lotes      
         end
         format.html { render :new }
         format.json { render json: @lote.errors, status: :unprocessable_entity }

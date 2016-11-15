@@ -37,6 +37,20 @@ class ControlLote < ApplicationRecord
     }
   end
 
+  def self.after_before(lote)
+    amount_lote = lote.cantidad
+    control_lotes = lote.control_lotes.sum(:cantidad)
+    if amount_lote < control_lotes
+      res = control_lotes - amount_lote
+      return "Sobran #{res}"
+    elsif amount_lote > control_lotes
+      res = amount_lote - control_lotes
+      return "Faltan #{res}"
+    else
+      return nil
+    end
+  end
+
   private
     # Parametros
     # d1: Día inicial 

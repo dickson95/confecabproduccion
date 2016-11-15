@@ -44,7 +44,6 @@ document.addEventListener("turbolinks:before-cache", function() {
   var tablecontrol = $('#control').DataTable();
   var tableclientes = $('#t_clientes').DataTable();
   var tables2 = $('.tablas2').DataTable();
-  $("#myModal").modal("toggle");
 	tablelotes.destroy();
 	tablecontrol.destroy();
 	tableclientes.destroy();
