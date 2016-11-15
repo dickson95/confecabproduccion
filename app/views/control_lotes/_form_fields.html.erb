@@ -1,7 +1,7 @@
     
 <div class="col-md-<%= col %>">
   <%= c.input :fecha_ingreso, as: "string", 
-  input_html: {:value => I18n::localize(Time.zone.utc_to_local(Time.new) + 60, :format => "%Y-%m-%d %H:%M:%S")},
+  input_html: {:value => fecha_ingreso_input },
   readonly: true, label: 'Entró a este proceso el día'  %>
 </div>
 <div class="col-md-<%= col %>">

@@ -39,6 +39,7 @@ class LotesController < ApplicationController
     @lote = Lote.new
     @colores_lotes = @lote.colores_lotes.build
     @cantidades = @colores_lotes.cantidades.build
+    @control_lote = @lote.control_lotes.build
   end
 
   # GET /lotes/1/edit

@@ -48,4 +48,9 @@ module ControlLotesHelper
 		end
 		return pref
 	end
+
+	def fecha_ingreso_input
+		return @control_lote.fecha_ingreso_input if !@control_lote.nil?
+    Time.zone.utc_to_local(Time.new) + 60
+	end
 end

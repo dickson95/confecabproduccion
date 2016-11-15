@@ -16,6 +16,11 @@ class ControlLote < ApplicationRecord
     write_attribute(:sub_estado_id, val)
   end
 
+  def fecha_ingreso_input
+    return  I18n::localize( self.fecha_ingreso, :format => "%Y-%m-%d %H:%M:%S") if !self.fecha_ingreso.nil?
+    I18n::localize( Time.zone.utc_to_local(Time.new) + 60, :format => "%Y-%m-%d %H:%M:%S")
+  end
+
   def self.hash_ids
     result = ControlLote.select("lote_id, fecha_ingreso").where("control_lotes.fecha_ingreso = (SELECT MIN(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)")
     hash_ids = Hash.new
