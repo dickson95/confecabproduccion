@@ -114,7 +114,8 @@ class ProgramacionesController < ApplicationController
 		clientes = Lote.distinct.where("programacion_id = ?", @programacion.first).pluck(:cliente_id)
 		@clientes = Cliente.select(:id, :cliente).find(clientes)
 		@estados = Estado.all
-		@sub_estados = SubEstado.all
+		ids_sub_estados = Lote.joins(:control_lotes).where(:programacion_id => @programacion.first).distinct.where("control_lotes.sub_estado_id > 0").pluck("control_lotes.sub_estado_id")
+		@sub_estados = SubEstado.find(ids_sub_estados)
 		if params[:format_export].eql?("xlsx")
 			@url = export_excel_programacion_path(@programacion.first, :format => "xlsx")
 		elsif params[:format].eql?("pdf")
@@ -127,7 +128,15 @@ class ProgramacionesController < ApplicationController
 		@programacion = Programacion.where("extract(year_month from programaciones.mes) = ? and empresa = ?", 
 			export_permit[:month], session[:selected_company])
 		@programacion_head = Programacion.find(params[:id])
-		@programacion_lotes = @programacion_head.lotes
+		# @programacion_lotes = @programacion_head.lotes
+		values = Programacion.remove_empty_key_value({
+			"cliente" => export_permit[:cliente],
+			"control_lotes.estado" => export_permit["control_lotes.estado"],
+			"control_lotes.sub_estado" => export_permit["control_lotes.sub_estado"]
+			})
+		@programacion_lotes = Programacion.collection_lotes @programacion_head, values
+		ids_sub_estados = @programacion_head.lotes.joins(:control_lotes).distinct.where("control_lotes.sub_estado_id > 0").pluck("control_lotes.sub_estado_id")
+		@lotes_sub_estados = SubEstado.find(ids_sub_estados)
 		@date = Programacion.date_split(export_permit[:month])
 		render xlsx: "export_excel", filename: "#{@empresa} de #{@meses[@date[:month]][:string]}.xlsx"
 	end
@@ -185,8 +194,8 @@ class ProgramacionesController < ApplicationController
 		end
 
 		def export_permit
-			params.require(:export).permit(:precio_u, :precio_t, :processes, :external_processes, 
-				:external_processes_details, :month, :cliente, :estado, :sub_estados)
+			params.require(:export).permit(:precio_u, :precio_t, :processes, 
+				:processes_details, :month, :cliente, "control_lotes.estado", "control_lotes.sub_estado")
 		end
 
 		# Sumar las horas y el precio total.

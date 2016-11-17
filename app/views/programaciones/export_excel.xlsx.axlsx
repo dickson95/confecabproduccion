@@ -1,14 +1,26 @@
 wb = xlsx_package.workbook
-head = wb.styles.add_style :bg_color => "428BCA", :fg_color => "FF"
+head = wb.styles.add_style :bg_color => "ededfe", :fg_color => "2d3f81", :sz => 30, :alignment => { :horizontal => :center, :vertical => :center }, :border => { :style => :thin, :color =>"00" }
+titles = wb.styles.add_style  :sz => 12, :alignment => {:horizontal => :center, :vertical => :center, :wrap_text => true}, :border => { :style => :thin, :color =>"00" }
+body =  wb.styles.add_style :border => { :style => :thin, :color =>"00" },:alignment => { :horizontal => :left}
 mes = @meses[@date[:month]][:string]
 
 wb.add_worksheet(:name => "#{mes}") do |sheet|
-	sheet.add_row ["Programación #{mes}"]
+	sheet.add_row ["", "#{mes.upcase}"], :height => 80
+
+	head_titles = titles_head
+	sheet.add_row head_titles, :style => titles, :height => 40
+
 	@programacion_lotes.each do |lote|
 		row_lote = set_row_programacion_lote lote
-		sheet.add_row row_lote
+		sheet.add_row row_lote, :style => body
+	end
+
+	# Establecer ancho de la primera fila para el título
+	cont = 2
+	(3..head_titles.size).each do |cell|
+		sheet.rows.first.add_cell(value = "")
+		cont += 1
 	end
 	sheet.row_style 0, head
+	sheet.merge_cells sheet.rows.first.cells[(1..cont)]
 end
-
-

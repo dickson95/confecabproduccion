@@ -13,10 +13,10 @@
 					<%= f.input :cliente, collection: @clientes, required: false, input_html: { :class => "input-sm" } %>
 				</div>
 				<div class="col-xs-4">
-					<%= f.input :estado, collection: @estados, required: false, input_html: { :class => "input-sm" } %>
+					<%= f.input "control_lotes.estado", collection: @estados, label: "Estado", required: false, input_html: { :class => "input-sm" } %>
 				</div>
 				<div class="col-xs-4">
-					<%= f.input :sub_estados, collection: @sub_estados, label: "Proceso externo", required: false, input_html: { :class => "input-sm" } %>
+					<%= f.input "control_lotes.sub_estado", collection: @sub_estados, label: "Proceso externo", required: false, input_html: { :class => "input-sm" } %>
 				</div>
 			</div>
 			<div class="row">
@@ -36,8 +36,7 @@
 					<%= f.input :precio_u, as: :boolean, label: "Precio unitario" %>
 					<%= f.input :precio_t, as: :boolean, label: "Precio total" %>
 					<%= f.input :processes, as: :boolean, label: "Procesos (WIP)" %>
-					<%= f.input :external_processes, as: :boolean, label: "Procesos externos (Sin detallar)" %>
-					<%= f.input :external_processes_details, as: :boolean, label: "Procesos externos (Detallados)" %>
+					<%= f.input :processes_details,  as: :radio_buttons, label: "Detallar procesos externos: ", required: false, disabled: true, input_html: { value: true }, checked: true %>
 					<%= f.hidden_field :month, value: params[:month] %>
 				</div>
 			</div>
@@ -57,5 +56,13 @@
 <script type="text/javascript">
 	$("button[type=submit]").click(function(){
 		$("#modal_add").modal("toggle");
+	});
+	$("#export_processes").click(function(){
+		true_= $("#export_processes_details_true")
+		false_ = $("#export_processes_details_false")
+		true_.toggleClass("disabled");
+		true_.attr('disabled', function(_, attr) { return !attr });
+		false_.toggleClass("disabled")
+		false_.attr('disabled', function(_, attr){ return !attr});
 	});
 </script>

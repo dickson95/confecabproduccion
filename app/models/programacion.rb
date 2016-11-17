@@ -130,4 +130,23 @@ class Programacion < ApplicationRecord
 			Lote.update(k.to_i, :secuencia => v.to_i)
 		end
 	end
+
+	# Retira de un hash aquellas claves cuyo valor esté vacío
+	def self.remove_empty_key_value(hash_)
+		hash_.each do |k, v|
+			hash_.delete(k) if v.strip.eql?("")
+		end
+	end
+
+	def self.collection_lotes(programing, values)
+		lotes = nil
+		if values.include?("control_lotes.estado") || values.include?("control_lotes.sub_estado")
+			lotes = programing.lotes.joins(:control_lotes).where(values)
+			lotes = lotes.reject{|lote| lote.control_lotes.last.estado_id != values["control_lotes.estado"].to_i} if values.include?("control_lotes.estado")
+			lotes = lotes.reject{|lote| lote.control_lotes.last.sub_estado_id != values["control_lotes.sub_estado"].to_i} if values.include?("control_lotes.sub_estado")
+		else
+			lotes = programing.lotes.where(values)
+		end
+		return lotes
+	end
 end
