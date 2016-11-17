@@ -15,7 +15,7 @@
 					<button type="button" class="btn btn-primary dropdown-toggle disabled-btn" data-toggle="dropdown" <%=disabled.fetch(0) ? 'disabled' : ''%>>Exportar&nbsp;<i class="caret"></i></button>
 					<ul class="dropdown-menu pull-right">
 						<li>
-							<%=link_to export_excel_programaciones_path(format: "xlsx", :month => params[:month]) do%>
+							<%=link_to programacion_options_export_path(params[:month], format_export: "xlsx"), remote: true do%>
 								<%=content_tag :i ,"",:class => "fa fa-file-excel-o"%>
 								Excel
 							<%end%>

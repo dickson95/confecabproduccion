@@ -29,6 +29,7 @@ class Programacion < ApplicationRecord
 
 	end
 
+	# Hash de los estados de los lotes para reducir el tiempo de carga
 	def self.states_lotes(programacion)
 		states_arr = Lote.joins([control_lotes: [:estado]]).where("lotes.programacion_id = ? and control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)", programacion).pluck("lotes.id","estados.estado")
 		states = Hash.new

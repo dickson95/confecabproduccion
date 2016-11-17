@@ -1,0 +1,61 @@
+<div class="modal-dialog" role="document" >
+	<div class="modal-content">
+		<div class="modal-header">
+			Opciones de exportación
+		</div>
+		<%= simple_form_for :export, url: @url, method: "GET" do |f| %>
+		<div class="modal-body">
+			<div class="well row" style="padding: 2px;">
+				<div class="col-md-12">
+					<h5>Seleccione un filtro (Opcional)</h5>
+				</div>
+				<div class="col-xs-4">
+					<%= f.input :cliente, collection: @clientes, required: false, input_html: { :class => "input-sm" } %>
+				</div>
+				<div class="col-xs-4">
+					<%= f.input :estado, collection: @estados, required: false, input_html: { :class => "input-sm" } %>
+				</div>
+				<div class="col-xs-4">
+					<%= f.input :sub_estados, collection: @sub_estados, label: "Proceso externo", required: false, input_html: { :class => "input-sm" } %>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xs-6">
+					<h5>Columnas estandar:</h5>
+					<ul>
+						<li>Fecha de ingreso</li>
+						<li>Estado actual</li>
+						<li>Número de secuencia</li>
+						<li>Cliente</li>
+						<li>Referencia</li>
+						<li>OP</li>
+						<li>Cantidad</li>
+					</ul>
+				</div>
+				<div class="col-xs-6">
+					<%= f.input :precio_u, as: :boolean, label: "Precio unitario" %>
+					<%= f.input :precio_t, as: :boolean, label: "Precio total" %>
+					<%= f.input :processes, as: :boolean, label: "Procesos (WIP)" %>
+					<%= f.input :external_processes, as: :boolean, label: "Procesos externos (Sin detallar)" %>
+					<%= f.input :external_processes_details, as: :boolean, label: "Procesos externos (Detallados)" %>
+					<%= f.hidden_field :month, value: params[:month] %>
+				</div>
+			</div>
+		</div>	
+		<div class="modal-footer">
+			<%= f.button :button, data:{ :dismiss => "modal" }, type: 'button' do %>
+				Cancelar
+			<% end %>
+			<%= f.button :button do %>
+				<i class="fa fa-external-link" aria-hidden="true"></i>
+				Exportar
+			<% end %>
+		</div>
+		<% end %>
+	</div>
+</div>
+<script type="text/javascript">
+	$("button[type=submit]").click(function(){
+		$("#modal_add").modal("toggle");
+	});
+</script>

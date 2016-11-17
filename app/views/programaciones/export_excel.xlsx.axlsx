@@ -1,112 +1,14 @@
 wb = xlsx_package.workbook
-# Configuración del mes de la programación
-date = Programacion.date_split params[:month]
-month = @meses[date[:month]]
+head = wb.styles.add_style :bg_color => "428BCA", :fg_color => "FF"
+mes = @meses[@date[:month]][:string]
 
-# Centrar celdas
-wrap_text_title = wb.styles.add_style(
-	{
-		:bg_color => "D8D8D8",
-		:sz => 14,
-		:font_name => 'Calibri',
-		:alignment => 
-			{:horizontal => 
-				:center, 
-				:vertical => :center, 
-				:wrap_text => true
-			},
-		:border => 
-			{ 
-				:style => :thin, 
-				:color => "00" 
-			}
-	}  
-)
-wrap_text_subtitles = wb.styles.add_style (
-	{
-		:fg_color => "17365D",
-		:border => { :style => :thin, :color => "00" },
-		:alignment => 
-		{
-			:horizontal => :center, 
-			:vertical => :center, 
-			:wrap_text => true
-		}
-		
-	}
-)
-
-text = wb.styles.add_style ({
-		:alignment => { :horizontal => :left },
-		:border => { :style => :thin, :color => "00" }
-	})
-money = wb.styles.add_style({
-		:format_code => '$0,000', :border => Axlsx::STYLE_THIN_BORDER,
-		:border => { :style => :thin, :color => "00" }
-	
-})
-border =  wb.styles.add_style :border => { :style => :thin, :color => "00" }
-# Celdas a imprimir
-wb.add_worksheet(:name  => "Programación") do |sheet|
-	sheet.add_row ["PROGRAMACIÓN MES #{month[:string].upcase} DE #{date[:year]}","","","","","",""], :style => wrap_text_title
-	sheet.add_row ["","","","","","",""], :style => wrap_text_title
-	# Combinar celdas
-	sheet.merge_cells("A1:H2")
-
-	# Céldas con texto enriquecido para los subtítulos de la tabla
-	rt = Axlsx::RichText.new
-	rt1 = Axlsx::RichText.new
-	rt3 = Axlsx::RichText.new
-	rt4 = Axlsx::RichText.new
-	rt5 = Axlsx::RichText.new
-	rt6 = Axlsx::RichText.new
-	rt7 = Axlsx::RichText.new
-	rt8 = Axlsx::RichText.new
-
-	rt.add_run('CLIENTE', :b => true)
-	rt1.add_run('DESCRIPCIÓN', :b => true)
-	rt3.add_run('REFERENCIA', :b => true)
-	rt4.add_run('CANT', :b => true)
-	if (can? :prices, Lote)
-		rt5.add_run('PRECIO', :b => true)
-		rt6.add_run('TOTAL', :b => true)
+wb.add_worksheet(:name => "#{mes}") do |sheet|
+	sheet.add_row ["Programación #{mes}"]
+	@programacion_lotes.each do |lote|
+		row_lote = set_row_programacion_lote lote
+		sheet.add_row row_lote
 	end
-	rt7.add_run('META', :b => true)
-	rt8.add_run('HORAS', :b => true)
-
-	sheet.add_row [
-			rt,
-			rt1,
-			rt3,
-			(can? :prices, Lote) ? rt4 : nil,
-			(can? :prices, Lote) ? rt5 : nil,
-			rt6,
-			rt7,
-			rt8,
-		], :style => wrap_text_subtitles
-
-	# Datos que se vana imprimir
-  @programaciones.each do |programacion|
-    sheet.add_row [
-    	programacion.fetch(0), 
-    	programacion.fetch(1), 
-    	programacion.fetch(3), 
-    	programacion.fetch(4), 
-    	(can? :prices, Lote) ? programacion.fetch(5) : nil,
-    	(can? :prices, Lote) ? programacion.fetch(6) : nil, 
-    	programacion.fetch(7), 
-    	programacion.fetch(8)
-    ], :style => border
-  end
-
-  # Dar un estilo diferente a cada columna	
-  sheet.col_style 2, text
-
-  # Formato moneda para las columnas de los precios
-  sheet.col_style 4, money
-  sheet.col_style 5, money
-
-  # Especificar ancho de cada columna
-  sheet.column_widths 20, nil, nil, nil, nil, nil, nil, nil
+	sheet.row_style 0, head
 end
+
 

@@ -1,5 +1,6 @@
 class Cliente < ApplicationRecord
 	
+	has_many :lotes
 	validates :cliente, presence: true
 	validates :empresa, inclusion: { in: [ true, false ] }
 	

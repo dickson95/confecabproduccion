@@ -2,11 +2,11 @@ class ProgramacionesController < ApplicationController
 	load_and_authorize_resource
 	before_action :empresa 
 	before_action :set_meses, except: [:modal_open, :update_row_order]
-	before_action :programacion_id, except: [:modal_open, :update_row_order]
+	before_action :programacion_id, except: [:modal_open, :update_row_order, :export_excel]
 	before_action :states_lotes, only: [:index, :program_table]
-	before_action :sum_totals, except: [:modal_open, :update_row_order]
-	before_action :set_programaciones, only: [:index, :export_excel, :export_pdf]
-	before_action :no_empty_program, except: [:modal_open, :remove_from_programing, :add_lotes_to_programing]
+	before_action :sum_totals, except: [:modal_open, :update_row_order, :export_excel, :options_export]
+	before_action :set_programaciones, only: [:index, :export_pdf]
+	before_action :no_empty_program, except: [:modal_open, :remove_from_programing, :add_lotes_to_programing, :export_excel,:options_export]
 	after_action  :states_lotes, only: [:generate, :add_lotes_to_programing]
 	
 	def index
@@ -110,10 +110,26 @@ class ProgramacionesController < ApplicationController
 	    head :no_content # this is a POST action, updates sent via AJAX, no view rendered
 	end
 
+	def options_export
+		clientes = Lote.distinct.where("programacion_id = ?", @programacion.first).pluck(:cliente_id)
+		@clientes = Cliente.select(:id, :cliente).find(clientes)
+		@estados = Estado.all
+		@sub_estados = SubEstado.all
+		if params[:format_export].eql?("xlsx")
+			@url = export_excel_programacion_path(@programacion.first, :format => "xlsx")
+		elsif params[:format].eql?("pdf")
+			@url = export_pdf_programaciones_path
+		end
+	end
+
 	# Exportar archivos a excel 
 	def export_excel
-		date = Programacion.date_split(params[:month])
-		render xlsx: "export_excel", filename: "#{@empresa} de #{@meses[date[:month]][:string]}.xlsx"
+		@programacion = Programacion.where("extract(year_month from programaciones.mes) = ? and empresa = ?", 
+			export_permit[:month], session[:selected_company])
+		@programacion_head = Programacion.find(params[:id])
+		@programacion_lotes = @programacion_head.lotes
+		@date = Programacion.date_split(export_permit[:month])
+		render xlsx: "export_excel", filename: "#{@empresa} de #{@meses[@date[:month]][:string]}.xlsx"
 	end
 
 	# Exportar archivos a PDF
@@ -166,6 +182,11 @@ class ProgramacionesController < ApplicationController
 
 		def programacion_params
 			params.require(:programacion).permit(:secuencia => [], :updated_positions => [:lote_id, :position])
+		end
+
+		def export_permit
+			params.require(:export).permit(:precio_u, :precio_t, :processes, :external_processes, 
+				:external_processes_details, :month, :cliente, :estado, :sub_estados)
 		end
 
 		# Sumar las horas y el precio total.
