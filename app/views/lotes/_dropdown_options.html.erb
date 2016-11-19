@@ -1,0 +1,54 @@
+<div class="dropdown" style="max-width: 30px; margin: 0;">
+  <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%=lote_id%>"></i>
+  <ul class="dropdown-menu" aria-labelledby="lote_<%=lote_id%>">
+    <li>
+    <%= link_to  lote_view_details_path(lote_id), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
+      <%= content_tag :i, "", :class => "fa fa-eye fa-fw" %>
+      Detalles
+      <% end %>
+    </li>
+    <% if can? :read, ControlLote %>
+    <li>
+    <% # plc: Hace referencia a place controller %>
+      <%= link_to lote_control_lotes_path(lote_id, :plc => params[:controller]), { :title => "Ver ciclo de producción", :id => "lote_control_lote"} do %>
+      <%= content_tag :i, "", :class => "fa fa-refresh fa-fw" %>
+      Ciclo de producción
+      <%end%>
+    </li>
+    <% end %>
+
+    <% if can? :update, Lote %>
+    <li class="divider"></li>
+    <li>
+      <% # plc: Hace referencia a place controller %>
+      <%= link_to edit_lote_path(lote_id, :place => "form_edit_lote", :plc => params[:controller]), { :title => 'Editar'}  do%>
+      <%=content_tag :i, "", :class => "fa fa-pencil fa-fw"%> 
+      Editar 
+      <%end%>
+    </li>
+    <%end%>
+    <%if can? :cambio_estado, Lote%>
+    <li>
+      <%= link_to new_lote_control_lote_path(lote_id), { :title => 'Proceso nuevo'}  do%>
+      <%=content_tag :i, "", :class => "fa fa-plus fa-fw"%> 
+      Proceso nuevo 
+      <%end%>
+    </li>
+    <li>
+      <%=next_state lote_cambio_estado_path(lote_id), estado_id, { method: "PATCH" }, {:class => "fa fa-fast-forward fa-fw"}%>
+    </li>
+    <%end%>
+    <% # Puede editar %>
+
+    <% if can? :destroy, Lote %>
+    <li class="divider"></li>
+    <li>
+      <%= link_to lote_path(lote_id), :class => "delete", :method => :delete, data: { :confirm => 'Si elimina este registro no podrá recuperarlo. ¿Está realmente seguro?' }, :title => "Eliminar", :remote => true do %>
+      <%=content_tag :i, "", :class => "fa fa-trash-o"%>
+      Eliminar
+      <%end%>
+    </li>
+    <%end%>
+    <% # Puede eliminar %>
+  </ul>
+</div>

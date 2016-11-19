@@ -2,11 +2,13 @@
   <div class="panel-heading ">
     <div class="row">
       <h4 class="col-xs-10">Ciclo de producción</h4>
+      <% if can? :create, ControlLote %>
       <div class = "col-sm-2 text-right">
         <%= link_to new_lote_control_lote_path(@lote), :title => 'Proceso nuevo'  do %>
           <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
         <% end %>
       </div>
+      <% end %>
     </div>
   </div>
   <div class="table-responsive">
@@ -72,7 +74,7 @@
   </div>
 </div>
 <div class="text-right">
-  <%= link_to "Regresar", lotes_path %>
+  <%= link_to "Regresar", "/#{params[:plc]}" %>
   <% if can? :cambio_estado, Lote %>
   <%=next_state lote_cambio_estado_path(@lote), @lote.control_lotes.last.estado.id, {:class => "btn btn-primary", method: "PATCH" }, {:class => "fa fa-forward fa-fw"}%>
   <% end %>

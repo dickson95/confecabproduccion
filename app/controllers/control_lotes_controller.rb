@@ -8,6 +8,7 @@ class ControlLotesController < ApplicationController
   # GET /control_lotes
   # GET /control_lotes.json
   def index
+    puts params[:path]
     company = session[:selected_company]
     @control_lotes = @lote.control_lotes
     @sub_estado = {}

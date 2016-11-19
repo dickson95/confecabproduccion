@@ -33,8 +33,10 @@
 					</ul>
 				</div>
 				<div class="col-xs-6">
+					<% if can? :prices, Lote %>
 					<%= f.input :precio_u, as: :boolean, label: "Precio unitario" %>
 					<%= f.input :precio_t, as: :boolean, label: "Precio total" %>
+					<% end %>
 					<%= f.input :processes, as: :boolean, label: "Procesos (WIP)" %>
 					<%= f.input :processes_details,  as: :radio_buttons, label: "Detallar procesos externos: ", required: false, disabled: true, input_html: { value: true }, checked: true %>
 					<%= f.hidden_field :month, value: params[:month] %>
@@ -58,11 +60,11 @@
 		$("#modal_add").modal("toggle");
 	});
 	$("#export_processes").click(function(){
-		true_= $("#export_processes_details_true")
-		false_ = $("#export_processes_details_false")
+		true_= $("#export_processes_details_true");
+		false_ = $("#export_processes_details_false");
 		true_.toggleClass("disabled");
 		true_.attr('disabled', function(_, attr) { return !attr });
-		false_.toggleClass("disabled")
+		false_.toggleClass("disabled");
 		false_.attr('disabled', function(_, attr){ return !attr});
 	});
 </script>
