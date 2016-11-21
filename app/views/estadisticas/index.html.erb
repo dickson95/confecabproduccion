@@ -1,17 +1,17 @@
-<div class="row">
+<div class="row" style="margin-top: 20px;">
   <div class="col-md-12">
     <div class="panel panel-primary">
       <div class="panel-heading">
         Clientes
       </div>
       <div class="panel-body">
-        <div class="col-md-6">
+        <div class="col-md-4">
           <h5>Clientes último mes</h5>
-          <div id="cliente_mensual" style="height: 250px;"></div>
+          <div id="cliente_mensual" style="height: 200px;"></div>
         </div> 
         <div class="col-md-6">  
           <h5>Clientes del año actual</h5>
-          <div id="cliente_anual" style="height: 250px;"></div>
+          <div id="cliente_anual" style="height: 200px;"></div>
         </div>
       </div>
       <div class="panel-footer">
@@ -30,13 +30,13 @@
         Avance de la programación
       </div>
       <div class="panel-body">
-        <div class="col-md-6"> 
+        <div class="col-md-4"> 
           <h5>Programación de este mes</h5>
-          <div id="programacion_mes" style="height: 250px;"></div>
+          <div id="programacion_mes" style="height: 200px;"></div>
         </div> 
         <div class="col-md-6">  
           <h5>Avance de plantas</h5>
-          <div id="relatives" style="height: 250px;"></div>
+          <div id="relatives" style="height: 200px;"></div>
         </div>
       </div>
       <div class="panel-footer">
@@ -48,7 +48,6 @@
     </div>
   </div>
 </div>
-
 <script type="text/javascript">
     new Morris.Bar({
       element: 'cliente_mensual',
@@ -77,8 +76,8 @@
     new Morris.Donut({
       element: 'programacion_mes',
       data: [
-        { label: 'Sin terminar', value: "<%=100 - @global_percente.round%>"  },
-        { label: 'Avance mensual', value: "<%=@global_percente.round%>"  }
+        { label: 'Sin terminar', value: "<%= 100 - @global_percente.round %>"  },
+        { label: 'Avance mensual', value: "<%= @global_percente.round %>"  }
       ],
       colors: [
         "#D8DADC",

@@ -1,13 +1,40 @@
-<% @years.each do |year| %>
-	<div class="row">
-		<div class="col-md-12">
-			<h4><%= year %></h4>
-			<div id="<%= year %>"></div>
-		</div>	
-	</div>
-<% end %>
+<div class="page-header">
+  <h4 class="pull-left">Clientes por año</h4>
+  <div class="text-right">
+    <%= link_to estadisticas_path, :class => "btn btn-default btn-sm"  do%>
+      <i class="fa fa-arrow-left" aria-hidden="true"></i>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <% @years.each do |year| %>
+		<div class="col-md-6">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <%= year %>
+        </div>
+        <div class="panel-body" id="<%= year %>" style="height: 200px;"></div>
+      </div>
+    </div>
+  <% end %>
+</div>
 
 <script type="text/javascript">
+cliente = null
+year = null
+
+set_variables = function(c, y){
+  if(c != null){ cliente = c  }
+  if(y != null){ year = y }
+}
+details_bar = function() {
+  if (cliente != null && year != null) {
+    window.location.href="clientes/detalles/"+ year+"?cliente="+cliente
+  }
+};
+
+
+//Pintar gráficos necesarios
 <% @year_clientes.each do |year, amount| %>
 	<% if !amount.empty? %>
 	new Morris.Bar({
@@ -21,7 +48,17 @@
       ykeys: ['value'],
       labels: ['Cantidad'],
       resize: true
-    });
+    }).on("click", function(i, row){
+        set_variables(row.cliente);
+        details_bar();
+      });
 	<% end %>
 <% end %>
+
+
+$("rect").click(function(){
+  console.log("año" + $(this).closest("div"));
+  set_variables(null, $(this).closest("div").attr("id"));
+  details_bar();
+});
 </script>

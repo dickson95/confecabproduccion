@@ -1,0 +1,36 @@
+<div class="page-header">
+  <h4 class="pull-left">Programaciones por año</h4>
+  <div class="text-right">
+    <%= link_to estadisticas_clientes_path, :class => "btn btn-default btn-sm"  do%>
+      <i class="fa fa-arrow-left" aria-hidden="true"></i>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          Detalle del año para <%= params[:cliente].capitalize %>
+        </div>
+        <div class="panel-body">
+          <div class="col-md-4">
+            <div id="annual" style="height: 200px;"></div>
+          </div>
+      </div>
+    </div> 
+  </div>
+</div>
+<script type="text/javascript">
+  new Morris.Bar({
+      element: 'annual',
+      data: [
+        <%@programaciones.each do |programacion|%>
+        { cliente: '<%= "mes" %>', value: <%= programacion.lotes.where(:cliente_id => @cliente.first.id).sum(:cantidad) %>  },
+        <%end%>
+      ],
+      xkey: 'cliente',
+      ykeys: ['value'],
+      labels: ['Cantidad'],
+      resize: true
+    });
+</script>

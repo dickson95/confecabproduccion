@@ -131,28 +131,31 @@ class Programacion < ApplicationRecord
 		end
 	end
 
-	# Determinar el porcentaje de avance de la planta de confección de acuerdo
-	# con la programación, medido al 100% en cada caso
+	# Determinar el porcentaje de avance de cada planta de acuerdo
+	# con la programación, medido al 100% en cada caso de terminación o confección
 	def self.percentage_planta(month, state, company)
-		# Recuperar cantidad de lotes que hay en el estado y programación solicitada
+		# Recuperar cantidad de lotes que hay en el estado (state) y programación solicitada
 		lotes = state_lotes_amount(month, state, company)
 		# Contar cuantos lotes hay en la programación
-		programacion = self.select(:id).where("EXTRACT(year_month from mes)=? and empresa = ?", month, company).limit 1
-		amount = self.find(programacion.first.id).lotes.count
+		programacion = self.select(:id).where("EXTRACT(year_month from mes)=? and empresa = ?", month, company).limit(1) if lotes > 0
+		amount = self.find(programacion.first.id).lotes.count if !programacion.nil?
+		
 		# Porcentaje completado para la planta
-		return (lotes.to_f * 100) / amount.to_f
+		res = (lotes.to_f * 100) / amount.to_f
+		return res.nan? ? 0.0 : res
 	end
 
 
 
 	private
 
-		def self.state_lotes_amount(mes, estado, company)
+		# Recupera la cantidad de lotes para una programación que están en estado solicitado
+		def self.state_lotes_amount(month, estado, company)
 			Programacion.joins(lotes:[:control_lotes])
 			.where("EXTRACT(year_month from programaciones.mes)=? and 
 				control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) 
 				FROM control_lotes cl WHERE cl.estado_id = ? 
 				GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id) 
-				and programaciones.empresa=?", mes, estado, company).count
+				and programaciones.empresa=?", month, estado, company).count
 		end
 end

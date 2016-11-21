@@ -1,41 +1,36 @@
 class EstadisticasController < ApplicationController
+  before_action :set_years, only:[:clientes, :programaciones]
+  before_action :meses, only:[:show_clientes, :show_programaciones, :programaciones]
   def index
     company = session[:selected_company] ? "CAB" : "D&C"
     time = Time.new() 
     month = (time - 1.month).strftime("%Y-%m")
     year = time.strftime("%Y")
-    @amount_monthly = Lote.select("SUM(cantidad) as cantidad, cliente_id")
+
+    # Datos mensuales de los clientes
+    @amount_monthly = Lote.select("SUM(lotes.cantidad) as cantidad, cliente_id")
       .joins(:programacion)
       .where("lotes.empresa = ? and programaciones.mes = ?", company, month+"-01")
       .group(:cliente_id, :mes)
-    @amount_annual = Lote.select("SUM(cantidad) as cantidad, cliente_id")
+    @amount_annual = Lote.select("SUM(lotes.cantidad) as cantidad, cliente_id")
       .joins(:programacion, :control_lotes)
       .where("lotes.empresa = ? and EXTRACT(year from programaciones.mes) = ? and 
         control_lotes.estado_id = 5", company, year)
       .group(:cliente_id)
-    
-    # Porcentajes relativos, es decir el 100% de producción en cada planta
-    @confeccion_relative = Programacion.percentage_planta(time.strftime("%Y%m"), 4, session[:selected_company])
-    @terminacion_relative = Programacion.percentage_planta(time.strftime("%Y%m"), 5, session[:selected_company])
 
-    # Porcenteje absoluto de progreso en la programación
-    absolute1 = @confeccion_relative * 0.7
-    absolute2 = @terminacion_relative * 0.3
-
-    @global_percente = absolute1 + absolute2 
+    # Programaciones
+    set_data_programaciones(time.strftime("%Y%m"))
   end
 
   # /estadísticas/clientes
   # Detalles anuales de las cantidades por clientes
   def clientes
     company = session[:selected_company] ? "CAB" : "D&C"
-    @years = Programacion.years_db
     @year_clientes = Hash.new
     # Con los años que hay de las programaciones se suma la cantidad total de cada cliente
     @years.each do |year|
-      clientes =  Lote.select("SUM(cantidad) as cantidad, cliente_id")
-      .joins(:programacion, :control_lotes).where("lotes.empresa = ? and 
-        EXTRACT(year from programaciones.mes) = ? and 
+      clientes =  Lote.select("SUM(lotes.cantidad) as cantidad, cliente_id")
+      .joins(:programacion, :control_lotes).where("lotes.empresa = ? and EXTRACT(year from programaciones.mes) = ? and 
         control_lotes.estado_id=5", company, year).group(:cliente_id)
         # al final el array queda con objetos de los lotes que tienen 
         # la cantidad y el cliente diponibles
@@ -43,9 +38,65 @@ class EstadisticasController < ApplicationController
     end
   end
 
+
+  def show_cliente
+    company = session[:selected_company] ? "CAB" : "D&C"
+    time = Time.new() 
+    month = (time - 1.month).strftime("%Y-%m")
+    @cliente = Cliente.where(:cliente => params[:cliente])
+    @programaciones = Programacion.joins(:lotes).where("extract(year from mes)=? and programaciones.empresa = ?", 
+      params[:year] , session[:selected_company])
+    respond_to do |format|
+      format.html
+    end
+  end
+
   # /estadisticas/clientes
   # Detalles anuales de las cantidades por clientes
-  def programaciones      
-  end  
+  def programaciones
+    # Datos de las programaciones
+    # Porcentajes relativos, es decir el 100% de producción en cada planta
+    @year_programaciones = Hash.new
+    @years.each do |year|
+      @year_programaciones[year] = year
+      months = Hash.new
+      # m representa cada mes de los 12 del año
+      @meses.each do |k, m|
+        set_data_programaciones "#{year}#{m[:number]}"
+        months[m[:string]] = @global_percente
+      end
+      @year_programaciones[year] = months
+    end
+  end 
 
+  def show_programaciones
+    year_month = params[:year]+params[:month]
+    set_data_programaciones year_month
+    # respuesta ajax desde el controlador http://stackoverflow.com/a/11897418
+    respond_to do |format|
+      format.html
+    end
+  end
+
+  private
+    def set_years
+      @years = Programacion.years_db
+    end 
+
+    def meses
+      @meses = Programacion.meses
+    end
+
+    def set_data_programaciones(year_month)
+      # Datos de las programaciones
+      # Porcentajes relativos, es decir el 100% de producción en cada planta
+      @confeccion_relative = Programacion.percentage_planta(year_month, 4, session[:selected_company])
+      @terminacion_relative = Programacion.percentage_planta(year_month, 5, session[:selected_company])
+
+      # Porcenteje absoluto de progreso en la programación
+      absolute1 = @confeccion_relative * 0.7
+      absolute2 = @terminacion_relative * 0.3
+
+      @global_percente = absolute1 + absolute2 
+    end
 end

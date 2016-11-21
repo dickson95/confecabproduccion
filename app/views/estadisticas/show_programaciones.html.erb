@@ -1,0 +1,49 @@
+<div class="page-header">
+  <h4 class="pull-left">Programación de <%= @meses[params[:month]][:string].downcase %>/<%= params[:year] %></h4>
+  <div class="text-right">
+    <%= link_to estadisticas_programaciones_path, :class => "btn btn-default btn-sm"  do%>
+      <i class="fa fa-arrow-left" aria-hidden="true"></i>
+    <% end %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-6"> 
+    <h5>Programación de este mes</h5>
+    <div id="programacion_mes" style="height: 250px;"></div>
+  </div> 
+  <div class="col-md-6">  
+    <h5>Avance de plantas</h5>
+    <div id="relatives" style="height: 250px;"></div>
+  </div>
+</div>
+<div>
+</div>
+<script type="text/javascript">
+    new Morris.Donut({
+        element: 'programacion_mes',
+        data: [
+          { label: 'Incompleto', value: "<%= 100 - @global_percente.round %>"  },
+          { label: 'Completado', value: "<%= @global_percente.round %>"  }
+        ],
+        colors: [
+          "#D8DADC",
+          "#1868AE"
+        ],
+        formatter: function (value, data) { return value + '%'; },
+        resize: true
+      });
+      new Morris.Bar({
+        element: 'relatives',
+        data: [
+          { planta: 'Planta de confección', value: <%= @confeccion_relative.round %>  },
+          { planta: 'Terminación', value: <%= @terminacion_relative.round %>  }
+        ],
+        xkey: 'planta',
+        ykeys: ['value'],
+        labels: ['Procentaje'],
+        hoverCallback: function (index, options, content, row) {
+          return 'Total: ' + row['value'] + "%";
+        },
+        resize: true
+      });
+</script>
