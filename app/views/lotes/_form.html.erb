@@ -31,7 +31,7 @@
       </div>
       <div class="col-md-4 text-right">
         <%= f.button :submit, :value => 'Aceptar', data:{:disable_with => "Guardando"}, class: 'btn-default', :id =>"lote_guardar" %>
-        <%= link_to 'Cancelar', lotes_path, class: 'btn btn-outline btn-primary' %>
+        <%= link_to 'Cancelar', :back, class: 'btn btn-outline btn-primary' %>
       </div>
     </div>
     <%= f.error_notification %>
@@ -104,7 +104,7 @@
           </div>
           <div class="form-actions text-right">
             <%= f.button :submit, :value => 'Aceptar', data:{:disable_with => "Guardando"}, class: 'btn-default', :id =>"lote_guardar" %>
-            <%= link_to 'Cancelar', lotes_path, class: 'btn btn-outline btn-primary' %>
+            <%= link_to 'Cancelar', :back, class: 'btn btn-outline btn-primary' %>
           </div>
           <div class="panel">
             <div class="panel-heading panel-primary">
@@ -118,6 +118,7 @@
       <!--____fin form-submit______________________________-->
     </div>
     <!--fin form-inputs-->
+    <%= f.hidden_field :plc, value: params[:plc] || params[:lote][:plc] %>
     <% end %>
 
     <% # Fin simple form %>

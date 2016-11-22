@@ -5,58 +5,7 @@
   <tr>
     <td><%= lote.fetch 0 %></td><!--id lote-->
     <td style="padding: 0px;">
-      <div class="dropdown">
-        <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%=lote.fetch(0)%>"></i>
-        <ul class="dropdown-menu" aria-labelledby="lote_<%=lote.fetch(0)%>">
-          <li>
-            <%= link_to  lote_view_details_path(lote.fetch(0)), {:remote => true, "data-target" => "#myModal", :title => "Ver detalles"} do%>
-            <%=content_tag :i, "", :class => "fa fa-eye fa-fw"%>
-            Detalles
-            <%end%>
-          </li>
-          <% if can? :read, ControlLote %>
-          <li>
-            <%= link_to lote_control_lotes_path(lote.fetch(0)), { :title => "Ver ciclo de producción", :id => "lote_control_lote"} do %>
-            <%= content_tag :i, "", :class => "fa fa-refresh fa-fw" %>
-            Ciclo de producción
-            <%end%>
-          </li>
-          <% end %>
-          
-          <% if can? :update, Lote %>
-          <li class="divider"></li>
-          <li>
-            <%= link_to edit_lote_path(lote.fetch(0), :place => "form_edit_lote"), { :title => 'Editar'}  do%>
-            <%=content_tag :i, "", :class => "fa fa-pencil fa-fw"%> 
-            Editar 
-            <%end%>
-          </li>
-          <%end%>
-          <%if can? :cambio_estado, Lote%>
-          <li>
-            <%= link_to new_lote_control_lote_path(lote.fetch(0)), { :title => 'Proceso nuevo'}  do%>
-            <%=content_tag :i, "", :class => "fa fa-plus fa-fw"%> 
-            Proceso nuevo 
-            <%end%>
-          </li>
-          <li>
-            <%=next_state lote_cambio_estado_path(lote.fetch(0)), lote.fetch(6), { method: "PATCH" }, {:class => "fa fa-fast-forward fa-fw"}%>
-          </li>
-          <%end%>
-          <% # Puede editar %>
-
-          <% if can? :destroy, Lote %>
-          <li class="divider"></li>
-          <li>
-            <%= link_to lote_path(lote.fetch(0)), :class => "delete", :method => :delete, data: { :confirm => 'Si elimina este registro no podrá recuperarlo. ¿Está realmente seguro?' }, :title => "Eliminar", :remote => true do %>
-            <%=content_tag :i, "", :class => "fa fa-trash-o"%>
-            Eliminar
-            <%end%>
-          </li>
-          <%end%>
-          <% # Puede eliminar %>
-        </ul>
-      </div>
+      <%= render partial: "dropdown_options", locals:{ lote_id: lote.fetch(0), estado_id: lote.fetch(6) } %>
     </td><!--Admnistración-->
     <td><%= lote.fetch 1 %></td><!--Cliente-->
     <td><%= lote.fetch 2 %></td><!--Referencia-->

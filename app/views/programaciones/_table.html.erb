@@ -15,7 +15,7 @@
 					<button type="button" class="btn btn-primary dropdown-toggle disabled-btn" data-toggle="dropdown" <%=disabled.fetch(0) ? 'disabled' : ''%>>Exportar&nbsp;<i class="caret"></i></button>
 					<ul class="dropdown-menu pull-right">
 						<li>
-							<%=link_to export_excel_programaciones_path(format: "xlsx", :month => params[:month]) do%>
+							<%=link_to programacion_options_export_path(params[:month], format_export: "xlsx"), remote: true do%>
 								<%=content_tag :i ,"",:class => "fa fa-file-excel-o"%>
 								Excel
 							<%end%>
@@ -44,20 +44,21 @@
 					<i class="fa fa-check-square-o" title="Cómo retirar"></i>
 				</p>
 			</th>
+			<%end%>
+			<th></th>
+			<%if can? :update, Programacion%>
 			<th>Sec</th>
 			<%end%>
-			<th class="col-md-1">Estado</th>
-			<th class="col-md-2" style="min-width: 170px;">Cliente</th>
-			<th class="col-md-2">Descripción</th>
-			<th class="col-md-2" style="min-width: 100px;">Referencia</th>
-			<th class="col-md-1">Cant</th>
+			<th>Estado</th>
+			<th style="min-width: 70px;">Cliente</th>
+			<th>Descripción</th>
+			<th style="min-width: 80px;">Referencia</th>
+			<th>Cant</th>
 			<%if can? :prices, Lote%>
 			<%$colspan = 11%>
-			<th class="col-md-1">Precio</th>
-			<th class="col-md-1">Total</th>
+			<th>Precio</th>
+			<th>Total</th>
 			<%end%>
-			<th style="width: 60px; min-width: 30px;">Meta</th>
-			<th>Horas</th>
 		</tr>
 
 	</thead>
@@ -66,7 +67,7 @@
 	<% if can?(:prices, Lote) ||  can?(:update, Programacion) %>
 	<tfoot>
 		<tr>
-			<td colspan="7">
+			<td colspan="6">
 				<%if can? :prices, Lote%>
 				<div>
 					<p class="col-md-2"><strong>Horas:</strong>  <%= @hours %></p>

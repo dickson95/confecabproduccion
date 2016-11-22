@@ -102,7 +102,7 @@ class LotesController < ApplicationController
   def update
     respond_to do |format|
       if @lote.update(lote_params_update) && @color_blank
-        format.html{ redirect_to lotes_path }
+        format.html{ redirect_to "/#{params[:lote][:plc]}" }
         flash[:success] = "Lote actualizado correctamente"
       else
         set_tipo_prenda
@@ -144,7 +144,7 @@ class LotesController < ApplicationController
       respond_to do |format|
         # Nuevo estado en el historial de los lotes
         if @control_lote.save
-          format.html { redirect_to lotes_path }
+          format.html { redirect_to :back }
           flash[:info] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}." 
           format.json { render :index, status: :ok, location: @control_lote }
         else
@@ -155,7 +155,7 @@ class LotesController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html {redirect_to lotes_path}
+        format.html {redirect_to :back}
         flash[:warning] = "El lote no tiene programación, no se puede confeccionar"
       end
     end
