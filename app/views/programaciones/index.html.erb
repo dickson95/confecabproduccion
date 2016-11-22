@@ -1,6 +1,6 @@
 <% content_for :title do "Programaciones" end %>
 <% date = Programacion.date_split params[:month] %>
-<ul class="nav nav-tabs" role="tablist">
+<ul class="nav nav-tabs" role="tablist" style="margin-top: 20px;">
 	<!--Años-->
 	<%@years.each do |year|%>
 		<li class="year <%= year.to_s == date[:year] ? "current active" : ""%>">

@@ -17,7 +17,6 @@ $(document).on "turbolinks:load", ->
 				data: { control_lote: { cantidad: cantidad }}
 				type: "PATCH"
 				success: (data, status, xhr) ->
-					console.log input.data("content")
 					if data.after != null
 						input.attr("data-content", data.after)
 						input.popover("show")
