@@ -1,19 +1,24 @@
 	<%@lotes.each do |lote|%>
 		<%lote.each do |l|%>
 			<tr  data-item-id=<%= "#{l.id}" %> class="item">
+				<%if can? :update, Programacion%>
 				<td><%=check_box_tag "lotes[#{l.id}]", l.id%></td>
-				<td><%=text_field_tag "programacion[secuencia][#{l.id}]", "", :value => l.secuencia, :style => "max-width: 3em;"%></td>
-				<td><%=@estados["#{l.id}"]%></td>
-				<td><%=l.cliente.cliente%></td>
-				<td><%=l.tipo_prenda.tipo%></td>
-				<td><%=l.referencia.referencia%></td>
-				<td><%=l.cantidad%></td>
-				<%if can? :prices, Lote%>
-				<td><%=Money.new("#{l.precio_u}00").format%></td>
-				<td><%=Money.new("#{l.precio_t}00").format%></td>
 				<%end%>
-				<td><%=l.meta%></td>
-				<td><%=l.h_req%></td>
+				<td style="padding: 0px;">
+				<%= render partial: "lotes/dropdown_options", locals: { lote_id: l.id, estado_id: @estados["#{l.id}"][:id] } %>
+				</td>
+				<%if can? :update, Programacion%>
+				<td style="padding-top: 5px; padding-bottom: 3px;" class="text-center"><%=text_field_tag "programacion[secuencia][#{l.id}]", "", :value => l.secuencia, :style => "max-width: 3em;"%></td>
+				<%end%>
+				<td><%= @estados["#{l.id}"][:name] %></td>
+				<td><%= l.cliente.cliente %></td>
+				<td><%= l.tipo_prenda.tipo %></td>
+				<td><%= l.referencia.referencia %></td>
+				<td><%= l.cantidad %></td>
+				<%if can? :prices, Lote%>
+				<td><%= Money.new("#{l.precio_u}00").format %></td>
+				<td><%= Money.new("#{l.precio_t}00").format %></td>
+				<%end%>
 			</tr>
 		<%end%>
 	<%end%>

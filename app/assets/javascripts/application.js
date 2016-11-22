@@ -18,8 +18,6 @@
 //= require jquery-ui/autocomplete
 //= require autocomplete-rails
 //= require bootstrap_sb_admin_base_v2
-//= require rails.validations
-//= require rails.validations.simple_form
 //= require turbolinks
 //= require_tree .
 
