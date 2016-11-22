@@ -39,10 +39,10 @@ class Ability
     elsif user.has_rol? :gerente
       can :read, :all
       can [:read, :export, :program_table], Programacion
-      can :prices, Lote
+      can [:export, :prices], Lote
       cannot :manage, [Referencia, Talla, Rol]
     elsif user.has_rol? :aux_facturacion
-      can [:read, :billing, :prices], Lote
+      can [:export, :read, :billing, :prices], Lote
       can :read, Cliente
     end
   end

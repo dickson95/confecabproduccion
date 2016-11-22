@@ -29,11 +29,15 @@ class Programacion < ApplicationRecord
 
 	end
 
+	# Hash de los estados de los lotes para reducir el tiempo de carga
 	def self.states_lotes(programacion)
-		states_arr = Lote.joins([control_lotes: [:estado]]).where("lotes.programacion_id = ? and control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)", programacion).pluck("lotes.id","estados.estado")
+		states_arr = Lote.joins([control_lotes: [:estado]]).where("lotes.programacion_id = ? 
+			and control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) 
+			FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)", 
+			programacion).pluck("lotes.id","estados.id", "estados.estado")
 		states = Hash.new
 		states_arr.each do |e|
-			states["#{e.fetch(0)}"] = e.fetch(1)
+			states["#{e.fetch(0)}"] = {id: e.fetch(1) ,name: e.fetch(2), }
 		end
 		return states
 	end
@@ -78,7 +82,7 @@ class Programacion < ApplicationRecord
 	
 	# Establece cuales son los años que hay en la tabla de las programaciones
 	def self.years_db 
-		@years = self.distinct.order(:mes).pluck("extract(year from mes)")
+		@years = self.distinct.pluck("extract(year from mes)")
 	end
 
 	# Establecer si hay lotes para hacer una nueva programación
@@ -128,5 +132,24 @@ class Programacion < ApplicationRecord
 		ids.each do |k, v|
 			Lote.update(k.to_i, :secuencia => v.to_i)
 		end
+	end
+
+	# Retira de un hash aquellas claves cuyo valor esté vacío
+	def self.remove_empty_key_value(hash_)
+		hash_.each do |k, v|
+			hash_.delete(k) if v.strip.eql?("")
+		end
+	end
+
+	def self.collection_lotes(programing, values)
+		lotes = nil
+		if values.include?("control_lotes.estado") || values.include?("control_lotes.sub_estado")
+			lotes = programing.lotes.joins(:control_lotes).where(values)
+			lotes = lotes.reject{|lote| lote.control_lotes.last.estado_id != values["control_lotes.estado"].to_i} if values.include?("control_lotes.estado")
+			lotes = lotes.reject{|lote| lote.control_lotes.last.sub_estado_id != values["control_lotes.sub_estado"].to_i} if values.include?("control_lotes.sub_estado")
+		else
+			lotes = programing.lotes.where(values)
+		end
+		return lotes
 	end
 end
