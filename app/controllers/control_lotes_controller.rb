@@ -2,23 +2,21 @@ class ControlLotesController < ApplicationController
   #Solicitar prueba de permisos antes de cargar cualquier acción
   load_and_authorize_resource 
   before_action :set_lote
+  before_action :collection_control_lote, only: [:index, :show]
   before_action :set_control_lotes, only: [:edit, :update, :update_cantidad, :destroy]
   before_action :sub_estados, only: [:new, :edit]
   
   # GET /control_lotes
   # GET /control_lotes.json
   def index
-    puts params[:path]
-    company = session[:selected_company]
-    @control_lotes = @lote.control_lotes
-    @sub_estado = {}
-    @sub_estados = SubEstado.all.each{ |e|  @sub_estado[e.id] = e.sub_estado}
-    @user = {}
-    @users = User.select("id, name").each{ |e|  @user[e.id] = e.name}
   end
   
   def new
     @control_lote = ControlLote.new
+  end
+
+  def show
+    render action: :index
   end
 
   def create
@@ -45,8 +43,8 @@ class ControlLotesController < ApplicationController
   def update  
     respond_to do |format|
       if @control_lote.update(control_lote_params)
-        format.html { redirect_to lote_control_lotes_path }
-        flash[:success] = "Proceso actualizado correctamente"
+        format.html { redirect_to @control_lote}
+        flash[:success] = "Proceso actuaslizado correctamente"
       else
         sub_estados
         format.html { render :edit }
@@ -96,5 +94,14 @@ class ControlLotesController < ApplicationController
 
     def sub_estados
       @sub_estados = SubEstado.all
+    end
+
+    def collection_control_lote
+      company = session[:selected_company]
+      @control_lotes = @lote.control_lotes
+      @sub_estado = {}
+      @sub_estados = SubEstado.all.each{ |e|  @sub_estado[e.id] = e.sub_estado}
+      @user = {}
+      @users = User.select("id, name").each{ |e|  @user[e.id] = e.name}
     end
 end

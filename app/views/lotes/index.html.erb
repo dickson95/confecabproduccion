@@ -12,7 +12,7 @@
           <% end %>
         <% end %>
         <%if can? :create, Lote%>
-          <%= link_to new_lote_path, :title => "Nuevo lote" , :class => "btn-sm" do %>
+          <%= link_to new_lote_path(:plc => params[:controller]), :title => "Nuevo lote" , :class => "btn-sm" do %>
             <%= content_tag :i, "", :class => "fa fa-plus fa-2x"%>
           <%end%>
         <%end%>

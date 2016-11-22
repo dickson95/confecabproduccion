@@ -14,7 +14,8 @@ class ApplicationController < ActionController::Base
   
   #Respuesta a la excepción lanzada por cancan cuando no hay autorización
   rescue_from CanCan::AccessDenied do |exception|
-    render :file => "#{Rails.root}/public/404.html", :status => 404, :layout =>false
+    flash[:danger] = "No podemos encontrar la página que busca"
+    redirect_to root_url
   end
 
   # Determina que empresa es con la que va a funcionar el sistema

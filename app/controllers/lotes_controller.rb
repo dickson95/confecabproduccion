@@ -359,7 +359,7 @@ class LotesController < ApplicationController
         :op, :fecha_entrada,  :fin_insumos, :obs_insumos, :meta, :h_req, 
         :obs_integracion, :fin_integracion, :cantidad, :precio_u, :precio_t,
         :fecha_revision, :fecha_entrega, :control_lotes_attributes => [:id, 
-          :sub_estado_id, :lote_id, :fecha_ingreso, :fecha_salida, :estado_id, :_destroy],
+          :sub_estado_id, :lote_id, :fecha_ingreso, :fecha_salida, :estado_id, :observaciones, :_destroy],
           :colores_lotes_attributes => [:id, :color_id, :lote_id, :total_id, :_destroy, 
             :cantidades_attributes =>[:id, :categoria_id, :total_id, :cantidad, :_destroy]]).
       merge(respon_edicion_id: current_user, referencia_id: set_referencia)
