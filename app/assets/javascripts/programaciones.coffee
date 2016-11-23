@@ -9,7 +9,7 @@ $(document).on "turbolinks:load", ->
 			if !$('#'+year).find('div.tab-content div.active').length
 				$('#'+year).find('div.current').removeClass('in active').addClass('in active')
 
-
+	
 	# Ancho de las columnas mientras es arrastrada la fila
 	fixHelper = (e, ui) ->
 	  ui.children().each ->

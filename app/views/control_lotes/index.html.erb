@@ -19,7 +19,7 @@
           <th colspan="<%= can?(:update_cantidad, ControlLote) ? "5" : "4" %>">OP: <%=@lote.op%></th>
         </tr>
         <tr class="bg-info">
-          <% if can?(:update, ControlLote) || can?(:destroy, ControlLote) %>
+          <º% if can?(:update, ControlLote) || can?(:destroy, ControlLote) %>
           <th colspan="<%= set_colspan 2 %>"></th>
           <% end %>
           <th>Proceso</th>
@@ -39,14 +39,14 @@
           <tr>
             <% if can? :update, ControlLote %>
             <td>
-              <%= link_to edit_lote_control_lote_path(@lote, control_lote) do %>
+              <%= link_to edit_lote_control_lote_path(@lote, control_lote, :plc => params[:plc]) do %>
               <i class="fa fa-pencil" aria-hidden="true"></i>
               <% end %>
             </td>
             <% end %>
             <% if can? :destroy, ControlLote %>
             <td>
-              <%= link_to lote_control_lote_path(@lote, control_lote), data:{:confirm => "¿Esta seguro de eliminar este proceso?"}, method: "delete" do %>
+              <%= link_to lote_control_lote_path(@lote, control_lote, :plc => params[:plc]), data:{:confirm => "¿Esta seguro de eliminar este proceso?"}, method: "delete" do %>
               <i class="fa fa-trash" aria-hidden="true" style="color:red;"></i>
               <% end %>
             </td>
@@ -76,6 +76,12 @@
 <div class="text-right">
   <%= link_to "Regresar", "/#{params[:plc]}" %>
   <% if can? :cambio_estado, Lote %>
-  <%=next_state lote_cambio_estado_path(@lote), @lote.control_lotes.last.estado.id, {:class => "btn btn-primary", method: "PATCH" }, {:class => "fa fa-forward fa-fw"}%>
+  <% change = next_state @lote.control_lotes.last.estado.id %>
+    <% if change[:boolean] %>
+      <%= link_to lote_cambio_estado_path(@lote, :btn => change[:state], :plc => params[:plc]), method: "PATCH", :class => "btn btn-primary" do %>
+        <i class='fa fa-fast-forward fa-fw' aria-hidden='true'></i>
+        <%= change[:view] %>
+      <% end %>
+    <% end %>
   <% end %>
 </div>

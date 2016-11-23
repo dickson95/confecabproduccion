@@ -93,6 +93,7 @@
         </div>
       </div>
       <!--____Fin detalle de estado_____________________________-->
+      <%= f.hidden_field :plc, value: params[:plc] || params[:lote][:plc] %>
       <%end%>
 
       <!--____Form submit_________________________________-->
@@ -118,7 +119,6 @@
       <!--____fin form-submit______________________________-->
     </div>
     <!--fin form-inputs-->
-    <%= f.hidden_field :plc, value: params[:plc] || params[:lote][:plc] %>
     <% end %>
 
     <% # Fin simple form %>

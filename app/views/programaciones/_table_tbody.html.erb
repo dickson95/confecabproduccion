@@ -12,7 +12,7 @@
 			<%if can? :update, Programacion%>
 			<td style="padding-top: 5px; padding-bottom: 3px;" class="text-center"><%=text_field_tag "programacion[secuencia][#{programacion.fetch(9)}]", "", :value => programacion.fetch(2), :style => "max-width: 3em;"%></td>
 			<%end%>
-			<td><%= @estados["#{programacion.fetch(9)}"][:name] %></td>
+			<td class="state"><%= @estados["#{programacion.fetch(9)}"][:name] %></td>
 			<td><%= programacion.fetch(0) %></td>
 			<td><%= programacion.fetch(1) %></td>
 			<td><%= programacion.fetch(3) %></td>

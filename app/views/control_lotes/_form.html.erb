@@ -51,7 +51,7 @@
 		</div>
 		<div class="panel-footer">
 			<div class="text-right">
-				<%= link_to "Regresar", :back %>
+				<%= link_to "Regresar", lote_control_lotes_path(:plc => params[:plc] || params[:control_lote][:plc]) %>
 				<%= f.button :button do %>
 					<i class="fa fa-floppy-o fa-fw" aria-hidden="true"></i>
 					Guardar
@@ -59,6 +59,7 @@
 			</div>
 
 		</div>
+		<%= f.hidden_field :plc, value: params[:plc] || params[:control_lote][:plc] %>
 	<% end %>
 </div>
 <!-- Modal -->
