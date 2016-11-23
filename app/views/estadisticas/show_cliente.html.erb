@@ -10,7 +10,7 @@
   <div class="col-md-12">
       <div class="panel panel-primary">
         <div class="panel-heading">
-          Detalle del año para <%= params[:cliente].capitalize %>
+          <h3 class="panel-title">Detalle del año para <%= params[:cliente].capitalize %></h3>
         </div>
         <div class="panel-body">
           <div class="col-md-4">
@@ -24,8 +24,8 @@
   new Morris.Bar({
       element: 'annual',
       data: [
-        <%@programaciones.each do |programacion|%>
-        { cliente: '<%= "mes" %>', value: <%= programacion.lotes.where(:cliente_id => @cliente.first.id).sum(:cantidad) %>  },
+        <% @programaciones.each do |programacion| %>
+        { cliente: '<%= @meses[programacion.mes.strftime("%m")][:string] %>', value: <%= programacion.lotes.joins(:control_lotes).where("lotes.cliente_id = ? and control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id) and control_lotes.estado_id = ?", @cliente.first.id, 5).sum("lotes.cantidad") %>  },
         <%end%>
       ],
       xkey: 'cliente',

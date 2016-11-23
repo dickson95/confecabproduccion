@@ -12,6 +12,21 @@
       <div class="panel panel-primary">
         <div class="panel-heading">
           <%= year %>
+          <div class="pull-right">
+            <div class="dropdown">
+              <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                  Ver para
+                  <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu pull-right" role="menu" style="z-index: 10000;">
+                <% @meses.each do |key, val| %>
+                <li>
+                  <%= link_to val[:string], clientes_month_show_path("#{year}-#{val[:number]}") %>
+                </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
         </div>
         <div class="panel-body" id="<%= year %>" style="height: 200px;"></div>
       </div>
@@ -26,6 +41,8 @@ year = null
 set_variables = function(c, y){
   if(c != null){ cliente = c  }
   if(y != null){ year = y }
+    console.log(cliente);
+    console.log(year);
 }
 details_bar = function() {
   if (cliente != null && year != null) {
@@ -56,7 +73,7 @@ details_bar = function() {
 <% end %>
 
 
-$("rect").click(function(){
+$("rect").on("click", function(){
   console.log("año" + $(this).closest("div"));
   set_variables(null, $(this).closest("div").attr("id"));
   details_bar();

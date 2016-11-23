@@ -89,8 +89,8 @@
     new Morris.Bar({
       element: 'relatives',
       data: [
-        { planta: 'Planta de confección', value: <%=@confeccion_relative.round%>  },
-        { planta: 'Terminación', value: <%=@terminacion_relative.round%>  }
+        { planta: 'Planta de confección', value: <%= @confeccion_relative.round %>  },
+        { planta: 'Terminación', value: <%= @terminacion_relative.round %>  }
       ],
       xkey: 'planta',
       ykeys: ['value'],

@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get 'estadisticas', to: 'estadisticas#index'
   get "estadisticas/programaciones/detalles/:year/:month", to: "estadisticas#show_programaciones", as: :programaciones_show
   get "estadisticas/clientes/detalles/:year", to: "estadisticas#show_cliente", as: :clientes_show
+  get "estadisticas/clientes/mes/:year_month", to: "estadisticas#show_month_cliente", as: :clientes_month_show
   namespace :estadisticas do
     get :clientes
     get :programaciones
