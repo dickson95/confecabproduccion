@@ -24,7 +24,7 @@ es-CO:
       user:
         signed_in: "Bienvenido al sistema de producción para Confecab y D&C"
     passwords:
-        no_token: "No puede acceder a esta página sin la autorización que se envía a su correo para que recupere su contraseña. \n Por favor acceda desde el enlace enviado o asegúrese de escribir bien la dirección."
+        no_token: "Revise la dirección en la barra de navegación."
         send_instructions: "Recibiras un correo con las instrucciones para restaurar tu contraseña en un momento. No olvides revisar el spam."
         send_paranoid_instructions: "Si tu correo existe en la base de datos recibiras un correo con las instrucciones para restaurar tu contraseña en un momento. No olvides revisar el spam."
         updated: "Tu contraseña fue reestablecida. Has iniciado sesión"
@@ -42,7 +42,9 @@ es-CO:
         user:
           attributes:
             username:
-              not_found: "No se encuentra el registro"
+              not_found: "Nombre de usuario no encontrado"
+            email:
+              not_found: "Correo no encontrado"
   date:
     abbr_day_names:
     - dom
