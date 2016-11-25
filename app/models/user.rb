@@ -1,11 +1,18 @@
 class User < ApplicationRecord
+  # AUTENTICACIÓN
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable,
+         :authentication_keys => [:login]
+  attr_accessor :login
+
   # RELACIONES
   has_and_belongs_to_many :roles
   has_many :control_lotes, class_name: 'ControlLote', primary_key: 'id', foreign_key: 'resp_ingreso_id'
   has_many :control_lotes, class_name: 'ControlLote', primary_key: 'id', foreign_key: 'resp_salida_id'
   has_many :lotes, class_name: 'Lote', primary_key: 'id', foreign_key: 'respon_insumos_id'
   has_many :lotes, class_name: 'Lote', primary_key: 'id', foreign_key: 'respon_edicion_id'
-
 
   # Validaciones
   validates :name, :presence => {:message => "El nombre y apellido deben estar"}
@@ -27,13 +34,6 @@ class User < ApplicationRecord
             }
   validates :rol_ids, :presence => {:message => "Por favor seleccione un permiso"}
 
-  # AUTENTICACIÓN
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable, 
-         :authentication_keys => [:login]
-  attr_accessor :login
   
   
   
@@ -54,4 +54,5 @@ class User < ApplicationRecord
       where(conditions.to_h).first
     end
   end
+
 end

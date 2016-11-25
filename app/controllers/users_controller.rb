@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:only, :show, :destroy, :update]
+  before_action :set_user, only: [:show, :destroy, :update]
   
-  
+
   # Validación de autorización
   load_and_authorize_resource
   def index
@@ -21,7 +21,6 @@ class UsersController < ApplicationController
   
   def create
     @user = User.new(user_params)
-
     respond_to do |format|
       if @user.save
         flash[:success] = 'Usuario registrado con éxito.'
@@ -35,7 +34,6 @@ class UsersController < ApplicationController
   end
   
   def destroy
-
     if @user.id != 1
       if @user.destroy
 
@@ -61,6 +59,7 @@ class UsersController < ApplicationController
   end
 
   def update
+    puts ''
     @rol = RolesUser.where(:user_id => @user.id).update(:rol_id => params[:user][:rol_ids])
     if @rol
 

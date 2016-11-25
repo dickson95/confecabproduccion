@@ -15,7 +15,7 @@ Rails.application.routes.draw do
 
   # Rutas de los usuarios
   devise_for :users
-  resources :users, except: [:create] do 
+  resources :users, except: [:create] do
     post 'new' => 'users#create', as: :create, on: :collection
   end
 
