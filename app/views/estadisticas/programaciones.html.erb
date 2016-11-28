@@ -1,45 +1,41 @@
 <div class="page-header">
   <h4 class="pull-left">Programaciones por año</h4>
   <div class="text-right">
-    <%= link_to estadisticas_path, :class => "btn btn-default btn-sm"  do%>
-      <i class="fa fa-arrow-left" aria-hidden="true"></i>
+    <%= link_to estadisticas_path, :class => "btn btn-default btn-sm" do %>
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
     <% end %>
   </div>
 </div>
 <div class="row">
   <% @years.each do |year| %>
-    <div class="col-md-6">
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <%= year %>
+      <div class="col-md-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <%= year %>
+            <div class="dropdown pull-right">
+              <button type="button" class="btn btn-warning btn-xs dropdown-toggle" data-toggle="dropdown">
+                Mes
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu pull-right" role="menu" style="z-index: 10000;">
+                <% @meses.each do |key, val| %>
+                    <li>
+                      <%= link_to val[:string], programaciones_show_path(year, val[:number]),
+                                  remote: true, class: "show_filter" %>
+                    </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div id="<%= year %>" style="height: 200px;"></div>
+          </div>
         </div>
-        <div class="panel-body" id="<%= year %>" style="height: 200px;"></div>
       </div>
-    </div>  
   <% end %>
 </div>
 
 <script type="text/javascript">
-  var month = null;
-  var year = null;
-
-  set_variables = function(m, y){
-    if(m != null){ 
-      m++
-      if(m < 10){
-        month = "0"+m
-      }else{
-        month = m
-      }
-
-    }
-    if(y != null){ year = y }
-  }
-  details_bar = function() {
-      if (month != null && year != null) {
-        window.location.href="programaciones/detalles/"+ year+"/"+month
-      }
-    };
   <% @year_programaciones.each do |year, months| %>
     new Morris.Bar({
         element: "<%= year %>",
@@ -52,15 +48,6 @@
         ykeys: ['value'],
         labels: ['%'],  
         resize: true
-      }).on('click', function(i, row){
-        set_variables(i);
-        details_bar();
       });
   <% end %>
-
-  $("rect").click(function(){
-    set_variables(null, $(this).closest("div").attr("id"));
-    details_bar();
-  });
-      
 </script>

@@ -1,0 +1,27 @@
+<div>
+  <div class="well row">
+    <h5 class="col-xs-10">Año para <%= params[:cliente].capitalize %></h5>
+    <button type="button" class="close col-sm-2" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div id="annual" style="height: 200px;"></div>
+
+  <script type="text/javascript">
+    new Morris.Bar({
+      element: 'annual',
+      data: [
+        <% @programaciones.each do |programacion| %>
+        {
+          cliente: '<%= @meses[programacion.mes.strftime("%m")][:string] %>',
+          value: <%= programacion.lotes.joins(:control_lotes).where("lotes.cliente_id = ? and control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id) and control_lotes.estado_id = ?", @cliente.first.id, 5).sum("lotes.cantidad") %>
+        },
+        <%end%>
+      ],
+      xkey: 'cliente',
+      ykeys: ['value'],
+      labels: ['Cantidad'],
+      resize: true
+    });
+  </script>
+</div>

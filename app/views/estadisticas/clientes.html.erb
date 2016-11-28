@@ -1,81 +1,78 @@
 <div class="page-header">
   <h4 class="pull-left">Clientes por año</h4>
   <div class="text-right">
-    <%= link_to estadisticas_path, :class => "btn btn-default btn-sm"  do%>
-      <i class="fa fa-arrow-left" aria-hidden="true"></i>
+    <%= link_to estadisticas_path, :class => "btn btn-default btn-sm" do %>
+        <i class="fa fa-arrow-left" aria-hidden="true"></i>
     <% end %>
   </div>
 </div>
 <div class="row">
   <% @years.each do |year| %>
-		<div class="col-md-6">
-      <div class="panel panel-primary">
-        <div class="panel-heading">
-          <%= year %>
-          <div class="pull-right">
-            <div class="dropdown">
-              <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                  Ver para
-                  <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu pull-right" role="menu" style="z-index: 10000;">
-                <% @meses.each do |key, val| %>
-                <li>
-                  <%= link_to val[:string], clientes_month_show_path("#{year}-#{val[:number]}") %>
-                </li>
-                <% end %>
-              </ul>
-            </div>
+      <div class="col-md-6">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+            <%= year %>
+            <% if !@year_clientes[year].empty? %>
+                <div class="pull-right">
+                  <div class="dropdown pull-left">
+                    <button type="button" class="btn btn-warning btn-xs dropdown-toggle" data-toggle="dropdown">
+                      Cliente
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right" role="menu" style="z-index: 10000;">
+                      <% @year_clientes[year].each do |lote| %>
+                          <li>
+                            <%= link_to lote.cliente.name, clientes_show_path(year, :cliente => lote.cliente.name),
+                                        remote: true, class: "show_filter" %>
+                          </li>
+                      <% end %>
+                    </ul>
+                  </div>
+                  <span class="col-xs-1"></span>
+                  <div class="dropdown pull-right">
+                    <button type="button" class="btn btn-warning btn-xs dropdown-toggle" data-toggle="dropdown">
+                      Mes
+                      <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu pull-right" role="menu" style="z-index: 10000;">
+                      <% @meses.each do |key, val| %>
+                          <li>
+                            <%= link_to val[:string], clientes_month_show_path("#{year}-#{val[:number]}", :month => val[:string]),
+                                        remote: true, class: "show_filter" %>
+                          </li>
+                      <% end %>
+                    </ul>
+                  </div>
+                </div>
+            <% end %>
+          </div>
+          <div class="panel-body">
+            <div id="<%= year %>"></div>
           </div>
         </div>
-        <div class="panel-body" id="<%= year %>" style="height: 200px;"></div>
       </div>
-    </div>
   <% end %>
 </div>
-
 <script type="text/javascript">
-cliente = null
-year = null
 
-set_variables = function(c, y){
-  if(c != null){ cliente = c  }
-  if(y != null){ year = y }
-    console.log(cliente);
-    console.log(year);
-}
-details_bar = function() {
-  if (cliente != null && year != null) {
-    window.location.href="clientes/detalles/"+ year+"?cliente="+cliente
-  }
-};
-
-
-//Pintar gráficos necesarios
-<% @year_clientes.each do |year, amount| %>
-	<% if !amount.empty? %>
-	new Morris.Bar({
-      element: '<%=year%>',
-      data: [
-      	<% amount.each do |a| %>
-        	{ cliente: '<%= a.cliente.name %>', value: <%= a.cantidad %>  },
-        <% end %>
-      ],
-      xkey: 'cliente',
-      ykeys: ['value'],
-      labels: ['Cantidad'],
-      resize: true
-    }).on("click", function(i, row){
-        set_variables(row.cliente);
-        details_bar();
+  //Pintar gráficos necesarios
+  <% @year_clientes.each do |year, amount| %>
+    <% if amount.empty? %>
+      $("#<%=year%>").html("<h4>No hay datos</h4>");
+    <% else %>
+      $("#<%=year%>").css("height","200px");
+      new Morris.Bar({
+        element: '<%=year%>',
+        data: [
+          <% amount.each do |a| %>
+          {cliente: '<%= a.cliente.name %>', value: <%= a.cantidad %>},
+          <% end %>
+        ],
+        xkey: 'cliente',
+        ykeys: ['value'],
+        labels: ['Cantidad'],
+        resize: true
       });
-	<% end %>
-<% end %>
-
-
-$("rect").on("click", function(){
-  console.log("año" + $(this).closest("div"));
-  set_variables(null, $(this).closest("div").attr("id"));
-  details_bar();
-});
+    <% end %>
+  <% end %>
 </script>

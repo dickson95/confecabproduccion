@@ -1,0 +1,28 @@
+<div>
+  <div class="well row">
+    <h5 class="col-xs-10"><%= params[:month] %></h5>
+    <button type="button" class="close col-sm-2" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div id="cliente_mensual"></div>
+  <script type="text/javascript">
+    <% if @amount_monthly.empty? %>
+      $("#cliente_mensual").html("<h4>No hay datos</h4>");
+    <% else %>
+    $("#cliente_mensual").css("height","200px");
+    new Morris.Bar({
+      element: 'cliente_mensual',
+      data: [
+          <%@amount_monthly.each do |amount|%>
+            {cliente: '<%=amount.cliente.name%>', value: <%=amount.cantidad%>},
+          <%end%>
+      ],
+      xkey: 'cliente',
+      ykeys: ['value'],
+      labels: ['Cantidad'],
+      resize: true
+    });
+    <% end %>
+  </script>
+</div>

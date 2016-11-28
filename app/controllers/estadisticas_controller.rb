@@ -31,6 +31,9 @@ class EstadisticasController < ApplicationController
   def show_month_cliente
     company = session[:selected_company] ? "CAB" : "D&C"
     month_cliente(company, params[:year_month])
+    respond_to do |format|
+      format.html{ render partial: 'show_month_cliente' }
+    end
   end
 
   def show_cliente
@@ -42,7 +45,7 @@ class EstadisticasController < ApplicationController
     @programaciones = Programacion.where("extract(year from mes)=? and programaciones.empresa = ? ", 
       params[:year] , session[:selected_company]).order(:mes)
     respond_to do |format|
-      format.html
+      format.html{ render partial: 'show_cliente' }
     end
   end
 
@@ -69,7 +72,7 @@ class EstadisticasController < ApplicationController
     set_data_programaciones year_month
     # respuesta ajax desde el controlador http://stackoverflow.com/a/11897418
     respond_to do |format|
-      format.html
+      format.html { render partial: 'show_programaciones' }
     end
   end
 
