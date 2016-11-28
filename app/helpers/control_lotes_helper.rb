@@ -15,21 +15,6 @@ module ControlLotesHelper
 		end
 	end
 
-	# Formato de fecha
-	# format_date(parametro_fecha)
-	def range_date(date1, date2)
-		if !date2.nil?
-			with_month = nil
-			if date1.strftime("%m") == date2.strftime("%m")
-				with_month = l(date1, :format => "%d")
-			else
-				with_month = l(date1, :format => "%d de %b")
-			end
-			"#{with_month} - #{l(date2, :format => "%d de %b")}"
-		else
-			"#{l(date1, :format => "%d de %b")}"
-		end
-	end
 
 	def days(day1, day2)
 		if !day2.nil?

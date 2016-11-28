@@ -16,6 +16,22 @@ class ControlLote < ApplicationRecord
     write_attribute(:sub_estado_id, val)
   end
 
+  def date_range
+    date1 = self.fecha_ingreso
+    date2 = self.fecha_salida
+    if !date2.nil?
+      with_month = nil
+      if date1.strftime("%m") == date2.strftime("%m")
+        with_month = date1.strftime("%d")
+      else
+        with_month = date1.strftime("%d de %b")
+      end
+      "#{with_month} - #{date2.strftime("%d de %b")}"
+    else
+      date1.strftime "%d de %b"
+    end
+  end
+
   def fecha_ingreso_input
     return  I18n::localize( self.fecha_ingreso, :format => "%Y-%m-%d %H:%M:%S") if !self.fecha_ingreso.nil?
     I18n::localize( Time.zone.utc_to_local(Time.new) + 60, :format => "%Y-%m-%d %H:%M:%S")
