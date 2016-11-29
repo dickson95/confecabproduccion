@@ -80,5 +80,7 @@ gem 'wicked_pdf'
 # Formato de la moneda
 gem 'money'
 
+# Ransack para buscar por todas las columnas
+gem 'ransack', github: 'activerecord-hackery/ransack'
 
 ruby "2.3.1"

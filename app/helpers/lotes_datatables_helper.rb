@@ -6,40 +6,58 @@ module LotesDatatablesHelper
     {
         "draw": params[:draw],
         "recordsTotal": Lote.where(:empresa => company).count,
-        "recordsFiltered": Lote.where(:empresa => company).count,
-        "data":  arrays
+        "recordsFiltered": arrays[:can],
+        "data":  arrays[:a]
     }
   end
 
   def array_data(params)
     tipos_prendas = TipoPrenda.hash_ids
+    clientes = Cliente.hash_ids
+    referencias = Referencia.hash_ids
     lotes = data(params)
     array = Array.new
-    lotes.each do |lote|
+    lotes[:lotes].each do |lote|
       array.push(
           [
-             lote.fetch(0),
-             (view_context.render partial: "dropdown_options", locals:{ lote_id: lote.fetch(0), estado_id: lote.fetch(6) }, formats: :html),
-             lote.fetch(1),
-             lote.fetch(2),
-             lote.fetch(3),
-             lote.fetch(4),
-             tipos_prendas[lote.fetch(5)],
-             Money.new("#{lote.fetch(6)}00").format,
-             Money.new("#{lote.fetch(7)}00").format
+             lote.id,
+             (view_context.render partial: "dropdown_options", locals:{ lote_id: lote.id, estado_id: lote.control_lotes.last.estado_id }, formats: :html),
+             clientes[lote.cliente_id],
+             referencias[lote.referencia_id],
+             lote.op,
+             lote.cantidad,
+             tipos_prendas[lote.tipo_prenda_id],
+             Money.new("#{lote.precio_u}00").format,
+             Money.new("#{lote.precio_t}00").format
           ]
       )
     end
-    array
+    {a: array, can: lotes[:amount]}
   end
 
   def data(params)
-    company = session[:selected_company]
-    Lote.joins([control_lotes: [:estado]], :referencia, :cliente)
-        .where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes
-        cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id) and lotes.empresa = '#{company ? "CAB" : "D&C"}'")
-        .limit(params[:length]).offset(params[:start]).order("lotes.id desc")
-        .pluck("lotes.id", "clientes.cliente", "referencias.referencia", "lotes.op", "lotes.cantidad",
-               "lotes.tipo_prenda_id", "lotes.precio_u", "lotes.precio_t")
+    company = session[:selected_company] ? "CAB" : "D&C"
+    lotes = nil
+    amou = nil
+    order_val = params[:order]["0"]
+    order = {"0" => {:id => order_val[:dir]}, "2" => {:cliente_id => order_val[:dir]} , "6" => {:tipo_prenda_id =>  order_val[:dir]}}
+    if params[:search][:value].strip == ""
+      amou = Lote.where(:empresa => company).count
+      lotes = Lote.where("lotes.empresa = '#{company}'")
+        .limit(params[:length]).offset(params[:start]).order(order[order_val[:column]])
+    else
+      value = params[:search][:value].strip
+      keys = {
+          op_cont: value,
+          cantidad_eq: value,
+          referencia_referencia_cont: value,
+          cliente_cliente_cont: value,
+          m: 'or'
+      }
+      lotes = Lote.ransack(keys)
+      amou = lotes.result.where(:empresa => company).count
+      lotes = lotes.result.where(:empresa => company).limit(params[:length]).order(order[order_val[:column]])
+    end
+    { lotes: lotes, amount: amou}
   end
 end

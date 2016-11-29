@@ -48,12 +48,15 @@ $(document).on 'turbolinks:load', ->
     order: [[0, "desc"]]
     columnDefs: [
       {
+        "class" : "no-padding"
+      }
+      {
         'targets': [0]
         'visible': false
         'searchable': false
       }
       {
-        'targets': [1]
+        'targets': [1, 3, 4, 5, 7, 8]
         'orderable': false
       }
     ]
