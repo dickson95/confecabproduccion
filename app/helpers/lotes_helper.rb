@@ -137,4 +137,47 @@ module LotesHelper
         ]
     }
   end
+
+  def dropdown(options_ul, options_li, content_tag_i = nil)
+    content_tag :div, :class => "dropdown" do
+      tag_i(content_tag_i) + tag_ul(options_ul, options_li)
+    end
+  end
+
+  private
+  # Etiquieta "i" del icono del dropdown
+  def tag_i(options=nil)
+    content_tag(:i, "", options).html_safe
+  end
+
+  # "ul" con el contenido del drodown
+  # El método permite tener un enlace anidado y una etiqueta i con las opciones correspondientes.
+  def tag_ul(options_ul, options_li)
+    result = ""
+    options_li.each do |li, value|
+      result_li = tag_li(value)
+      if !result_li.nil?
+        result += result_li
+      end
+    end
+    content_tag :ul, options_ul do
+      result.html_safe
+    end
+  end
+
+
+  # Enlaces para los listados
+  def tag_li(options)
+    if !options.empty?
+      content_tag :li, options[:options] do
+        if !options[:a].nil?
+          link_to options[:a][:route], options[:a][:options] do
+            tag_i(options[:i]) + options[:a][:text]
+          end
+        end
+      end
+    end
+  end
+
+
 end
