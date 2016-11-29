@@ -1,4 +1,5 @@
 module LotesHelper
+
   def link_to_add_fields(name, clase = nil, f, association)
     new_object = f.object.send(association).klass.new
     id = new_object.object_id
@@ -103,5 +104,37 @@ module LotesHelper
       end
     end
     return values
+  end
+
+  def data_tables(params)
+    {
+        "draw": params[:draw],
+        "recordsTotal": Lote.where(:empresa => "CAB").count,
+        "recordsFiltered": 57,
+        "data": [
+            [
+                "Angelica",
+                "#{view_context.link_to "lotes", root_path, class: 'btn btn-danger btn-lg'}",
+                "System Architect",
+                "London",
+                "9th Oct 09",
+                "$2,875",
+                "9th Oct 09",
+                "$2,875",
+                "$2,875"
+            ],
+            [
+                "Ashton",
+                "Cox",
+                "Technical Author",
+                "San Francisco",
+                "12th Jan 09",
+                "$4,800",
+                "9th Oct 09",
+                "$2,875",
+                "$2,875"
+            ]
+        ]
+    }
   end
 end

@@ -1,11 +1,11 @@
-<table class="table table-striped table-bordered" id="lotes" width="100%">
+<table class="table table-striped table-bordered" id="lotes" width="100%" data-source="<%= lotes_path(format: :json) %>">
   <thead>
       <tr>
         <th title="Identificador">#</th>
         <th style="max-width: 40px;"></th>
         <th class="col-md-2" style="min-width: 140px;" title="Cliente">Cliente</th>
         <th class="col-md-2" style="min-width: 80px;" title="Referencia">Referencia</th>
-        <th class="col-md-1" title="OP de lote">OP</tsh>
+        <th class="col-md-1" title="OP de lote">OP</th>
         <th class="col-md-1" title="Cantidad">Cantidad</th>
         <th class="col-md-2" title="Descripción de la prenda">Descripción</th>
         <%if can? :prices, Lote%>
@@ -14,5 +14,5 @@
         <%end%>
       </tr>
   </thead>
-  <%=render "table_tbody"%>
+  <tbody></tbody>
 </table>

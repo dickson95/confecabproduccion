@@ -24,6 +24,10 @@ class LotesController < ApplicationController
       "lotes.tipo_prenda_id","control_lotes.estado_id","control_lotes.sub_estado_id", "lotes.precio_u", "lotes.precio_t")    
     @fechas_ingreso = ControlLote.hash_ids
     @tipos_prendas = TipoPrenda.hash_ids
+    respond_to do |format|
+      format.html
+      format.json { render json: data_tables(params) }
+    end
   end
   
   def view_details

@@ -296,7 +296,7 @@ class Lote < ApplicationRecord
     end
     return Lote.where("empresa = ?", company)
   end
-
+  
   private 
     def split_date_on_space(str)
       @meses = Programacion.meses
