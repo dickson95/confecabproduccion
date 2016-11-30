@@ -12,6 +12,7 @@ class ControlLotesController < ApplicationController
   end
 
   def show
+    params[:plc] = params[:plc] || 'lotes'
     render action: :index
   end
   
@@ -26,7 +27,7 @@ class ControlLotesController < ApplicationController
       if @control_lote.save
         last_state_lote.update(:resp_salida_id => current_user, 
           :fecha_salida => control_lote_params[:fecha_ingreso] )
-        format.html { redirect_to lote_control_lotes_path }
+        format.html { redirect_to lote_control_lotes_path(:plc => params[:control_lote][:plc]) }
         flash[:success] = "Proceso nuevo registrado"
         format.json { render :index, status: :ok }
       else
@@ -47,7 +48,7 @@ class ControlLotesController < ApplicationController
         flash[:success] = "Proceso actualizado correctamente"
       else
         sub_estados
-        format.html { render :edit }
+        format.html { render :edit, :plc => params[:control_lote][:plc] }
         format.json { render json: @control_lote.errors, status: :unprocessable_entity }
       end
     end
