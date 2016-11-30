@@ -11,14 +11,14 @@ $(document).on 'turbolinks:load', ->
       $.floatingMessage "El lote no tiene programación.\n No puede pasar de integración.", {
         position: "bottom-right"
         height: 80
-        time: 4000
         className: "ui-state-error"
       }
-      $(".dropdown-menu").hide('slide')
+      $(".dropdown-menu").parent().removeClass("open")
   ).on('ajax:success', '.change', (e, data, status, xhr) ->
     if xhr.status == 200
       $.floatingMessage data.message, {
         position: "bottom-right"
+        height: 80
         time: 4000
         className: "ui-state-active"
       }
