@@ -4,7 +4,7 @@
       <h4 class="col-xs-10">Ciclo de producción</h4>
       <% if can? :create, ControlLote %>
       <div class = "col-sm-2 text-right">
-        <%= link_to new_lote_control_lote_path(@lote), :title => 'Proceso nuevo'  do %>
+        <%= link_to new_lote_control_lote_path(@lote, :plc => params[:plc]), :title => 'Proceso nuevo'  do %>
           <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
         <% end %>
       </div>
@@ -39,21 +39,21 @@
           <tr>
             <% if can? :update, ControlLote %>
             <td>
-              <%= link_to edit_lote_control_lote_path(@lote, control_lote) do %>
+              <%= link_to edit_lote_control_lote_path(@lote, control_lote, :plc => params[:plc]) do %>
               <i class="fa fa-pencil" aria-hidden="true"></i>
               <% end %>
             </td>
             <% end %>
             <% if can? :destroy, ControlLote %>
             <td>
-              <%= link_to lote_control_lote_path(@lote, control_lote), data:{:confirm => "¿Esta seguro de eliminar este proceso?"}, method: "delete" do %>
+              <%= link_to lote_control_lote_path(@lote, control_lote, :plc => params[:plc]), data:{:confirm => "¿Esta seguro de eliminar este proceso?"}, method: "delete" do %>
               <i class="fa fa-trash" aria-hidden="true" style="color:red;"></i>
               <% end %>
             </td>
             <% end %>
             <td title="Proceso"><%= control_lote.estado.name.upcase %></td>
             <td title="Proceso adicional"><%= sub_process control_lote.sub_estado %></td>
-            <td title="Fecha de ingreso"><%= range_date control_lote.fecha_ingreso, control_lote.fecha_salida %></td>
+            <td title="Fecha de ingreso"><%= control_lote.date_range %></td>
             <td title="Responsable de ingreso"><%= control_lote.resp_ingreso_id.name %></td>
             <td title="Responsable de salida"><%= respon_exit control_lote.resp_salida_id %></td>
             <td title="Días en proceso"><%= days control_lote.fecha_ingreso, control_lote.fecha_salida %></td>
@@ -76,6 +76,12 @@
 <div class="text-right">
   <%= link_to "Regresar", "/#{params[:plc]}" %>
   <% if can? :cambio_estado, Lote %>
-  <%=next_state lote_cambio_estado_path(@lote), @lote.control_lotes.last.estado.id, {:class => "btn btn-primary", method: "PATCH" }, {:class => "fa fa-forward fa-fw"}%>
+  <% change = next_state @lote.control_lotes.last.estado.id %>
+    <% if change[:boolean] %>
+      <%= link_to lote_cambio_estado_path(@lote, :btn => change[:state], :plc => params[:plc]), method: "PATCH", :class => "btn btn-primary" do %>
+        <i class='fa fa-fast-forward fa-fw' aria-hidden='true'></i>
+        <%= change[:view] %>
+      <% end %>
+    <% end %>
   <% end %>
 </div>

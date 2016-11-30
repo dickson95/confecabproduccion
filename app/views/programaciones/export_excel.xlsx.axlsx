@@ -8,19 +8,28 @@ wb.add_worksheet(:name => "#{mes}") do |sheet|
 	sheet.add_row ["", "#{mes.upcase}"], :height => 80
 
 	head_titles = titles_head
-	sheet.add_row head_titles, :style => titles, :height => 40
+	width_body = Array.new
+	# Establecer ancho de la primera fila para el título
+    cont = 2
+    (3..head_titles[:row].size).each do
+        sheet.rows.first.add_cell(value = "")
+        width_body.push(:ignore)
+        cont += 1
+    end
+	sheet.add_row head_titles[:row], :style => titles, :height => 40, :widths => head_titles[:width]
 
 	@programacion_lotes.each do |lote|
 		row_lote = set_row_programacion_lote lote
-		sheet.add_row row_lote, :style => body
+		sheet.add_row row_lote, :style => body, :height => 25, :widths => width_body
 	end
-
-	# Establecer ancho de la primera fila para el título
-	cont = 2
-	(3..head_titles.size).each do |cell|
-		sheet.rows.first.add_cell(value = "")
-		cont += 1
-	end
+	if !@position.nil?
+        size_sub = params[:export][:processes_details].eql?("true")   ? @lotes_sub_estados.size : 0
+        size = 4 + size_sub
+        (0..size).each do
+            sheet.merge_cells sheet.rows.fetch(1).cells[(@position..@position += 1)]
+            @position += 1
+        end
+    end
 	sheet.row_style 0, head
 	sheet.merge_cells sheet.rows.first.cells[(1..cont)]
 end

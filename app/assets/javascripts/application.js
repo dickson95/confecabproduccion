@@ -14,8 +14,10 @@
 //= require jquery_ujs
 //= require jquery-ui/sortable
 //= require jquery-ui/effect-highlight
+//= require jquery-ui/effect-drop
 //= require jquery-ui/datepicker
 //= require jquery-ui/autocomplete
+//= require jquery.floatingmessage
 //= require autocomplete-rails
 //= require bootstrap_sb_admin_base_v2
 //= require turbolinks

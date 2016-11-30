@@ -118,9 +118,9 @@ class LotesController < ApplicationController
   # Pasar entre los distintos estados del lote y registrar las fechas de salida
   # de un estado, la de entrada al siguiente y un responsable por acción
   def cambio_estado
-    next_state_lote = next_state "", params[:btn]
-    estado = next_state_lote[:state]
-    men = next_state_lote[:message]
+    next_state_lote = next_state params[:btn]
+    estado = next_state_lote[:state] - 1
+            men = next_state_lote[:controller]
     has_programing = Lote.has_programing params[:lote_id], estado
 
     if has_programing
@@ -144,19 +144,32 @@ class LotesController < ApplicationController
       respond_to do |format|
         # Nuevo estado en el historial de los lotes
         if @control_lote.save
-          format.html { redirect_to :back }
-          flash[:info] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}." 
-          format.json { render :index, status: :ok, location: @control_lote }
+          if request.format == "text/javascript"
+            hs = Hash.new
+            hs[:dropdown] = view_context.render partial: 'dropdown_options', locals: { lote_id: params[:lote_id], 
+                          estado_id: estado}
+            hs[:message] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}."
+            hs[:process] = next_state_lote[:controller].capitalize
+            format.json { render json: hs, status: :ok }
+          else
+            format.html { redirect_to :back }
+            flash[:info] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}."
+          end
+          
         else
-          @lotes = ControlLote.select(:lote_id).map(&:lote_id).uniq
-          format.html { render :index }
-          format.json { render json: @control_lote.errors, status: :unprocessable_entity }
+          format.html { redirect_to lotes_path }
+          flash[:danger] = "Ocurrio un error, intenta de nuevo"
         end
       end
     else
       respond_to do |format|
-        format.html {redirect_to :back}
-        flash[:warning] = "El lote no tiene programación, no se puede confeccionar"
+        if request.format == "text/javascript"
+          format.html { render partial: 'dropdown_options', locals: { lote_id: params[:lote_id], estado_id: estado - 1}, 
+           status: :not_modified } 
+        else
+          format.html { redirect_to :back }
+        end   
+
       end
     end
   end

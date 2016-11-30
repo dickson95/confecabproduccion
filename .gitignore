@@ -3,3 +3,4 @@ config/database.yml
 config/secrets.yml
 tmp/*
 .byebug_history
+.idea/*

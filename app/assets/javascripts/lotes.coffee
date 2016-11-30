@@ -7,6 +7,27 @@ $(document).on 'turbolinks:load', ->
     $('#page-wrapper').prepend(data)
     $(this).closest("tr").remove()
 
+  $('table').on('ajax:complete', '.change', (e, xhr, status) ->
+      if xhr.status == 304
+        $.floatingMessage "El lote no tiene programación.\n No puede pasar de integración.", {
+          position : "bottom-right" 
+          height : 80
+          time: 4000
+          className : "ui-state-error"
+        }
+        $(".dropdown-menu").hide('slide')
+    ).on('ajax:success', '.change', (e, data, status, xhr) ->
+        if xhr.status == 200
+          $.floatingMessage data.message, {
+              position : "bottom-right"
+              time: 4000
+              className : "ui-state-active"
+            }
+          dropd = $(this)
+          dropd.closest("tr").find("td.state").text(data.process)
+          dropd.closest("td").html(data.dropdown)
+
+    )
   # DataTables
   $('#lotes').DataTable
       language:

@@ -16,48 +16,25 @@ module LotesHelper
     end
   end
 
-    # Cambio de estados. Las opciones son todas las disponibles en el helper link_to
-  def next_state(route, state, link_to_options=nil, content_tag_options=nil, options=nil)
-    state_final = nil
+  # Cambio de estados. Las opciones son todas las disponibles en el helper link_to
+  def next_state( state )
     men = nil
-    boolean = true
-    case state.to_i
+    state = state.to_i
+    case state
       when 1
-        state_final = 2
-        men = {:view => 'Integrar'}
+        men = { :view => 'Integrar', :state => state + 1, :boolean => true }
       when 2
-        state_final = 3
-        men = {:view =>'Confeccionar', :controller => "integración"}
+        men = { :view =>'Confeccionar', :controller => "integración", :state => state + 1, :boolean => true }
       when 3
-        state_final = 4
-        men = {:view => 'Terminar', :controller => "confección"}
+        men = { :view => 'Terminar', :controller => "confección", :state => state + 1, :boolean => true }
       when 4
-        state_final = 5
-        men = {:view => 'Completar', :controller => "terminación"}
+        men = { :view => 'Completar', :controller => "terminación", :state => state + 1, :boolean => true }
       when 5
-        boolean = false
-        state_final = 6
-        men = {:controller => "completado"}
+        men = { :controller => "completado", :state => state + 1, :boolean => false }
       else
-        boolean = false
-        men = ""
+        men = {:state => state, :boolean => false }
     end
-      if boolean && params[:action] != "cambio_estado"
-        link_to_options[:title] = men[:view]
-        link_to "#{route}?btn=#{state_final}", link_to_options do
-          content_tag(:i, "", content_tag_options).html_safe + men[:view]
-        end
-      elsif params[:action] == "cambio_estado"
-        {:message => men[:controller], :state => state_final - 1}
-      end
-    if boolean && params[:action] != "cambio_estado"
-      link_to_options[:title] = men[:view]
-      link_to "#{route}?btn=#{state_final}&plc=#{ params[:plc] }", link_to_options do
-        content_tag(:i, "", content_tag_options).html_safe + men[:view]
-      end
-    elsif params[:action] == "cambio_estado"
-      {:message => men[:controller], :state => state_final - 1}
-    end
+    return men
   end
 
   def def_names(keys)

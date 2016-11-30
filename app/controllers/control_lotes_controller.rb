@@ -2,13 +2,18 @@ class ControlLotesController < ApplicationController
   #Solicitar prueba de permisos antes de cargar cualquier acción
   load_and_authorize_resource 
   before_action :set_lote
-  before_action :collection_control_lote, only: [:index, :show]
+  before_action :collection_control_lotes, only: [:index, :show]
   before_action :set_control_lotes, only: [:edit, :update, :update_cantidad, :destroy]
   before_action :sub_estados, only: [:new, :edit]
   
   # GET /control_lotes
   # GET /control_lotes.json
   def index
+  end
+
+  def show
+    params[:plc] = params[:plc] || 'lotes'
+    render action: :index
   end
   
   def new
@@ -26,7 +31,7 @@ class ControlLotesController < ApplicationController
       if @control_lote.save
         last_state_lote.update(:resp_salida_id => current_user, 
           :fecha_salida => control_lote_params[:fecha_ingreso] )
-        format.html { redirect_to lote_control_lotes_path }
+        format.html { redirect_to lote_control_lotes_path(:plc => params[:control_lote][:plc]) }
         flash[:success] = "Proceso nuevo registrado"
         format.json { render :index, status: :ok }
       else
@@ -43,11 +48,11 @@ class ControlLotesController < ApplicationController
   def update  
     respond_to do |format|
       if @control_lote.update(control_lote_params)
-        format.html { redirect_to @control_lote}
-        flash[:success] = "Proceso actuaslizado correctamente"
+        format.html { redirect_to lote_control_lotes_path(:plc => params[:control_lote][:plc]) }
+        flash[:success] = "Proceso actualizado correctamente"
       else
         sub_estados
-        format.html { render :edit }
+        format.html { render :edit, :plc => params[:control_lote][:plc] }
         format.json { render json: @control_lote.errors, status: :unprocessable_entity }
       end
     end
@@ -56,7 +61,7 @@ class ControlLotesController < ApplicationController
   def destroy
     @control_lote.destroy
     respond_to do |format|
-      format.html { redirect_to lote_control_lotes_path }
+      format.html { redirect_to lote_control_lotes_path(:plc => params[:plc]) }
       flash[:success] = "Proceso eliminado."
       format.json { head :no_content }
     end
@@ -96,7 +101,7 @@ class ControlLotesController < ApplicationController
       @sub_estados = SubEstado.all
     end
 
-    def collection_control_lote
+    def collection_control_lotes
       company = session[:selected_company]
       @control_lotes = @lote.control_lotes
       @sub_estado = {}
