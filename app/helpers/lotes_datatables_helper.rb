@@ -46,18 +46,23 @@ module LotesDatatablesHelper
       lotes = Lote.where("lotes.empresa = '#{company}'")
         .limit(params[:length]).offset(params[:start]).order(order[order_val[:column]])
     else
-      value = params[:search][:value].strip
-      keys = {
-          op_cont: value,
-          cantidad_eq: value,
-          referencia_referencia_cont: value,
-          cliente_cliente_cont: value,
-          m: 'or'
-      }
+      keys = searchable_columns params[:search][:value].strip
       lotes = Lote.ransack(keys)
       amou = lotes.result.where(:empresa => company).count
       lotes = lotes.result.where(:empresa => company).limit(params[:length]).order(order[order_val[:column]])
     end
-    { lotes: lotes, amount: amou}
+    { lotes: lotes, amount: amou }
+  end
+  
+  private
+
+  def searchable_columns(value)
+    {
+        op_cont: value,
+        cantidad_eq: value,
+        referencia_referencia_cont: value,
+        cliente_cliente_cont: value,
+        m: 'or'
+    }
   end
 end
