@@ -2,6 +2,7 @@ class LotesController < ApplicationController
   # Validación de autorización
   load_and_authorize_resource :except  => [:view_details]
   include LotesHelper
+  include LotesDatatablesHelper
   # Acciones primarias
   before_action :rol_user, only: [:create, :update, :edit, :new]
   before_action :set_color, only: [:create, :update]
@@ -16,14 +17,10 @@ class LotesController < ApplicationController
   # GET /lotes
   # GET /lotes.json
   def index
-    company = session[:selected_company]
-    @lotes = Lote.joins([control_lotes: [:estado]], :referencia, :cliente)
-    .where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes 
-      cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id) and lotes.empresa = '#{company ? "CAB" : "D&C"}'")
-    .pluck("lotes.id", "clientes.cliente", "referencias.referencia", "lotes.op", "lotes.cantidad", 
-      "lotes.tipo_prenda_id","control_lotes.estado_id","control_lotes.sub_estado_id", "lotes.precio_u", "lotes.precio_t")    
-    @fechas_ingreso = ControlLote.hash_ids
-    @tipos_prendas = TipoPrenda.hash_ids
+    respond_to do |format|
+      format.html
+      format.json { render json: data_tables(params) }
+    end
   end
   
   def view_details
@@ -177,8 +174,7 @@ class LotesController < ApplicationController
   # DELETE /lotes/1
   # DELETE /lotes/1.json
   def destroy
-    @lote.destroy
-    render partial: 'layouts/messages', flash: flash[:info]='Registro eliminado con éxito'
+    render json: @lote.destroy, status: :ok
   end
 
   # PATCH /lotes/:lote_id/total_price

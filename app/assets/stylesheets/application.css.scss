@@ -1,5 +1,7 @@
 @import "font-awesome";
+@import "bootstrap";
 @import "bootstrap_sb_admin_base_v2";
+@import "bootstrap-sprockets";
 @import "jquery-ui/datepicker";
 @import "jquery-ui/core";
 @import "jquery-ui/theme";
@@ -74,12 +76,32 @@ input[type=number]::-webkit-outer-spin-button {
     text-decoration: none;
 }
 
-.ui-state-hover, .ui-state-active {
-    color: #ffffff;
+/* Comentado para consevar el borde en los mensaje flotantes */
+.ui-state-hover, .ui-state-active{
+    color: #0ACD0A;
+    border: 1px solid #0ACD0A;
     text-decoration: none;
-    background-color: #0088cc;
-    border-radius: 0px;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
+    background-color: #F1FEEC;
     background-image: none;
+}
+
+
+.ui-widget-content {
+  z-index: 10;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+.no-padding-top {
+  padding-top: 0 !important;
+}
+.no-padding-left {
+  padding-left: 0 !important;
+}
+.no-padding-right {
+  padding-right: 0 !important;
+}
+.no-padding-bottom {
+  padding-bottom: 0 !important;
 }
