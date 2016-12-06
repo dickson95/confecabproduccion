@@ -7,7 +7,7 @@ $(document).on "turbolinks:load", ->
   $("tbody").on("click keyup", "tr > td > input.lote_precio_unitario", ->
     unit_price = $(this).val()
     id = $(this).data("lote")
-    amount = $(this).closest("tr").find("td[data-cantidad]").data("cantidad")
+    amount = $(this).closest("tr").find("span[data-cantidad]").data("cantidad")
     if unit_price.trim() == ""
       unit_price = 0
     input = $(this)
@@ -16,7 +16,7 @@ $(document).on "turbolinks:load", ->
       url: "/lotes/" + id + "/total_price",
       data: {lote: {amount: amount, unit_price: unit_price}},
       success: (data, status) ->
-        input.closest("tr").find("td.total").text(data['total'])
+        input.closest("tr").find("span[data-total]").text(data['total'])
         format_price_u = data['unit']
     )
   ).on "focusout", "input.lote_precio_unitario", ->

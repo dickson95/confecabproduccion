@@ -47,7 +47,7 @@ $(document).on 'turbolinks:load', ->
         next: 'Siguiente'
     order: [[0, "desc"]]
     columnDefs: [
-      { className: "no-padding-top no-padding-bottom", "targets": [ 1 ] }
+      { className: "no-padding-top no-padding-bottom", "targets": [ 1, 7 ] }
       {
         'targets': [0]
         'visible': false

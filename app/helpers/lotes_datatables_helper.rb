@@ -25,10 +25,10 @@ module LotesDatatablesHelper
              clientes[lote.cliente_id],
              referencias[lote.referencia_id],
              lote.op,
-             lote.cantidad,
+             (view_context.content_tag :span, lote.cantidad, data:{ cantidad: lote.cantidad }),
              tipos_prendas[lote.tipo_prenda_id],
-             Money.new("#{lote.precio_u}00").format,
-             Money.new("#{lote.precio_t}00").format
+             (view_context.content_tag :input, "", data:{:lote => lote.id}, :value => Money.new("#{lote.precio_u}00").format, :class => "form-control input-sm lote_precio_unitario", :disabled => (can? :prices_update, Lote)? false : true),
+             (view_context.content_tag :span, Money.new("#{lote.precio_t}00").format, data:{ total: '0' })
           ]
       )
     end
