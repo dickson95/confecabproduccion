@@ -59,11 +59,11 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   
   config.action_mailer.smtp_settings = {
-    :address              => "smtp.gmail.com",
-    :port                 => 587,
-    :domain               => "gmail.com",
-    :user_name            => "correosconfecab@gmail.com",
-    :password             => "123654987",
+    :address              => "smtpout.secureserver.net",
+    :port                 => 80,
+    :domain               => "confecab.com",
+    :user_name            => "info@confecab.com",
+    :password             => "900355811",
     :authentication       => "plain",
     :enable_starttls_auto => true
   }

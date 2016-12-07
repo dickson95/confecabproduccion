@@ -13,9 +13,6 @@
         <div class="form-group">
           <%= f.input :password, required: false, label: "Contraseña" %>
         </div>
-        <div class="checkbox">
-          <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
-        </div>
       
         <div class="form-actions">
           <%= f.button :submit, "Ingresar", class:"btn btn-lg btn-primary btn-block"%>

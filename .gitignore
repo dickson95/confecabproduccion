@@ -4,3 +4,4 @@ config/secrets.yml
 tmp/*
 .byebug_history
 .idea/*
+.idea/.generators

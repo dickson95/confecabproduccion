@@ -23,6 +23,15 @@ es-CO:
     sessions:
       user:
         signed_in: "Bienvenido al sistema de producción para Confecab y D&C"
+    mailer:
+      confirmation_instructions:
+        subject: "Instrucciones de confirmación"
+      reset_password_instructions:
+        subject: "Instrucciones para reestablecer la contraseña"
+      unlock_instructions:
+        subject: "Instrucciones para desbloquear cuenta"
+      password_change:
+        subject: "Contraseña cambiada"
     passwords:
         no_token: "Revise la dirección en la barra de navegación."
         send_instructions: "Recibiras un correo con las instrucciones para restaurar tu contraseña en un momento. No olvides revisar el spam."
