@@ -84,4 +84,12 @@ gem 'money'
 # Ransack para buscar por todas las columnas
 gem 'ransack', github: 'activerecord-hackery/ransack'
 
+# Es una dependencia de premailer-rails y esta gema sirve para tratar documentos html, xml
+gem 'nokogiri'
+
+# Esta gema dá el estilo a los correos sin tener que poner style en la misma linea de las etiquetas
+# html, como tendría que ser para dar estilo.
+gem 'premailer-rails'
+
+
 ruby "2.3.1"

@@ -26,8 +26,8 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  
-  config.action_mailer.default_url_options = { host: '0.0.0.0' , port: 8080 }
+
+  config.action_mailer.default_url_options = { host: 'localhost' , port: 3000 }
   
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = true
@@ -51,7 +51,6 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  config.action_mailer.default_url_options = { :host => '0.0.0.0:8080' }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {:address => "0.0.0.0", :port => 1025}
   
@@ -60,10 +59,11 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   
   config.action_mailer.smtp_settings = {
-    :address              => "smtp.gmail.com",
-    :port                 => 587,
-    :user_name            => "correosconfecab@gmail.com",
-    :password             => "123654987",
+    :address              => "smtpout.secureserver.net",
+    :port                 => 80,
+    :domain               => "confecab.com",
+    :user_name            => "info@confecab.com",
+    :password             => "900355811",
     :authentication       => "plain",
     :enable_starttls_auto => true
   }
