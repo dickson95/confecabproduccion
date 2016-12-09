@@ -277,7 +277,6 @@ $(document).on 'turbolinks:load', ->
       $(this).val('')
     else if $(this).val().trim() == ''
       $(this).val('0')
-
   return
 
   # Reorganizamiento cuando la pantalla se encoge

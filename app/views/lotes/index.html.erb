@@ -1,4 +1,6 @@
-<% content_for :title do  "Lotes" end%>
+<% content_for :title do
+  "Lotes"
+end %>
 <div class="panel panel-default" style="margin-top: 20px;">
   <div class="panel-heading">
     <div class="row">
@@ -6,22 +8,22 @@
         <h4 class="panel-title">Lotes</h4>
       </div>
       <div class="pull-right text-right">
-        <%if can? :export, Lote%>
-          <%= link_to options_export_lotes_path, :remote => true, :class => "btn-sm", :id => "exportar", :title => "Exportar excel" do %>
-          <i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i>
-          <% end %>
+        <% if can? :export, Lote %>
+            <%= link_to options_export_lotes_path, :remote => true, :class => "btn-sm", :id => "exportar", :title => "Exportar excel" do %>
+                <i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i>
+            <% end %>
         <% end %>
-        <%if can? :create, Lote%>
-          <%= link_to new_lote_path(:plc => controller_name), :title => "Nuevo lote" , :class => "btn-sm" do %>
-            <%= content_tag :i, "", :class => "fa fa-plus fa-2x"%>
-          <%end%>
-        <%end%>
+        <% if can? :create, Lote %>
+            <%= link_to new_lote_path(:plc => controller_name), :title => "Nuevo lote", :class => "btn-sm" do %>
+                <%= content_tag :i, "", :class => "fa fa-plus fa-2x" %>
+            <% end %>
+        <% end %>
       </div>
     </div>
 
   </div>
   <div class="panel-body">
-    <%=render 'table' %>
+    <%= render 'table' %>
     <!--Fin de la lista-->
   </div>
 </div>

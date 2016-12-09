@@ -1,10 +1,10 @@
 class ProgramacionesController < ApplicationController
 	load_and_authorize_resource
-	before_action :empresa 
-	before_action :set_meses, except: [:modal_open, :update_row_order]
-	before_action :programacion_id, except: [:modal_open, :update_row_order, :export_excel]
+	before_action :empresa
+	before_action :set_meses, except: [:modal_open, :update_row_order, :update_meta_mensual]
+	before_action :programacion_id, except: [:modal_open, :update_row_order, :export_excel, :update_meta_mensual]
 	before_action :states_lotes, only: [:index, :program_table]
-	before_action :sum_totals, except: [:modal_open, :update_row_order, :export_excel, :options_export]
+	before_action :sum_totals, except: [:modal_open, :update_row_order, :export_excel, :options_export, :update_meta_mensual]
 	before_action :set_programaciones, only: [:index, :export_pdf]
 	before_action :no_empty_program, except: [:modal_open, :remove_from_programing, :add_lotes_to_programing, :export_excel,:options_export]
 	after_action  :states_lotes, only: [:generate, :add_lotes_to_programing]
@@ -155,7 +155,18 @@ class ProgramacionesController < ApplicationController
 			format.html
 		end
 	end
-
+	
+	def update_meta_mensual
+		program_params = params.permit(:monthly_target, :programacion_id)
+		Programacion.where("empresa = ? and  EXTRACT(year_month from mes) = ?", 
+							session[:selected_company], program_params[:programacion_id])
+		.update(:meta_mensual => program_params[:monthly_target])
+		
+		respond_to do |format|
+			format.json{ head :no_content }
+		end
+	end
+	
 	private
 		def set_meses
 			@meses = Programacion.meses
@@ -200,9 +211,9 @@ class ProgramacionesController < ApplicationController
 
 		# Sumar las horas y el precio total.
 		def sum_totals
-			@hours = Lote.where(:programacion_id => @programacion.first).sum(:h_req)
 			@total = Lote.where(:programacion_id => @programacion.first).sum(:precio_t)
 			@total = Money.new("#{@total}00", "USD").format
+			@cantidades = Lote.where(:programacion_id => @programacion.first).sum(:cantidad)
 		end
 
 		def states_lotes

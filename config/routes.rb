@@ -1,16 +1,26 @@
-Rails.application.routes.draw do  
+Rails.application.routes.draw do
+  get 'estadisticas', to: 'estadisticas#index'
+  get "estadisticas/programaciones/detalles/:year/:month", to: "estadisticas#show_programaciones", as: :programaciones_show
+  get "estadisticas/clientes/detalles/:year", to: "estadisticas#show_cliente", as: :clientes_show
+  get "estadisticas/clientes/mes/:year_month", to: "estadisticas#show_month_cliente", as: :clientes_month_show
+  namespace :estadisticas do
+    get :clientes
+    get :programaciones
+  end
+
   # Rutas para las programaciones
   match 'programaciones/remove_from_programing/:month', to: 'programaciones#remove_from_programing', as: :remove_from_programing, via: [:post, :patch] # Para editar un atributo concreto; es patch
   get 'programaciones/program_table/:month', to: 'programaciones#program_table', as: :program_table
   get 'programaciones/modal_open/:month', to: 'programaciones#modal_open', as: :modal_open  # Leer recurso; es get
   get 'programaciones/options_export/:month', to: 'programaciones#options_export', as: :programacion_options_export
-  resources :programaciones, only:[:index] do 
+  resources :programaciones, only:[:index] do
     # Más información sobre collection http://guides.rubyonrails.org/routing.html#adding-collection-routes
     get :export_pdf, on: :collection
     get :export_excel, on: :member
     patch :generate, on: :member # Editar una parte concreta, es patch
     patch :add_lotes_to_programing, as: :add_lotes, on: :collection # Para editar un atributo concreto; es patch
-    patch :update_row_order, on: :collection 
+    patch :update_row_order, on: :collection
+    post :update_meta_mensual
   end
 
   # Rutas de los usuarios

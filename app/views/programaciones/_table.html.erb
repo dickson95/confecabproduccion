@@ -1,90 +1,99 @@
-<%disabled = Programacion.interfaz @no_empty_program, @programaciones%>
-<%month = Programacion.date_split params[:month]%>
-<%$colspan = 9%>
-	<caption>
-		<div class="pull-left">
-			<h4>Programación de <%=@meses[month[:month]][:string]%></h4>
-		</div>
-		<!--Opciones de exportación-->
-		<div class="pull-right text-right">
-			<p style="cursor: help;" class="btn pull-left" data-html="true" data-toggle="popover" data-placement="bottom" title="Cómo ordenar" data-content="Para ordenar solo has click con el mouse sobre la fila y a arrastras hacia donde la quieres">
-				<i class="fa fa-question-circle" title="Cómo ordenar"></i>
-			</p>
-			<% if can? :export, Programacion %>
-			<div class="dropdown pull-right">
-					<button type="button" class="btn btn-primary dropdown-toggle disabled-btn" data-toggle="dropdown" <%=disabled.fetch(0) ? 'disabled' : ''%>>Exportar&nbsp;<i class="caret"></i></button>
-					<ul class="dropdown-menu pull-right">
-						<li>
-							<%=link_to programacion_options_export_path(params[:month], format_export: "xlsx"), remote: true do%>
-								<%=content_tag :i ,"",:class => "fa fa-file-excel-o"%>
-								Excel
-							<%end%>
-						</li>
-						<li>
-							<%=link_to export_pdf_programaciones_path(format: "pdf",:month => params[:month]) do%>
-								<%=content_tag :i ,"",:class => "fa fa-file-pdf-o"%>
-								PDF
-							<%end%>
-						</li>
-					</ul>	
-			</div>
-			<% end %>
-			<% if can? :update, Programacion %>
-			<div class="pull-left col-sm-1">
-				<%=submit_tag "Ordenar", class:"btn btn-default disabled-btn", disabled: disabled.fetch(0)%>
-			</div>
-			<% end %>
-		</div>
-	</caption>
-	<thead>
-		<tr>
-			<%if can? :update, Programacion%>
-			<th style="width: 30px; min-width: 30px; cursor: help;">
-				<p data-html="true" data-toggle="popover" data-placement="bottom" title="Retirar de programación" data-content='Selecciona los lotes deseados y has click en el botón "Retirar" para no incluirlos en la programación'>
-					<i class="fa fa-check-square-o" title="Cómo retirar"></i>
-				</p>
-			</th>
-			<%end%>
-			<th></th>
-			<%if can? :update, Programacion%>
-			<th>Sec</th>
-			<%end%>
-			<th>Estado</th>
-			<th style="min-width: 70px;">Cliente</th>
-			<th>Descripción</th>
-			<th style="min-width: 80px;">Referencia</th>
-			<th>Cant</th>
-			<%if can? :prices, Lote%>
-			<%$colspan = 11%>
-			<th>Precio</th>
-			<th>Total</th>
-			<%end%>
-		</tr>
+<% disabled = Programacion.interfaz @no_empty_program, @programaciones %>
+<% month = Programacion.date_split params[:month] %>
+<% $colspan = 9 %>
+<caption>
+  <div class="pull-left">
+    <h4>Programación de <%= @meses[month[:month]][:string] %></h4>
+  </div>
+  <!--Opciones de exportación-->
+  <div class="pull-right text-right">
+    <p style="cursor: help;" class="btn pull-left" data-html="true" data-toggle="popover" data-placement="bottom" title="Cómo ordenar" data-content="Para ordenar solo has click con el mouse sobre la fila y a arrastras hacia donde la quieres">
+      <i class="fa fa-question-circle" title="Cómo ordenar"></i>
+    </p>
+    <% if can? :export, Programacion %>
+        <div class="dropdown pull-right">
+          <button type="button" class="btn btn-primary dropdown-toggle disabled-btn" data-toggle="dropdown" <%= disabled.fetch(0) ? 'disabled' : '' %>>Exportar&nbsp;<i class="caret"></i>
+          </button>
+          <ul class="dropdown-menu pull-right">
+            <li>
+              <%= link_to programacion_options_export_path(params[:month], format_export: "xlsx"), remote: true do %>
+                  <%= content_tag :i, "", :class => "fa fa-file-excel-o" %>
+                  Excel
+              <% end %>
+            </li>
+            <li>
+              <%= link_to export_pdf_programaciones_path(format: "pdf", :month => params[:month]) do %>
+                  <%= content_tag :i, "", :class => "fa fa-file-pdf-o" %>
+                  PDF
+              <% end %>
+            </li>
+          </ul>
+        </div>
+    <% end %>
+    <% if can? :update, Programacion %>
+        <div class="pull-left col-sm-1">
+          <%= submit_tag "Ordenar", class: "btn btn-default disabled-btn", disabled: disabled.fetch(0) %>
+        </div>
+    <% end %>
+  </div>
+</caption>
+<thead>
+<tr>
+  <% if can? :update, Programacion %>
+      <th style="width: 30px; min-width: 30px; cursor: help;">
+        <p data-html="true" data-toggle="popover" data-placement="bottom" title="Retirar de programación" data-content='Selecciona los lotes deseados y has click en el botón "Retirar" para no incluirlos en la programación'>
+          <i class="fa fa-check-square-o" title="Cómo retirar"></i>
+        </p>
+      </th>
+  <% end %>
+  <th></th>
+  <% if can? :update, Programacion %>
+      <th>Sec</th>
+  <% end %>
+  <th>Estado</th>
+  <th style="min-width: 70px;">Cliente</th>
+  <th>Descripción</th>
+  <th style="min-width: 80px;">Referencia</th>
+  <th>Cant</th>
+  <% if can? :prices, Lote %>
+      <% $colspan = 11 %>
+      <th>Precio</th>
+      <th>Total</th>
+  <% end %>
+</tr>
 
-	</thead>
-	<%=render partial: "table_tbody", colspan: $colspan%>
+</thead>
+<%= render partial: "table_tbody", colspan: $colspan %>
 
-	<% if can?(:prices, Lote) ||  can?(:update, Programacion) %>
-	<tfoot>
-		<tr>
-			<td colspan="6">
-				<%if can? :prices, Lote%>
-				<div>
-					<p class="col-md-2"><strong>Horas:</strong>  <%= @hours %></p>
-					<p class="col-md-4"><strong>Precio total:</strong> <%= @total %></p>
-				</div>
-				<%end%>
-			</td>
-			<td colspan="<%= can?(:prices, Lote) &&  can?(:update, Programacion) ? 4 : 2 %>" style="margin-right:0px; padding-right:0px;">
-				<%if can? :update, Programacion%>
-				<div class="pull-right">
-					<%=submit_tag "Retirar", class:"btn btn-warning disabled-btn", disabled: disabled.fetch(0)%>
-					<%=link_to "Añadir", modal_open_path(params[:month]), class:"btn btn-default #{disabled.fetch(1) ? 'disabled' : ''}", remote: true, id: "add-lote" %>
-				</div>
-				<%end%>
-			</td>
-		</tr>
-	</tfoot>
-	<% end %>
+<% if can?(:prices, Lote) || can?(:update, Programacion) %>
+    <tfoot>
+    <tr>
+      <td colspan="6">
+        <div class="pull-left">
+          <p><strong>Total unidades:</strong> <%= @cantidades %> </p>
+          <% if can? :prices, Lote %>
+              <p><strong>Precio total:</strong> <%= @total %> </p>
+          <% end %>
+        </div>
+        <% if can? :update, Programacion %>
+            <div class="pull-right">
+              <%= content_tag :input, "", data: {:month => params[:month]},
+                              :class => "form-control input-sm col-xs-6", :placeholder => "Meta mensual", :type => "number",
+                              :value => monthly_target(params[:month]), :id => "programacion_meta_mensual" %>
+            </div>
+            <label class="pull-right col-xs-2" for="programacion_meta_mensual">Meta</label>
+        <% end %>
+      </td>
+      <td colspan="<%= can?(:prices, Lote) && can?(:update, Programacion) ? 4 : 2 %>" style="margin-right:0px; padding-right:0px;">
+        <% if can? :update, Programacion %>
+            <div class="pull-right">
+              <%= submit_tag "Retirar", class: "btn btn-warning disabled-btn", disabled: disabled.fetch(0) %>
+              <%= link_to "Añadir", modal_open_path(params[:month]), class: "btn btn-default #{disabled.fetch(1) ? 'disabled' : ''}", remote: true, id: "add-lote" %>
+            </div>
+        <% end %>
+      </td>
+    </tr>
+    </tfoot>
+<% end %>
 	
 

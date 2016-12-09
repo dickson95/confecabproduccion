@@ -6,7 +6,9 @@ class TipoPrenda < ApplicationRecord
     def name
         self.tipo
     end
-
+    def tipo=(val)
+        self[:tipo] = val.upcase
+    end
     def self.hash_ids
     	result = select("id, tipo").as_json
     	hash_ids = Hash.new
