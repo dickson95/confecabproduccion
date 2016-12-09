@@ -18,8 +18,9 @@
 //= require jquery-ui/datepicker
 //= require jquery-ui/autocomplete
 //= require jquery.floatingmessage
+//= require bootstrap-sprockets
+//= require dist/js/app.min.js
 //= require autocomplete-rails
-//= require bootstrap_sb_admin_base_v2
 //= require turbolinks
 //= require_tree .
 

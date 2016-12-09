@@ -1,14 +1,9 @@
-@import "font-awesome";
-@import "bootstrap";
-@import "bootstrap_sb_admin_base_v2";
-@import "bootstrap-sprockets";
-@import "jquery-ui/datepicker";
-@import "jquery-ui/core";
-@import "jquery-ui/theme";
-@import "jquery-ui/autocomplete";
-@import "static_pages";
-@import "lotes";
-
+/*
+*= require base
+*= require dist/css/AdminLTE.min.css
+*= require dist/css/skins/_all-skins.min.css
+*= require_tree.
+*/
 @media (max-width: 768px) {
   #page-wrapper{
     padding-top: 80px;
