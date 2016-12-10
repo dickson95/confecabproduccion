@@ -274,7 +274,7 @@ Devise.setup do |config|
   # Especificar que layouts usará devise para las acciones
   Rails.application.config.to_prepare do
     Devise::SessionsController.layout "devise/login"
-    # Devise::RegistrationsController.layout proc { |controller| user_signed_in? ? "application" : "devise/login" }
+    Devise::RegistrationsController.layout proc { |controller| user_signed_in? ? "application" : "devise/login" }
     # Devise::ConfirmationsController.layout "devise"
     # Devise::UnlocksController.layout "devise"
     # Devise::PasswordsController.layout "devise"

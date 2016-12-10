@@ -1,4 +1,4 @@
-$(document).on "turbolinks:load", ->
+$(document).on "ready", ->
   $("#lote_op").keyup ->
     value = $(this).val()
     this_op = $(this)

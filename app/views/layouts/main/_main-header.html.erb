@@ -1,0 +1,17 @@
+<!-- Logo -->
+<%= link_to root_path, class: "logo" do %>
+    <!-- mini logo for sidebar mini 50x50 pixels -->
+    <span class="logo-mini"><b><%= name_company_logo %></b></span>
+    <!-- logo for regular state and mobile devices -->
+    <span class="logo-lg"><%= session[:selected_company] ? "CONFE" : "DISEÑOS " %><b><%= name_company_logo %></b> </span>
+<% end %>
+<nav class="navbar navbar-static-top">
+  <%= link_to "#", data: {toggle: "offcanvas"}, class: "sidebar-toggle", role: "button" do %>
+      <span class="sr-only">Toggle navigation</span>
+  <% end %>
+  <div class="navbar-custom-menu">
+    <ul class="nav navbar-nav">
+      <%= render 'layouts/main/navbar-custom-menu' %>
+    </ul>
+  </div>
+</nav>

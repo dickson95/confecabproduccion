@@ -1,4 +1,4 @@
-$(document).on "turbolinks:load", ->
+$(document).on "ready", ->
 	# Cambiar la clase active entre las pestañas y la carga de los datos
 	$("ul.nav-tabs a").click (e)->
 		e.preventDefault()

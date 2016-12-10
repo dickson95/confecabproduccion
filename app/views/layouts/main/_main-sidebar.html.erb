@@ -1,0 +1,30 @@
+<section class="sidebar">
+  <ul class="sidebar-menu">
+    <li class="header">MENÚ DE NAVEGACIÓN</li>
+    <% if can? :read, Lote %>
+        <li class=<%= active_navigation(lotes_path) %>>
+          <%= link_to lotes_path, title: "Lotes" do %>
+              <i class="fa fa-dashboard" aria-hidden="true"></i>
+              <span>Lotes</span>
+          <% end %>
+        </li>
+    <% end %>
+    <% if can? :read, Programacion %>
+        <li class=<%= active_navigation(programaciones_path) %>>
+          <%= link_to programaciones_path, title: "Programación" do %>
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <span>Programación</span>
+          <% end %>
+        </li>
+    <% end %>
+    <% if (can? :read, Lote) %>
+        <li class=<%= active_navigation(estadisticas_path) %>>
+          <%= link_to estadisticas_path, title: "Estadísticas" do %>
+              <i class="fa fa-bar-chart-o" aria-hidden="true"></i>
+              <span>Estadísticas</span>
+          <% end %>
+        </li>
+        s
+    <% end %>
+  </ul>
+</section>

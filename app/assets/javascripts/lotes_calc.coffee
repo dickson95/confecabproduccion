@@ -1,4 +1,4 @@
-$(document).on "turbolinks:load", ->
+$(document).on "ready", ->
   format_price_u = undefined
   $("tbody").on "click focus", "tr > td > input.lote_precio_unitario", ->
     if $(this).val() == "$0.00"

@@ -1,4 +1,4 @@
-$(document).on "turbolinks:load", ->
+$(document).on "ready", ->
 		target = if gon.clientes then [ 1..4 ] else [ 1..3 ]
 		$('#clientes').DataTable
       language:

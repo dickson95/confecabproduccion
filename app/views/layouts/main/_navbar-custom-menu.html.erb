@@ -1,0 +1,29 @@
+<li class="dropdown user user-menu">
+  <%= link_to "#", data: {toggle: "dropdown"}, class: "dropdown-toggle" do %>
+      <span class="hidden-xs"><%= current_user.name %></span>
+  <% end %>
+  <ul class="dropdown-menu">
+    <!-- User image -->
+    <li class="user-header">
+      <p>
+        <%= current_user.name.capitalize %>
+        <small>Registrado(a) <%= I18n::localize(current_user.created_at, format: "%B de %Y").downcase %></small>
+      </p>
+    </li>
+    <!-- Menu Footer-->
+    <li class="user-footer">
+      <div class="pull-left">
+        <%= link_to edit_user_registration_path, :class => "btn btn-default btn-flat" do %>
+            <i class="fa fa-gear fa-fw"></i>
+            Perfil
+        <% end %>
+      </div>
+      <div class="pull-right">
+        <%= link_to destroy_user_session_path, :class => "btn btn-default btn-flat", :method => 'delete', :title => "Salir" do %>
+            <%= content_tag :i, "", :class => "fa fa-sign-out" %>
+            Salir
+        <% end %>
+      </div>
+    </li>
+  </ul>
+</li>
