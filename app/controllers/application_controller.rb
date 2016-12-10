@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
-  layout 'application'
   before_action :set_company_layout
   #Parámetros para el registro de usuarios con username y otros datos en devise
   def configure_permitted_parameters
@@ -18,12 +17,13 @@ class ApplicationController < ActionController::Base
   end
 
   def set_company_layout
-    if !params[:company] && !session[:selected_company]
-      self.class.layout 'select_company'
-      render "static_pages/home" if user_signed_in?
+    if view_context.current_page?(root_path)
+      session[:selected_company] = nil
+    elsif !params[:company] && session[:selected_company].nil? && user_signed_in?
+      new_session = controller_name == 'sessions' && action_name == 'create'
+      redirect_to root_path if !new_session
     else
-      self.class.layout 'application'
-      choose = session[:selected_company] || params[:company] == "true" ? true : false
+      choose = params[:company] == "true" ? true : false
       session[:selected_company] ||= choose
     end
   end
