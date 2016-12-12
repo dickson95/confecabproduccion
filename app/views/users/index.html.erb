@@ -4,13 +4,13 @@ end %>
 <div class="box box-primary with-border">
   <div class="box-header">
     <h3 class="box-title">Usuarios</h3>
-      <div class="box-tools pull-right">
-        <% if can? :create, User %>
-            <%= link_to new_user_path, :title => "Nuevo usuario" do %>
-                <%= content_tag :i, "", :class => "fa fa-plus fa-2x" %>
-            <% end %>
-        <% end %>
-      </div>
+    <div class="box-tools pull-right">
+      <% if can? :create, User %>
+          <%= link_to new_user_path, :title => "Nuevo usuario" do %>
+              <%= content_tag :i, "", :class => "fa fa-plus fa-2x" %>
+          <% end %>
+      <% end %>
+    </div>
   </div>
   <div class="box-body table-responsive">
     <table class="table">
@@ -33,23 +33,10 @@ end %>
               <% end %>
             </td>
             <td>
-              <% if current_user.id == user.id %>
-                  <%= link_to edit_user_registration_path, :title => "Editar mi perfil" do %>
-                      <%= content_tag :i, "", :class => "fa fa-pencil" %>
-                  <% end %>
-              <% elsif can? :destroy, User %>
-
-                  <% if user.id == 1 %>
-                      <%= link_to "", class: "text-red", :disabled => true,
-                                  :title => "El usuario administrador no se puede eliminar" do %>
-                          <%= content_tag :i, "", :class => "fa fa-trash-o" %>
-                      <% end %>
-                  <% else %>
-
-                      <%= link_to user, method: :delete, class: "text-red",
-                                  :title => "Eliminar", data: {confirm: "Are you sure?"} do %>
-                          <%= content_tag :i, "", :class => "fa fa-trash-o" %>
-                      <% end %>
+              <% if can? :destroy, user %>
+                  <%= link_to user, method: :delete, class: "text-red",
+                              :title => "Eliminar", data: {confirm: "Are you sure?"} do %>
+                      <%= content_tag :i, "", :class => "fa fa-trash-o" %>
                   <% end %>
               <% end %>
             </td>
