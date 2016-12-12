@@ -1,3 +1,16 @@
+<% content_for :title do %>
+    Historial del lote <%= @lote.referencia.referencia %>
+<% end %>
+<%= content_for :content_header do %>
+    <h1>
+      Detalle del ciclo de producción
+      <small></small>
+    </h1>
+<% end %>
+<%= content_for :content_breadcrumb do %>
+    <li><%= link_to "Lotes", lotes_path %></li>
+    <li><%= link_to "Ciclo de producción", lote_control_lotes_path(@lote, @control_lote, :plc=> params[:plc]) %></li>
+<% end %>
 <div class="box box-primary with-border">
   <div class="box-header">
     <h4 class="box-title">Ciclo de producción</h4>

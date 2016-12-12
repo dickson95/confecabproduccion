@@ -21,6 +21,18 @@
   <!--main-sidebar-->
 
   <div class="content-wrapper">
+    <section class="content-header">
+      <%= content_for?(:content_header) ? yield(:content_header) : "<h1>Producción</h1>".html_safe %>
+      <% if content_for?(:content_breadcrumb) %>
+          <ol class="breadcrumb">
+            <%= yield(:content_breadcrumb) %>
+          </ol>
+      <% else %>
+        <ol class="breadcrumb">
+          <li><%= link_to "Regresar", :back %></li>
+        </ol>
+      <% end %>
+    </section>
     <section class="content">
       <%= render 'layouts/messages' %>
       <%= yield %>

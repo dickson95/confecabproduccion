@@ -1,6 +1,15 @@
 <% content_for :title do %>
     Lotes
 <% end %>
+<%= content_for :content_header do %>
+    <h1>
+      Todos los lotes
+      <small>Estos son todos los lotes de <%= session[:selected_company] ? "Cofecab" : "Diseños y camisas" %></small>
+    </h1>
+<% end %>
+<%= content_for :content_breadcrumb do %>
+    <li><%= link_to "Lotes", lotes_path %></li>
+<% end %>
 <div class="box box-primary with-border" style="margin-top: 20px;">
   <div class="box-header">
     <h4 class="box-title">Lotes</h4>

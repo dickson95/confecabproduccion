@@ -13,7 +13,7 @@ end %>
     </div>
   </div>
   <div class="box-body table-responsive">
-    <table class="table">
+    <table class="table table-striped table-bordered">
       <thead>
       <tr>
         <th></th>
@@ -27,15 +27,15 @@ end %>
       <tbody>
       <% @users.each do |user| %>
           <tr>
-            <td>
+            <td class="text-center">
               <%= link_to user_path(user), {:remote => true, :title => "Ver detalles"} do %>
                   <%= content_tag :i, "", :class => "fa fa-list-alt" %>
               <% end %>
             </td>
-            <td>
+            <td class="text-center">
               <% if can? :destroy, user %>
                   <%= link_to user, method: :delete, class: "text-red",
-                              :title => "Eliminar", data: {confirm: "Are you sure?"} do %>
+                              :title => "Eliminar", data: {confirm: "¿Realmente desea eliminar este usuario?"} do %>
                       <%= content_tag :i, "", :class => "fa fa-trash-o" %>
                   <% end %>
               <% end %>
