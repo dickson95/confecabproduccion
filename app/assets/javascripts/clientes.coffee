@@ -1,20 +1,19 @@
 $(document).on "ready", ->
-		target = if gon.clientes then [ 1..4 ] else [ 1..3 ]
+		target = if gon.clientes then [ 0, 1, 3, 4, 5 ] else [ 2..4 ]
 		$('#clientes').DataTable
       language:
-        processing: 'Cargando...'
         lengthMenu: 'Mostrar _MENU_ registros'
         search: 'Buscar&nbsp;:'
         info: 'Resultados _START_ a _END_ de _TOTAL_ '
         infoEmpty: 'No hay datos o intente de nuevo'
         infoFiltered: '(filtrado de _MAX_ registros)'
         infoPostFix: ''
-        loadingRecords: 'Cargando...'
         zeroRecords: 'No se encuentran registros'
         emptyTable: 'No hay datos disponibles'
         paginate:
           previous: 'Anterior'
           next: 'Siguiente'
+      order: [[2, "desc"]]
       columnDefs:[
                     {
                       'targets': target

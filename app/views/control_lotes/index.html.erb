@@ -1,17 +1,15 @@
-<div class="panel panel-default" style="margin-top: 20px">
-  <div class="panel-heading ">
-    <div class="row">
-      <h4 class="col-xs-10">Ciclo de producción</h4>
-      <% if can? :create, ControlLote %>
-          <div class="col-sm-2 text-right">
-            <%= link_to new_lote_control_lote_path(@lote, :plc => params[:plc]), :title => 'Proceso nuevo' do %>
-                <i class="fa fa-plus fa-3x" aria-hidden="true"></i>
-            <% end %>
-          </div>
-      <% end %>
-    </div>
+<div class="box box-primary with-border">
+  <div class="box-header">
+    <h4 class="box-title">Ciclo de producción</h4>
+    <% if can? :create, ControlLote %>
+        <div class="box-tools">
+          <%= link_to new_lote_control_lote_path(@lote, :plc => params[:plc]), :title => 'Proceso nuevo' do %>
+              <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
+          <% end %>
+        </div>
+    <% end %>
   </div>
-  <div class="table-responsive">
+  <div class="box-body table-responsive">
     <table class="table table-striped table-bordered">
       <thead>
       <tr class="bg-primary">
@@ -47,7 +45,7 @@
             <% if can? :destroy, ControlLote %>
                 <td>
                   <%= link_to lote_control_lote_path(@lote, control_lote, :plc => params[:plc]), data: {:confirm => "¿Esta seguro de eliminar este proceso?"}, method: "delete" do %>
-                      <i class="fa fa-trash" aria-hidden="true" style="color:red;"></i>
+                      <i class="fa fa-trash text-red" aria-hidden="true"></i>
                   <% end %>
                 </td>
             <% end %>
@@ -68,20 +66,24 @@
       </tbody>
     </table>
   </div>
-  <div class="panel-footer text-right">
-    <strong>Cantidad total:</strong> <span><%= @lote.cantidad %></span> <br>
-    <strong>Cantidad en proceso:</strong> <span id="cantidad_proceso"><%= @control_lotes.sum(:cantidad) %></span>
+  <div class="box-footer">
+    <div class="box-tools pull-right">
+      <strong>Cantidad total:</strong> <span><%= @lote.cantidad %></span> <br>
+      <strong>Cantidad en proceso:</strong> <span id="cantidad_proceso"><%= @control_lotes.sum(:cantidad) %></span>
+    </div>
   </div>
 </div>
-<div class="text-right">
-  <%= link_to "Regresar", "/#{params[:plc]}" %>
-  <% if can? :cambio_estado, Lote %>
-      <% change = next_state @lote.control_lotes.last.estado.id %>
-      <% if change[:boolean] %>
-          <%= link_to lote_cambio_estado_path(@lote, :btn => change[:state], :plc => params[:plc]), method: "PATCH", :class => "btn btn-primary" do %>
-              <i class='fa fa-fast-forward fa-fw' aria-hidden='true'></i>
-              <%= change[:view] %>
-          <% end %>
-      <% end %>
-  <% end %>
+<div class="row">
+  <div class="col-md-offset-9 col-md-3 text-right">
+    <%= link_to "Regresar", "/#{params[:plc]}" %>
+    <% if can? :cambio_estado, Lote %>
+        <% change = next_state @lote.control_lotes.last.estado.id %>
+        <% if change[:boolean] %>
+            <%= link_to lote_cambio_estado_path(@lote, :btn => change[:state], :plc => params[:plc]), method: "PATCH", :class => "btn btn-primary" do %>
+                <i class='fa fa-fast-forward fa-fw' aria-hidden='true'></i>
+                <%= change[:view] %>
+            <% end %>
+        <% end %>
+    <% end %>
+  </div>
 </div>
