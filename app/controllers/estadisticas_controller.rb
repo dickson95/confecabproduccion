@@ -6,10 +6,15 @@ class EstadisticasController < ApplicationController
     time = Time.new() 
     month = (time - 1.month).strftime("%Y-%m")
     year = time.strftime("%Y")
+    year_month = time.strftime("%Y%m")
     month_cliente(company, month)
     # Datos mensuales de los clientes
     @amount_annual = annual_cliente(company, year)
-
+    com_progr = "lotes.empresa = ?  and EXTRACT(year_month from programaciones.mes) = ?"
+    @wip_integracion = Lote.current_state.state_filtered(2).joins(:programacion).where(com_progr, company, year_month).sum("lotes.cantidad")
+    @wip_planta = Lote.current_state.state_filtered(3).joins(:programacion).where(com_progr, company, year_month).sum("lotes.cantidad")
+    @wip_terminacion = Lote.current_state.state_filtered(4).joins(:programacion).where(com_progr, company, year_month).sum("lotes.cantidad")
+    @wip_facturado = Lote.current_state.state_filtered(5).joins(:programacion).where(com_progr, company, year_month).sum("lotes.cantidad")
     # Programaciones
     set_data_programaciones(time.strftime("%Y%m"))
   end

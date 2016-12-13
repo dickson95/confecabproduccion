@@ -3,6 +3,7 @@
   <p class="text-muted">Último mes de los clientes, progreso de la programación actual, y datos anuales para clientes y
     programación</p>
 </div>
+<!--Clientes-->
 <div class="row" style="margin-top: 20px;">
   <div class="col-md-12">
     <div class="panel panel-primary">
@@ -35,6 +36,7 @@
     </div>
   </div>
 </div>
+<!--Programaciones-->
 <div class="row">
   <div class="col-md-12">
     <div class="panel panel-primary">
@@ -42,20 +44,20 @@
         Avance de la programación
       </div>
       <div class="panel-body">
-        <div class="col-md-4">
+        <!--Donut chart mes-->
+        <div class="col-md-3">
           <h5>Programación de este mes</h5>
           <div id="programacion_mes" style="height: 200px;"></div>
         </div>
-        <div class="col-md-5">
+        <!--Por plantas-->
+        <div class="col-md-4">
           <h5>Avance de plantas</h5>
           <div id="relatives" style="height: 200px;"></div>
         </div>
-        <div class="col-md-3">
-          <div class="alert alert-link">
-            Avance de la programación. La planta de confección representa el 70% del valor mensual, y terminación
-            el 30%. Dé click <%= link_to "aquí", estadisticas_programaciones_path %> para ver más detalles por año o
-            mes.
-          </div>
+        <!--WIP-->
+        <div class="col-md-5">
+          <h5>WIP de este mes</h5>
+          <div id="wip_chart" style="height: 200px;"></div>
         </div>
       </div>
       <div class="panel-footer">
@@ -118,7 +120,7 @@
   new Morris.Bar({
     element: 'relatives',
     data: [
-      {planta: 'Planta de confección', value: <%= @confeccion_relative.round %>},
+      {planta: 'Planta', value: <%= @confeccion_relative.round %>},
       {planta: 'Terminación', value: <%= @terminacion_relative.round %>}
     ],
     xkey: 'planta',
@@ -127,6 +129,19 @@
     hoverCallback: function (index, options, content, row) {
       return 'Total: ' + row['value'] + "%";
     },
+    resize: true
+  });
+  new Morris.Bar({
+    element: 'wip_chart',
+    data: [
+      {wip: 'Integración', value: <%= @wip_integracion %>},
+      {wip: 'Planta', value: <%= @wip_planta %>},
+      {wip: 'Terminacíón', value: <%= @wip_terminacion %>},
+      {wip: 'Facturado', value: <%= @wip_facturado %>}
+    ],
+    xkey: 'wip',
+    ykeys: ['value'],
+    labels: ['Cantidad'],
     resize: true
   });
 </script>
