@@ -103,20 +103,14 @@ class EstadisticasController < ApplicationController
       @global_percente = absolute1 + absolute2 
     end
 
-
-    def str_max_date_control
-      "control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)"
-    end
-
     def annual_cliente(company, year)
-      Lote.select("SUM(lotes.cantidad) as cantidad, cliente_id").joins(:programacion, :control_lotes).where(str_max_date_control + " and lotes.empresa = ? and EXTRACT(year from programaciones.mes) = ? and control_lotes.estado_id = 5", company, year).group(:cliente_id)
+      Lote.current_state.state_filtered(5).select("SUM(lotes.cantidad) as cantidad, cliente_id").joins(:programacion, :control_lotes).where("lotes.empresa = ? and EXTRACT(year from programaciones.mes) = ?", company, year).group(:cliente_id)
     end
 
     def month_cliente(company, month)
-      @amount_monthly = Lote.select("SUM(lotes.cantidad) as cantidad, cliente_id")
+      @amount_monthly = Lote.current_state.state_filtered(5).select("SUM(lotes.cantidad) as cantidad, cliente_id")
         .joins(:programacion, :control_lotes)
-        .where(str_max_date_control + " and control_lotes.estado_id = 5 and lotes.empresa = ? 
-          and programaciones.mes = ?", company, month+"-01")
+        .where("lotes.empresa = ? and programaciones.mes = ?", company, month+"-01")
         .group(:cliente_id, :mes)
     end
 end

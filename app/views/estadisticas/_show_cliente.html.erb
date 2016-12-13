@@ -14,7 +14,7 @@
         <% @programaciones.each do |programacion| %>
         {
           cliente: '<%= @meses[programacion.mes.strftime("%m")][:string] %>',
-          value: <%= programacion.lotes.joins(:control_lotes).where("lotes.cliente_id = ? and control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id) and control_lotes.estado_id = ?", @cliente.first.id, 5).sum("lotes.cantidad") %>
+          value: <%= programacion.lotes.current_state.state_filtered(5).joins(:control_lotes).where("lotes.cliente_id = ?", @cliente.first.id).sum("lotes.cantidad") %>
         },
         <%end%>
       ],
