@@ -27,8 +27,8 @@ module LotesDatatablesHelper
              lote.op,
              (view_context.content_tag :span, lote.cantidad, data:{ cantidad: lote.cantidad }),
              tipos_prendas[lote.tipo_prenda_id],
-             (view_context.content_tag :input, "", data:{:lote => lote.id}, :value => Money.new("#{lote.precio_u}00").format, :class => "form-control input-sm lote_precio_unitario", :disabled => (can? :prices_update, Lote)? false : true),
-             (view_context.content_tag :span, Money.new("#{lote.precio_t}00").format, data:{ total: '0' })
+             (view_context.content_tag :input, "", data:{:lote => lote.id}, :value => Money.from_amount(lote.precio_u, "COP").format(:no_cents => true), :class => "form-control input-sm lote_precio_unitario", :disabled => (can? :prices_update, Lote)? false : true),
+             (view_context.content_tag :span, Money.from_amount(lote.precio_t, "COP").format(:no_cents => true), data:{ total: '0' })
           ]
       )
     end

@@ -10,7 +10,21 @@
   <%= csrf_meta_tags %>
 </head>
 
-<body class="hold-transition login-page">
-  <%= yield %>
+<body class="hold-transition skin-blue layout-top-nav">
+  <div class="wrapper">
+    <header class="main-header">
+      <%= render 'layouts/top_layout/main-header' %>
+    </header>
+    <div class="content-wrapper">
+      <div class="container">
+        <section class="content-header">
+          <%= content_for?(:content_header) ? yield(:content_header) : "<h1>Producción</h1>".html_safe %>
+        </section>
+        <section class="content">
+          <%= yield %>
+        </section>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

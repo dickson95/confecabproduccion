@@ -1,29 +1,41 @@
-<div class="row">
-  <div class="col-lg-12">
-    <h1 class="page-header">Selecciona la empresa</h1>
-  </div>
-</div>
+<%= content_for :content_header do %>
+    <h1>Selecciona una empresa
+      <small>Si deseas cambiarla más adelante solo regresa al inicio de la aplicación seleccionando
+        el nombre de la empresa ubicado en la barra de navegación superior
+      </small>
+    </h1>
+<% end %>
 <div class="row">
   <div class="col-md-6">
     <%= link_to lotes_path(company: true) do %>
-        <div class="panel panel-primary company_selected" data-company=true>
-          <div class="panel-heading text-center">
+        <div class="box box-solid box-primary" data-company=true>
+          <div class="box-header text-center">
             <h1>CONFECAB</h1>
           </div>
-          <div class="panel-body text-center">
+          <div class="box-body text-center">
             <%= image_tag('cab', size: '132x82', alt: "Confecab") %>
+          </div>
+          <div class="box-footer">
+            Medellín, Colombia<br>
+            Contacto: 444 45 25 <br>
+            NIT: 900 355 811 -5
           </div>
         </div>
     <% end %>
   </div>
   <div class="col-md-6">
     <%= link_to lotes_path(company: false) do %>
-        <div class="panel panel-primary company_selected" data-company=false data-remote="true">
-          <div class="panel-heading text-center">
+        <div class="box box-solid box-primary" data-company=false data-remote="true">
+          <div class="box-header text-center">
             <h1>DISEÑOS Y CAMISAS</h1>
           </div>
-          <div class="panel-body text-center">
+          <div class="box-body text-center">
             <%= image_tag('dyc', size: '132x82', alt: "Diseños y camisas") %>
+          </div>
+          <div class="box-footer">
+            Medellín, Colombia<br>
+            Tel: 444 45 25 <br>
+            NIT: 900 648 448
           </div>
         </div>
     <% end %>

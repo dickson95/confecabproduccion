@@ -182,8 +182,8 @@ class LotesController < ApplicationController
     lote_price = params.require(:lote).permit( :amount, :unit_price)
     lote_price[:unit_price] = Lote.functional_format lote_price[:unit_price]
     price_total = Lote.multiplication(lote_price.values)  
-    format_price_u = Money.new("#{lote_price[:unit_price]}00").format
-    format_price_t = Money.new("#{price_total}00").format
+    format_price_u = Money.from_amount(lote_price[:unit_price].to_i, "COP").format(:no_cents => true)
+    format_price_t = Money.from_amount(price_total.to_i, "COP").format(:no_cents => true)
     Lote.update(params[:id].to_i, :precio_u => lote_price[:unit_price], :precio_t => price_total, :respon_edicion_id => current_user)
     @prices = {:total => format_price_t, :unit => format_price_u}
     respond_to do |format|
