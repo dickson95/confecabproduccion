@@ -19,4 +19,8 @@ module ApplicationHelper
 		  end
 		end
 	end
+
+	def set_date(date, format)
+		I18n::localize(date, format: format) if !date.nil?
+	end
 end

@@ -14,7 +14,7 @@
     <td><%= @tipos_prendas[lote.fetch(5)]%></td><!--Descripción-->
     <%if can? :prices, Lote%>
     <td style="padding: 1px;">
-    <%=content_tag :input, "", data:{:lote => lote.fetch(0)}, :value => Money.new("#{lote.fetch 8}00").format, :class => "form-control input-sm lote_precio_unitario", :disabled => (can? :prices_update, Lote)? false : true%>
+    <%= content_tag :input, "", data:{:lote => lote.fetch(0)}, :value => Money.new("#{lote.fetch 8}00").format, :class => "form-control input-sm lote_precio_unitario", :disabled => (can? :prices_update, Lote)? false : true %>
     </td><!--Precio unitario-->
     <td class="total"><%= Money.new("#{lote.fetch 9}00").format %></td><!--Precio total-->
     <%end%>

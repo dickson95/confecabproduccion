@@ -181,7 +181,7 @@ class ProgramacionesController < ApplicationController
 				params[:month], @empresa).order("lotes.secuencia asc")
 			.pluck("clientes.cliente", "tipos_prendas.tipo", "lotes.secuencia", 
 				"referencias.referencia", "lotes.cantidad", "lotes.precio_u", "lotes.precio_t", 
-				"lotes.meta", "lotes.h_req","lotes.id")
+				"lotes.meta", "lotes.h_req","lotes.id", "lotes.ingresara_a_planta")
 		end
 
 		def programacion_id

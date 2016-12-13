@@ -73,6 +73,7 @@ $(document).on 'turbolinks:load', ->
     $("#lote_fecha_entrada").val()
 
   # Doc: http://api.jqueryui.com/datepicker/
+  # datePicker
   $("input.datepicker").each (i) ->
     $(this).datepicker
       monthNames: ["Enero", "Febrero", "Marzo", "Abril",
