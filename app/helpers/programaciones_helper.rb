@@ -11,8 +11,8 @@ module ProgramacionesHelper
   # Formar estructura de títulos para el archivo de excel
   def titles_head
     export = params[:export]
-    result = ["Orden de trabajo", "Ingreso", "Proceso", "Cliente", "Referencia", "OP", "Cant"]
-    widths = [7, 11, 11, 11, 15, 11, :auto]
+    result = ["Orden de trabajo", "Ingreso", "Ira a planta", "Proceso", "Cliente", "Referencia", "OP", "Cant"]
+    widths = [7, 11, 11, 11, 11, 15, 11, :auto]
     (result.push("Pre. Unitario"); widths.push(11)) if export[:precio_u] == "1"
     (result.push("Pre. Total"); widths.push(10)) if export[:precio_t] == "1"
 
@@ -48,6 +48,7 @@ module ProgramacionesHelper
     result = Array.new
     result.push(lote.secuencia)
     result.push(I18n::localize(lote.created_at, format: "%d/%b/%Y"))
+    result.push(set_date(lote.ingresara_a_planta, "%d/%b/%Y"))
     result.push(lote.control_lotes.last.estado.name)
     result.push(lote.cliente.name)
     result.push(lote.referencia.name)
