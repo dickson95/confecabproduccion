@@ -1,6 +1,4 @@
 class Lote < ApplicationRecord
-  # Ordenar lista de acuerdo al campo de la secuencia
-
   #Relaciones
   belongs_to :programacion, optional: true
   belongs_to :referencia
@@ -15,8 +13,14 @@ class Lote < ApplicationRecord
   accepts_nested_attributes_for :control_lotes, allow_destroy: true
   accepts_nested_attributes_for :colores_lotes, allow_destroy: true
   
-  #
-  #
+  # scopes
+
+  # Trae el estado actual de cada lote
+  scope :current_state, -> { joins(:control_lotes).where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)") }
+  # En uso con :current_state se puede filtrar por el estado deseado
+  scope :state_filtered, ->(state) { joins(:control_lotes).where("control_lotes.estado_id = ?", state) }
+
+
   #Validaciones
   validates_presence_of :cliente, :control_lotes, :colores_lotes, 
   :tipo_prenda_id, :referencia, :empresa
