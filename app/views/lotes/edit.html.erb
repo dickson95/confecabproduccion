@@ -1,2 +1,11 @@
-<%content_for :title do "Editar lote" end%>
+<%= content_for :content_breadcrumb do %>
+    <li><%= link_to params[:plc].capitalize, "/#{params[:plc]}" %></li>
+    <li class="active"><%= link_to "Editar lote", edit_lote_path(@lote, :place => "form_edit_lote", :plc => params[:plc]) %></li>
+<% end %>
+<%= content_for :content_header do %>
+    <h1>Editar lote</h1>
+<% end %>
+<%= content_for :title do
+  "Editar lote"
+end %>
 <%= render 'form', lote: @lote %>

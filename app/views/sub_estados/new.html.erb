@@ -1,9 +1,11 @@
+<%= content_for :content_breadcrumb do %>
+    <li><%= link_to "Procesos adicionales", sub_estados_path %></li>
+    <li class="active"><%= link_to "Nuevo proceso", new_sub_estado_path %></li>
+<% end %>
+<%= content_for :content_header do %>
+    <h1>Nuevo proceso adicional</h1>
+<% end %>
 <%content_for :title do "Editar proceso" end%>
-<div class="row page-header">
-    <div class="pull-left">
-        <h1>Nuevo proceso adicional</h1>
-    </div>
-</div>
 <div class="row">
     <div class="col-md-6 col-md-offset-3">
         <%= render 'form', sub_estado: @sub_estado %>

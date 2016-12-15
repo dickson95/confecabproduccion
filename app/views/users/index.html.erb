@@ -1,3 +1,11 @@
+<%= content_for :content_breadcrumb do %>
+    <li class="active"><%= link_to "Usuarios", users_path %></li>
+<% end %>
+<%= content_for :content_header do %>
+    <h1>Todos los usuarios del sistema
+      <small>Agregue un nuevo usuario con un tipo de permiso para que pueda acceder al sistema</small>
+    </h1>
+<% end %>
 <% content_for :title do
   "Usuarios"
 end %>

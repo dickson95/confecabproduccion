@@ -1,6 +1,14 @@
+<%= content_for :content_breadcrumb do %>
+    <li class="active"><%= link_to "Procesos adicionales", sub_estados_path %></li>
+<% end %>
+<%= content_for :content_header do %>
+    <h1>Procesos adicionales
+      <small>Procesos externos a los que son enviados los lotes</small>
+    </h1>
+<% end %>
 <div class="box box-primary with-border">
   <div class="box-header">
-    <h3 class="box-title">Procesos adicionales</h3>
+    <h3 class="box-title">Adicionales</h3>
     <div class="box-tools pull-right">
       <% if can? :create, SubEstado %>
           <%= link_to new_sub_estado_path, :title => "Nuevo proceso" do %>

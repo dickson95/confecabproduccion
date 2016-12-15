@@ -1,19 +1,26 @@
-<%= simple_form_for @user, url: create_users_path do |f|%>
-    <%= f.error_notification %>
-    <div class="form-inputs">
-      <%= f.input :email, required: true, autofocus: true, label: "Correo electrónico (Usuario de acceso)" %>
-      <%= f.input :name, required: true, label: "Nombre y apellido" %>
-      <%= f.input :telefono, label: "Teléfono" %>
-      <%= f.input :username, required: true, label: "Cédula (Usuario de acceso)"%>
-      <%= f.input :password, required: true, hint: ("#{@minimum_password_length} 
+<div class="box box-primary">
+  <%= simple_form_for @user, url: create_users_path do |f| %>
+      <div class="box-body">
+        <%= f.error_notification %>
+        <div class="col-md-6">
+          <%= f.input :email, required: true, autofocus: true, label: "Correo electrónico (Usuario de acceso)" %>
+          <%= f.input :name, required: true, label: "Nombre y apellido" %>
+          <%= f.input :telefono, label: "Teléfono" %>
+        </div>
+
+        <div class="col-md-6">
+          <%= f.input :username, required: true, label: "Cédula (Usuario de acceso)" %>
+          <%= f.input :password, required: true, hint: ("#{@minimum_password_length}
       characters minimum" if @minimum_password_length), label: "Contraseña" %>
-      <%= f.input :password_confirmation, required: true, label: "Confirme contraseña" %>
-      <%= f.input :rol_ids, :collection => Rol.all, :value_method => :id, label: "Tipo de permiso"%>
-      <p>* Campos requridos</p>
-    </div>
-    <div class="form-actions text-right">
-      <%= f.button :submit, "Resgistrar" %>
-      <%= link_to 'Cancelar', users_path, class:"btn btn-outline btn-primary"%>
-    </div>
-  
-<%end%>
+          <%= f.input :password_confirmation, required: true, label: "Confirme contraseña" %>
+          <%= f.input :rol_ids, :collection => Rol.all, :value_method => :id, label: "Tipo de permiso" %>
+        </div>
+      </div>
+      <div class="box-body">
+        <div class="box-tools pull-right">
+          <%= f.button :submit, "Resgistrar", :class => "btn btn-primary btn-sm" %>
+          <%= link_to 'Cancelar', users_path, class: "btn btn-sm btn-default" %>
+        </div>
+      </div>
+  <% end %>
+</div>
