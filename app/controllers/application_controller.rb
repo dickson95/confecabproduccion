@@ -20,7 +20,8 @@ class ApplicationController < ActionController::Base
     if view_context.current_page?(root_path)
       session[:selected_company] = nil
     elsif !params[:company] && session[:selected_company].nil? && user_signed_in?
-      new_session = controller_name == 'sessions' && action_name == 'create'
+      puts controller_name
+      new_session = devise_controller? || controller_name == "static_pages"
       redirect_to root_path if !new_session
     else
       choose = params[:company] == "true" ? true : false
