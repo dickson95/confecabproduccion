@@ -8,7 +8,7 @@ class LotesController < ApplicationController
   before_action :set_color, only: [:create, :update]
   before_action :set_tipo_prenda, only: [:new, :edit]
   before_action :referencia_params, only: [:set_referencia]
-  before_action :set_lote, only: [:edit, :update, :destroy]
+  before_action :set_lote, only: [:edit, :update, :update_ingresara_a_planta, :destroy]
   before_action :set_talla, only: [:view_details, :new, :edit, :create, :update]
   
   # Autocompletado
@@ -167,6 +167,16 @@ class LotesController < ApplicationController
           format.html { redirect_to :back }
         end   
 
+      end
+    end
+  end
+
+  def update_ingresara_a_planta
+    respond_to do |format|
+      if @lote.update(params.require(:lote).permit(:ingresara_a_planta))
+        format.json { render json: @lote, status: :ok }
+      else
+        head :bad_request # Código 400 en los estados HTTP
       end
     end
   end
