@@ -9,7 +9,15 @@ $(document).on "ready", ->
 			if !$('#'+year).find('div.tab-content div.active').length
 				$('#'+year).find('div.current').removeClass('in active').addClass('in active')
 
-	
+	$("body.programaciones").on "ajax:before", "a[data-remote], form[data-remote]", (e) ->
+    $("#modal_add").modal("hide")
+    load_state = '<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>'
+    $(this).closest("body").find("div.box").append(load_state)
+
+  $("body.programaciones").on "ajax:complete", "a[data-remote], form[data-remote]", (e, xhr, status) ->
+    $(this).closest("body").find("div.box .overlay").remove()
+
+
 	# Ancho de las columnas mientras es arrastrada la fila
 	fixHelper = (e, ui) ->
 	  ui.children().each ->

@@ -1,46 +1,47 @@
-<div style="height: 20px;"></div>
 <div class="box box-primary">
 	<%= simple_form_for [@lote, @control_lote] do |f|%>
 		<div class="box-body row">
-			<div class="well col-md-6">
-				<table class="table table-bordered table-striped">
-					<tbody>
-						<tr>
-							<th>Referencia:</th>
-							<td><%= @lote.referencia.name %></td>
-						</tr>
-						<tr>
-							<th>OP:</th>
-							<td><%= @lote.op %></td>
-						</tr>
-						<tr>
-							<th colspan="2" class="text-center">Datos del proceso actual</th>
-						</tr>
-						<tr>
-							<th>Proceso actual:</th>
-							<td><%= @control.estado.name.upcase %></td>
-						</tr>
-						<tr>
-							<th>Proceso adicional:</th>
-							<td>
-								<% sub_estado = @control.sub_estado %>
-								<%= sub_estado.nil? ? "No tiene proceso" : sub_estado.name.upcase %>
-							</td>
-						</tr>
-						<tr>
-							<th>Días en este proceso:</th>
-							<td><%= days @control.fecha_ingreso, Time.new %></td>
-						</tr>
-						<tr>
-							<th>Observaciones:</th>
-							<td><%= @control.observaciones %></td>
-						</tr>
-						<tr>
-							<th>Ingresado por:</th>
-							<td><%= @control.resp_ingreso_id.name.upcase %></td>
-						</tr>
-					</tbody>
-				</table>
+			<div class="col-md-6">
+        <div class="well">
+          <table class="table table-bordered table-striped">
+            <tbody>
+            <tr>
+              <th>Referencia:</th>
+              <td><%= @lote.referencia.name %></td>
+            </tr>
+            <tr>
+              <th>OP:</th>
+              <td><%= @lote.op %></td>
+            </tr>
+            <tr>
+              <th colspan="2" class="text-center">Datos del proceso actual</th>
+            </tr>
+            <tr>
+              <th>Proceso actual:</th>
+              <td><%= @control.estado.name.upcase %></td>
+            </tr>
+            <tr>
+              <th>Proceso adicional:</th>
+              <td>
+                <% sub_estado = @control.sub_estado %>
+                <%= sub_estado.nil? ? "No tiene proceso" : sub_estado.name.upcase %>
+              </td>
+            </tr>
+            <tr>
+              <th>Días en este proceso:</th>
+              <td><%= days @control.fecha_ingreso, Time.new %></td>
+            </tr>
+            <tr>
+              <th>Observaciones:</th>
+              <td><%= @control.observaciones %></td>
+            </tr>
+            <tr>
+              <th>Ingresado por:</th>
+              <td><%= @control.resp_ingreso_id.name.upcase %></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
 			</div>
 			<div class="col-md-6">
 				<%= render partial: 'form_fields', locals: { c: f, col: 12 } %>

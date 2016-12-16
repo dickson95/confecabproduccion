@@ -10,7 +10,7 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => 'reload' %>
   <%= csrf_meta_tags %>
 </head>
-<body class="hold-transition skin-blue sidebar-mini fixed ">
+<body class="<%= controller_name %> hold-transition skin-blue sidebar-mini fixed ">
 <div class="wrapper">
   <header class="main-header">
     <%= render 'layouts/main/main-header' %>

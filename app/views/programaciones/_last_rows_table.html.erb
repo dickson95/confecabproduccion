@@ -16,8 +16,8 @@
           <td><%= l.referencia.referencia %></td>
           <td><%= l.cantidad %></td>
           <% if can? :prices, Lote %>
-              <td><%= Money.from_amount(programacion.fetch(5), "COP").format(:no_cents => true) %></td>
-              <td><%= Money.from_amount(programacion.fetch(6), "COP").format(:no_cents => true) %></td>
+              <td><%= Money.from_amount(l.precio_u, "COP").format(:no_cents => true) %></td>
+              <td><%= Money.from_amount(l.precio_t, "COP").format(:no_cents => true) %></td>
           <% end %>
         </tr>
     <% end %>
