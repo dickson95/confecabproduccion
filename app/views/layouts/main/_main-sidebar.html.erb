@@ -24,7 +24,12 @@
               <span>Estadísticas</span>
           <% end %>
         </li>
-        s
     <% end %>
+    <li class=<%= active_navigation(calendario_index_path) %>>
+      <%= link_to calendario_index_path, title: "Estadísticas" do %>
+          <i class="fa fa-calendar" aria-hidden="true"></i>
+          <span>Calendario</span>
+      <% end %>
+    </li>
   </ul>
 </section>

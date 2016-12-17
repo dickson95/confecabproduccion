@@ -13,12 +13,15 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui/sortable
+//= require jquery-ui/draggable
 //= require jquery-ui/effect-highlight
 //= require jquery-ui/effect-drop
 //= require jquery-ui/datepicker
 //= require jquery-ui/autocomplete
 //= require jquery.floatingmessage
 //= require bootstrap-sprockets
+//= require plugins/fullcalendar/moment.min
+//= require plugins/fullcalendar/fullcalendar.min
 //= require plugins/slimScroll/jquery.slimscroll.min
 //= require plugins/datatables/jquery.dataTables.min
 //= require plugins/datatables/dataTables.bootstrap.min
