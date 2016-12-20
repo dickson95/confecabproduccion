@@ -1,6 +1,7 @@
 class CalendarioController < ApplicationController
   def index
     gon.lote = Lote.limit 2
+    @lotes = Lote.where("(ingresara_a_planta IS NULL OR programacion_id IS NULL) AND empresa = ?", company )
   end
 
   def new
@@ -16,5 +17,10 @@ class CalendarioController < ApplicationController
   end
 
   def destroy
+  end
+
+  private
+  def company
+    @company = session[:selected_company] ? "CAB" : "D&C"
   end
 end

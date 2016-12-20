@@ -21,7 +21,7 @@
 //= require jquery.floatingmessage
 //= require bootstrap-sprockets
 //= require plugins/fullcalendar/moment.min
-//= require plugins/fullcalendar/fullcalendar.min
+//= require plugins/fullcalendar/fullcalendar
 //= require plugins/slimScroll/jquery.slimscroll.min
 //= require plugins/datatables/jquery.dataTables.min
 //= require plugins/datatables/dataTables.bootstrap.min

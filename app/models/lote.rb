@@ -14,7 +14,7 @@ class Lote < ApplicationRecord
 
   accepts_nested_attributes_for :control_lotes, allow_destroy: true
   accepts_nested_attributes_for :colores_lotes, allow_destroy: true
-  
+
   #
   #
   #Validaciones
