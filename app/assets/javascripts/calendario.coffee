@@ -21,12 +21,9 @@ $ ->
     dia = if dia < 10 then '0' + dia else dia
     return new Date(anno, mes - 1, dia)
 
-  $.each gon.lote, (key, lote)->
-    console.log typeof lote.ingresara_a_planta
-
   ini_events = (ele) ->
     ele.each ->
-# create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+      # create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
       eventObject = title: $.trim($(this).text())
       # store the Event Object in the DOM element so we can get to it later
       $(this).data 'eventObject', eventObject
@@ -40,14 +37,6 @@ $ ->
 
   ini_events($('#external-events div.external-event'))
 
-  event = new Array()
-  $.each gon.lote, (key, lote)->
-    event.push({
-      title: lote.op
-      start: new Date(2016, 12, 1)
-      backgroundColor: '#f56954'
-      borderColor: '#f56954'
-    })
 
   $('#calendar').fullCalendar
     header:
@@ -60,7 +49,7 @@ $ ->
       month: 'mes'
       week: 'semana'
       day: 'día'
-    events: event
+    events: $('#calendar').data("url")
     editable: true
     droppable: true
     monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
@@ -91,8 +80,8 @@ $ ->
         data: {lote: {year: real_d.getFullYear(), month: real_d.getMonth() + 1, day: real_d.getDate()}}
       )
       $(this).remove()
-
   return
+
 
 
 
