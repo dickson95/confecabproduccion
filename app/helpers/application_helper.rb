@@ -17,4 +17,14 @@ module ApplicationHelper
 	def name_company_logo
 		session[:selected_company] ? "CAB" : "D&C"
 	end
+
+	def color_row(state, strong)
+		case state
+			when 1; strong ? "bg-gray" : "active"
+			when 2; strong ? "bg-light-blue": "info"
+			when 3; strong ? "bg-red-active": "danger"
+			when 4; strong ? "bg-orange-active": "warning"
+			when 5; strong ? "bg-green-active": "success"
+		end
+	end
 end

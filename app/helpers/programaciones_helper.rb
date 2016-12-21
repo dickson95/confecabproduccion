@@ -1,11 +1,7 @@
 module ProgramacionesHelper
 
   def colspan
-    if can?(:update, Programacion) && can?(:prices, Programacion)
-      4
-    else
-      2
-    end
+    (can?(:update, Programacion) && can?(:prices, Programacion)) ? 4 : 2
   end
 
   # Formar estructura de títulos para el archivo de excel

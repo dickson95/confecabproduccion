@@ -2,17 +2,21 @@
 <% # Control en caso de que la programación esté vacía %>
 <% if (@no_empty_program == false && !@programaciones.empty?) || (@no_empty_program && !@programaciones.empty?) %>
     <% @programaciones.each do |programacion| %>
-        <tr data-item-id=<%= "#{programacion.fetch(9)}" %> class="<%= (can? :update, Lote) ? "item" : "" %> ">
+        <% estado_id = @estados["#{programacion.fetch(9)}"][:id] %>
+        <tr data-item-id="<%= "#{programacion.fetch(9)}" %>" class="<%= (can? :update, Lote) ? "item" : "" %> <%= color_row(estado_id, false) %>">
         <% if can? :update, Programacion %>
             <td><%= check_box_tag "lotes[#{programacion.fetch(9)}]", programacion.fetch(9) %></td>
         <% end %>
         <td style="padding: 0px;">
-          <%= render partial: "lotes/dropdown_options", locals: {lote_id: programacion.fetch(9), estado_id: @estados["#{programacion.fetch(9)}"][:id]} %>
+          <%= render partial: "lotes/dropdown_options", locals: {lote_id: programacion.fetch(9), estado_id: estado_id} %>
         </td>
         <% if can? :update, Programacion %>
-            <td style="padding-top: 5px; padding-bottom: 3px;" class="text-center"><%= text_field_tag "programacion[secuencia][#{programacion.fetch(9)}]", "", :value => programacion.fetch(2), :style => "max-width: 3em;" %></td>
+            <td style="padding-top: 5px; padding-bottom: 3px;" class="text-center">
+              <%= text_field_tag "programacion[secuencia][#{programacion.fetch(9)}]", "", :value => programacion.fetch(2),
+                                 :style => "max-width: 3em;", :class => "text-black" %>
+            </td>
         <% end %>
-        <td class="state"><%= @estados["#{programacion.fetch(9)}"][:name] %></td>
+        <td class="state <%= color_row(estado_id,  true) %>"><%= @estados["#{programacion.fetch(9)}"][:name] %></td>
         <td><%= programacion.fetch(0) %></td>
         <td><%= programacion.fetch(1) %></td>
         <td><%= programacion.fetch(3) %></td>

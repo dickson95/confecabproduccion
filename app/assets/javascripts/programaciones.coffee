@@ -55,14 +55,12 @@ $(document).on "ready", ->
         cursor: 'move'
         helper: fixHelper
 
-        sort: (e, ui) ->
-          ui.item.addClass('warning')
-
         stop: (e, ui) ->
           ui.item.removeClass('active-item-shadow')
           # Resalta la fila indicada en la actualización
-          ui.item.removeClass("warning")
-          ui.item.addClass("success")
+          classes = ui.item.find(".state").attr("class").split(" ")
+          ui.item.removeClass("active danger success info warning")
+          ui.item.addClass(classes[1])
 
         update: fix_update
       )
