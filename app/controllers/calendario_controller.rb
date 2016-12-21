@@ -37,10 +37,13 @@ class CalendarioController < ApplicationController
   def lotes_to_json_calendar(lotes)
     events = Array.new
     lotes.each do |lote|
+      id = lote.fetch(0)
       events.push(
           {
+              id: id,
               title: lote.fetch(1),
-              start: lote.fetch(2)
+              start: lote.fetch(2),
+              'data-url': view_context.update_programacion_lote_path(id)
           }
       )
     end

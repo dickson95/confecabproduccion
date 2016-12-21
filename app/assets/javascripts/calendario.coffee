@@ -23,7 +23,7 @@ $ ->
 
   ini_events = (ele) ->
     ele.each ->
-      # create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
+# create an Event Object (http://arshaw.com/fullcalendar/docs/event_data/Event_Object/)
       eventObject = title: $.trim($(this).text())
       # store the Event Object in the DOM element so we can get to it later
       $(this).data 'eventObject', eventObject
@@ -35,6 +35,35 @@ $ ->
       return
     return
 
+  update_ingresara_a_planta = (date, url) ->
+    moment = date
+    month = moment.getMonth() + 1
+    real_d = sumaFecha(1, moment.getDate() + "-" + month + "-" + moment.getFullYear())
+    $.ajax(
+      type: 'PATCH'
+      url: url
+      data: {lote: {year: real_d.getFullYear(), month: real_d.getMonth() + 1, day: real_d.getDate()}}
+    )
+
+  drop = (date, allDay) ->
+    originalEventObject = $(this).data('eventObject')
+    # Es necesario copiar el 'originalEventObject', así múltiples eventos no hacen referencia al mismo objeto
+    copiedEventObject = $.extend({}, originalEventObject)
+    # asigna los datos pasados
+    copiedEventObject.start = date
+    copiedEventObject.allDay = allDay
+    copiedEventObject.backgroundColor = $(this).css('background-color')
+    copiedEventObject.borderColor = $(this).css('border-color')
+    # renderizar el evento en el calendario
+    # El último argumento 'true' causa que el evento quede fijo al calendario (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
+    $('#calendar').fullCalendar 'renderEvent', copiedEventObject, true
+    update_ingresara_a_planta(date._d, $(this).data("url"))
+
+  event_drop = (e) ->
+    console.log e
+    update_ingresara_a_planta(e.start._d, e['data-url'])
+
+
   ini_events($('#external-events div.external-event'))
 
 
@@ -42,7 +71,7 @@ $ ->
     header:
       left: 'prev,next today'
       center: 'title'
-      right: 'month,agendaWeek,agendaDay'
+      right: 'month'
     timezone: 'America/Bogota'
     buttonText:
       today: 'hoy'
@@ -58,28 +87,9 @@ $ ->
       'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
     dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
     dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
-    drop: (date, allDay)->
-      originalEventObject = $(this).data('eventObject')
-      # Es necesario copiar el 'originalEventObject', así múltiples eventos no hacen referencia al mismo objeto
-      copiedEventObject = $.extend({}, originalEventObject)
-      # asigna los datos pasados
-      copiedEventObject.start = date
-      copiedEventObject.allDay = allDay
-      copiedEventObject.backgroundColor = $(this).css('background-color')
-      copiedEventObject.borderColor = $(this).css('border-color')
-      # renderizar el evento en el calendario
-      # El último argumento 'true' causa que el evento quede fijo al calendario (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
-      $('#calendar').fullCalendar 'renderEvent', copiedEventObject, true
-      moment = date._d
-      month = moment.getMonth() + 1
-      real_d = sumaFecha(1, moment.getDate() + "-" + month + "-" + moment.getFullYear())
-      console.log real_d.getFullYear()
-      $.ajax(
-        type: 'PATCH'
-        url: $(this).data("url")
-        data: {lote: {year: real_d.getFullYear(), month: real_d.getMonth() + 1, day: real_d.getDate()}}
-      )
-      $(this).remove()
+    drop: drop
+    eventDrop: event_drop
+    $(this).remove()
   return
 
 
