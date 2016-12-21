@@ -10,6 +10,7 @@
 <%= content_for :content_breadcrumb do %>
     <li><%= link_to "Lotes", lotes_path %></li>
 <% end %>
+<% can_pri = can? :prices, Lote %>
 <div class="box box-primary with-border" style="margin-top: 20px;">
   <div class="box-header">
     <h4 class="box-title">Lotes</h4>
@@ -38,7 +39,7 @@
         <th class="col-md-1" title="OP de lote">OP</th>
         <th class="col-md-1" title="Cantidad">Cant</th>
         <th class="col-md-2" title="Descripción de la prenda">Descripción</th>
-        <% if can? :prices, Lote %>
+        <% if can_pri %>
             <th class="col-md-2" title="Precio unitario">Precio</th>
             <th class="col-md-2" title="Precio total">Total</th>
         <% end %>
@@ -48,4 +49,5 @@
     </table>
     <!--Fin de la lista-->
   </div>
+  <div id="targets" data-padding="[<%= can_pri ? "1, 7" : "1" %>]" data-orderable="[1, 3, 4, 5<%= ", 7, 8" if can_pri  %>]"></div>
 </div>

@@ -54,14 +54,14 @@ $(document).on 'ready', ->
         next: 'Siguiente'
     order: [[0, "desc"]]
     columnDefs: [
-      { className: "no-padding-top no-padding-bottom", "targets": [ 1, 7 ] }
+      { className: "no-padding-top no-padding-bottom", "targets": $("#targets").data("padding") }
       {
         'targets': [0]
         'visible': false
         'searchable': false
       }
       {
-        'targets': [1, 3, 4, 5, 7, 8]
+        'targets': $("#targets").data("orderable")
         'orderable': false
       }
     ]
