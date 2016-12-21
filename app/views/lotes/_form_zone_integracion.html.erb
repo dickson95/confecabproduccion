@@ -5,7 +5,7 @@
 <div class="row">
   <div class="col-lg-9">
     <div class="col-md-4" style="max-height: 90px;">
-      <%= f.input :op, input_html: {data:{:url => lote_validate_op_path(@lote)}, style: 'text-transform:uppercase;', autocomplete: 'off', autofocus: true} %>
+      <%= f.input :op, input_html: {data:{:url => lote_validate_op_path( @lote.id || 0)}, style: 'text-transform:uppercase;', autocomplete: 'off', autofocus: true} %>
     </div>
     <div class="col-md-4" style="max-height: 90px;">
       <%= f.input :referencia, input_html: {style: 'text-transform:uppercase;', autocomplete: 'off', value: @lote.referencia.nil? ? "" : @lote.referencia.referencia} %>

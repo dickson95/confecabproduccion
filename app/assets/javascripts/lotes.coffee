@@ -37,11 +37,15 @@ $(document).on 'ready', ->
   $('#lotes').DataTable
     serverSide: true,
     processing: true,
-    ajax: $("#lotes").data("source")
+    ajax:
+      url: $("#lotes").data("source")
+      beforeSend: ->
+        load_state = '<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>'
+        $("#lotes").closest(".box").append(load_state)
+      complete: ->
+        $("#lotes").closest(".box").find(".overlay").remove()
     language:
-      search: 'Buscar&nbsp;:'
-      processing: 'Espere...',
-
+      search: 'Buscar:&nbsp;'
       lengthMenu: 'Mostrar _MENU_ registros'
       info: 'Resultados _START_ a _END_ de _TOTAL_ '
       infoEmpty: 'No hay datos o intente de nuevo'
