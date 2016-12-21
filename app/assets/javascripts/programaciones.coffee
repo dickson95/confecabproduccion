@@ -10,6 +10,7 @@ $(document).on "ready", ->
       onClose: (text, obj) ->
         input = $(this)
         date = obj.selectedYear + "-" + (obj.selectedMonth + 1) + "-" + obj.selectedDay
+        date = null if text.trim() == ""
         $.ajax(
           type: "PATCH"
           url: input.data("url")

@@ -3,7 +3,7 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 
-$ ->
+$(document).ready ->
 # https://reviblog.net/2014/07/01/sumar-dias-a-una-fecha-en-javascript/
   sumaFecha = (d, fecha) ->
     `var fecha`
