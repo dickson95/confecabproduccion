@@ -1,18 +1,27 @@
-<div class="page-header">
-  <h4 class="pull-left">Programaciones por año</h4>
-  <div class="text-right">
-    <%= link_to estadisticas_path, :class => "btn btn-default btn-sm" do %>
-        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-    <% end %>
-  </div>
-</div>
+<%= content_for :title do
+  "Estadísticas de programaciones"
+end %>
+<%= content_for :content_header do %>
+    <h1>
+      Años estadísticos de las Programaciones
+      <small>Use los filtros para detalles específicos</small>
+    </h1>
+<% end %>
+<%= content_for :content_breadcrumb do %>
+    <li><%= link_to "Estadísticas", estadisticas_path %></li>
+    <li><%= link_to "Programaciones", estadisticas_programaciones_path %></li>
+<% end %>
 <div class="row">
   <% @years.each do |year| %>
       <div class="col-md-6">
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <%= year %>
-            <div class="dropdown pull-right">
+        <div class="box box-primary with-border">
+          <div class="box-header">
+            <h3 class="box-title"><%= year %></h3>
+            <div class="box-tools">
+              <button type="button" class="btn btn-box-tool pull-right" data-widget="remove"><i class="fa fa-times"></i></button>
+              <button type="button" class="btn btn-box-tool pull-right" data-widget="collapse"><i class="fa fa-minus"></i>
+              </button>
+              <div class="dropdown pull-right margin-r-5">
               <button type="button" class="btn btn-warning btn-xs dropdown-toggle" data-toggle="dropdown">
                 Mes
                 <span class="caret"></span>
@@ -26,8 +35,10 @@
                 <% end %>
               </ul>
             </div>
+            </div>
+
           </div>
-          <div class="panel-body">
+          <div class="box-body">
             <div id="<%= year %>" style="height: 200px;"></div>
           </div>
         </div>

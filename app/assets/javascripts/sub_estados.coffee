@@ -1,4 +1,4 @@
-$(document).on 'turbolinks:load', ->
+$(document).on 'ready', ->
   $('#sub_estados').DataTable
       language:
         processing: 'Cargando...'

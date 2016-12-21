@@ -1,15 +1,14 @@
-$(document).on "turbolinks:load", ->
+$(document).on "ready", ->
   $("#lote_op").keyup ->
-    value = $(this).val()
-    this_op = $(this)
-    lote_id = $(this).closest("form").data("lote-id")
+    $this = $(this)
+    value = $this.val()
     $.post(
-      "/lotes/" + lote_id + "/validate_op",
+      $this.data("url"),
       {
         op: value
       },
       (data, status, xhr) ->
-        div = this_op.closest("div")
+        div = $this.closest("div")
         div.find(".help-block").remove()
         if !data
           div.addClass("has-error")

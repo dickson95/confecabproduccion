@@ -1,7 +1,7 @@
-$(document).on "turbolinks:load", ->
+$(document).on "ready", ->
   format_price_u = undefined
   $("tbody").on "click focus", "tr > td > input.lote_precio_unitario", ->
-    if $(this).val() == "$0.00"
+    if $(this).val() == "$0"
       $(this).val("")
 
   $("tbody").on("click keyup", "tr > td > input.lote_precio_unitario", ->
@@ -21,7 +21,7 @@ $(document).on "turbolinks:load", ->
     )
   ).on "focusout", "input.lote_precio_unitario", ->
     if $(this).val().trim() == ""
-      $(this).val("$0.00")
+      $(this).val("$0")
       format_price_u = undefined
     else if format_price_u != undefined
       $(this).val(format_price_u)

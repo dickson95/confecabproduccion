@@ -1,10 +1,7 @@
 <div style="height: 20px;"></div>
-<div class="panel panel-primary">
-	<div class="panel-heading">
-		Nuevo proceso
-	</div>
+<div class="box box-primary">
 	<%= simple_form_for [@lote, @control_lote] do |f|%>
-		<div class="panel-body row">
+		<div class="box-body row">
 			<div class="well col-md-6">
 				<table class="table table-bordered table-striped">
 					<tbody>
@@ -49,10 +46,10 @@
 				<%= render partial: 'form_fields', locals: { c: f, col: 12 } %>
 			</div>
 		</div>
-		<div class="panel-footer">
-			<div class="text-right">
-				<%= link_to "Regresar", lote_control_lotes_path(:plc => params[:plc] || params[:control_lote][:plc]) %>
-				<%= f.button :button do %>
+		<div class="box-footer">
+			<div class="box-tools pull-right">
+				<%= link_to "Regresar", lote_control_lotes_path(:plc => plc) %>
+				<%= f.button :button, :class => "btn btn-primary btn-sm" do %>
 					<i class="fa fa-floppy-o fa-fw" aria-hidden="true"></i>
 					Guardar
 				<% end %>
@@ -62,7 +59,5 @@
 		<%= f.hidden_field :plc, value: params[:plc] || params[:control_lote][:plc] %>
 	<% end %>
 </div>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
-aria-labelledby="myModalLabel" aria-hidden="true">
-</div>
+
+

@@ -1,7 +1,7 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
-$(document).on 'turbolinks:load', ->
+$(document).on 'ready', ->
   $("body").on 'ajax:success', '.delete', (e, data, status, xhr) ->
     $('#page-wrapper').prepend(data)
     $(this).closest("tr").remove()
@@ -41,6 +41,7 @@ $(document).on 'turbolinks:load', ->
     language:
       search: 'Buscar&nbsp;:'
       processing: 'Espere...',
+
       lengthMenu: 'Mostrar _MENU_ registros'
       info: 'Resultados _START_ a _END_ de _TOTAL_ '
       infoEmpty: 'No hay datos o intente de nuevo'

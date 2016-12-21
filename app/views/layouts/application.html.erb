@@ -10,40 +10,46 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => 'reload' %>
   <%= csrf_meta_tags %>
 </head>
-<body>
-<% if user_signed_in? %>
-    <div id="wrapper">
-      <nav class="navbar navbar-default navbar-fixed-top" style="margin-bottom: 0">
-        <%= render 'layouts/navigation' %>
-      </nav>
-      <!--navbar-->
-      <div id="page-wrapper" style="min-height: 860px;">
-        <%= render 'layouts/messages' %>
-        <%= yield %>
-        <%= render 'layouts/footer' %>
-      </div>
-      <!--page-wrapper-->
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel" aria-hidden="true">
-    </div>
-    <!--wrapper-->
-<% else %>
-    <div class="container">
-      <div class="row">
-        <%= render 'layouts/messages' %>
-        <div class="col-md-4 col-md-offset-4">
-          <% if controller_name == 'sessions' %>
-              <%= render "devise/sessions/new" %>
-          <% elsif controller_name == 'passwords' %>
-              <%= yield %>
-          <% else %>
-              <%= yield %>
-          <% end %>
-        </div>
-      </div>
-    </div>
-<% end %>
+<body class="hold-transition skin-blue sidebar-mini fixed ">
+<div class="wrapper">
+  <header class="main-header">
+    <%= render 'layouts/main/main-header' %>
+  </header>
+  <aside class="main-sidebar">
+    <%= render 'layouts/main/main-sidebar' %>
+  </aside>
+  <!--main-sidebar-->
+
+  <div class="content-wrapper">
+    <section class="content-header">
+      <%= content_for?(:content_header) ? yield(:content_header) : "<h1>Producción</h1>".html_safe %>
+      <% if content_for?(:content_breadcrumb) %>
+          <ol class="breadcrumb">
+            <%= yield(:content_breadcrumb) %>
+          </ol>
+      <% else %>
+        <ol class="breadcrumb">
+          <li><%= link_to "Regresar", :back %></li>
+        </ol>
+      <% end %>
+    </section>
+    <section class="content">
+      <%= render 'layouts/messages' %>
+      <%= yield %>
+    </section>
+  </div>
+  <!--content-wrapper-->
+
+  <footer class="main-footer">
+    <%= render 'layouts/main/main-footer' %>
+  </footer>
+</div>
+<!--page-wrapper-->
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+</div>
+<!--wrapper-->
 </body>
 </html>

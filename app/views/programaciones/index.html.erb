@@ -1,19 +1,33 @@
-<% content_for :title do "Programaciones" end %>
+<%= content_for :content_breadcrumb do %>
+    <li class="active"><%= link_to "Programaciones", programaciones_path %></li>
+<% end %>
+<%= content_for :content_header do %>
+    <h1>Programaciones
+      <small>Órdenes de producción</small>
+    </h1>
+<% end %>
+<% content_for :title do
+  "Programaciones"
+end %>
 <% date = Programacion.date_split params[:month] %>
-<ul class="nav nav-tabs" role="tablist" style="margin-top: 20px;">
-	<!--Años-->
-	<%@years.each do |year|%>
-		<li class="year <%= year.to_s == date[:year] ? "current active" : ""%>">
-			<a data-toggle="tab" href="#<%=year%>"><%=year%></a>
-		</li>
-	<%end%>	
-</ul>
-<!--Contenido de los años-->
-<div class="tab-content">
-	<%@years.each do |year|%>
-		<%= render partial: "meses", locals: { year: year, date: date }%>
-	<%end%>
+<div class="box box-primary with-border">
+  <div class="box-body">
+    <ul class="nav nav-tabs" role="tablist">
+      <!--Años-->
+      <% @years.each do |year| %>
+          <li class="year <%= year.to_s == date[:year] ? "current active" : "" %>">
+            <a data-toggle="tab" href="#<%= year %>"><%= year %></a>
+          </li>
+      <% end %>
+    </ul>
+    <!--Contenido de los años-->
+    <div class="tab-content">
+      <% @years.each do |year| %>
+          <%= render partial: "meses", locals: {year: year, date: date} %>
+      <% end %>
+    </div>
+  </div>
 </div>
 
-<div class="modal fade" id="modal_add"  tabindex="-1" role="dialog" 
- aria-labelledby="modalAddLabe" aria-hidden="true"></div>
+<div class="modal fade" id="modal_add" tabindex="-1" role="dialog"
+     aria-labelledby="modalAddLabe" aria-hidden="true"></div>

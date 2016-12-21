@@ -1,1 +1,10 @@
-<%= render 'form', control_lote: @control_lote %>
+<% plc =  params[:plc] || params[:control_lote][:plc] %>
+<%= content_for :content_breadcrumb do %>
+    <li><%= link_to plc.capitalize, "/#{plc}" %></li>
+    <li><%= link_to "Ciclo de producción", lote_control_lotes_path(@lote, @control_lotes, :plc => plc) %></li>
+    <li class="active"><%= link_to "Editar proceso", edit_lote_control_lote_path(@lote, @control_lote, :plc => plc) %></li>
+<% end %>
+<%= content_for :content_header do %>
+    <h1>Editar proceso</h1>
+<% end %>
+<%= render partial: 'form',  locals: {control_lote: @control_lote, plc: plc} %>

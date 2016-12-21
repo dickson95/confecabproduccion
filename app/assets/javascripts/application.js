@@ -18,12 +18,18 @@
 //= require jquery-ui/datepicker
 //= require jquery-ui/autocomplete
 //= require jquery.floatingmessage
+//= require bootstrap-sprockets
+//= require plugins/slimScroll/jquery.slimscroll.min
+//= require plugins/datatables/jquery.dataTables.min
+//= require plugins/datatables/dataTables.bootstrap.min
+//= require plugins/morris/raphael-min
+//= require plugins/morris/morris.min
+//= require dist/js/app
 //= require autocomplete-rails
-//= require bootstrap_sb_admin_base_v2
-//= require turbolinks
 //= require_tree .
 
-$(document).on("turbolinks:load", function () {
+
+$(document).on("ready", function () {
     //Remover mensajes informativos
     setTimeout(function () {
         $("#notice").slideUp("normal", function () {
@@ -38,17 +44,6 @@ $(document).on("turbolinks:load", function () {
     });
 });
 
-
-document.addEventListener("turbolinks:before-cache", function() {
-  var tablelotes = $('#lotes').DataTable();
-  var tablecontrol = $('#control').DataTable();
-  var tableclientes = $('#t_clientes').DataTable();
-  var tables2 = $('.tablas2').DataTable();
-	tablelotes.destroy();
-	tablecontrol.destroy();
-	tableclientes.destroy();
-	tables2.destroy();
-})
 
 
 

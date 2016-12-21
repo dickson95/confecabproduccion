@@ -46,9 +46,9 @@ Rails.application.routes.draw do
   # Otras rutas
   resources :sub_estados, :referencias, :tipos_prendas, :tallas, :roles, :clientes
   # get "clientes/send_email" => 'clientes#send_email', :as => :send_email # debe pertenecer a los clientes y tener el id del cliente a quien se envía el correo
- 
 
-  get '/pages', to: 'static_pages#home', as: :home
+  get '/sobre-confecab', to: 'static_pages#about_confecab', as: :about_confecab
+  get '/sobre-disenos-y-camisas', to: 'static_pages#about_dyc', as: :about_dyc
   # Inicio de la aplicación
   root :to => 'static_pages#home'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html

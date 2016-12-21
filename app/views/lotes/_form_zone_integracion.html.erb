@@ -1,46 +1,46 @@
-<%company = session[:selected_company] ? "CAB" : "D&C"%>
-<%=f.hidden_field :empresa, :value => company%>
+<% company = session[:selected_company] ? "CAB" : "D&C" %>
+<%= f.hidden_field :empresa, :value => company %>
 <div style="margin-top: 20px;"></div>
 <!--Otros roles Primera fila-->
 <div class="row">
   <div class="col-lg-9">
     <div class="col-md-4" style="max-height: 90px;">
-      <%= f.input :op, input_html: { style: 'text-transform:uppercase;', autocomplete: 'off', autofocus: true} %>
+      <%= f.input :op, input_html: {data:{:url => lote_validate_op_path(@lote)}, style: 'text-transform:uppercase;', autocomplete: 'off', autofocus: true} %>
     </div>
     <div class="col-md-4" style="max-height: 90px;">
-      <%= f.input :referencia, input_html: { style: 'text-transform:uppercase;', autocomplete: 'off', value: @lote.referencia.nil? ? "" : @lote.referencia.referencia }%>
+      <%= f.input :referencia, input_html: {style: 'text-transform:uppercase;', autocomplete: 'off', value: @lote.referencia.nil? ? "" : @lote.referencia.referencia} %>
     </div>
     <div class="col-md-4" style="min-height: 90px; max-height: 90px;">
-        <%= f.input :cliente, wrapper: :vertical_input_group do %>
-        <%= f.input_field  :cliente_id, class: "form-control", :collection => @clientes, :value_method => :id, :include_blank => "-- seleccione cliente --"%>
-        <div class="input-group-btn">
-          <%= link_to '...', new_cliente_path(:place => "form_lote_cliente"),{:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#myModal', :class => "btn btn-primary", :title => "Nuevo cliente"} %>
-        </div>
-        <% end %>
+      <%= f.input :cliente, wrapper: :vertical_input_group do %>
+          <%= f.input_field :cliente_id, class: "form-control", :collection => @clientes, :value_method => :id, :include_blank => "-- seleccione cliente --" %>
+          <div class="input-group-btn">
+            <%= link_to '...', new_cliente_path(:place => "form_lote_cliente"), {:remote => true, 'data-toggle' => "modal", 'data-target' => '#myModal', :class => "btn btn-primary", :title => "Nuevo cliente"} %>
+          </div>
+      <% end %>
     </div>
     <div class="col-md-4">
-        <%= f.input :tipo_prenda_id,  label: "Descripción", wrapper: :vertical_input_group do %>
-        <%= f.input_field  :tipo_prenda_id, class: "form-control", :collection => @tipos_prendas, :value_method => :id, :include_blank => "-- seleccione descripción --" %>
-        <div class="input-group-btn">
-          <%= link_to '...', new_tipo_prenda_path(:place => "form_lote_tipo_prenda"),{:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#myModal',  :class => "btn btn-primary", :title => "Nueva descripción"} %>
-        </div>
-        <% end %>
+      <%= f.input :tipo_prenda_id, label: "Descripción", wrapper: :vertical_input_group do %>
+          <%= f.input_field :tipo_prenda_id, class: "form-control", :collection => @tipos_prendas, :value_method => :id, :include_blank => "-- seleccione descripción --" %>
+          <div class="input-group-btn">
+            <%= link_to '...', new_tipo_prenda_path(:place => "form_lote_tipo_prenda"), {:remote => true, 'data-toggle' => "modal", 'data-target' => '#myModal', :class => "btn btn-primary", :title => "Nueva descripción"} %>
+          </div>
+      <% end %>
     </div>
     <div class="col-md-4">
-       <%= f.association :programacion, as: "string", input_html: { :autocomplete => "off", :value => date_form_value(@lote), data:{calendar: "false"}} %>
-    </div> 
+      <%= f.association :programacion, as: "string", input_html: {:autocomplete => "off", :value => date_form_value(@lote), data: {calendar: "false"}} %>
+    </div>
     <style type="text/css">
       .hide-calendar .ui-datepicker-calendar {
         display: none;
       }
     </style>
     <div class="col-md-4" style="padding-top:15px">
-      <%=f.label :fin_integracion_true, label: "¿Tiene lista la integración?"%><br>
-      <%= f.collection_radio_buttons :fin_integracion, [[true, 'Sí'], [false, 'No']], :first, :last, {item_wrapper_class: 'radio-inline',  item_wrapper_tag: :div } %>
+      <%= f.label :fin_integracion_true, label: "¿Tiene lista la integración?" %><br>
+      <%= f.collection_radio_buttons :fin_integracion, [[true, 'Sí'], [false, 'No']], :first, :last, {item_wrapper_class: 'radio-inline', item_wrapper_tag: :div} %>
     </div>
   </div>
   <div class="col-lg-3">
-    <%= f.input :obs_integracion,  input_html:{:style => "height: 125px"}, :label => 'Notas de integración'%>
+    <%= f.input :obs_integracion, input_html: {:style => "height: 125px"}, :label => 'Notas de integración' %>
   </div>
 </div>
 <!--Otros roles Fin primera fila-->
@@ -49,14 +49,14 @@
 
 <!--#########################################################################-->
 <!--_________________________Detalle de cantidades___________________________-->
-<!--#########################################################################--> 
+<!--#########################################################################-->
 <div class="row">
   <div class="col-md-12">
     <h4>Cantidades por talla</h4>
     <span class="text-danger">
-      <%if !@lote.errors[:colores_lotes].empty?%>
+      <% if !@lote.errors[:colores_lotes].empty? %>
       Por favor ingrese el color y al menos una cantidad
-      <%end%>
+      <% end %>
     </span>
   </div>
 </div>
@@ -64,7 +64,7 @@
   <div class="col-md-12">
     <div class="table-responsive">
       <!--Inicio de tabla-->
-      <%=render "form_zone_detalle_cantidades", f: f%>
+      <%= render "form_zone_detalle_cantidades", f: f %>
       <!--fin de tabla-->
     </div>
   </div>

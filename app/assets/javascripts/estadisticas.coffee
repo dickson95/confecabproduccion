@@ -1,10 +1,10 @@
-$(document).on "turbolinks:load", ->
+$(document).on "ready", ->
   $(".show_filter").on "ajax:success", (e, data, status, xhr) ->
     $(".dropdown-menu").hide()
-    panel_body = $(this).closest(".panel").find(".panel-body")
-    panel_body.children("div:eq(1)").remove()
-    panel_body.append(data)
+    box_body = $(this).closest(".box").find(".box-body")
+    box_body.children("div:eq(1)").remove()
+    box_body.append(data)
 
-  $(".panel-body").on "click", ".close", ->
-    $(this).parent().parent().remove()
+  $(".box").on "click", ".close", ->
+    $(this).closest(".box").find(".box-body").children("div:eq(1)").remove()
 return

@@ -5,3 +5,12 @@
   background-color: #dfdfdf !important;
   cursor: pointer;
 }
+.static_pages .affix {
+  top: 20px;
+}
+@media (max-width: 991px) {
+  .static_pages .affix {
+    top: 20px;
+    display: none;
+  }
+}

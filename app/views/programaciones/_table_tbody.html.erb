@@ -18,8 +18,8 @@
         <td><%= programacion.fetch(3) %></td>
         <td><%= programacion.fetch(4) %></td>
         <% if can? :prices, Lote %>
-            <td><%= Money.new("#{programacion.fetch(5)}00").format %></td>
-            <td><%= Money.new("#{programacion.fetch(6)}00").format %></td>
+            <td><%= Money.from_amount(programacion.fetch(5), "COP").format(:no_cents => true) %></td>
+            <td><%= Money.from_amount(programacion.fetch(6), "COP").format(:no_cents => true) %></td>
         <% end %>
         </tr>
     <% end %>

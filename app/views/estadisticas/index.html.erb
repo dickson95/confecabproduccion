@@ -1,16 +1,28 @@
-<div class="page-header">
-  <h4>Estadísticas</h4>
-  <p class="text-muted">Último mes de los clientes, progreso de la programación actual, y datos anuales para clientes y
-    programación</p>
-</div>
-<!--Clientes-->
-<div class="row" style="margin-top: 20px;">
-  <div class="col-md-12">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        Clientes
+
+<%= content_for :title do "Estadísticas" end %>
+<%= content_for :content_header do %>
+    <h1>
+      Estadísticas
+      <small>Último mes de los clientes, progreso de la programación actual, y datos anuales para
+        clientes y
+        programación
+      </small>
+    </h1>
+<% end %>
+<%= content_for :content_breadcrumb do %>
+    <li><%= link_to "Estadísticas", estadisticas_path %></li>
+<% end %>
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">Clientes</h3>
+        <div class="box-tools pull-right">
+          <%= link_to estadisticas_clientes_path, :class => "text-right" do %>
+              <i class="fa fa-eye" aria-hidden="true"></i>
+              Ver detalles
+          <% end %>
+        </div>
       </div>
-      <div class="panel-body">
+      <div class="box-body">
         <div class="col-md-4">
           <h5>Prendas en <%= I18n::localize((Time.new() - 1.month), format: '%B').downcase %></h5>
           <div id="cliente_mensual" style="height: 200px;"></div>
@@ -27,24 +39,18 @@
           </div>
         </div>
       </div>
-      <div class="panel-footer">
-        <%= link_to estadisticas_clientes_path, :class => "text-right" do %>
-            <i class="fa fa-eye" aria-hidden="true"></i>
-            Ver detalles
-        <% end %>
-      </div>
     </div>
-  </div>
-</div>
-<!--Programaciones-->
-<div class="row">
-  <div class="col-md-12">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        Avance de la programación
+    <div class="box box-info">
+      <div class="box-header">
+        <h3 class="box-title">Avance de la programación</h3>
+        <div class="box-tools pull-right">
+          <%= link_to estadisticas_programaciones_path do %>
+              <i class="fa fa-eye" aria-hidden="true"></i>
+              Ver detalles
+          <% end %>
+        </div>
       </div>
-      <div class="panel-body">
-        <!--Donut chart mes-->
+      <div class="box-body">
         <div class="col-md-3">
           <h5>Programación de este mes</h5>
           <div id="programacion_mes" style="height: 200px;"></div>
@@ -60,15 +66,7 @@
           <div id="wip_chart" style="height: 200px;"></div>
         </div>
       </div>
-      <div class="panel-footer">
-        <%= link_to estadisticas_programaciones_path do %>
-            <i class="fa fa-eye" aria-hidden="true"></i>
-            Ver detalles
-        <% end %>
-      </div>
     </div>
-  </div>
-</div>
 <script type="text/javascript">
   new Morris.Bar({
     element: 'cliente_mensual',

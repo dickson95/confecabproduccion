@@ -1,9 +1,0 @@
-<% if can? :read, Lote %>
-<%=nav_link "Lotes", lotes_path, {class: "item", title: "Lotes"}, {class: "fa fa-dashboard fa-fw"}  %>
-<% end %>
-<% if can? :read, Programacion %>
-<%=nav_link "Programación", programaciones_path, {class: "item", title: "Lotes"}, {class: "fa fa-calendar fa-fw"}  %>
-<% end %>
-<%if (can? :read, Lote)%>
-	<%=nav_link "Estadísticas", estadisticas_path, {class: "item", title: "Estadísticas"}, {class: "fa fa-bar-chart-o fa-fw"} %>
-<%end%>

@@ -1,21 +1,29 @@
-<div class="page-header">
-  <h4 class="pull-left">Clientes por año</h4>
-  <div class="text-right">
-    <%= link_to estadisticas_path, :class => "btn btn-default btn-sm" do %>
-        <i class="fa fa-arrow-left" aria-hidden="true"></i>
-    <% end %>
-  </div>
-</div>
+<%= content_for :title do
+  "Estadísticas de clientes"
+end %>
+<%= content_for :content_header do %>
+    <h1>
+      Estadísticas de los clientes
+      <small>Use los filtros para detaller específicos</small>
+    </h1>
+<% end %>
+<%= content_for :content_breadcrumb do %>
+    <li><%= link_to "Estadísticas", estadisticas_path %></li>
+    <li><%= link_to "Clientes", estadisticas_clientes_path %></li>
+<% end %>
 <div class="row">
   <% @years.each do |year| %>
       <div class="col-md-6">
-        <div class="panel panel-primary">
-          <div class="panel-heading">
-            <%= year %>
-            <% if !@year_clientes[year].empty? %>
-                <div class="pull-right">
-                  <div class="dropdown pull-left">
-                    <button type="button" class="btn btn-warning btn-xs dropdown-toggle" data-toggle="dropdown">
+        <div class="box box-primary">
+          <div class="box-header">
+            <h3 class="box-title"><%= year %></h3>
+            <div class=" box-tools pull-right">
+              <button type="button" class="btn btn-box-tool pull-right" data-widget="remove"><i class="fa fa-times"></i></button>
+              <button type="button" class="btn btn-box-tool pull-right" data-widget="collapse"><i class="fa fa-minus"></i>
+              </button>
+              <% if !@year_clientes[year].empty? %>
+                  <div class="dropdown pull-right">
+                    <button type="button" class="btn btn-warning btn-xs dropdown-toggle margin-r-5" data-toggle="dropdown">
                       Cliente
                       <span class="caret"></span>
                     </button>
@@ -28,8 +36,7 @@
                       <% end %>
                     </ul>
                   </div>
-                  <span class="col-xs-1"></span>
-                  <div class="dropdown pull-right">
+                  <div class="dropdown pull-right margin-r-5">
                     <button type="button" class="btn btn-warning btn-xs dropdown-toggle" data-toggle="dropdown">
                       Mes
                       <span class="caret"></span>
@@ -43,10 +50,10 @@
                       <% end %>
                     </ul>
                   </div>
-                </div>
-            <% end %>
+              <% end %>
+            </div>
           </div>
-          <div class="panel-body">
+          <div class="box-body chart-responsive">
             <div id="<%= year %>"></div>
           </div>
         </div>
@@ -57,22 +64,22 @@
 
   //Pintar gráficos necesarios
   <% @year_clientes.each do |year, amount| %>
-    <% if amount.empty? %>
-      $("#<%=year%>").html("<h4>No hay datos</h4>");
-    <% else %>
-      $("#<%=year%>").css("height","200px");
-      new Morris.Bar({
-        element: '<%=year%>',
-        data: [
-          <% amount.each do |a| %>
-          {cliente: '<%= a.cliente.name %>', value: <%= a.cantidad %>},
-          <% end %>
-        ],
-        xkey: 'cliente',
-        ykeys: ['value'],
-        labels: ['Cantidad'],
-        resize: true
-      });
-    <% end %>
+  <% if amount.empty? %>
+  $("#<%=year%>").html("<h4>No hay datos</h4>");
+  <% else %>
+  $("#<%=year%>").css("height", "200px");
+  new Morris.Bar({
+    element: '<%=year%>',
+    data: [
+      <% amount.each do |a| %>
+      {cliente: '<%= a.cliente.name %>', value: <%= a.cantidad %>},
+      <% end %>
+    ],
+    xkey: 'cliente',
+    ykeys: ['value'],
+    labels: ['Cantidad'],
+    resize: true
+  });
+  <% end %>
   <% end %>
 </script>

@@ -1,4 +1,12 @@
-<%content_for :title do "Nuevo lote" end%>
-<%= render 'form', lote: @lote %>
-
+<%= content_for :content_breadcrumb do %>
+    <li><%= link_to "Lotes", lotes_path %></li>
+    <li class="active"><%= link_to "Nuevo lote", new_lote_path(:plc => controller_name) %></li>
+<% end %>
+<%= content_for :content_header do %>
+    <h1>Nuevo lote</h1>
+<% end %>
+<% content_for :title do
+  "Nuevo lote"
+end %>
+    <%= render 'form', lote: @lote %>
 

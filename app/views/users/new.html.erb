@@ -1,15 +1,10 @@
-<%content_for :title do "Nuevo usuario" end%>
-<div class="row page-header col-md-6 col-md-offset-3">
-  <div class="pull-left">
+<%= content_for :content_breadcrumb do %>
+    <li><%= link_to "Usuarios", users_path %></li>
+    <li class="active"><%= link_to "Nuevo usuario", new_user_path %></li>
+<% end %>
+<%= content_for :content_header do %>
     <h1>Nuevo usuario</h1>
-  </div>
-  <div class="pull-right">
-    <%= link_to 'Cancelar', users_path, class:"btn btn-outline btn-primary"%>
-  </div>
-</div>
-<div class="row">
-  <div class="col-md-6 col-md-offset-3" >
+<% end %>
+<%content_for :title do "Nuevo usuario" end%>
     <%= render 'form'%>
-  </div>
- </div>
  

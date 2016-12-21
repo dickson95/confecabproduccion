@@ -1,45 +1,40 @@
-<% content_for :title do  "Tablas" end%>
-<div class="panel panel-default page-header">
-  <div class="panel-heading">
-    <div class="row">
-      <div class="col-xs-10">
-        <h4>Descripción de prenda</h4>
-      </div>
-      <div class="col-sm-2 text-right">
-        <% if can? :create, TipoPrenda %>
+<% content_for :title do
+  "Tablas"
+end %>
+<div class="box box-primary with-border">
+  <div class="box-header">
+    <h4 class="box-title">Descripción de prenda</h4>
+    <div class="box-tools pull-right">
+      <% if can? :create, TipoPrenda %>
           <%= link_to new_tipo_prenda_path, :title => "Nueva descripción" do %>
-           <%= content_tag(:i, "", :class => "fa fa-plus fa-3x") %>
-          <%end%>
-        <%end%>
-      </div>
+              <%= content_tag(:i, "", :class => "fa fa-plus fa-2x") %>
+          <% end %>
+      <% end %>
     </div>
   </div>
-  <div class="panel-body">
-    <table class="table table-striped table-bordered table-hover" id="tipos">
+  <div class="box-body">
+    <table class="table table-striped table-bordered" id="tipos">
       <thead>
-        <tr>
-          <th title="Descripción">Descripción</th>
-          <% if can? :create, TipoPrenda %>
-          <th></th>
-          <%end%>
-        </tr>
+      <tr>
+        <% if can? :create, TipoPrenda %>
+            <th></th>
+        <% end %>
+        <th title="Descripción">Descripción</th>
+      </tr>
       </thead>
       <tbody>
-        <% @tipos_prendas.each do |tipo_prenda| %>
-        <tr>
-          <td title="Descripción"><%= tipo_prenda.tipo %></td>
-          <% if can? :update, TipoPrenda %>
-          <td class="col-xs-4">
-            <div class="btn-group">
-              <%= link_to edit_tipo_prenda_path(tipo_prenda), :title =>"Editar",
-              class: "btn btn-primary" do%>
-              <%= content_tag(:i, "", :class => "fa fa-pencil") %>
-              <% end %>
-            </div>
-          </td>
-          <%end%>
-        </tr>
-        <% end %>
+      <% @tipos_prendas.each do |tipo_prenda| %>
+          <tr>
+            <% if can? :update, TipoPrenda %>
+                <td class="text-center">
+                  <%= link_to edit_tipo_prenda_path(tipo_prenda), :title => "Editar" do %>
+                      <%= content_tag(:i, "", :class => "fa fa-pencil") %>
+                  <% end %>
+                </td>
+            <% end %>
+            <td title="Descripción"><%= tipo_prenda.tipo %></td>
+          </tr>
+      <% end %>
       </tbody>
     </table>
   </div>
