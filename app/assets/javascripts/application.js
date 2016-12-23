@@ -20,6 +20,7 @@
 //= require jquery-ui/autocomplete
 //= require jquery.floatingmessage
 //= require bootstrap-sprockets
+//= require plugins/colorpicker/bootstrap-colorpicker.min
 //= require plugins/fullcalendar/moment.min
 //= require plugins/fullcalendar/fullcalendar
 //= require plugins/slimScroll/jquery.slimscroll.min
