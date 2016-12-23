@@ -146,7 +146,11 @@ class LotesController < ApplicationController
             hs[:dropdown] = view_context.render partial: 'dropdown_options', locals: { lote_id: params[:lote_id], 
                           estado_id: estado}
             hs[:message] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}."
-            hs[:process] = next_state_lote[:controller].capitalize
+            hs[:process] = {}
+            hs[:process][:name] = next_state_lote[:controller].capitalize
+            estado_full = Estado.find(estado)
+            hs[:process][:color] = estado_full.color
+            hs[:process][:color_claro] = estado_full.color_claro
             format.json { render json: hs, status: :ok }
           else
             format.html { redirect_to :back }

@@ -30,8 +30,11 @@ $(document).on 'ready', ->
         className: "ui-state-active"
       }
       dropd = $(this)
-      dropd.closest("tr").find("td.state").text(data.process)
+      tr = dropd.closest("tr")
+      tr.css("background-color", data.process.color_claro)
+      tr.find("td.state").css("background-color", data.process.color).text(data.process.name)
       dropd.closest("td").html(data.dropdown)
+      $(".overlay").remove()
   )
   # DataTables
   $('#lotes').DataTable
