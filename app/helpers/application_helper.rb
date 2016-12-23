@@ -18,7 +18,12 @@ module ApplicationHelper
 		session[:selected_company] ? "CAB" : "D&C"
 	end
 
-	def color_row(state, strong)
+	def set_date(date, format)
+		I18n::localize(date, format: format) if !date.nil?
+	end
+
+	def color_row(state, strong=nil)
+		string ||= true
 		case state
 			when 1; strong ? "bg-gray" : "active"
 			when 2; strong ? "bg-light-blue": "info"

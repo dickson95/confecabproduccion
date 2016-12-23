@@ -60,6 +60,7 @@
       <th>Precio</th>
       <th>Total</th>
   <% end %>
+  <th class="no-padding-right">Ingresara a planta</th>
 </tr>
 
 </thead>
@@ -68,7 +69,7 @@
 <% if can?(:prices, Lote) || can?(:update, Programacion) %>
     <tfoot>
     <tr>
-      <td colspan="6">
+      <td colspan="7">
         <div class="pull-left">
           <p><strong>Total unidades:</strong> <%= @cantidades %> </p>
           <% if can? :prices, Lote %>

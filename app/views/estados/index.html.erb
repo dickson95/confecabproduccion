@@ -1,0 +1,41 @@
+<%= content_for :content_header do %>
+    <h1>
+      Procesos
+      <small>Estados que los lotes atraviesan en el proceso de producción.</small>
+    </h1>
+<% end %>
+<%= content_for :content_breadcrumb do %>
+    <li><%= link_to "Procesos", estados_path %></li>
+<% end %>
+<%= content_for :title do %>
+    Procesos
+<% end %>
+<div id="box-estados">
+  <div class="box box-primary">
+    <div class="box-body">
+      <table class="table table-bordered table-striped">
+        <caption>
+          <strong>Proceso:</strong> Nombre que se mostrará mientras el lote está en ese proceso <br>
+          <strong>Nombre como acción:</strong> Nombre que se muestra para la opción rápida para el siguiente estado <br>
+          <strong>Color fuerte:</strong> Con este se resalta el lote en la programación y en el calendario <br>
+          <strong>Color claro:</strong> Con este se resalta el resto de información del lote
+        </caption>
+        <thead>
+        <tr>
+          <th></th>
+          <th>Proceso</th>
+          <th>Nombre como acción</th>
+          <th>Color fuerte</th>
+          <th>Color suave</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% @estados.each do |estado| %>
+            <%= render 'row', estado: estado %>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

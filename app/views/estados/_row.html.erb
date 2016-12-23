@@ -1,0 +1,11 @@
+<tr data-id="<%= estado.id %>">
+  <td>
+    <%= link_to edit_estado_path(estado), remote: true do %>
+        <i class="fa fa-pencil"></i> Editar
+    <% end %>
+  </td>
+  <td><%= estado.estado %></td>
+  <td><%= estado.nombre_accion %></td>
+  <td><%= estado.color %> <small class="pull-right"><i class="fa fa-square fa-lg" style="color: <%= estado.color %>;"></i></small> </td>
+  <td><%= estado.color_claro %> <small class="pull-right"><i class="fa fa-square fa-lg" style="color: <%= estado.color_claro %>;"></i></small> </td>
+</tr>

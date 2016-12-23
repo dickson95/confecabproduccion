@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+
+
   get 'estadisticas', to: 'estadisticas#index'
   get "estadisticas/programaciones/detalles/:year/:month", to: "estadisticas#show_programaciones", as: :programaciones_show
   get "estadisticas/clientes/detalles/:year", to: "estadisticas#show_cliente", as: :clientes_show
@@ -37,6 +39,8 @@ Rails.application.routes.draw do
     get :view_details           # es método get, y parte de los lotes
     patch :cambio_estado        # Este es patch y debe pertenecer a los lotes
     patch :total_price, on: :member # esta es un patch y pertenece a los lotes
+    patch :update_ingresara_a_planta, on: :member
+    patch :update_programacion, on: :member
     resources :control_lotes do 
       patch :update_cantidad, on: :member
     end
@@ -45,6 +49,8 @@ Rails.application.routes.draw do
 
   # Otras rutas
   resources :sub_estados, :referencias, :tipos_prendas, :tallas, :roles, :clientes
+  resources :calendario, except: :show
+  resources :estados, only: [:index, :edit, :update]
   # get "clientes/send_email" => 'clientes#send_email', :as => :send_email # debe pertenecer a los clientes y tener el id del cliente a quien se envía el correo
 
   get '/sobre-confecab', to: 'static_pages#about_confecab', as: :about_confecab

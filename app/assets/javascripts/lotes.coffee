@@ -59,14 +59,14 @@ $(document).on 'ready', ->
         next: 'Siguiente'
     order: [[0, "desc"]]
     columnDefs: [
-      { className: "no-padding-top no-padding-bottom", "targets": [ 1, 7 ] }
+      { className: "no-padding-top no-padding-bottom", "targets": $("#targets").data("padding") }
       {
         'targets': [0]
         'visible': false
         'searchable': false
       }
       {
-        'targets': [1, 3, 4, 5, 7, 8]
+        'targets': $("#targets").data("orderable")
         'orderable': false
       }
     ]
@@ -78,6 +78,7 @@ $(document).on 'ready', ->
     $("#lote_fecha_entrada").val()
 
   # Doc: http://api.jqueryui.com/datepicker/
+  # datePicker
   $("input.datepicker").each (i) ->
     $(this).datepicker
       monthNames: ["Enero", "Febrero", "Marzo", "Abril",

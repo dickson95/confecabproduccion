@@ -61,6 +61,14 @@
               <% end %>
             </li>
         <% end %>
+        <% if can? :read, Estado %>
+            <li>
+              <%= link_to estados_path do %>
+                  <i class="fa fa-cubes fa-fw text-red"></i>
+                  Procesos
+              <% end %>
+            </li>
+        <% end %>
         <% if can? :read, SubEstado %>
             <li>
               <%= link_to sub_estados_path do %>

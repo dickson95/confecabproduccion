@@ -12,8 +12,14 @@
     <% if can? :read, Programacion %>
         <li class=<%= active_navigation(programaciones_path) %>>
           <%= link_to programaciones_path, title: "Programación" do %>
-              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <i class="fa fa-tasks" aria-hidden="true"></i>
               <span>Programación</span>
+          <% end %>
+        </li>
+        <li class=<%= active_navigation(calendario_index_path) %>>
+          <%= link_to calendario_index_path, title: "Estadísticas" do %>
+              <i class="fa fa-calendar" aria-hidden="true"></i>
+              <span>Calendario</span>
           <% end %>
         </li>
     <% end %>
@@ -24,7 +30,6 @@
               <span>Estadísticas</span>
           <% end %>
         </li>
-        s
     <% end %>
   </ul>
 </section>

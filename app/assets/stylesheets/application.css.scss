@@ -1,9 +1,11 @@
 /*
 *= require base
-*= require plugins/datatables/dataTables.bootstrap.css
-*= require plugins/morris/morris.css
-*= require dist/css/AdminLTE.min.css
-*= require dist/css/skins/_all-skins.min.css
+*= require plugins/colorpicker/bootstrap-colorpicker.min
+*= require plugins/fullcalendar/fullcalendar.min
+*= require plugins/datatables/dataTables.bootstrap
+*= require plugins/morris/morris
+*= require dist/css/AdminLTE.min
+*= require dist/css/skins/_all-skins.min
 *= require_tree.
 */
 @media (max-width: 768px) {

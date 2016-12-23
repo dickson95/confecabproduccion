@@ -8,7 +8,10 @@
             <%= render partial: "lotes/dropdown_options", locals: {lote_id: l.id, estado_id: @estados["#{l.id}"][:id]} %>
           </td>
           <% if can? :update, Programacion %>
-              <td style="padding-top: 5px; padding-bottom: 3px;" class="text-center"><%= text_field_tag "programacion[secuencia][#{l.id}]", "", :value => l.secuencia, :style => "max-width: 3em;" %></td>
+              <td style="padding-top: 5px; padding-bottom: 3px;" class="text-center no-padding">
+                <%= text_field_tag "programacion[secuencia][#{l.id}]", "", :class => "form-control input-sm no-padding text-center",
+                                   :value => l.secuencia, :style => "max-width: 3em;" %>
+              </td>
           <% end %>
           <td><%= @estados["#{l.id}"][:name] %></td>
           <td><%= l.cliente.cliente %></td>
@@ -19,6 +22,14 @@
               <td><%= Money.from_amount(l.precio_u, "COP").format(:no_cents => true) %></td>
               <td><%= Money.from_amount(l.precio_t, "COP").format(:no_cents => true) %></td>
           <% end %>
+          <td class="no-padding">
+            <% if can? :update, Programacion %>
+                <%= content_tag :input, "", data: {:lote => l.id, url: update_ingresara_a_planta_lote_path(l.id)}, :value => set_date(l.ingresara_a_planta, "%d %B %Y"),
+                                :class => "form-control input-sm no-padding ingresara_a_planta" %>
+            <% else %>
+                <%= programacion.fetch(10) %>
+            <% end %>
+          </td>
         </tr>
     <% end %>
 <% end %>

@@ -1,5 +1,30 @@
 $(document).on "ready", ->
-# Cambiar la clase active entre las pestañas y la carga de los datos
+# métodos con Ajax
+  bindDatePicker = (element)->
+    $(element).datepicker
+      monthNames: ["Enero", "Febrero", "Marzo", "Abril",
+        "Mayo", "Junio", "Julio", "Agosto", "Septiembre",
+        "Octubre", "Noviembre", "Diciembre"]
+      dayNamesMin: ["do", "lu", "ma", "mi", "ju", "vi", "sa"]
+      dateFormat: "dd MM yy"
+      onClose: (text, obj) ->
+        input = $(this)
+        date = obj.selectedYear + "-" + (obj.selectedMonth + 1) + "-" + obj.selectedDay
+        date = null if text.trim() == ""
+        $.ajax(
+          type: "PATCH"
+          url: input.data("url")
+          data: {lote: {ingresara_a_planta: date}}
+        )
+  setDatePicker = ()->
+    $(".ingresara_a_planta").each ->
+      bindDatePicker($(this))
+
+  setDatePicker()
+
+  $("body").on "ajax:success", "a[data-remote], form[data-remote]", (e, data, status, xhr) ->
+    setDatePicker()
+  # Cambiar la clase active entre las pestañas y la carga de los datos
   $("ul.nav-tabs a").click (e)->
     e.preventDefault()
     $(this).closest("ul").find(".active").removeClass("active")
@@ -42,7 +67,6 @@ $(document).on "ready", ->
       dataType: 'json'
       data: {programacion: {updated_positions: array}}
     )
-
 
   # Sortable para las tablas de la programación
   $ ->

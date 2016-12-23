@@ -2,6 +2,9 @@ class Programacion < ApplicationRecord
   ###
   # Relaciones
   has_many :lotes
+
+  scope :get_per_month, ->(year_month, company) { where("EXTRACT(YEAR_MONTH FROM mes)=? AND empresa = ? ", year_month, company) }
+
   # Getter and setter
   def name
     self.mes
