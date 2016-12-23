@@ -1,5 +1,4 @@
 class CalendarioController < ApplicationController
-  include CalendarioHelper
   def index
     @estados = Estado.all
     @lotes = Lote.where("(ingresara_a_planta IS NULL OR programacion_id IS NULL) AND empresa = ?", company)
@@ -8,21 +7,6 @@ class CalendarioController < ApplicationController
       format.html
       format.json { render json: lotes_calendar }
     end
-  end
-
-  def new
-  end
-
-  def create
-  end
-
-  def edit
-  end
-
-  def update
-  end
-
-  def destroy
   end
 
   private
@@ -41,7 +25,7 @@ class CalendarioController < ApplicationController
     lotes.each do |lote|
       sec = lote.secuencia
       id = lote.id
-      color = color_row(lote.control_lotes.last.estado_id)
+      color = lote.control_lotes.last.estado.color
       events.push(
           {
               id: id,

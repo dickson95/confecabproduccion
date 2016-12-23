@@ -23,7 +23,8 @@
         <!-- the events -->
         <div id="external-events">
           <% @lotes.each do |lote| %>
-              <div data-url="<%= update_programacion_lote_path(lote) %>" class="external-event <%= color_event_extern(lote) %>">
+              <div data-url="<%= update_programacion_lote_path(lote) %>" data-color="<%= lote.control_lotes.last.estado.color %>"
+                   class="external-event <%= color_event_extern(lote) %>">
                 <%= lote.referencia.referencia %> <small class="pull-right"><%= " Sec: #{lote.secuencia}" if lote.secuencia %></small>
                 <small class="pull-right"><%= "#{l(lote.programacion.mes, format: ('%B %Y'))}." if lote.programacion %>&nbsp;</small>
               </div>
@@ -39,11 +40,11 @@
         <h4>
           <div class="btn-group">
             <ul class="list-unstyled list-inline">
-              <li><i class="fa fa-square text-gray"></i> <%= @estados.first.estado %></li>
-              <li><i class="fa fa-square text-light-blue"></i> <%= @estados.second.estado %></li>
-              <li><i class="fa fa-square text-red"></i> <%= @estados.third.estado %></li>
-              <li><i class="fa fa-square text-orange"></i> <%= @estados.fourth.estado %></li>
-              <li><i class="fa fa-square text-green"></i> <%= @estados.fifth.estado %></li>
+              <li><i class="fa fa-square" style="color: <%= @estados.first.color %>"></i> <%= @estados.first.estado %></li>
+              <li><i class="fa fa-square" style="color: <%= @estados.second.color %>"></i> <%= @estados.second.estado %></li>
+              <li><i class="fa fa-square" style="color: <%= @estados.third.color %>"></i> <%= @estados.third.estado %></li>
+              <li><i class="fa fa-square" style="color: <%= @estados.fourth.color %>"></i> <%= @estados.fourth.estado %></li>
+              <li><i class="fa fa-square" style="color: <%= @estados.fifth.color %>"></i> <%= @estados.fifth.estado %></li>
             </ul>
           </div>
         </h4>

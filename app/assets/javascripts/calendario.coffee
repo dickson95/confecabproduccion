@@ -52,8 +52,8 @@ $(document).ready ->
     # asigna los datos pasados
     copiedEventObject.start = date
     copiedEventObject.allDay = allDay
-    copiedEventObject.backgroundColor = $(this).css('background-color')
-    copiedEventObject.borderColor = $(this).css('border-color')
+    copiedEventObject.backgroundColor = $(this).data("color")
+    copiedEventObject.borderColor = $(this).data("color")
     # renderizar el evento en el calendario
     # El último argumento 'true' causa que el evento quede fijo al calendario (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
     $('#calendar').fullCalendar 'renderEvent', copiedEventObject, true

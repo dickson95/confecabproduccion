@@ -22,7 +22,7 @@ module ApplicationHelper
 		I18n::localize(date, format: format) if !date.nil?
 	end
 
-	def color_row(state, strong=nil)
+	def color_row_p(state, strong=nil)
 		string ||= true
 		case state
 			when 1; strong ? "bg-gray" : "active"

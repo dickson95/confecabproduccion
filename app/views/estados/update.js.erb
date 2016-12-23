@@ -1,4 +1,4 @@
-
-  $("#box-estados").removeClass("col-md-6").next().remove();
+  console.log("update");
+  $("#box-estados").removeClass("col-md-6").addClass("col-md-12").next().remove();
   tr = $("table").find("[data-id='<%= @estado.id %>']");
   tr.replaceWith("<%= j render 'row', estado: @estado %>");

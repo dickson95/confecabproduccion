@@ -37,10 +37,10 @@ class Programacion < ApplicationRecord
     states_arr = Lote.joins([control_lotes: [:estado]]).where("lotes.programacion_id = ?
 			and control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) 
 			FROM control_lotes cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id)",
-                                                              programacion).pluck("lotes.id", "estados.id", "estados.estado")
+                                                              programacion).pluck("lotes.id", "estados.id", "estados.estado", "estados.color", "estados.color_claro")
     states = Hash.new
     states_arr.each do |e|
-      states["#{e.fetch(0)}"] = {id: e.fetch(1), name: e.fetch(2), }
+      states["#{e.fetch(0)}"] = {id: e.fetch(1), name: e.fetch(2), color: e.fetch(3), color_claro: e.fetch(4) }
     end
     return states
   end
