@@ -5,84 +5,84 @@
         <span aria-hidden="true">&times;</span>
       </button>
       <h4 class="modal-title" id="myModalLabel">
-        REFERENCIA: <%= @lote.lote.referencia.referencia%>
+        REFERENCIA: <%= @lote.lote.referencia.referencia %>
       </h4>
     </div>
     <div class="modal-body">
-      
+
       <!--Detalla de cantidades-->
       <div class="table-responsive">
-          <table class="table table-bordered">
-            <caption>Detalle de cantidades</caption>
-            <thead>
-              <tr class="">
-                <th rowspan="3" class="text-center">Cantidad Corte</th>
-                <th rowspan="3">Tallas</th>
-                <%cont = 0%>
-                <%@tallas.each do |talla|%>
-                  <% if cont == 0%>
-                    <th class="col-lg-1 small"><%=talla.talla%></th>
-                  <%end%>
-                  <%cont == 2 ? cont = 0 : cont = cont + 1%>
-                <%end%>
-                <th rowspan="3">
-                  Total colores
-                </th>
-              </tr>
-              <tr class="small">
-                <%cont = 0%>
-                <%@tallas.each do |talla|%>
-                  <% if cont == 1%>
-                    <th class="col-lg-1"><%=talla.talla%></th>
-                  <%end%>
-                  <%cont == 2 ? cont = 0 : cont = cont + 1%>
-                <%end%>
-              </tr>
-              <tr class="small">
-                <%cont = 0%>
-                <%@tallas.each do |talla|%>
-                  <% if cont == 2%>
-                    <th class="col-lg-1"><%=talla.talla%></th>
-                  <%end%>
-                  <%cont == 2 ? cont = 0 : cont = cont + 1%>
-                <%end%>
-                
-              </tr>
-            </thead>
-            <tbody>
-              <%totales = Array.new%>
-              <%@lote.lote.colores_lotes.each do |color|%>
+        <table class="table table-bordered">
+          <caption>Detalle de cantidades</caption>
+          <thead>
+          <tr class="">
+            <th rowspan="3" class="text-center">Cantidad Corte</th>
+            <th rowspan="3">Tallas</th>
+            <% cont = 0 %>
+            <% @tallas.each do |talla| %>
+                <% if cont == 0 %>
+                    <th class="col-lg-1 small"><%= talla.talla %></th>
+                <% end %>
+                <% cont == 2 ? cont = 0 : cont = cont + 1 %>
+            <% end %>
+            <th rowspan="3">
+              Total colores
+            </th>
+          </tr>
+          <tr class="small">
+            <% cont = 0 %>
+            <% @tallas.each do |talla| %>
+                <% if cont == 1 %>
+                    <th class="col-lg-1"><%= talla.talla %></th>
+                <% end %>
+                <% cont == 2 ? cont = 0 : cont = cont + 1 %>
+            <% end %>
+          </tr>
+          <tr class="small">
+            <% cont = 0 %>
+            <% @tallas.each do |talla| %>
+                <% if cont == 2 %>
+                    <th class="col-lg-1"><%= talla.talla %></th>
+                <% end %>
+                <% cont == 2 ? cont = 0 : cont = cont + 1 %>
+            <% end %>
+
+          </tr>
+          </thead>
+          <tbody>
+          <% totales = Array.new %>
+          <% @lote.lote.colores_lotes.each do |color| %>
               <tr>
                 <th rowspan="1">Colores</th>
-                <td><%=color.color.nil? ? "COLOR" : color.color.color%></td>
-                <%color.cantidades.each do |cantidad|%>
-                  <td>
-                    <%=cantidad.cantidad%>
-                    <% totales.push cantidad.total.total%>
-                  </td>
-                <%end%>
-                <td><%=color.total.total%></td>
+                <td><%= color.color.nil? ? "COLOR" : color.color.color %></td>
+                <% color.cantidades.each do |cantidad| %>
+                    <td>
+                      <%= cantidad.cantidad %>
+                      <% totales.push cantidad.total.total %>
+                    </td>
+                <% end %>
+                <td><%= color.total.total %></td>
               </tr>
-              <%end%>
-            </tbody>
-            <tfoot>
-              <tr class="active">
-                <th colspan="2">Totales tallas</th>
-                <%if totales.empty?%>
-                  <%(0..9).each do |i|%>
+          <% end %>
+          </tbody>
+          <tfoot>
+          <tr class="active">
+            <th colspan="2">Totales tallas</th>
+            <% if totales.empty? %>
+                <% (0..9).each do |i| %>
                     <td></td>
-                  <%end%>
-                <%else%>
-                    <%(0..8).each do |i|%>
-                    <td><%=totales.fetch i%></td>
-                  <%end%>
-                <%end%>
-                <th><%=@lote.lote.cantidad%></th>
-              </tr>
-            </tfoot>
-          </table>
+                <% end %>
+            <% else %>
+                <% (0..8).each do |i| %>
+                    <td><%= totales.fetch i %></td>
+                <% end %>
+            <% end %>
+            <th><%= @lote.lote.cantidad %></th>
+          </tr>
+          </tfoot>
+        </table>
       </div>
-        
+
       <!--Cliente, y lote-->
       <div class="row">
         <p class="col-md-3  text-left">
@@ -99,7 +99,7 @@
         </p>
         <p class="col-md-3 text-left">
           <strong>Descripción:</strong>
-          <%= @lote.lote.tipo_prenda.nil? ? "-" : "#{@lote.lote.tipo_prenda.tipo}"%>
+          <%= @lote.lote.tipo_prenda.nil? ? "-" : "#{@lote.lote.tipo_prenda.tipo}" %>
         </p>
       </div>
       <hr>
@@ -107,45 +107,45 @@
       <div class="row">
         <p class="col-md-3 text-left">
           <strong>Fecha de entrada:</strong><br>
-          <% f_entrada = ControlLote.where(lote_id: @lote.lote.id).pluck(:fecha_ingreso).min%>
-          <%=I18n::localize(f_entrada, :format => "%d de %b/%y")%>
+          <% f_entrada = ControlLote.where(lote_id: @lote.lote.id).pluck(:fecha_ingreso).min %>
+          <%= I18n::localize(f_entrada, :format => "%d de %b/%y") %>
         </p>
         <p class="col-md-3 text-left">
           <strong>Fecha de salida:</strong><br>
-          <%=@lote.estado.id==5 ? l(@lote.fecha_salida, format: "%d de %b/%y") : "No ha salido"%>
+          <%= @lote.estado.id==5 ? l(@lote.fecha_salida, format: "%d de %b/%y") : "No ha salido" %>
         </p>
         <p class="col-md-3 text-left">
           <strong>Meta por hora:</strong>
-          <%=@lote.lote.meta%>
+          <%= @lote.lote.meta %>
         </p>
         <p class="col-md-3 text-left">
           <strong>Horas totales:</strong>
-          <%=@lote.lote.h_req%>
+          <%= @lote.lote.h_req %>
         </p>
       </div>
 
       <!--Facturación-->
-      <%if can? :prices, Lote%>
-      <hr>
-      <div class="row">
-        <p class="col-md-3 text-left">
-          <strong>Número de factura:</strong>
-          <%= @lote.lote.no_factura %>
-        </p>
-        <p class="col-md-3 text-left">
-          <strong>Número de remisión:</strong>
-          <%= @lote.lote.no_remision%>
-        </p>
-        <p class="col-md-3 text-left">
-          <strong>Precio unitario:</strong>
-          <%= Money.new("#{@lote.lote.precio_u}00", "USD").format %>
-        </p>
-        <p class="col-md-3 text-left">
-          <strong>Precio total:</strong>
-          <%= Money.new("#{@lote.lote.precio_t}", "USD").format%>
-        </p>
-      </div>
-      <%end%>
+      <% if can? :prices, Lote %>
+          <hr>
+          <div class="row">
+            <p class="col-md-3 text-left">
+              <strong>Número de factura:</strong>
+              <%= @lote.lote.no_factura %>
+            </p>
+            <p class="col-md-3 text-left">
+              <strong>Número de remisión:</strong>
+              <%= @lote.lote.no_remision %>
+            </p>
+            <p class="col-md-3 text-left">
+              <strong>Precio unitario:</strong>
+              <%= Money.new("#{@lote.lote.precio_u}00", "USD").format %>
+            </p>
+            <p class="col-md-3 text-left">
+              <strong>Precio total:</strong>
+              <%= Money.new("#{@lote.lote.precio_t}", "USD").format %>
+            </p>
+          </div>
+      <% end %>
 
       <!--Insumos-->
       <div class="row">
@@ -155,7 +155,7 @@
             <div class="panel-body">
               <p class="col-sm-6">
                 <strong>Fecha de revisión:</strong><br>
-                <%= @lote.lote.fecha_revision%>
+                <%= @lote.lote.fecha_revision %>
               </p>
               <p class="col-sm-6">
                 <strong>Fecha de entrega:</strong><br>
@@ -165,12 +165,12 @@
                 <strong>Observaciones:</strong><br>
                 <%= @lote.lote.obs_insumos %>
               </p>
-              <p  class="col-sm-6">
+              <p class="col-sm-6">
                 <strong>Listos:</strong>
-                <%= @lote.lote.fin_insumos ? "Si" : "No"%>
+                <%= @lote.lote.fin_insumos ? "Si" : "No" %>
               </p>
             </div>
-          </div>              
+          </div>
         </div>
 
         <!--Integración-->
@@ -187,7 +187,7 @@
                 <%= @lote.lote.fin_integracion ? "Si" : "No" %>
               </p>
             </div>
-          </div> 
+          </div>
         </div>
       </div>
       <hr>
@@ -195,46 +195,46 @@
       <div class="row">
         <p class="col-sm-3 text-left">
           <strong>Proceso:</strong>
-          <%=@lote.estado.estado %>
+          <%= @lote.estado.estado %>
         </p>
         <p class="col-sm-3 text-left">
           <strong>Entrada a este proceso:</strong><br>
-          <%=I18n::localize(@lote.fecha_ingreso, :format => "%d de %B de %Y") %>
+          <%= I18n::localize(@lote.fecha_ingreso, :format => "%d de %B de %Y") %>
         </p>
         <p class="col-sm-3 text-left">
           <strong>Proceso adicional:</strong>
-          <%=@lote.sub_estado.nil? ? "-" : "#{@lote.sub_estado.sub_estado}"%>
+          <%= @lote.sub_estado.nil? ? "-" : "#{@lote.sub_estado.sub_estado}" %>
         </p>
         <p class="col-md-3 text-left">
           <strong>Tiempo de proceso:</strong>
           <%= ControlLote.where(lote_id: @lote.lote.id).sum(:min_u) %>
         </p>
       </div>
-      
+
     </div>
     <!--Body modal-->
     <div class="modal-footer">
       <p class="text-left pull-left">
         <strong>Última edición:</strong>
-        El <%= I18n::localize @lote.lote.updated_at, :format => "%d de %b" %> 
+        El <%= I18n::localize @lote.lote.updated_at, :format => "%d de %b" %>
         por <%= @lote.lote.respon_edicion_id.name %>
       </p>
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-      <% if can? :update, Lote %>  
-        <div class="btn-group">
-          <%= link_to edit_lote_path(@lote.lote, :commit => "edit", :estado_id => @lote.estado.id, :sub_id => @lote.sub_estado.nil? ? "" : "#{@lote.sub_estado.id}"), class: "btn btn-primary" do |l|%>
-            <%=content_tag :i, "", :class => "fa fa-pencil"%>
-            Editar
-          <%end%>
-          <% change = next_state @lote.estado.id %>
-          <% if change[:boolean] %>
-            <%= link_to lote_cambio_estado_path(@lote.lote, :btn => change[:state]), method: "PATCH", :class => "btn btn-primary" do %>
-              <i class='fa fa-fast-forward fa-fw' aria-hidden='true'></i>
-              <%= change[:view] %>
+      <% if can? :update, Lote %>
+          <div class="btn-group">
+            <%= link_to edit_lote_path(@lote.lote, :commit => "edit", :estado_id => @lote.estado.id, :sub_id => @lote.sub_estado.nil? ? "" : "#{@lote.sub_estado.id}"), class: "btn btn-primary" do |l| %>
+                <%= content_tag :i, "", :class => "fa fa-pencil" %>
+                Editar
             <% end %>
-          <% end %>
-        </div>
-      <%end%>
+            <% change = next_state @lote.estado.id %>
+            <% if change[:boolean] %>
+                <%= link_to lote_cambio_estado_path(@lote.lote, :btn => change[:state]), method: "PATCH", :class => "btn btn-primary" do %>
+                    <i class='fa fa-fast-forward fa-fw' aria-hidden='true'></i>
+                    <%= change[:view] %>
+                <% end %>
+            <% end %>
+          </div>
+      <% end %>
     </div>
 
   </div>

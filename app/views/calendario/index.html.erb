@@ -1,0 +1,60 @@
+<%= content_for :content_header do %>
+    <h1>Calendario
+      <small>Planeación en planta. Arrastre los lotes para programarlos</small>
+    </h1>
+<% end %>
+<%= content_for :content_breadcrumb do %>
+    <li><%= link_to "Calendario", calendario_index_path %></li>
+<% end %>
+<%= content_for :title do %>
+    Calendario de eventos
+<% end %>
+<div class="row">
+  <div class="col-md-3 bg-gray">
+    <div class="box box-solid">
+      <div class="box-header with-border">
+        <h4 class="box-title">
+          <p><i class="fa fa-square text-red"></i> Sin programar</p>
+          <p><i class="fa fa-square text-aqua"></i> Sin fecha de ingreso</p>
+          <p><i class="fa fa-square text-black"></i> No tiene nada</p>
+        </h4>
+      </div>
+      <div class="box-body">
+        <!-- the events -->
+        <div id="external-events">
+          <% @lotes.each do |lote| %>
+              <div data-url="<%= update_programacion_lote_path(lote) %>" data-color="<%= lote.control_lotes.last.estado.color %>"
+                   class="external-event <%= color_event_extern(lote) %>">
+                <%= lote.referencia.referencia %> <small class="pull-right"><%= " Sec: #{lote.secuencia}" if lote.secuencia %></small>
+                <small class="pull-right"><%= "#{l(lote.programacion.mes, format: ('%B %Y'))}." if lote.programacion %>&nbsp;</small>
+              </div>
+          <% end %>
+        </div>
+      </div>
+      <!-- /.box-body -->
+    </div>
+  </div>
+  <div class="col-md-9">
+    <div class="box box-primary">
+      <div class="box-header">
+        <h4>
+          <div class="btn-group">
+            <ul class="list-unstyled list-inline">
+              <li><i class="fa fa-square" style="color: <%= @estados.first.color %>"></i> <%= @estados.first.estado %></li>
+              <li><i class="fa fa-square" style="color: <%= @estados.second.color %>"></i> <%= @estados.second.estado %></li>
+              <li><i class="fa fa-square" style="color: <%= @estados.third.color %>"></i> <%= @estados.third.estado %></li>
+              <li><i class="fa fa-square" style="color: <%= @estados.fourth.color %>"></i> <%= @estados.fourth.estado %></li>
+              <li><i class="fa fa-square" style="color: <%= @estados.fifth.color %>"></i> <%= @estados.fifth.estado %></li>
+            </ul>
+          </div>
+        </h4>
+      </div>
+      <div class="box-body">
+        <div id="calendar" data-url="<%= calendario_index_path(format: :json) %>"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<% can = can? :update, Programacion  %>
+<div id="actions" data-editable="<%= can %>" data-droppable="<%= can %>"></div>
+

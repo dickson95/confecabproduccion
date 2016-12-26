@@ -1,0 +1,66 @@
+<%= content_for :title do %>
+    Acerca de Diseños y Camisas
+<% end %>
+<%= content_for :content_header do %>
+    <h1>Acerca de Diseños y Camisas</h1>
+<% end %>
+<div class="row">
+  <div class="col-md-9">
+    <div class="box box-info">
+      <div class="box-body">
+        <section id="nuestra-historia">
+          <h2 class="page-header"><a href="#nuestra-historia">Nuestra Historia</a></h2>
+          <p class="lead">
+            DyC es una compañía fundada en agosto de 2013, enfocada en la producción de camisetas tipo Polo y T-Shirt.
+            La compañía nace como una respuesta a la necesidad del mercado, para desarrollar y producir prendas en
+            tejido de punto con altos estándares de calidad, a través de la certificación de compradores nacionales e
+            internacionales.
+          </p>
+        </section>
+        <section id="mision">
+          <h2 class="page-header"><a href="#mision">Misión</a></h2>
+          <p class="lead">
+            Diseñar, producir y comercializar colecciones que cumplan con las tendencias y estándares de calidad
+            nacional e internacional
+          </p>
+        </section>
+        <section id="vision">
+          <h2 class="page-header"><a href="#vision">Visión</a></h2>
+          <p class="lead">
+            Ser reconocida como una empresa líder, que nos permita cumplir las expectativas de nuestros clientes
+            nacionales e internacionales, teniendo en cuenta el bienestar de nuestro talento humano.
+          </p>
+        </section>
+        <section id="saber-mas">
+          <h2 class="page-header"><a href="#saber-mas">Saber más</a></h2>
+          <p class="lead">
+            Si desea saber más sobre la empresa puede visitar el siguiente sitio web que describe detalladamente todos
+            los servicios que tenemos:
+          </p>
+          <p class="lead text-center"><a href="http://dycsas.com.co" target="_blank">dycsas.com.co</a></p>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <nav data-spy="affix" data-offset-top="110">
+      <div class="box box-primary" style="width: 255px;">
+        <div class="box-body">
+          <ul class="nav nav-pills nav-stacked">
+            <li class=""><a href="#nuestra-historia">Nuestra historia</a></li>
+            <li class=""><a href="#mision">Misión</a></li>
+            <li class=""><a href="#vision">Visión</a></li>
+            <li class=""><a href="#saber-mas">Saber más</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="box box-primary" id="medida" style="width: 255px;">
+        <div class="box-body">
+          <%= link_to "http://dycsas.com.co", :target => "_blank" do %>
+              <%= image_tag 'dyc', width: '230' %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>

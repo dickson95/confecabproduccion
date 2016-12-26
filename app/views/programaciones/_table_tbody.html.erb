@@ -1,50 +1,62 @@
-	<tbody>
-		<% # Control en caso de que la programación esté vacía %>
-		<%if (@no_empty_program == false && !@programaciones.empty?) || (@no_empty_program && !@programaciones.empty?)%>
-		<%@programaciones.each do |programacion|%>
-		<tr data-item-id=<%= "#{programacion.fetch(9)}" %> class="<%=(can? :update, Lote) ? "item": ""%> ">
-			<%if can? :update, Programacion%>
-			<td><%=check_box_tag "lotes[#{programacion.fetch(9)}]", programacion.fetch(9)%></td>
-			<%end%>
-			<td style="padding: 0px;">
-			<%= render partial: "lotes/dropdown_options", locals: { lote_id: programacion.fetch(9), estado_id: @estados["#{programacion.fetch(9)}"][:id] } %>
-			</td>
-			<%if can? :update, Programacion%>
-			<td style="padding-top: 5px; padding-bottom: 3px;" class="text-center"><%=text_field_tag "programacion[secuencia][#{programacion.fetch(9)}]", "", :value => programacion.fetch(2), :style => "max-width: 3em;"%></td>
-			<%end%>
-			<td class="state"><%= @estados["#{programacion.fetch(9)}"][:name] %></td>
-			<td><%= programacion.fetch(0) %></td>
-			<td><%= programacion.fetch(1) %></td>
-			<td><%= programacion.fetch(3) %></td>
-			<td><%= programacion.fetch(4) %></td>
-			<%if can? :prices, Lote%>
-			<td><%=Money.new("#{programacion.fetch(5)}00").format%></td>
-			<td><%=Money.new("#{programacion.fetch(6)}00").format%></td>
-			<%end%>
-		</tr>
-		<%end%>
-		<%elsif @no_empty_program && @programaciones.empty?%>
-		<tr id="row_generate">
-			<td colspan="11" class="text-center">
-			<%if can? :generate, Programacion%>
-				No existe programación para este mes<br>
-				¿Desea generarla?
-				<%=link_to "Generar programación", generate_programacion_path(@programacion, :month => params[:month]), 
-				method: :patch, remote: :true%>
-			<%else%>
-				No se ha generado ninguna programación
-			<%end%>
-			</td>
-		</tr>
-		<%else%>
-		<tr>
-			<td colspan="<%=$colspan%>" class="text-center">
-				No hay lotes disponibles para generar una programación
-			</td>
-		</tr>
-		<%end%>
-		<% # Fin de control para las programaciones vacías %>
-	</tbody>
+<tbody>
+<% # Control en caso de que la programación esté vacía %>
+<% if (@no_empty_program == false && !@programaciones.empty?) || (@no_empty_program && !@programaciones.empty?) %>
+    <% @programaciones.each do |programacion| %>
+        <% estado = @estados["#{programacion.fetch(9)}"] %>
+        <tr data-item-id="<%= "#{programacion.fetch(9)}" %>" class="<%= (can? :update, Lote) ? "item" : "" %>" style="background-color: <%= estado[:color_claro] %>;">
+        <% if can? :update, Programacion %>
+            <td><%= check_box_tag "lotes[#{programacion.fetch(9)}]", programacion.fetch(9) %></td>
+        <% end %>
+        <td class="no-padding">
+          <%= render partial: "lotes/dropdown_options", locals: {lote_id: programacion.fetch(9), estado_id: estado[:id]} %>
+        </td>
+        <% if can? :update, Programacion %>
+            <td class="text-center no-padding-top no-padding-bottom no-padding-right">
+              <%= text_field_tag "programacion[secuencia][#{programacion.fetch(9)}]", "", :value => programacion.fetch(2),
+                                 :style => "max-width: 3em;", :class => "form-control text-black text-center input-sm no-padding" %>
+            </td>
+        <% end %>
+        <td class="state" style="background-color: <%= estado[:color] %>;"><%= @estados["#{programacion.fetch(9)}"][:name] %></td>
+        <td><%= programacion.fetch(0) %></td>
+        <td><%= programacion.fetch(1) %></td>
+        <td><%= programacion.fetch(3) %></td>
+        <td><%= programacion.fetch(4) %></td>
+        <% if can? :prices, Lote %>
+            <td><%= Money.from_amount(programacion.fetch(5), "COP").format(:no_cents => true) %></td>
+            <td><%= Money.from_amount(programacion.fetch(6), "COP").format(:no_cents => true) %></td>
+        <% end %>
+        <td class="no-padding">
+        <% if can? :update, Programacion %>
+              <%= content_tag :input, "", data: {:lote => programacion.fetch(9), url: update_ingresara_a_planta_lote_path(programacion.fetch(9))},
+                              :value => set_date(programacion.fetch(10), "%d %B %Y"),:class => "form-control text-center input-sm no-padding ingresara_a_planta" %>
+        <% else %>
+              <%= programacion.fetch(10) %>
+        <% end %>
+        </td>
+        </tr>
+    <% end %>
+<% elsif @no_empty_program && @programaciones.empty? %>
+    <tr id="row_generate">
+      <td colspan="11" class="text-center">
+        <% if can? :generate, Programacion %>
+            No existe programación para este mes<br>
+            ¿Desea generarla?
+            <%= link_to "Generar programación", generate_programacion_path(@programacion, :month => params[:month]),
+                        method: :patch, remote: :true %>
+        <% else %>
+            No se ha generado ninguna programación
+        <% end %>
+      </td>
+    </tr>
+<% else %>
+    <tr>
+      <td colspan="<%= $colspan %>" class="text-center">
+        No hay lotes disponibles para generar una programación
+      </td>
+    </tr>
+<% end %>
+<% # Fin de control para las programaciones vacías %>
+</tbody>
 <script type="text/javascript">
-	$('[data-toggle="popover"]').popover();
+  $('[data-toggle="popover"]').popover();
 </script>

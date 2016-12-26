@@ -1,131 +1,104 @@
-<div class="row">
-  <div class=" col-md-12">
-    <%
-    place = nil
-    if params[:action]=="edit"
-      place = "form_edit_lote_response"
-    else
-      place = "form_new_lote_response"
-    end
-    %>
-    <% action = params[:action] %>
-    <% url = action=="edit" || action=="update" ? lote_path(:place => place) : lotes_path(:place => place) %>
-    <%= simple_form_for(@lote, :url => url) do |f|%>
-    <div class="row page-header">
-      <div class="col-md-3 text-left">
-        <%if action.eql?("edit") || action.eql?("update")%>
-        <h3>Editar</h3>
-        <%else%>
-        <h3>Nuevo</h3>
-        <%end%>
+<%
+  place = nil
+  if params[:action]=="edit"
+    place = "form_edit_lote_response"
+  else
+    place = "form_new_lote_response"
+  end
+%>
+<% action = params[:action] %>
+<% url = action=="edit" || action=="update" ? lote_path(:place => place) : lotes_path(:place => place) %>
+
+<%= simple_form_for(@lote, :url => url) do |f| %>
+    <div class="box box-primary">
+      <div class="box-header">
+        <h3 class="box-title">
+          <p>
+            <% if !@lote.cliente.nil? %>
+                <%= @lote.cliente.cliente %> -
+            <% end %>
+            <% if !@lote.referencia.nil? %>
+                <%= @lote.referencia.referencia %>
+            <% end %>
+          </p>
+        </h3>
+        <div class="box-tools pull-right">
+          <%= f.button :submit, :value => 'Aceptar', data: {:disable_with => "Guardando"}, class: 'btn btn-primary btn-sm', :id => "lote_guardar" %>
+          <%= link_to 'Cancelar', "/#{params[:plc] || params[:lote][:plc]}", class: 'btn btn-default btn-sm' %>
+        </div>
       </div>
-      <div class="col-md-5 text-center text-muted">
-        <p>
-          <%if !@lote.cliente.nil?%>
-          <%=@lote.cliente.cliente%> -
-          <%end%>
-          <%if !@lote.referencia.nil?%>
-          <%= @lote.referencia.referencia%>
-          <%end%>
-        </p>
+      <div class="box-body">
+        <%= f.error_notification %>
+        <ul class="nav nav-tabs">
+          <% if can? :integracion, Lote %>
+              <li class="active"><a data-toggle="tab" href="#integracion">Integración</a></li>
+          <% end %>
+
+          <% if can? :insumos, Lote %>
+              <li class=<%= (current_user.has_rol? :aux_insumos) ? "active" : "" %>>
+                <a data-toggle="tab" href="#insumos">Insumos</a></li>
+          <% end %>
+
+          <% if can? :billing, Lote %>
+              <li class=<%= (current_user.has_rol? :aux_facturacion) ? "active" : "" %>>
+                <a data-toggle="tab" href="#facturacion">Facturación</a></li>
+          <% end %>
+        </ul>
+        <div class="tab-content">
+
+          <% if can? :integracion, Lote %>
+              <div id="integracion" class="tab-pane fade in active">
+                <% # Integración %>
+                <%= render "form_zone_integracion", f: f %>
+              </div>
+          <% end %>
+
+          <% if can? :insumos, Lote %>
+              <div id="insumos" class="tab-pane fade <%= (current_user.has_rol? :aux_insumos) ? "in active" : "" %>">
+                <% # Insumos %>
+                <%= render "form_zone_insumos", f: f %>
+              </div>
+          <% end %>
+
+          <% if can? :billing, Lote %>
+              <div id="facturacion" class="tab-pane fade <%= (current_user.has_rol? :aux_facturacion) ? "in active" : "" %>">
+                <% # Facturacion %>
+                <%= render "form_zone_facturacion", f: f %>
+              </div>
+          <% end %>
+        </div>
       </div>
-      <div class="col-md-4 text-right">
-        <%= f.button :submit, :value => 'Aceptar', data:{:disable_with => "Guardando"}, class: 'btn-default', :id =>"lote_guardar" %>
-        <%= link_to 'Cancelar', :back, class: 'btn btn-outline btn-primary' %>
-      </div>
+      <% if params[:action].eql?("edit") || params[:action].eql?("update") %>
+        <div class="box-footer">
+          <div class="pull-right">
+            <%= f.button :submit, :value => 'Aceptar', data: {:disable_with => "Guardando"}, class: 'btn btn-primary btn-sm', :id => "lote_guardar" %>
+            <%= link_to 'Cancelar', "/#{params[:plc] || params[:lote][:plc]}", class: 'btn btn-default btn-sm' %>
+          </div>
+        </div>
+      <% end %>
     </div>
-    <%= f.error_notification %>
 
-    <!--inicio form-inputs-->
-    <div class="form-inputs">
-      <ul class="nav nav-tabs">
-        <% if can? :integracion, Lote%>
-        <li class="active"><a data-toggle="tab" href="#integracion">Integración</a></li>
-        <%end%>
-
-        <% if can? :insumos, Lote%>
-        <li class=<%=(current_user.has_rol? :aux_insumos) ? "active" : ""%>><a data-toggle="tab" href="#insumos">Insumos</a></li>
-        <%end%>
-
-        <% if can? :billing, Lote%>
-        <li class=<%=(current_user.has_rol? :aux_facturacion) ? "active" : ""%>><a data-toggle="tab" href="#facturacion">Facturación</a></li>
-        <%end%>
-      </ul>
-
-      <div class="tab-content">
-
-        <% if can? :integracion, Lote%>
-        <div id="integracion" class="tab-pane fade in active">
-          <% # Integración %>
-          <%=render "form_zone_integracion", f: f%>
-        </div>
-        <%end%>
-
-        <% if can? :insumos, Lote%>
-        <div id="insumos" class="tab-pane fade <%=(current_user.has_rol? :aux_insumos) ? "in active" : ""%>">
-          <% # Insumos %>
-          <%=render "form_zone_insumos", f: f%>
-        </div>
-        <%end%>
-
-        <% if can? :billing, Lote %>
-        <div id="facturacion" class="tab-pane fade <%=(current_user.has_rol? :aux_facturacion) ? "in active" : ""%>">
-          <% # Facturacion %>
-          <%=render "form_zone_facturacion", f: f%>
-        </div>
-        <%end%>
-      </div>
-      <% if can?(:cambio_estado, Lote) && (params[:action].eql?("new") || params[:action].eql?("create"))%>  
-      <!--____Detalle de estado_______________________________-->
-      <div class="row" id="form_lote_estado_update">
-        <div class="col-lg-12">
-          <div class="panel">
-            <div class="panel-heading panel-default">
-              <h4>Datos del proceso</h4>
+    <% if can?(:cambio_estado, Lote) && (params[:action].eql?("new") || params[:action].eql?("create")) %>
+        <div class="box box-warning">
+          <div class="box-header">
+            <h3 class="box-title">Datos del proceso</h3>
+          </div>
+          <div class="box-body">
+            <%= f.fields_for :control_lotes, @control_lotes do |c| %>
+                <%= render partial: 'control_lotes/form_fields', locals: {c: c, col: 4} %>
+            <% end %>
+          </div>
+          <div class="box-footer">
+            <div class="pull-right">
+              <%= f.button :submit, :value => 'Aceptar', data: {:disable_with => "Guardando"}, class: 'btn btn-primary btn-sm', :id => "lote_guardar" %>
+              <%= link_to 'Cancelar', "/#{params[:plc] || params[:lote][:plc]}", class: 'btn btn-default btn-sm' %>
             </div>
           </div>
         </div>
-
-        <div class="col-lg-12">
-        <%= f.fields_for :control_lotes, @control_lotes do |c| %>
-          <%=render partial: 'control_lotes/form_fields', locals: { c: c, col: 4 } %>
-        <% end %>
-        </div>
-      </div>
-      <!--____Fin detalle de estado_____________________________-->
-      <%= f.hidden_field :plc, value: params[:plc] || params[:lote][:plc] %>
-      <%end%>
-
-      <!--____Form submit_________________________________-->
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="panel">
-            <div class="panel-heading panel-default">
-            </div>
-          </div>
-          <div class="form-actions text-right">
-            <%= f.button :submit, :value => 'Aceptar', data:{:disable_with => "Guardando"}, class: 'btn-default', :id =>"lote_guardar" %>
-            <%= link_to 'Cancelar', :back, class: 'btn btn-outline btn-primary' %>
-          </div>
-          <div class="panel">
-            <div class="panel-heading panel-primary">
-            </div>
-            <p class="text-right"><i class="text-danger">*</i>&nbsp;&nbsp;Campos obligatorios</p>
-            <div class="panel-footer">
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--____fin form-submit______________________________-->
-    </div>
-    <!--fin form-inputs-->
     <% end %>
+    <!--____Fin detalle de estado_____________________________-->
 
-    <% # Fin simple form %>
+    <%= f.hidden_field :plc, value: params[:plc] || params[:lote][:plc] %>
+<% end %>
+<% # Fin simple form %>
 
-  </div>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" 
-aria-labelledby="myModalLabel" aria-hidden="true">
-</div>

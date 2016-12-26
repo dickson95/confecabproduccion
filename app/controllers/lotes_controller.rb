@@ -2,12 +2,13 @@ class LotesController < ApplicationController
   # Validación de autorización
   load_and_authorize_resource :except  => [:view_details]
   include LotesHelper
+  include LotesDatatablesHelper
   # Acciones primarias
   before_action :rol_user, only: [:create, :update, :edit, :new]
   before_action :set_color, only: [:create, :update]
   before_action :set_tipo_prenda, only: [:new, :edit]
   before_action :referencia_params, only: [:set_referencia]
-  before_action :set_lote, only: [:edit, :update, :destroy]
+  before_action :set_lote, only: [:edit, :update, :update_ingresara_a_planta, :update_programacion, :destroy]
   before_action :set_talla, only: [:view_details, :new, :edit, :create, :update]
   
   # Autocompletado
@@ -16,14 +17,10 @@ class LotesController < ApplicationController
   # GET /lotes
   # GET /lotes.json
   def index
-    company = session[:selected_company]
-    @lotes = Lote.joins([control_lotes: [:estado]], :referencia, :cliente)
-    .where("control_lotes.fecha_ingreso = (SELECT MAX(fecha_ingreso) FROM control_lotes 
-      cl GROUP BY lote_id HAVING cl.lote_id = control_lotes.lote_id) and lotes.empresa = '#{company ? "CAB" : "D&C"}'")
-    .pluck("lotes.id", "clientes.cliente", "referencias.referencia", "lotes.op", "lotes.cantidad", 
-      "lotes.tipo_prenda_id","control_lotes.estado_id","control_lotes.sub_estado_id", "lotes.precio_u", "lotes.precio_t")    
-    @fechas_ingreso = ControlLote.hash_ids
-    @tipos_prendas = TipoPrenda.hash_ids
+    respond_to do |format|
+      format.html
+      format.json { render json: data_tables(params) }
+    end
   end
   
   def view_details
@@ -149,7 +146,11 @@ class LotesController < ApplicationController
             hs[:dropdown] = view_context.render partial: 'dropdown_options', locals: { lote_id: params[:lote_id], 
                           estado_id: estado}
             hs[:message] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}."
-            hs[:process] = next_state_lote[:controller].capitalize
+            hs[:process] = {}
+            hs[:process][:name] = next_state_lote[:controller].capitalize
+            estado_full = Estado.find(estado)
+            hs[:process][:color] = estado_full.color
+            hs[:process][:color_claro] = estado_full.color_claro
             format.json { render json: hs, status: :ok }
           else
             format.html { redirect_to :back }
@@ -173,12 +174,33 @@ class LotesController < ApplicationController
       end
     end
   end
+
+  def update_ingresara_a_planta
+    respond_to do |format|
+      if @lote.update(params.require(:lote).permit(:ingresara_a_planta))
+        format.json { render json: @lote, status: :ok }
+      else
+        head :bad_request # Código 400 en los estados HTTP
+      end
+    end
+  end
+
+  def update_programacion
+    par = params.require(:lote).permit(:year, :month, :day)
+    programacion = Programacion.get_per_month("#{par[:year]}#{par[:month]}", session[:selected_company])
+    respond_to do |format|
+      if @lote.update(:programacion_id => programacion.first.id, :ingresara_a_planta => "#{par[:year]}-#{par[:month]}-#{par[:day]}")
+        format.json { render json: @lote, status: :ok }
+      else
+        head :bad_request # Código 400 en los estados HTTP
+      end
+    end
+  end
   
   # DELETE /lotes/1
   # DELETE /lotes/1.json
   def destroy
-    @lote.destroy
-    render partial: 'layouts/messages', flash: flash[:info]='Registro eliminado con éxito'
+    render json: @lote.destroy, status: :ok
   end
 
   # PATCH /lotes/:lote_id/total_price
@@ -186,8 +208,8 @@ class LotesController < ApplicationController
     lote_price = params.require(:lote).permit( :amount, :unit_price)
     lote_price[:unit_price] = Lote.functional_format lote_price[:unit_price]
     price_total = Lote.multiplication(lote_price.values)  
-    format_price_u = Money.new("#{lote_price[:unit_price]}00").format
-    format_price_t = Money.new("#{price_total}00").format
+    format_price_u = Money.from_amount(lote_price[:unit_price].to_i, "COP").format(:no_cents => true)
+    format_price_t = Money.from_amount(price_total.to_i, "COP").format(:no_cents => true)
     Lote.update(params[:id].to_i, :precio_u => lote_price[:unit_price], :precio_t => price_total, :respon_edicion_id => current_user)
     @prices = {:total => format_price_t, :unit => format_price_u}
     respond_to do |format|

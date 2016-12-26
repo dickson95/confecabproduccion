@@ -1,0 +1,32 @@
+<div class="login-box">
+  <div class="login-logo">
+    <%= link_to root_path do %>
+        <b>CONFE</b>CAB
+    <% end %>
+  </div>
+  <div class="login-box-body">
+    <p class="login-box-msg">Ingresar</p>
+    <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <%= f.error_notification %>
+        <%= f.input :login, required: true, autofocus: true, placeholder: 'Cédula o correo',
+                    label: "Cédula o correo", wrapper: :vertical_input_feedback do %>
+            <%= f.input_field :login, class: 'form-control' %>
+            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <% end %>
+        <%= f.input :password, required: false, label: "Contraseña", wrapper: :vertical_input_feedback do %>
+            <%= f.input_field :password, class: 'form-control' %>
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <% end %>
+        <div class="row">
+          <div class="col-xs-8">
+            <%= render "devise/shared/links" %>
+          </div>
+          <div class="col-xs-4">
+            <%= f.button :submit, 'Acceder', class: 'btn-primary btn-block btn-flat' %>
+          </div>
+        </div>
+    <% end %>
+  </div>
+</div>
+
+

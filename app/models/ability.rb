@@ -3,7 +3,6 @@ class Ability
   
   def initialize(user)
     user ||= User.new # guest user
-
     alias_action :export_excel, :export_pdf, :options_export, :to => :export
     alias_action :read, :to => :prices   # Permiso de lectura para los precios
     alias_action :total_price, :update, :to => :prices_update   # Permiso de escritura para los precios

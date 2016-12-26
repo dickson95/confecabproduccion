@@ -1,0 +1,91 @@
+<%= content_for :title do %>
+    Acerca de Confecab
+<% end %>
+<%= content_for :content_header do %>
+    <h1>Acerca de Confecab</h1>
+<% end %>
+<div class="row">
+  <div class="col-md-9">
+    <div class="box box-info">
+      <div class="box-body">
+        <section id="nuestra-historia">
+          <h2 class="page-header"><a href="#nuestra-historia">Nuestra Historia</a></h2>
+          <p class="lead">
+            Confecciones Álvaro Botero Rodríguez S.A.S (CONFECAB), es una compañía fundada en al año 2002 dedicada a
+            la fabricación de camisas y blusas en tejido plano y de punto para el mercado nacional e internacional
+            que cuenta con un grupo de profesionales expertos en cada área. <br><br>
+            Nuestras certificaciones en TOE y VF, nos acreditan como proveedores con calidad internacional.
+          </p>
+        </section>
+        <section id="mision">
+          <h2 class="page-header"><a href="#mision">Misión</a></h2>
+          <p class="lead">
+            Proveer a nuestros clientes un servicio integral en la fabricación de prendas de vestir tanto en mercados
+            nacionales como internacionales, manteniendo un ambiente armónico y respetando el medio ambiente que
+            propicie el buen desarrollo y funcionamiento de nuestros empleados, con un compromiso constante en la
+            mejora continua de nuestros procesos para obtener buenos resultados.
+          </p>
+        </section>
+        <section id="vision">
+          <h2 class="page-header"><a href="#vision">Visión</a></h2>
+          <p class="lead">
+            Ser reconocida en el sector textil - confección como una empresa con proyección internacional, enfocada en
+            el cumplimiento a sus clientes con productos de calidad que responden a las tendencias de la moda.
+          </p>
+        </section>
+        <section id="politica-de-calidad">
+          <h2 class="page-header"><a href="#politica-de-calidad">Política de calidad</a></h2>
+          <p class="lead">
+            Nuestra política de calidad se fundamenta en buscar siempre la satisfacción de nuestros clientes
+            garantizando la calidad de nuestros productos, la confección y entrega oportuna; con valores agregados en
+            precio, diseño, uso, comodidad y cumpliendo con los estándares de calidad que exige el mercado. Buscamos el
+            mejoramiento continuo de nuestros procesos a través de la implementación, mantenimiento y optimización de
+            los recursos disponibles en la empresa.
+          </p>
+        </section>
+        <section id="objetivo-de-calidad">
+          <h2 class="page-header"><a href="#objetivo-de-calidad">Objetivo de calidad</a></h2>
+          <ul class="lead">
+            <li> Satisfacer a nuestros clientes con productos y servicios de calidad, orientados a la mejora continua.
+            </li>
+            <li>Disminuir el tiempo del proceso mediante auditorías en la planta durante el proceso de confección.</li>
+            <li>Reducir problemas de picas y talles mediante el acople de la maquinaria y el uso adecuado de los
+              aditamentos necesarios.resa.
+            </li>
+          </ul>
+        </section>
+        <section id="saber-mas">
+          <h2 class="page-header"><a href="#saber-mas">Saber más</a></h2>
+          <p class="lead">
+            Si desea saber más sobre la empresa puede visitar el siguiente sitio web que describe detalladamente todos
+            los servicios que tenemos:
+          </p>
+          <p class="lead text-center"><a href="http://confecab.com" target="_blank">confecab.com</a></p>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <nav data-spy="affix" data-offset-top="110">
+      <div class="box box-primary" style="width: 255px;">
+        <div class="box-body">
+          <ul class="nav nav-pills nav-stacked">
+            <li class=""><a href="#nuestra-historia">Nuestra historia</a></li>
+            <li class=""><a href="#mision">Misión</a></li>
+            <li class=""><a href="#vision">Visión</a></li>
+            <li class=""><a href="#politica-de-calidad">Política de calidad</a></li>
+            <li class=""><a href="#objetivo-de-calidad">Objetivo de calidad</a></li>
+            <li class=""><a href="#saber-mas">Saber más</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="box box-primary" id="medida" style="width: 255px;">
+        <div class="box-body">
+          <%= link_to "http://confecab.com", :target => "_blank" do %>
+              <%= image_tag 'cab', width: '230' %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>

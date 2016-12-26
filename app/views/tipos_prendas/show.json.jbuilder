@@ -1,1 +1,0 @@
-json.partial! "tipos_prendas/tipo_prenda", tipo_prenda: @tipo_prenda

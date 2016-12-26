@@ -57,7 +57,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 # Maquetación y efectos dinámicos
 gem 'simple_form'
-gem 'bootstrap_sb_admin_base_v2'
+gem 'font-awesome-sass'
+gem 'bootstrap-sass', '~> 3.3.7'
 gem 'jquery-ui-rails'
 gem 'rails-jquery-autocomplete'
 
@@ -79,6 +80,16 @@ gem 'wicked_pdf'
 
 # Formato de la moneda
 gem 'money'
+
+# Ransack para buscar por todas las columnas
+gem 'ransack', github: 'activerecord-hackery/ransack'
+
+# Es una dependencia de premailer-rails y esta gema sirve para tratar documentos html, xml
+gem 'nokogiri'
+
+# Esta gema dá el estilo a los correos sin tener que poner style en la misma linea de las etiquetas
+# html, como tendría que ser para dar estilo.
+gem 'premailer-rails'
 
 
 ruby "2.3.1"

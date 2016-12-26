@@ -13,42 +13,41 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui/sortable
+//= require jquery-ui/draggable
 //= require jquery-ui/effect-highlight
 //= require jquery-ui/effect-drop
 //= require jquery-ui/datepicker
 //= require jquery-ui/autocomplete
 //= require jquery.floatingmessage
+//= require bootstrap-sprockets
+//= require plugins/colorpicker/bootstrap-colorpicker.min
+//= require plugins/fullcalendar/moment.min
+//= require plugins/fullcalendar/fullcalendar
+//= require plugins/slimScroll/jquery.slimscroll.min
+//= require plugins/datatables/jquery.dataTables.min
+//= require plugins/datatables/dataTables.bootstrap.min
+//= require plugins/morris/raphael-min
+//= require plugins/morris/morris.min
+//= require dist/js/app
 //= require autocomplete-rails
-//= require bootstrap_sb_admin_base_v2
-//= require turbolinks
 //= require_tree .
 
-$(document).on("turbolinks:load", function(){
-  //Remover mensajes informativos
-  setTimeout(function() {
-    $("#notice").slideUp("normal", function() { $(this).remove(); } );
-  }, 7000);
 
-	$('.dropdown').on('show.bs.dropdown', function(e) {
-    $(this).find('.dropdown-menu').first().stop(true, true).slideDown()
-  })
-    
-  $('.dropdown').on('hide.bs.dropdown', function(e){
-    $(this).find('.dropdown-menu').first().stop(true, true).slideUp()
-  })
-})
+$(document).on("ready", function () {
+    //Remover mensajes informativos
+    setTimeout(function () {
+        $("#notice").slideUp("normal", function () {
+            $(this).remove();
+        });
+    }, 7000);
 
+    $("body").on('show.bs.dropdown', '.dropdown', function (e) {
+        $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+    }).on('hide.bs.dropdown', '.dropdown', function (e) {
+        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+    });
+});
 
-document.addEventListener("turbolinks:before-cache", function() {
-  var tablelotes = $('#lotes').DataTable();
-  var tablecontrol = $('#control').DataTable();
-  var tableclientes = $('#t_clientes').DataTable();
-  var tables2 = $('.tablas2').DataTable();
-	tablelotes.destroy();
-	tablecontrol.destroy();
-	tableclientes.destroy();
-	tables2.destroy();
-})
 
 
 

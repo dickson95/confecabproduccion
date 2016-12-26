@@ -10,13 +10,26 @@ module ApplicationHelper
 	end
 
 	# Definir cual es el enlace que debe quedar activo
-	def nav_link(link_text, link_path, link_to_options=nil, content_tag_options=nil)
-	  class_name = current_page?(link_path) ? 'active' : ''
-	  link_to_options[:class] = "#{class_name} #{link_to_options[:class]}"
-	  content_tag  :li do
-		  link_to link_path, link_to_options do
-		  	content_tag(:i,"", content_tag_options).html_safe + " #{link_text}"
-		  end
+	def active_navigation(link_path)
+	  current_page?(link_path) ? 'active' : ''
+	end
+
+	def name_company_logo
+		session[:selected_company] ? "CAB" : "D&C"
+	end
+
+	def set_date(date, format)
+		I18n::localize(date, format: format) if !date.nil?
+	end
+
+	def color_row_p(state, strong=nil)
+		string ||= true
+		case state
+			when 1; strong ? "bg-gray" : "active"
+			when 2; strong ? "bg-light-blue": "info"
+			when 3; strong ? "bg-red-active": "danger"
+			when 4; strong ? "bg-orange-active": "warning"
+			when 5; strong ? "bg-green-active": "success"
 		end
 	end
 end

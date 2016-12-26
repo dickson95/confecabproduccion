@@ -1,0 +1,64 @@
+<div class="col-md-6">
+
+  <%= simple_form_for @estado, remote: true do |f| %>
+      <div class="box box-primary">
+        <div class="box-header">
+          <h3 class="box-title">Editar</h3>
+        </div>
+        <div class="box-body">
+          <%= f.input :estado %>
+          <%= f.input :nombre_accion %>
+          <%= f.input :color, wrapper: :vertical_input_group do %>
+              <div class="input-group my-colorpicker">
+                <%= f.input_field :color, class: "form-control" %>
+                <div class="input-group-addon">
+                  <i></i>
+                </div>
+              </div>
+          <% end %>
+          <%= f.input :color_claro, wrapper: :vertical_input_group do %>
+              <div class="input-group my-colorpicker">
+                <%= f.input_field :color_claro, class: "form-control" %>
+                <div class="input-group-addon">
+                  <i></i>
+                </div>
+              </div>
+          <% end %>
+          <table class="table table-bordered">
+            <caption>
+              Vista previa
+            </caption>
+            <thead>
+            <tr>
+              <th>Sec</th>
+              <th>Estado</th>
+              <th>Referencia</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr id="preview">
+              <td class="text-center no-padding"><input type="number" value="1" class="form-control no-padding text-center" style="max-width: 3em;"></td>
+              <td id="preview-td"><%= Estado.first.name %></td>
+              <td>REFERENCIA</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="box-footer">
+          <div class="box-tools pull-right">
+            <%= f.button :button, :class => "btn btn-primary btn-sm" do %>
+                <i class="fa fa-floppy-o"></i>
+                Guardar
+            <% end %>
+            <%= f.button :button, :type =>"button", :class => "btn btn-default btn-sm" do %>
+                <i class="fa fa-close"></i>
+                Cancelar
+            <% end %>
+          </div>
+        </div>
+      </div>
+  <% end %>
+</div>
+<script type="text/javascript" charset="utf-8">
+  $(".my-colorpicker").colorpicker();
+</script>

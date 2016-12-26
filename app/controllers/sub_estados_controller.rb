@@ -39,7 +39,7 @@ class SubEstadosController < ApplicationController
           @sub_estado = SubEstado.last
           format.js{ render 'lotes/ajaxResults' }
         else
-          format.html { redirect_to tipos_prendas_path }
+          format.html { redirect_to sub_estados_path }
           flash[:success] = "Proceso registrado con éxito"
         end
       else
@@ -55,7 +55,7 @@ class SubEstadosController < ApplicationController
   def update
     respond_to do |format|
       if @sub_estado.update(sub_estado_params)
-        format.html { redirect_to tipos_prendas_path }
+        format.html { redirect_to sub_estados_path }
         flash[:success] = "Proceso actualizado correctamente"
       else
         format.html { render :edit }
@@ -69,7 +69,7 @@ class SubEstadosController < ApplicationController
   def destroy
     @sub_estado.destroy
     respond_to do |format|
-      format.html { redirect_to tipos_prendas_path }
+      format.html { redirect_to sub_estados_path }
       flash[:success] = "Proceso eliminado con éxito"
       format.json { head :no_content }
     end

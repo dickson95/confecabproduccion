@@ -1,54 +1,50 @@
-<div class="panel panel-default page-header">
-  <div class="panel-heading">
-    <div class="row">
-      <div class="col-xs-10">
-        <h4>Clientes</h4>
-      </div>
-      <div class="col-sm-2 text-right">
-          <% if can? :manage, Cliente %>
-            <%= link_to new_cliente_path, :title =>"Nuevo" do%>
-              <%= content_tag(:i, "", :class => "fa fa-plus fa-3x") %>
-            <% end %>
+<div class="box box-primary with-border">
+  <div class="box-header">
+    <h3 class="box-title">Clientes</h3>
+    <% if can? :manage, Cliente %>
+        <div class="box-tools pull-right">
+          <%= link_to new_cliente_path, :title => "Nuevo" do %>
+              <%= content_tag(:i, "", :class => "fa fa-plus fa-2x") %>
           <% end %>
-      </div>
-    </div>
+        </div>
+    <% end %>
   </div>
-  <div class="panel-body">
-    <table  class="table table-striped table-bordered table-hover" id="clientes">
+  <div class="box-body">
+    <table class="table table-striped table-bordered" id="clientes">
       <thead>
-        <tr>
-          <th title="Cliente">Cliente</th>
-          <th title="Teléfono">Telefono</th>
-          <th title="Dirección">Direccion</th>
-          <th title="Correo">Correo</th>
-          <% if can? :manage, Cliente %>
-          <th></th>
-          <% end %>
-        </tr>
-      </thead>
-    
-      <tbody>
-        <% @clientes.each do |cliente| %>
-          <tr>
-            <td title="Cliente"><%= cliente.cliente %></td>
-            <td class="col-xs-1" title="Teléfono"><%= cliente.telefono %></td>
-            <td class="col-xs-2" title="Dirección"><%= cliente.direccion %></td>
-            <td class="col-xs-3" title="Correo"><%= cliente.email %></td>
-            <% if can? :manage, Cliente %>
-            <td>
-              <div class="btn-group">
-                <%= link_to edit_cliente_path(cliente), :title =>"Editar", class: "btn btn-primary" do%>
-                  <%= content_tag(:i, "", :class => "fa fa-pencil") %>
-                <% end %>
-                <%= link_to cliente, remote: true, method: :delete, :title => "Eliminar",
-                data: { confirm: '¿Seguro desea eliminar el cliente?' }, class: "btn btn-danger" do %>
-                  <%= content_tag(:i, "", :class => "fa fa-trash-o") %>
-                <% end %>
-              </div>
-            </td>
-            <% end %>
-          </tr>
+      <tr>
+        <% if can? :manage, Cliente %>
+            <th class="no-padding" colspan="2"> Opc.</th>
         <% end %>
+        <th title="Cliente">Cliente</th>
+        <th title="Teléfono">Telefono</th>
+        <th title="Dirección">Direccion</th>
+        <th title="Correo">Correo</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @clientes.each do |cliente| %>
+          <tr>
+            <% if can? :manage, Cliente %>
+                <td class="text-center">
+                  <%= link_to edit_cliente_path(cliente), :title => "Editar" do %>
+                      <%= content_tag(:i, "", :class => "fa fa-pencil") %>
+                  <% end %>
+                </td>
+                <td class="text-center">
+                  <%= link_to cliente, :class => 'text-red', remote: true, method: :delete, :title => "Eliminar",
+                              data: {confirm: '¿Seguro desea eliminar el cliente?'} do %>
+                      <%= content_tag(:i, "", :class => "fa fa-trash-o") %>
+                  <% end %>
+                </td>
+            <% end %>
+            <td title="Cliente"><%= cliente.cliente %></td>
+            <td title="Teléfono"><%= cliente.telefono.empty? ? '-' : cliente.telefono %></td>
+            <td title="Dirección"><%= cliente.direccion.empty? ? '-' : cliente.direccion %></td>
+            <td title="Correo"><%= cliente.email.empty? ? '-' : cliente.email %></td>
+          </tr>
+      <% end %>
       </tbody>
     </table>
   </div>

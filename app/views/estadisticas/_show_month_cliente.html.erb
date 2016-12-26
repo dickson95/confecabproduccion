@@ -1,0 +1,29 @@
+<div>
+  <div class="callout callout-info">
+    <h4><%= params[:month] %></h4>
+  </div>
+  <div id="cliente_mensual<%= params[:year_month].strip %>"></div>
+  <button type="button" class="close btn btn-block btn-sm margin" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    Cerrar
+  </button>
+  <script type="text/javascript">
+    <% if @amount_monthly.empty? %>
+      $("#cliente_mensual<%= params[:year_month].strip %>").html("<h4>No hay datos</h4>");
+    <% else %>
+    $("#cliente_mensual<%= params[:year_month].strip %>").css("height","200px");
+    new Morris.Bar({
+      element: "cliente_mensual<%= params[:year_month].strip %>",
+      data: [
+          <%@amount_monthly.each do |amount|%>
+            {cliente: '<%=amount.cliente.name%>', value: <%=amount.cantidad%>},
+          <%end%>
+      ],
+      xkey: 'cliente',
+      ykeys: ['value'],
+      labels: ['Cantidad'],
+      resize: true
+    });
+    <% end %>
+  </script>
+</div>

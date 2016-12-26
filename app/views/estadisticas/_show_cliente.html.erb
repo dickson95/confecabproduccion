@@ -1,0 +1,27 @@
+<div>
+  <div class="callout callout-info">
+    <h4>Año para <%= params[:cliente].capitalize %></h4>
+  </div>
+  <div id="annual<%= params[:year] %>" style="height: 200px;"></div>
+  <button type="button" class="close btn btn-block btn-sm margin" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    Cerrar
+  </button>
+  <script type="text/javascript">
+    new Morris.Bar({
+      element: "annual<%= params[:year] %>",
+      data: [
+        <% @programaciones.each do |programacion| %>
+        {
+          cliente: '<%= @meses[programacion.mes.strftime("%m")][:string] %>',
+          value: <%= programacion.lotes.current_state.state_filtered(5).joins(:control_lotes).where("lotes.cliente_id = ?", @cliente.first.id).sum("lotes.cantidad") %>
+        },
+        <%end%>
+      ],
+      xkey: 'cliente',
+      ykeys: ['value'],
+      labels: ['Cantidad'],
+      resize: true
+    });
+  </script>
+</div>

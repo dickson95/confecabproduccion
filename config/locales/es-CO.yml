@@ -23,6 +23,23 @@ es-CO:
     sessions:
       user:
         signed_in: "Bienvenido al sistema de producción para Confecab y D&C"
+    mailer:
+      confirmation_instructions:
+        subject: "Instrucciones de confirmación"
+      reset_password_instructions:
+        subject: "Instrucciones para reestablecer la contraseña"
+      unlock_instructions:
+        subject: "Instrucciones para desbloquear cuenta"
+      password_change:
+        subject: "Contraseña cambiada"
+    passwords:
+        no_token: "Revise la dirección en la barra de navegación."
+        send_instructions: "Recibiras un correo con las instrucciones para restaurar tu contraseña en un momento. No olvides revisar el spam."
+        send_paranoid_instructions: "Si tu correo existe en la base de datos recibiras un correo con las instrucciones para restaurar tu contraseña en un momento. No olvides revisar el spam."
+        updated: "Tu contraseña fue reestablecida. Has iniciado sesión"
+        updated_not_active: "Contraseña cambiada correctamente."
+        user:
+          send_instructions: "Recibiras un correo con las instrucciones para restaurar tu contraseña en un momento. No olvides revisar el spam."
   activerecord:
     errors:
       messages:
@@ -30,6 +47,13 @@ es-CO:
         restrict_dependent_destroy:
           has_one: "No se puede eliminar el registro porque existe un %{record} dependiente"
           has_many: "No se puede eliminar el registro porque existen %{record} dependientes"
+      models:
+        user:
+          attributes:
+            username:
+              not_found: "Nombre de usuario no encontrado"
+            email:
+              not_found: "Correo no encontrado"
   date:
     abbr_day_names:
     - dom

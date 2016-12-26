@@ -1,0 +1,50 @@
+<div>
+  <div class="callout callout-info">
+    <h4><%= @meses[params[:month]][:string] %></h4>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Programación de este mes</h5>
+      <div id="programacion_mes<%= "#{params[:year]}#{params[:month]}" %>" style="height: 100px;"></div>
+    </div>
+    <div class="col-md-8">
+      <h5>Avance de plantas</h5>
+      <div id="relatives<%= "#{params[:year]}#{params[:month]}" %>" style="height: 250px;"></div>
+    </div>
+  </div>
+  <button type="button" class="close btn btn-block btn-sm margin" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+    Cerrar
+  </button>
+  <script type="text/javascript">
+    new Morris.Donut({
+      element: 'programacion_mes<%= "#{params[:year]}#{params[:month]}" %>',
+      data: [
+        {label: 'Incompleto', value: "<%= 100 - @global_percente.round %>"},
+        {label: 'Completado', value: "<%= @global_percente.round %>"}
+      ],
+      colors: [
+        "#D8DADC",
+        "#1868AE"
+      ],
+      formatter: function (value, data) {
+        return value + '%';
+      },
+      resize: true
+    });
+    new Morris.Bar({
+      element: 'relatives<%= "#{params[:year]}#{params[:month]}" %>',
+      data: [
+        {planta: 'Confección', value: <%= @confeccion_relative.round %>},
+        {planta: 'Terminación', value: <%= @terminacion_relative.round %>}
+      ],
+      xkey: 'planta',
+      ykeys: ['value'],
+      labels: ['Procentaje'],
+      hoverCallback: function (index, options, content, row) {
+        return row['planta'] + " Total: " + row['value'] + "%";
+      },
+      resize: true
+    });
+  </script>
+</div>
