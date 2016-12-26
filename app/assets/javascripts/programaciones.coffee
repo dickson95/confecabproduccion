@@ -103,16 +103,6 @@ $(document).on "ready", ->
     else
       tab.addClass("nav-justified")
 
-  # Editar la cantidad de la meta mensual
-  $("table").on "keyup", "input#programacion_meta_mensual", ->
-    target = $(this).val()
-    programacion_id = $(this).data("month")
-    $.ajax
-      url: 'programaciones/' + programacion_id + '/update_meta_mensual'
-      type: 'POST'
-      data:
-        monthly_target: target
-
 
   $(window).resize ->
     if $(document).width() < 1263

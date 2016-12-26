@@ -156,17 +156,6 @@ class ProgramacionesController < ApplicationController
     end
   end
 
-  def update_meta_mensual
-    program_params = params.permit(:monthly_target, :programacion_id)
-    Programacion.where("empresa = ? and  EXTRACT(year_month from mes) = ?",
-                       session[:selected_company], program_params[:programacion_id])
-        .update(:meta_mensual => program_params[:monthly_target])
-
-    respond_to do |format|
-      format.json { head :no_content }
-    end
-  end
-
   private
   def set_meses
     @meses = Programacion.meses

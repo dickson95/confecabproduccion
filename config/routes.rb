@@ -22,7 +22,6 @@ Rails.application.routes.draw do
     patch :generate, on: :member # Editar una parte concreta, es patch
     patch :add_lotes_to_programing, as: :add_lotes, on: :collection # Para editar un atributo concreto; es patch
     patch :update_row_order, on: :collection
-    post :update_meta_mensual
   end
 
   # Rutas de los usuarios

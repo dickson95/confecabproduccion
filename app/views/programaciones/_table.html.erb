@@ -76,14 +76,6 @@
               <p><strong>Precio total:</strong> <%= @total %> </p>
           <% end %>
         </div>
-        <% if can? :update, Programacion %>
-            <div class="pull-right">
-              <%= content_tag :input, "", data: {:month => params[:month]},
-                              :class => "form-control input-sm col-xs-6", :placeholder => "Meta mensual", :type => "number",
-                              :value => monthly_target(params[:month]), :id => "programacion_meta_mensual" %>
-            </div>
-            <label class="pull-right col-xs-2" for="programacion_meta_mensual">Meta</label>
-        <% end %>
       </td>
       <td colspan="<%= can?(:prices, Lote) && can?(:update, Programacion) ? 4 : 2 %>" style="margin-right:0px; padding-right:0px;">
         <% if can? :update, Programacion %>
