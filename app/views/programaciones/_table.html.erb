@@ -17,15 +17,23 @@
           <ul class="dropdown-menu pull-right">
             <li>
               <%= link_to programacion_options_export_path(params[:month], format_export: "xlsx"), remote: true do %>
-                  <%= content_tag :i, "", :class => "fa fa-file-excel-o" %>
-                  Excel
+                  <i class="fa fa-file-excel-o hidden-xs" aria-hidden="true"></i>
+                  <span class="hidden-xs">Excel</span>
+                  <h4 class="visible-xs">
+                    <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                    Excel
+                  </h4>
               <% end %>
             </li>
             <li>
-              <%= link_to export_pdf_programaciones_path(format: "pdf", :month => params[:month]) do %>
-                  <%= content_tag :i, "", :class => "fa fa-file-pdf-o" %>
-                  PDF
-              <% end %>
+              <%= link_to export_pdf_programaciones_path(format: "pdf", :month => params[:month]), :target => "_blank" do %>
+                  <i class="fa fa-file-pdf-o hidden-xs" aria-hidden="true"></i>
+                  <span class="hidden-xs">PDF</span>
+                  <h4 class="visible-xs">
+                    <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
+                    PDF
+                  </h4>
+            <% end %>
             </li>
           </ul>
         </div>

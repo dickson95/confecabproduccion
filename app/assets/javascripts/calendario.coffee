@@ -57,10 +57,10 @@ $(document).ready ->
     # renderizar el evento en el calendario
     # El último argumento 'true' causa que el evento quede fijo al calendario (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
     $('#calendar').fullCalendar 'renderEvent', copiedEventObject, true
+    $(this).remove()
     update_ingresara_a_planta(date._d, $(this).data("url"))
 
   event_drop = (e) ->
-    console.log e
     update_ingresara_a_planta(e.start._d, e['data-url'])
 
 
@@ -79,8 +79,8 @@ $(document).ready ->
       week: 'semana'
       day: 'día'
     events: $('#calendar').data("url")
-    editable: true
-    droppable: true
+    editable: $("#actions").data("editable")
+    droppable: $("#actions").data("droppable")
     monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
       'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
     monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'
