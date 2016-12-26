@@ -1,26 +1,35 @@
-<div class="login-panel panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title">Cambiar contraseña</h3>
+<div class="login-box">
+  <div class="login-logo">
+    <%= link_to root_path do %>
+        <b>CONFE</b>CAB
+    <% end %>
   </div>
-  <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
-  <div class="panel-body">
-    <%= f.error_notification %>
-
-    <%= f.input :reset_password_token, as: :hidden %>
-    <%= f.full_error :reset_password_token %>
-
-    <div class="form-inputs">
-      <%= f.input :password, label: "Nueva contraseña", required: true, autofocus: true, hint: ("#{@minimum_password_length} caracteres como mínimo" if @minimum_password_length) %>
-      <%= f.input :password_confirmation, label: "Confirmar contraseña", required: true %>
-    </div>
-    <div class="form-actions">
-      <%= f.button :submit, "Aceptar", class:"btn btn-lg btn-primary btn-block" %>
-    </div>
+  <div class="login-box-body">
+    <p class="login-box-msg">Cambiar contraseña</p>
+    <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+        <%= f.error_notification %>
+        <%= f.input :reset_password_token, as: :hidden %>
+        <%= f.full_error :reset_password_token %>
+        <%= f.input :password, required: true, autofocus: true, placeholder: 'Cédula o correo',
+                    label: "Nueva contraseña", wrapper: :vertical_input_feedback do %>
+            <%= f.input_field :password, class: 'form-control' %>
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <% end %>
+        <%= f.input :password_confirmation, required: true, autofocus: true, placeholder: 'Cédula o correo',
+                    label: "Confirmar contraseña", wrapper: :vertical_input_feedback do %>
+            <%= f.input_field :password_confirmation, class: 'form-control' %>
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+        <% end %>
+        <div class="row">
+          <div class="col-xs-8">
+            <%= render "devise/shared/links" %>
+          </div>
+          <div class="col-xs-4">
+            <%= f.button :submit, 'Aceptar', class: 'btn-primary btn-block btn-flat' %>
+          </div>
+        </div>
+    <% end %>
   </div>
-  <div class="panel-footer">
-      <%= render "devise/shared/links" %>
-  </div>
-  <% end %>
 </div>
 
 

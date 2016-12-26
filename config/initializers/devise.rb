@@ -277,6 +277,6 @@ Devise.setup do |config|
     Devise::RegistrationsController.layout proc { |controller| user_signed_in? ? "application" : "devise/login" }
     # Devise::ConfirmationsController.layout "devise"
     # Devise::UnlocksController.layout "devise"
-    # Devise::PasswordsController.layout "devise"
+    Devise::PasswordsController.layout "devise/login"
   end
 end
