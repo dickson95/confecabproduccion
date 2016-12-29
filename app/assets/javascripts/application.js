@@ -34,6 +34,26 @@
 
 
 $(document).on("ready", function () {
+    function getCookie(cname) {
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    body = $("body");
+    $(".sidebar-toggle").on("click", function(){
+        var collapse = getCookie("sidebar_position") == "" ? ("sidebar-collapse") : ("");
+        document.cookie = "sidebar_position= "+ collapse+"; path=/";
+    });
     //Remover mensajes informativos
     setTimeout(function () {
         $("#notice").slideUp("normal", function () {
@@ -41,7 +61,7 @@ $(document).on("ready", function () {
         });
     }, 7000);
 
-    $("body").on('show.bs.dropdown', '.dropdown', function (e) {
+    body.on('show.bs.dropdown', '.dropdown', function (e) {
         $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
     }).on('hide.bs.dropdown', '.dropdown', function (e) {
         $(this).find('.dropdown-menu').first().stop(true, true).slideUp();

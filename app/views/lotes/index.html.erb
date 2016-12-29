@@ -13,7 +13,7 @@
 <% can_pri = can? :prices, Lote %>
 <div class="box box-primary with-border" style="margin-top: 20px;">
   <div class="box-header">
-    <h4 class="box-title">Lotes</h4>
+    <h4 class="box-title">Lotes <span class="label label-primary"><%= Lote.where(:empresa => session[:selected_company] ? "CAB" : "D&C").count %></span></h4>
     <div class="box-tools pull-right">
       <% if can? :export, Lote %>
           <%= link_to options_export_lotes_path, :remote => true, :class => "btn-sm", :id => "exportar", :title => "Exportar excel" do %>
@@ -31,11 +31,14 @@
   </div>
   <div class="box-body">
     <div class="nav-tabs-custom">
-      <% active = @estados.first.id %>
-
+      <% active = cookies[:tab_active] || @estados.first.id %>
+      <% active = active.to_i %>
       <ul class="nav nav-tabs">
         <% @estados.each do |estado| %>
-          <li class="<%= "active" if estado.id == active %>" data-url-tabs="<%= lotes_path(format: :js, state: estado.id) %>"><%= link_to estado.name.capitalize, "##{estado.name.downcase}", data:{:toggle => "tab"} %></li>
+            <% id = estado.id %>
+          <li class="<%= "active" if id == active %>" data-url-tabs="<%= lotes_url(format: :js, state: id) %>" data-id="<%= id %>">
+            <%= link_to estado.name.capitalize, "##{estado.name.downcase}", data:{:toggle => "tab"} %>
+          </li>
         <% end %>
       </ul>
       <div class="tab-content no-padding">

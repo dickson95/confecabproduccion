@@ -2,52 +2,6 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).on 'ready', ->
-
-  load_tabs = (ele=null)->
-    ele ||= $(".nav-tabs").find(".active").data("url-tabs")
-    $.ajax(
-      url: ele
-      type: "GET"
-    )
-  $("body").on 'ajax:success', '.delete', (e, data, status, xhr) ->
-    $('#page-wrapper').prepend(data)
-    $(this).closest("tr").remove()
-    $.floatingMessage "Registro eliminado con éxito.", {
-      position: "bottom-right"
-      height: 80
-      time: 4000
-      className: "ui-state-active"
-    }
-  $("li[data-url-tabs]").click ->
-    load_tabs($(this).data("url-tabs"))
-  load_tabs()
-
-
-  $('table').on('ajax:complete', '.change', (e, xhr, status) ->
-    if xhr.status == 304
-      $.floatingMessage "El lote no tiene programación.\n No puede pasar de integración.", {
-        position: "bottom-right"
-        height: 80
-        time: 4000
-        className: "ui-state-error"
-      }
-      $(".dropdown-menu").hide().parent().removeClass("open")
-  ).on('ajax:success', '.change', (e, data, status, xhr) ->
-    if xhr.status == 200
-      $.floatingMessage data.message, {
-        position: "bottom-right"
-        height: 80
-        time: 4000
-        className: "ui-state-active"
-      }
-      dropd = $(this)
-      tr = dropd.closest("tr")
-      tr.css("background-color", data.process.color_claro)
-      tr.find("td.state").css("background-color", data.process.color).text(data.process.name)
-      dropd.closest("td").html(data.dropdown)
-      $(".overlay").remove()
-  )
-
   # Inputs con fecha administrada por parte de jQuery
   minimumDate = ->
     $("#lote_fecha_entrada").val()
