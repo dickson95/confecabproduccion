@@ -17,8 +17,10 @@ class LotesController < ApplicationController
   # GET /lotes
   # GET /lotes.json
   def index
+    @estados = Estado.all
     respond_to do |format|
       format.html
+      format.js
       format.json { render json: data_tables(params) }
     end
   end

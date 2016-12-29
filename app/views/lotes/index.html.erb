@@ -20,6 +20,7 @@
               <i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i>
           <% end %>
       <% end %>
+
       <% if can? :create, Lote %>
           <%= link_to new_lote_path(:plc => controller_name), :title => "Nuevo lote", :class => "btn-sm" do %>
               <%= content_tag :i, "", :class => "fa fa-plus fa-2x" %>
@@ -29,25 +30,20 @@
 
   </div>
   <div class="box-body">
-    <table class="table table-striped table-bordered" id="lotes" width="100%" data-source="<%= lotes_path(format: :json) %>">
-      <thead>
-      <tr>
-        <th title="Identificador">#</th>
-        <th style="max-width: 40px;"></th>
-        <th class="col-md-2" style="min-width: 140px;" title="Cliente">Cliente</th>
-        <th class="col-md-2" style="min-width: 80px;" title="Referencia">Referencia</th>
-        <th class="col-md-1" title="OP de lote">OP</th>
-        <th class="col-md-1" title="Cantidad">Cant</th>
-        <th class="col-md-2" title="Descripción de la prenda">Descripción</th>
-        <% if can_pri %>
-            <th class="col-md-2" title="Precio unitario">Precio</th>
-            <th class="col-md-2" title="Precio total">Total</th>
+    <div class="nav-tabs-custom">
+      <% active = @estados.first.id %>
+
+      <ul class="nav nav-tabs">
+        <% @estados.each do |estado| %>
+          <li class="<%= "active" if estado.id == active %>" data-url-tabs="<%= lotes_path(format: :js, state: estado.id) %>"><%= link_to estado.name.capitalize, "##{estado.name.downcase}", data:{:toggle => "tab"} %></li>
         <% end %>
-      </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <!--Fin de la lista-->
+      </ul>
+      <div class="tab-content no-padding">
+        <% @estados.each do |estado| %>
+            <div class="tab-pane <%= "active" if estado.id == active %>" id="<%= estado.name.downcase %>"></div>
+        <% end %>
+      </div>
+    </div>
   </div>
   <div id="targets" data-padding="[<%= can_pri ? "1, 7" : "1" %>]" data-orderable="[1, 3, 4, 5<%= ", 7, 8" if can_pri  %>]"></div>
 </div>

@@ -2,6 +2,13 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).on 'ready', ->
+
+  load_tabs = (ele=null)->
+    ele ||= $(".nav-tabs").find(".active").data("url-tabs")
+    $.ajax(
+      url: ele
+      type: "GET"
+    )
   $("body").on 'ajax:success', '.delete', (e, data, status, xhr) ->
     $('#page-wrapper').prepend(data)
     $(this).closest("tr").remove()
@@ -11,6 +18,10 @@ $(document).on 'ready', ->
       time: 4000
       className: "ui-state-active"
     }
+  $("li[data-url-tabs]").click ->
+    load_tabs($(this).data("url-tabs"))
+  load_tabs()
+
 
   $('table').on('ajax:complete', '.change', (e, xhr, status) ->
     if xhr.status == 304
@@ -36,45 +47,6 @@ $(document).on 'ready', ->
       dropd.closest("td").html(data.dropdown)
       $(".overlay").remove()
   )
-  # DataTables
-  $('#lotes').DataTable
-    serverSide: true,
-    processing: true,
-    ajax:
-      url: $("#lotes").data("source")
-      beforeSend: ->
-        load_state = '<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>'
-        $("#lotes").closest(".box").append(load_state)
-      complete: ->
-        $("#lotes").closest(".box").find(".overlay").remove()
-    language:
-      search: 'Buscar:&nbsp;'
-      lengthMenu: 'Mostrar _MENU_ registros'
-      info: 'Resultados _START_ a _END_ de _TOTAL_ '
-      infoEmpty: 'No hay datos o intente de nuevo'
-      infoFiltered: '(filtrado de _MAX_ registros)'
-      infoPostFix: ''
-      loadingRecords: 'Cargando...'
-      zeroRecords: 'No se encuentran registros'
-      emptyTable: 'No hay datos disponibles'
-      paginate:
-        previous: 'Anterior'
-        next: 'Siguiente'
-    order: [[0, "desc"]]
-    columnDefs: [
-      { className: "no-padding-top no-padding-bottom", "targets": $("#targets").data("padding") }
-      {
-        'targets': [0]
-        'visible': false
-        'searchable': false
-      }
-      {
-        'targets': $("#targets").data("orderable")
-        'orderable': false
-      }
-    ]
-  $("#lotes").parent().addClass("table-responsive")
-  $('.dataTables_filter label').after $('.dataTables_filter label input[type="search"]').detach()
 
   # Inputs con fecha administrada por parte de jQuery
   minimumDate = ->
