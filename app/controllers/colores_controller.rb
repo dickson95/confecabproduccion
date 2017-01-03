@@ -3,7 +3,7 @@ class ColoresController < ApplicationController
         @color = Color.new
     	
         respond_to do |wants|
-            wants.html # new.html.erb
+            wants.html # create.html.erb
             wants.xml  { render :xml => @color }
         end
     end

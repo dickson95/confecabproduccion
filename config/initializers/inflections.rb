@@ -20,8 +20,8 @@ ActiveSupport::Inflector.inflections do |inflect|
   inflect.uncountable %w( campus lunes martes miercoles jueves viernes )
 
   inflect.irregular('tipo_prenda', 'tipos_prendas')
-  inflect.irregular('op', 'op_s')
   inflect.irregular('sub_estado', 'sub_estados')
   inflect.irregular('control_lote', 'control_lotes')
+  inflect.irregular('seguimiento_control_lote', 'seguimientos_control_lotes')
   inflect.irregular('user', 'users')
 end

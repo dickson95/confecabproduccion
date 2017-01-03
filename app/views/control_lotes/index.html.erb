@@ -71,8 +71,8 @@
             <td title="Días en proceso"><%= days control_lote.fecha_ingreso, control_lote.fecha_salida %></td>
             <td title="Observaciones"><%= control_lote.observaciones %></td>
             <% if can? :update_cantidad, ControlLote %>
-                <td style="padding: 1px;">
-                  <%= content_tag :input, "", data: {:control_id => control_lote.id}, :value => control_lote.cantidad, :type => "number", :class => "form-control input-sm cantidades" %>
+                <td class="no-padding text-center">
+                  <%= wip_tracing(control_lote) %>
                 </td>
             <% end %>
           </tr>

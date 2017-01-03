@@ -25,4 +25,27 @@ $(document).on "ready", ->
         $("#cantidad_proceso").text(data.total)
     )
     return
+
+
+  $("form[data-remote]").on("ajax:success", (e, data, status, xhr)->
+    $.floatingMessage "Dato registrado", {
+      position: "bottom-right"
+      height: 50
+      width: 130
+      time: 4000
+      className: "ui-state-active"
+    }
+  ).on("ajax:error", (e, xhr, status, error) ->
+    mess = ""
+    $.each xhr.responseJSON.cantidad, (i, v)->
+      m =  v + "<br>"
+      mess = mess + m
+
+    mess = mess + "<br> Click para cerrar"
+    $.floatingMessage mess, {
+      position: "bottom-right"
+      height: 80
+      className: "ui-state-error"
+    }
+  )
 return

@@ -38,4 +38,31 @@ module ControlLotesHelper
 		return @control_lote.fecha_ingreso_input if !@control_lote.nil?
     Time.zone.utc_to_local(Time.new) + 60
 	end
+
+	# wip_tracing: Definir si el campo para modificar la cantidad en este proceso debe o no aparecer
+	def wip_tracing(control_lote)
+		if control_lote.estado_id > 3
+			form_cantidades(control_lote)
+		else
+			tracing = control_lote.seguimientos.last
+			 !tracing.nil? ? tracing.cantidad : "0"
+		end
+	end
+
+	private
+
+	def form_cantidades(control_lote)
+		simple_form_for [control_lote, Seguimiento.new],format: :json, remote: true, html:{ id: "new_seguimiento_#{control_lote.id}" }  do |f|
+			f.input(:cantidad, label: false,  wrapper: :vertical_input_group) do
+				(
+				f.input_field(:cantidad, :class => "form-control input-sm") +
+						content_tag(:div, "", :class => "input-group-btn") do
+							f.button(:button, :class => "btn btn-primary btn-sm") do
+								content_tag :i, "", :class => "fa fa-floppy-o"
+							end
+						end
+				)
+			end
+		end
+	end
 end

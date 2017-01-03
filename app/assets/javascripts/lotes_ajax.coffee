@@ -17,7 +17,7 @@ $(document).on 'ready', ->
         )
 
   $("body").on 'ajax:success', '.delete', (e, data, status, xhr) ->
-    $('#page-wrapper').prepend(data)
+    $('#page-wrapper').prepenactived(data)
     remove_animate_tr($(this).closest("tr"))
     $.floatingMessage "Registro eliminado con éxito.", {
       position: "bottom-right"

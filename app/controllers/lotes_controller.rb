@@ -189,6 +189,7 @@ class LotesController < ApplicationController
 
   def update_programacion
     par = params.require(:lote).permit(:year, :month, :day)
+    par[:month] = "0#{par[:month]}" if par[:month].to_i < 10
     programacion = Programacion.get_per_month("#{par[:year]}#{par[:month]}", session[:selected_company])
     respond_to do |format|
       if @lote.update(:programacion_id => programacion.first.id, :ingresara_a_planta => "#{par[:year]}-#{par[:month]}-#{par[:day]}")

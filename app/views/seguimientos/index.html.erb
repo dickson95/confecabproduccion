@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Seguimientos</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Cantidad</th>
+      <th>Control lote</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @seguimientos.each do |seguimiento| %>
+      <tr>
+        <td><%= seguimiento.cantidad %></td>
+        <td><%= seguimiento.control_lote %></td>
+        <td><%= link_to 'Show', seguimiento %></td>
+        <td><%= link_to 'Edit', edit_seguimiento_path(seguimiento) %></td>
+        <td><%= link_to 'Destroy', seguimiento, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Seguimiento', new_seguimiento_path %>

@@ -1,4 +1,5 @@
 class ControlLote < ApplicationRecord
+  has_many :seguimientos
   belongs_to :lote, optional: true
   belongs_to :estado
   belongs_to :sub_estado, optional: true
@@ -8,7 +9,10 @@ class ControlLote < ApplicationRecord
   
   # Validaciones
   validates :estado, :fecha_ingreso, presence: true
-  
+
+  scope :prev, ->(id, lote_id) { where("id < ? and lote_id = ?", id, lote_id).last }
+  scope :next, ->(id, lote_id) { where("id > ? and lote_id = ?", id, lote_id).first }
+
   # Métodos
   
   def sub_estado_id=(val)
