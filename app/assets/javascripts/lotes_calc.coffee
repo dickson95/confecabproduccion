@@ -1,10 +1,11 @@
 $(document).on "ready", ->
   format_price_u = undefined
-  $("tbody").on "click focus", "tr > td > input.lote_precio_unitario", ->
+  lotes = $("body.lotes")
+  lotes.on "click focus", "tr > td > input.lote_precio_unitario", ->
     if $(this).val() == "$0"
       $(this).val("")
 
-  $("tbody").on("click keyup", "tr > td > input.lote_precio_unitario", ->
+  lotes.on("click keyup", "tr > td > input.lote_precio_unitario", ->
     unit_price = $(this).val()
     id = $(this).data("lote")
     amount = $(this).closest("tr").find("span[data-cantidad]").data("cantidad")

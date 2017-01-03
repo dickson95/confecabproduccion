@@ -7,9 +7,18 @@ $(document).on 'ready', ->
       type: "GET"
     )
 
+  remove_animate_tr = (tr)->
+     tr.children('td').animate(
+        padding: 0
+      ).wrapInner('<div />')
+        .children()
+        .slideUp(->
+          $(this).closest('tr').remove()
+        )
+
   $("body").on 'ajax:success', '.delete', (e, data, status, xhr) ->
     $('#page-wrapper').prepend(data)
-    $(this).closest("tr").remove()
+    remove_animate_tr($(this).closest("tr"))
     $.floatingMessage "Registro eliminado con éxito.", {
       position: "bottom-right"
       height: 80
@@ -44,14 +53,6 @@ $(document).on 'ready', ->
       }
       dropd = $(this)
       tr = dropd.closest("tr")
-      tr.children('td')
-        .animate(
-          padding: 0
-        )
-        .wrapInner('<div />')
-        .children()
-        .slideUp(->
-          $(this).closest('tr').remove()
-        )
+      remove_animate_tr(tr)
       $(".overlay").remove()
   )
