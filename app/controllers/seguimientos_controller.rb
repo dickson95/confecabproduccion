@@ -25,15 +25,16 @@ class SeguimientosController < ApplicationController
   # POST /seguimientos
   # POST /seguimientos.json
   def create
-    @seguimiento = @control_lote.seguimientos.new(seguimiento_params)
-
+    param_amo = seguimiento_params[:cantidad]
+    amount =  param_amo.strip==""|| param_amo=="0" ? nil : param_amo.to_i + @control_lote.cantidad_last
+    @seguimiento = Seguimiento.seguimientos_status_change(amount, @control_lote, action_name)
     respond_to do |format|
-      if @seguimiento.valid?
-        format.html { redirect_to @seguimiento, notice: 'Seguimiento was successfully created.' }
-        format.json { render json: @seguimiento, status: :created }
+      if @seguimiento[:save]
+        save = @control_lote.seguimientos.order("id desc").offset(1).limit(1).update(:fecha_salida => Time.new)
+        puts "actualizado último #{save}"
+        format.json { render json: @seguimiento[:seguimiento], status: :created }
       else
-        format.html { render :new }
-        format.json { render json: @seguimiento.errors, status: :unprocessable_entity }
+        format.json { render json: @seguimiento[:seguimiento].errors, status: :unprocessable_entity }
       end
     end
   end

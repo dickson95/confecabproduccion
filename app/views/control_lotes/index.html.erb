@@ -58,7 +58,7 @@
             <% if can? :destroy, ControlLote %>
                 <td>
                   <%= link_to lote_control_lote_path(@lote, control_lote, :plc => params[:plc]),
-                              data: {:confirm => "¿Esta seguro de eliminar este proceso?"}, method: "delete" do %>
+                              data: {:confirm => "¿Esta seguro de eliminar este proceso?", action: "delete"}, remote: false, method: "delete" do %>
                       <i class="fa fa-trash text-red" aria-hidden="true"></i>
                   <% end %>
                 </td>
@@ -83,7 +83,7 @@
   <div class="box-footer">
     <div class="box-tools pull-right">
       <strong>Cantidad total:</strong> <span><%= @lote.cantidad %></span> <br>
-      <strong>Cantidad en proceso:</strong> <span id="cantidad_proceso"><%= @control_lotes.sum(:cantidad) %></span>
+      <strong>Cantidad en proceso:</strong> <span id="cantidad_proceso"></span>
     </div>
   </div>
 </div>

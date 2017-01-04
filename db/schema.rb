@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170103132655) do
+ActiveRecord::Schema.define(version: 20170103192842) do
 
   create_table "asignaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -67,18 +67,16 @@ ActiveRecord::Schema.define(version: 20170103132655) do
   end
 
   create_table "control_lotes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.datetime "fecha_ingreso",                                                     null: false
+    t.datetime "fecha_ingreso",                             null: false
     t.datetime "fecha_salida"
     t.integer  "lote_id"
-    t.integer  "estado_id",                                                         null: false
-    t.datetime "created_at",                                                        null: false
-    t.datetime "updated_at",                                                        null: false
-    t.integer  "sub_estado_id",                                         default: 0
-    t.decimal  "min_u",                         precision: 9, scale: 2
-    t.integer  "resp_ingreso_id",                                       default: 1, null: false
+    t.integer  "estado_id",                                 null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.integer  "sub_estado_id",                 default: 0
+    t.integer  "resp_ingreso_id",               default: 1, null: false
     t.integer  "resp_salida_id"
     t.text     "observaciones",   limit: 65535
-    t.integer  "cantidad",                                              default: 0
     t.index ["estado_id"], name: "index_control_lotes_on_estado_id", using: :btree
     t.index ["lote_id"], name: "index_control_lotes_on_lote_id", using: :btree
     t.index ["resp_ingreso_id"], name: "index_control_lotes_on_resp_ingreso_id", using: :btree
@@ -166,6 +164,7 @@ ActiveRecord::Schema.define(version: 20170103132655) do
     t.integer  "control_lote_id"
     t.datetime "created_at",      null: false
     t.datetime "updated_at",      null: false
+    t.date     "fecha_salida"
     t.index ["control_lote_id"], name: "index_seguimientos_on_control_lote_id", using: :btree
   end
 

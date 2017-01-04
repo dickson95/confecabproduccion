@@ -42,7 +42,7 @@ module ControlLotesHelper
 	# wip_tracing: Definir si el campo para modificar la cantidad en este proceso debe o no aparecer
 	def wip_tracing(control_lote)
 		if control_lote.estado_id > 3
-			form_cantidades(control_lote)
+			form_cantidades(control_lote) + "#{control_lote.cantidad_last}"
 		else
 			tracing = control_lote.seguimientos.last
 			 !tracing.nil? ? tracing.cantidad : "0"

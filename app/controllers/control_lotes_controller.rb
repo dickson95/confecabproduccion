@@ -25,6 +25,7 @@ class ControlLotesController < ApplicationController
       last_state_lote = @lote.control_lotes.last
       @control_lote = @lote.control_lotes.new(control_lote_params)
       if @control_lote.save
+        Seguimiento.seguimientos_status_change(@lote.cantidad, @control_lote, "cambio_estado")
         last_state_lote.update(:resp_salida_id => current_user, 
           :fecha_salida => control_lote_params[:fecha_ingreso] )
         format.html { redirect_to lote_control_lotes_path(:plc => params[:control_lote][:plc]) }
@@ -55,6 +56,8 @@ class ControlLotesController < ApplicationController
   end
 
   def destroy
+    prev = ControlLote.prev(@control_lote, @control_lote.lote).seguimientos.last
+    prev.update(fecha_salida: nil) if prev
     @control_lote.destroy
     respond_to do |format|
       format.html { redirect_to lote_control_lotes_path(:plc => params[:plc]) }

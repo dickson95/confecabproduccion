@@ -1,5 +1,5 @@
 class ControlLote < ApplicationRecord
-  has_many :seguimientos
+  has_many :seguimientos, :dependent => :destroy
   belongs_to :lote, optional: true
   belongs_to :estado
   belongs_to :sub_estado, optional: true
@@ -14,7 +14,13 @@ class ControlLote < ApplicationRecord
   scope :next, ->(id, lote_id) { where("id > ? and lote_id = ?", id, lote_id).first }
 
   # Métodos
-  
+  # Get para la última cantidad
+  def cantidad_last
+    last = self.seguimientos.last
+    return last.cantidad if last
+    0
+  end
+
   def sub_estado_id=(val)
     val = val.strip.eql?("") ? "0" : val
     write_attribute(:sub_estado_id, val)
