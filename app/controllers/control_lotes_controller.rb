@@ -56,8 +56,7 @@ class ControlLotesController < ApplicationController
   end
 
   def destroy
-    prev = ControlLote.prev(@control_lote, @control_lote.lote).seguimientos.last
-    prev.update(fecha_salida: nil) if prev
+    set_prev_seguimiento
     @control_lote.destroy
     respond_to do |format|
       format.html { redirect_to lote_control_lotes_path(:plc => params[:plc]) }
@@ -108,4 +107,12 @@ class ControlLotesController < ApplicationController
       @user = {}
       @users = User.select("id, name").each{ |e|  @user[e.id] = e.name}
     end
+
+  def set_prev_seguimiento
+    this = ControlLote
+    prev = this.prev(@control_lote, @control_lote.lote).seguimientos.last
+    if prev
+      prev.update(cantidad: @control_lote.cantidad_last + prev.cantidad, fecha_salida: nil)
+    end
+  end
 end

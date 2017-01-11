@@ -62,12 +62,12 @@ class Seguimiento < ApplicationRecord
   def self.continue
     @control_prev = control_prev
     first_seguimiento if !have_seguimientos(@lote)
-    save = (@state < 4 || @action!="cambio_estado") ? seguimientos_register(@amount) : false
-    if save
+    $save = (@state < 4 || @action!="cambio_estado") ? seguimientos_register(@amount) : false
+    if $save
       close_seguimientos          # Cerrar seguimiento del proceso anterior
       reduce_previous_seguimiento # Restar cantidad para el lote en el proceso anterior
     end
-    {seguimiento: @seguimiento, save: save}
+    {seguimiento: @seguimiento, save: $save}
   end
 
   def self.close_seguimientos(control=nil)
