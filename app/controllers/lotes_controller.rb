@@ -75,7 +75,7 @@ class LotesController < ApplicationController
         if @lote.save
           @control = @lote.control_lotes.last
           @control.update(resp_ingreso_id: current_user, fecha_ingreso: Time.new)
-          Seguimiento.seguimientos_register(@lote.cantidad)
+          @control.seguimientos.new(cantidad: @lote.cantidad).save
           format.html { redirect_to lotes_path }
         else
           invalid = true
