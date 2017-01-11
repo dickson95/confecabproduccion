@@ -71,7 +71,7 @@
             <td title="Días en proceso"><%= days control_lote.fecha_ingreso, control_lote.fecha_salida %></td>
             <td title="Observaciones"><%= control_lote.observaciones %></td>
             <% if can? :update_cantidad, ControlLote %>
-                <td class="no-padding text-center">
+                <td class="no-padding text-center col-md-2">
                   <%= wip_tracing(control_lote) %>
                 </td>
             <% end %>

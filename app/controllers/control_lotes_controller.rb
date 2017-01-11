@@ -3,6 +3,7 @@ class ControlLotesController < ApplicationController
   load_and_authorize_resource 
   before_action :set_lote
   before_action :collection_control_lotes, only: [:index, :show]
+  before_action :data_from_tracking, only: [:index, :show]
   before_action :set_control_lotes, only: [:edit, :update, :update_cantidad, :destroy]
   before_action :sub_estados, only: [:new, :edit]
   
@@ -107,6 +108,10 @@ class ControlLotesController < ApplicationController
       @user = {}
       @users = User.select("id, name").each{ |e|  @user[e.id] = e.name}
     end
+
+  def data_from_tracking
+    @seguimiento = Seguimiento.new
+  end
 
   def set_prev_seguimiento
     this = ControlLote

@@ -41,28 +41,18 @@ module ControlLotesHelper
 
 	# wip_tracing: Definir si el campo para modificar la cantidad en este proceso debe o no aparecer
 	def wip_tracing(control_lote)
+		@control_lote = control_lote
 		if control_lote.estado_id > 3
-			form_cantidades(control_lote) + "#{control_lote.cantidad_last}"
+			form_cantidades
 		else
-			tracing = control_lote.seguimientos.last
-			 !tracing.nil? ? tracing.cantidad : "0"
+			"<span>#{control_lote.cantidad_last}</span>".html_safe
 		end
 	end
 
 	private
 
-	def form_cantidades(control_lote)
-		simple_form_for [control_lote, Seguimiento.new],format: :json, remote: true, html:{ id: "new_seguimiento_#{control_lote.id}" }  do |f|
-			f.input(:cantidad, label: false,  wrapper: :vertical_input_group) do
-				(
-				f.input_field(:cantidad, :class => "form-control input-sm") +
-						content_tag(:div, "", :class => "input-group-btn") do
-							f.button(:button, :class => "btn btn-primary btn-sm") do
-								content_tag :i, "", :class => "fa fa-floppy-o"
-							end
-						end
-				)
-			end
-		end
+	def form_cantidades
+		puts @control_lote
+		render partial: "seguimientos/form"
 	end
 end

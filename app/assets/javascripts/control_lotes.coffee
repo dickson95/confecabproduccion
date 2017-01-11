@@ -1,10 +1,5 @@
+# Funciones que son manejadas únicamente por el controlador de los lotes
 $(document).on "ready", ->
-
-  # Remover elemento en ajax success
-  $("a[data-action]").on "ajax:success", ->
-      alert("remover")
-      $(this).closest("tr").remove()
-
   $("input.cantidades").on("focus", ->
     if $(this).val().trim() == "0"
       $(this).val("")

@@ -31,8 +31,7 @@ class SeguimientosController < ApplicationController
     respond_to do |format|
       if @seguimiento[:save]
         save = @control_lote.seguimientos.order("id desc").offset(1).limit(1).update(:fecha_salida => Time.new)
-        puts "actualizado último #{save}"
-        format.json { render json: @seguimiento[:seguimiento], status: :created }
+        format.json { render json: json_response, status: :created }
       else
         format.json { render json: @seguimiento[:seguimiento].errors, status: :unprocessable_entity }
       end
@@ -76,5 +75,12 @@ class SeguimientosController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def seguimiento_params
     params.require(:seguimiento).permit(:cantidad, :control_lote_id)
+  end
+
+  def json_response
+    {
+        seguimiento: @seguimiento[:seguimiento],
+        seg_prev: ControlLote.prev(@control_lote, @control_lote.lote).seguimientos.last
+    }
   end
 end
