@@ -1,5 +1,7 @@
 $(document).on 'ready', ->
   # Funciones
+
+  # Cargar datos de las Tabs al inicio de la carga o cuando se da click en una de ellas
   load_tabs = (ele=null)->
     ele ||= $(".nav-tabs").find(".active").data("url-tabs")
     $.ajax(
@@ -15,16 +17,8 @@ $(document).on 'ready', ->
         .slideUp(->
           $(this).closest('tr').remove()
         )
-
-  $("body").on 'ajax:success', '.delete', (e, data, status, xhr) ->
-    $('#page-wrapper').prepenactived(data)
-    remove_animate_tr($(this).closest("tr"))
-    $.floatingMessage "Registro eliminado con éxito.", {
-      position: "bottom-right"
-      height: 80
-      time: 4000
-      className: "ui-state-active"
-    }
+  # Fin zona funciones
+  # __________________
 
   # Tab
   $("li[data-url-tabs]").click ->

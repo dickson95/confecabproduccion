@@ -1,7 +1,7 @@
 <div class="box box-primary with-border">
   <div class="box-header">
     <h3 class="box-title">Clientes</h3>
-    <% if can? :manage, Cliente %>
+    <% if can? :create, Cliente %>
         <div class="box-tools pull-right">
           <%= link_to new_cliente_path, :title => "Nuevo" do %>
               <%= content_tag(:i, "", :class => "fa fa-plus fa-2x") %>
@@ -12,9 +12,11 @@
   <div class="box-body">
     <table class="table table-striped table-bordered" id="clientes">
       <thead>
+      <% update = can? :update, Cliente %>
+      <% destroy = can? :destroy, Cliente %>
       <tr>
-        <% if can? :manage, Cliente %>
-            <th class="no-padding" colspan="2"> Opc.</th>
+        <% if update || destroy %>
+            <th class="no-padding" colspan="<%= update && destroy ? "2" : "1" %>"> Opc.</th>
         <% end %>
         <th title="Cliente">Cliente</th>
         <th title="Teléfono">Telefono</th>
@@ -26,15 +28,17 @@
       <tbody>
       <% @clientes.each do |cliente| %>
           <tr>
-            <% if can? :manage, Cliente %>
+            <% if update %>
                 <td class="text-center">
                   <%= link_to edit_cliente_path(cliente), :title => "Editar" do %>
                       <%= content_tag(:i, "", :class => "fa fa-pencil") %>
                   <% end %>
                 </td>
+            <% end %>
+            <% if destroy %>
                 <td class="text-center">
                   <%= link_to cliente, :class => 'text-red', remote: true, method: :delete, :title => "Eliminar",
-                              data: {confirm: '¿Seguro desea eliminar el cliente?'} do %>
+                              data: {confirm: '¿Seguro desea eliminar el cliente?', action: 'delete'} do %>
                       <%= content_tag(:i, "", :class => "fa fa-trash-o") %>
                   <% end %>
                 </td>

@@ -42,8 +42,8 @@ end %>
             </td>
             <td class="text-center">
               <% if can? :destroy, user %>
-                  <%= link_to user, method: :delete, class: "text-red",
-                              :title => "Eliminar", data: {confirm: "¿Realmente desea eliminar este usuario?"} do %>
+                  <%= link_to user, data: {confirm: "¿Realmente desea eliminar este usuario?", action: 'delete'}, method: :delete,
+                              class: "text-red", :title => "Eliminar", remote: true do %>
                       <%= content_tag :i, "", :class => "fa fa-trash-o" %>
                   <% end %>
               <% end %>

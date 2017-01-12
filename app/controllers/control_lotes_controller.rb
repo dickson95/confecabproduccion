@@ -60,8 +60,6 @@ class ControlLotesController < ApplicationController
     set_prev_seguimiento
     @control_lote.destroy
     respond_to do |format|
-      format.html { redirect_to lote_control_lotes_path(:plc => params[:plc]) }
-      flash[:success] = "Proceso eliminado."
       format.json { head :no_content }
     end
   end

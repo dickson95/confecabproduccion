@@ -1,6 +1,8 @@
 <% content_for :title do
   "Tablas"
 end %>
+<% update = can? :update, TipoPrenda %>
+<% destroy = can? :destroy, TipoPrenda %>
 <div class="box box-primary with-border">
   <div class="box-header">
     <h4 class="box-title">Descripción de prenda</h4>
@@ -16,8 +18,8 @@ end %>
     <table class="table table-striped table-bordered" id="tipos">
       <thead>
       <tr>
-        <% if can? :create, TipoPrenda %>
-            <th></th>
+        <% if update || destroy %>
+            <th class="no-padding" colspan="<%= update && destroy ? "2" : "1" %>"> Opc.</th>
         <% end %>
         <th title="Descripción">Descripción</th>
       </tr>
@@ -25,10 +27,18 @@ end %>
       <tbody>
       <% @tipos_prendas.each do |tipo_prenda| %>
           <tr>
-            <% if can? :update, TipoPrenda %>
+            <% if update %>
                 <td class="text-center">
                   <%= link_to edit_tipo_prenda_path(tipo_prenda), :title => "Editar" do %>
                       <%= content_tag(:i, "", :class => "fa fa-pencil") %>
+                  <% end %>
+                </td>
+            <% end %>
+            <% if destroy %>
+                <td class="text-center">
+                  <%= link_to tipo_prenda, :class => 'text-red', remote: true, method: :delete, :title => "Eliminar",
+                              data: {confirm: '¿Seguro desea eliminar la descripción?', action: 'delete'} do %>
+                      <%= content_tag(:i, "", :class => "fa fa-trash-o") %>
                   <% end %>
                 </td>
             <% end %>

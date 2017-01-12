@@ -66,11 +66,15 @@ class ClientesController < ApplicationController
   # DELETE /clientes/1
   # DELETE /clientes/1.json
   def destroy
-    @cliente.destroy
+    bef_delete = Before::Delete.new
     respond_to do |format|
-      format.html { redirect_to clientes_path }
-      flash[:success] = "Cliente eliminado."
-      format.json { head :no_content }
+      if bef_delete.child_records(@cliente)
+        format.json { render json: "Algunos lotes dependen de este cliente. No se puede eliminar.", status: :conflict }
+      else
+        @cliente.destroy
+        data= { message: "Cliente eliminado con éxito" }
+        format.json { render json: data }
+      end
     end
   end
   

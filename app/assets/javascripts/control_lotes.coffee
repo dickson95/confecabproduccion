@@ -1,4 +1,4 @@
-# Funciones que son manejadas únicamente por el controlador de los lotes
+# Funciones que son manejadas directamente por el controlador de control_lotes
 $(document).on "ready", ->
   $("input.cantidades").on("focus", ->
     if $(this).val().trim() == "0"
@@ -26,7 +26,6 @@ $(document).on "ready", ->
         $("#cantidad_proceso").text(data.total)
     )
     return
-
 
   $("form[data-remote]").on("ajax:success", (e, data, status, xhr)->
     $.floatingMessage "Dato registrado", {

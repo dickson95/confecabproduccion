@@ -38,8 +38,6 @@ class UsersController < ApplicationController
       if @user.destroy
 
         respond_to do |format|
-          format.html { redirect_to users_path }
-          flash[:success] = "Usuario eliminado correctamente"
           format.json  { head :no_content }
         end
       end
