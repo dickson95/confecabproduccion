@@ -1,3 +1,9 @@
+=begin
+  CONTROLADOR DE CONTROL LOTES
+Todas las acciones a la vista de acuerdo con el paradigma MVC
+Este controlador es dependiente del controlador de los lotes y representa el ciclo de producción del lote
+Todos los procesos que el lote vive el lote deben tener un registro mediante este controlador
+=end
 class ControlLotesController < ApplicationController
   #Solicitar prueba de permisos antes de cargar cualquier acción
   load_and_authorize_resource 

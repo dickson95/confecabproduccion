@@ -1,3 +1,7 @@
+=begin
+  CONTROLADOR DE LOTES
+Todas las acciones a la vista de acuerdo con el paradigma MVC
+=end
 class LotesController < ApplicationController
   # Validación de autorización
   load_and_authorize_resource :except => [:view_details]
@@ -140,7 +144,7 @@ class LotesController < ApplicationController
             hs = Hash.new
             hs[:dropdown] = view_context.render partial: 'dropdown_options', locals: {lote_id: params[:lote_id],
                                                                                       estado_id: @estado}
-            link = view_context.link_to "Ver ciclo", lote_control_lotes_path(@lote)
+            link = view_context.link_to "Ver ciclo", lote_control_lotes_path(@lote, plc: params[:plc] )
             hs[:message] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}. <br> #{link}"
             hs[:process] = {}
             hs[:process][:name] = next_state_lote[:controller].capitalize
@@ -201,6 +205,7 @@ class LotesController < ApplicationController
   end
 
   # PATCH /lotes/:lote_id/total_price
+  # Actualiza los precios (total y unitario) del lote
   def total_price
     lote_price = params.require(:lote).permit(:amount, :unit_price)
     lote_price[:unit_price] = Lote.functional_format lote_price[:unit_price]
@@ -270,6 +275,12 @@ class LotesController < ApplicationController
     id.id
   end
 
+  # Validación de los datos del color.
+  # Define que para todas las tallas exista por lo menos una cantidad mayor a 0
+  # Determina que el campo para el color no esté vacío
+  # Asigna las variables correspondientes para reanudar el formulario en caso de fallar esta validación.
+  # Cómo buena práctica debería estar en el modelo de lote o de color. Puede ser pasado teniendo presentes todas las
+  # implicaciones en ello
   def set_color
     # Totales: Array para los totales por tallas
     totales = Array.new

@@ -1,3 +1,8 @@
+=begin
+  MÓDULO PARA VALIDACIONES ANTES DE ALGÚN EVENTO COMÚN
+Por ejemplo la clase dentro del módulo delete y el método child_records sirve para varificar si hay más registros
+dependientes y se puede usar para evitar que se elimine el registro
+=end
 module Before
   class Delete
     # Define si un registro tiene registros que dependen del mismo. Retorna true en caso de ser así
