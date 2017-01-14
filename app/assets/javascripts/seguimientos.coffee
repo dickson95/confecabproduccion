@@ -5,7 +5,6 @@
 $(document).on "ready", ->
   $("table").on "ajax:success", "form[data-remote]", (e, data, status, xhr) ->
     # Celda de arriva del formulario que se cambia
-    console.log data
     $(this).closest("tr").prev().children("td").last().find("span").text(data.seg_prev.cantidad)
     $(this).closest("td").find("span").text(data.seguimiento.cantidad)
     $(this).find("input").val('')

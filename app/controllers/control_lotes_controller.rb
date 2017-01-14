@@ -64,9 +64,11 @@ class ControlLotesController < ApplicationController
 
   def destroy
     set_prev_seguimiento
+    prev_control
     @control_lote.destroy
     respond_to do |format|
       format.json { head :no_content }
+      format.js
     end
   end
 
@@ -123,5 +125,10 @@ class ControlLotesController < ApplicationController
     if prev
       prev.update(cantidad: @control_lote.cantidad_last + prev.cantidad, fecha_salida: nil)
     end
+  end
+
+  def prev_control
+    @control = ControlLote.prev(@control_lote, @control_lote.lote)
+    @control.update(fecha_salida: nil, resp_salida_id: nil)
   end
 end

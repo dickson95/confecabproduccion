@@ -1,0 +1,10 @@
+<%
+@seguimiento = Seguimiento.new
+@user = {}
+@users = User.select("id, name").each{ |e|  @user[e.id] = e.name}
+prev = ControlLote.prev(@control, @lote)
+%>
+
+$("table > tbody > tr").last().replaceWith("<%= j render 'control_lotes/row', control_lote: prev%>");
+$("table > tbody").append("<%= j render 'control_lotes/row', control_lote: @control%>");
+$("a[data-action='cambio_estado']").replaceWith("<%= j render 'control_lotes/button_cambio_estado' %>");

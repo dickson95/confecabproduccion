@@ -46,7 +46,8 @@
         <li>
           <% change = next_state estado_id %>
           <% if change[:boolean] %>
-              <%= link_to lote_cambio_estado_path(lote_id, :btn => change[:state], :plc => params[:controller]), method: "PATCH", remote: true, :class => "change" do %>
+              <%= link_to lote_cambio_estado_path(lote_id, :btn => change[:state], :plc => params[:controller], format: :json),
+                          method: "PATCH", remote: true, :class => "change" do %>
                   <i class='fa fa-fast-forward fa-fw text-green' aria-hidden='true'></i>
                   <%= change[:view] %>
               <% end %>

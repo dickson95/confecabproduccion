@@ -10,7 +10,7 @@ module ControlLotesHelper
 	# Responsable de salida del proceso
 	# respon_exit(id_responsable)
 	def respon_exit(respon_exit)
-		if !respon_exit.nil?
+		if respon_exit
 			@user[respon_exit.id]
 		end
 	end
@@ -52,7 +52,6 @@ module ControlLotesHelper
 	private
 
 	def form_cantidades
-		puts @control_lote
 		render partial: "seguimientos/form"
 	end
 end

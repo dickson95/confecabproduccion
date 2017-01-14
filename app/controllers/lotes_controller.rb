@@ -140,11 +140,12 @@ class LotesController < ApplicationController
         # Nuevo estado en el historial de los lotes
         if @control.save
           Seguimiento.seguimientos_status_change(@lote.cantidad, @control, action_name)
-          if request.format == "text/javascript"
+          reqfor = request.format
+          if reqfor == "application/json" || reqfor == "text/javascript"
             hs = Hash.new
             hs[:dropdown] = view_context.render partial: 'dropdown_options', locals: {lote_id: params[:lote_id],
-                                                                                      estado_id: @estado}
-            link = view_context.link_to "Ver ciclo", lote_control_lotes_path(@lote, plc: params[:plc] )
+                                                                                      estado_id: @estado}, formats: :html
+            link = view_context.link_to "Ver ciclo", lote_control_lotes_path(@lote, plc: params[:plc])
             hs[:message] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}. <br> #{link}"
             hs[:process] = {}
             hs[:process][:name] = next_state_lote[:controller].capitalize
@@ -152,6 +153,7 @@ class LotesController < ApplicationController
             hs[:process][:color] = estado_full.color
             hs[:process][:color_claro] = estado_full.color_claro
             format.json { render json: hs, status: :ok }
+            format.js { render 'control_lotes/cambio_estado' }
           else
             format.html { redirect_to :back }
             flash[:info] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}."

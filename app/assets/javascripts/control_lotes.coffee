@@ -48,4 +48,5 @@ $(document).on "ready", ->
       className: "ui-state-error"
     }
   )
+
 return
