@@ -1,6 +1,9 @@
 <% content_for :title do
-  "Tablas"
+  "Descripción de prendas"
 end %>
+<% content_for :content_breadcrumb do %>
+    <li><%= link_to "Descripción",tipos_prendas_path %></li>
+<% end %>
 <% update = can? :update, TipoPrenda %>
 <% destroy = can? :destroy, TipoPrenda %>
 <div class="box box-primary with-border">
