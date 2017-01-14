@@ -28,6 +28,8 @@ Rails.application.routes.draw do
   devise_for :users
   resources :users, except: [:create] do
     post 'new' => 'users#create', as: :create, on: :collection
+    patch :lock, on: :member
+    patch :unlock, on: :member
   end
 
   # Rutas de los lotes

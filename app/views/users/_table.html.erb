@@ -1,0 +1,42 @@
+<table class="table table-striped table-bordered">
+  <thead>
+  <tr>
+    <th></th>
+    <th></th>
+    <th title="Nombre">Nombre</th>
+    <th title="Cédula">Cédula</th>
+    <th title="Correo">Correo</th>
+    <th title="Teléfono">Teléfono</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% if @users.empty? %>
+      <tr>
+        <td colspan="<%= can?(:manage, User) ? "6" : "5" %>">No hay datos disponibles</td>
+      </tr>
+  <% else %>
+      <% @users.each do |user| %>
+          <tr>
+            <td class="text-center">
+              <%= link_to user_path(user), {:remote => true, :title => "Ver detalles"} do %>
+                  <%= content_tag :i, "", :class => "fa fa-list-alt" %>
+              <% end %>
+            </td>
+            <td class="text-center">
+              <% lock = user.access_locked? %>
+              <% if can? :lock, user %>
+                  <%= link_to (@lock ? unlock_user_path(user) : lock_user_path(user)), data: {action: "delete"},
+                              method: :patch, class: "text-red", :title => ((@lock ? "Desbloquear" : "Bloquear ")), remote: true do %>
+                      <%= content_tag :i, "", :class => (@lock ? "fa fa-unlock" : "fa fa-lock") %>
+                  <% end %>
+              <% end %>
+            </td>
+            <td title="Nombre"><%= user.name %></td>
+            <td title="Cédula"><%= user.username %></td>
+            <td title="Correo"><%= user.email %></td>
+            <td title="Teléfono"><%= user.telefono %></td>
+          </tr>
+      <% end %>
+  <% end %>
+  </tbody>
+</table>

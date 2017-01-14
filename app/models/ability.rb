@@ -17,7 +17,7 @@ class Ability
     if user.has_rol? :admin
       can :manage, :all
       # Evita que el usuario con el id que se le pase sea eliminado
-      cannot :destroy, User do |u|
+      cannot [:destroy, :lock], User do |u|
         u.id == 1
       end
     elsif user.has_rol? :coor_tiempos

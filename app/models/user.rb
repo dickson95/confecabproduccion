@@ -1,5 +1,8 @@
+=begin
+AUTENTICACIÓN
+Modelo para los usuarios. Tiene los módulos que se usan en devise para las acciones
+=end
 class User < ApplicationRecord
-  # AUTENTICACIÓN
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :lockable,
@@ -38,6 +41,7 @@ class User < ApplicationRecord
   
   
   # MÉTODOS
+  # Definir qué roles tiene un usuario
   def has_rol?(rol_sym)
     roles.any? { |r| r.name.underscore.to_sym == rol_sym }
   end

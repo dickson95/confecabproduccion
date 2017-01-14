@@ -1,3 +1,8 @@
+=begin
+CONTROLADOR DE USUARIOS (USERS)
+Controlador independente del que devise usa para abrir sessions registrar usuarios y demás acciones. Esta clase
+es para uso del administrador del sistema de modo que pueda gestionar los usuarios
+=end
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :destroy, :update]
   
@@ -5,7 +10,10 @@ class UsersController < ApplicationController
   # Validación de autorización
   load_and_authorize_resource
   def index
-    @users = User.all
+    respond_to do |format|
+      format.html
+      format.json {render json: users_json}
+    end
   end
 
   def new
@@ -36,7 +44,6 @@ class UsersController < ApplicationController
   def destroy
     if @user.id != 1
       if @user.destroy
-
         respond_to do |format|
           format.json  { head :no_content }
         end
@@ -57,12 +64,10 @@ class UsersController < ApplicationController
   end
 
   def update
-    puts ''
-    @rol = RolesUser.where(:user_id => @user.id).update(:rol_id => params[:user][:rol_ids])
+    roles_user = RolesUser
+    @rol = roles_user.where(:user_id => @user.id).update(:rol_id => params[:user][:rol_ids])
     if @rol
-
-      @new_rol = RolesUser
-                  .joins(:rol)
+      @new_rol = roles_user.joins(:rol)
                   .where(user_id: params[:id])
                   .pluck("roles.name")
       respond_to do |format|
@@ -71,7 +76,36 @@ class UsersController < ApplicationController
     end
   end
 
+  # Bloquear los usuarios
+  def lock
+    user = User.find(params[:id])
+    user.lock_access!(send_instructions: false)
+    response_json(json: {message: "Usuario #{user.name} bloqueado. Ya no podrá acceder al sistema"})
+  end
+
+  # Desbloquear los usuarios
+  def unlock
+    user = User.find(params[:id])
+    user.unlock_access!
+    response_json(json: {message: "Usuario #{user.name} desbloqueado. Ya puede acceder al sistema"})
+  end
+
   private
+
+  def users_json
+    lock = params[:lock?]
+    @lock = true if lock == "true"
+    @users = User.where("locked_at #{(@lock ? "IS NOT NULL" : "IS NULL")}")
+    view_context.render(partial: "table", formats: :html)
+  end
+
+  # Respuesta con json
+  def response_json(options)
+    respond_to do |format|
+      format.json{render options}
+    end
+  end
+
     def user_params
       params.require(:user).permit(:username, :email, :password, :password_confirmation, :name,
         :telefono, :remember_me, :rol_ids )
