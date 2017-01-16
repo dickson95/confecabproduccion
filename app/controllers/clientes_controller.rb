@@ -72,8 +72,7 @@ class ClientesController < ApplicationController
         format.json { render json: "Algunos lotes dependen de este cliente. No se puede eliminar.", status: :conflict }
       else
         @cliente.destroy
-        data= { message: "Cliente eliminado con éxito" }
-        format.json { render json: data }
+        format.json { render json: { message: "Cliente eliminado con éxito" } }
       end
     end
   end

@@ -32,13 +32,13 @@ class ControlLote < ApplicationRecord
     if !date2.nil?
       with_month = nil
       if date1.strftime("%m") == date2.strftime("%m")
-        with_month = date1.strftime("%d")
+        with_month = I18n::l(date1, format: "%d")
       else
-        with_month = date1.strftime("%d de %b")
+        with_month = I18n::l(date1, format: "%d de %b")
       end
-      "#{with_month} - #{date2.strftime("%d de %b")}"
+      "#{with_month} - #{I18n::l(date2, format: "%d de %b")}"
     else
-      date1.strftime "%d de %b"
+      I18n::l(date1, format: "%d de %b")
     end
   end
 

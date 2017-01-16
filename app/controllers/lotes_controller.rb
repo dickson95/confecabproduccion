@@ -203,7 +203,8 @@ class LotesController < ApplicationController
   # DELETE /lotes/1
   # DELETE /lotes/1.json
   def destroy
-    render json: @lote.destroy, status: :ok
+    @lote.destroy
+    render json: {message: "Lote eliminado."}, status: :ok
   end
 
   # PATCH /lotes/:lote_id/total_price

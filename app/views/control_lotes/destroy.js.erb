@@ -3,7 +3,8 @@
 @user = {}
 @users = User.select("id, name").each{ |e|  @user[e.id] = e.name}
 %>
-$("table > tbody > tr").last().prev().replaceWith("<%= j render 'control_lotes/row', control_lote: @control%>");
+console.log($("tr[data-id='<%= @id %>']"));
+$("tr[data-id='<%= @id %>']").prev().replaceWith("<%= j render 'control_lotes/row', control_lote: @control%>");
 btn_cambio = $("a[data-action='cambio_estado']");
 button = "<%= j render 'control_lotes/button_cambio_estado' %>";
 if(btn_cambio.length > 0) {

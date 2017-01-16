@@ -2,7 +2,7 @@
 <% seguimiento = Seguimiento %>
 <% update_seguimiento = can? :update, seguimiento %>
 <% read_seguimiento = can? :read, seguimiento %>
-<tr>
+<tr data-id="<%= control_lote.id %>">
   <% if can? :update, this %>
       <td>
         <%= link_to edit_lote_control_lote_path(@lote, control_lote, :plc => params[:plc]) do %>
