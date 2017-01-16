@@ -19,16 +19,11 @@ class Seguimiento < ApplicationRecord
     @control_prev = this.control_prev(@control)
     @lote = @control.lote
     last_amount = @control.cantidad_last
-    puts "cantidad pasada #{cantidad}"
-    puts "cantidad última a restar #{last_amount}"
     amount_new = cantidad - last_amount
-    puts "resultado #{amount_new}"
     # el único caso donde se presenta que la nueva cantidad sea menor es cuando se registra la resta en el proceso anterior
     # al actual.
     @amount_new = amount_new < 0 ? cantidad : amount_new
-    puts "resultado si negativo #{@amount_new}"
     res = this.have_seguimientos(@lote) ? subtract : equal_amount(@amount_new)  # Esta es la linea que define la validez de la cantidad
-    puts "res #{res}"
     errors.add(:cantidad, "Ingresaste #{@total}. La cantidad real del lote #{@lote.cantidad}") if res
   end
 
