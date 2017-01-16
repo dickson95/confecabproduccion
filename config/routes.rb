@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     # Más información sobre collection http://guides.rubyonrails.org/routing.html#adding-collection-routes
     get :export_pdf, on: :collection
     get :export_excel, on: :member
+    get :get_row, on: :collection
     patch :generate, on: :member # Editar una parte concreta, es patch
     patch :add_lotes_to_programing, as: :add_lotes, on: :collection # Para editar un atributo concreto; es patch
     patch :update_row_order, on: :collection

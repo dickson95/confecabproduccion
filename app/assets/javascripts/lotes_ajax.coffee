@@ -27,7 +27,7 @@ $(document).on 'ready', ->
   load_tabs()
 
   # Cambio de estado
-  $('.tab-content').on('ajax:complete', '.change', (e, xhr, status) ->
+  $('.lotes .tab-content').on('ajax:complete', '.change', (e, xhr, status) ->
     if xhr.status == 304
       $.floatingMessage "El lote no tiene programación.\n No puede pasar de integración.", {
         position: "bottom-right"

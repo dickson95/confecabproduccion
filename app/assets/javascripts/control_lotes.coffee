@@ -27,7 +27,7 @@ $(document).on "ready", ->
     )
     return
 
-  $("form[data-remote]").on("ajax:success", (e, data, status, xhr)->
+  $(".control_lote form[data-remote]").on("ajax:success", (e, data, status, xhr)->
     $.floatingMessage "Dato registrado", {
       position: "bottom-right"
       height: 50

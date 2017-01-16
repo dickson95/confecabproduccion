@@ -1,5 +1,7 @@
 $(document).on "ready", ->
-# métodos con Ajax
+  body = $("body.programaciones")
+
+  # Función que permite cargar el datapicker cuando se cambia entre meses en la programación
   bindDatePicker = (element)->
     $(element).datepicker
       monthNames: ["Enero", "Febrero", "Marzo", "Abril",
@@ -16,12 +18,14 @@ $(document).on "ready", ->
           url: input.data("url")
           data: {lote: {ingresara_a_planta: date}}
         )
+  # Cargar datapicker
   setDatePicker = ()->
     $(".ingresara_a_planta").each ->
       bindDatePicker($(this))
 
   setDatePicker()
 
+  # Cargar datapicker despues de añadir filas a la tabla o de cambiar entre pestañas
   $("body").on "ajax:success", "a[data-remote], form[data-remote]", (e, data, status, xhr) ->
     setDatePicker()
   # Cambiar la clase active entre las pestañas y la carga de los datos
@@ -34,13 +38,29 @@ $(document).on "ready", ->
       if !$('#' + year).find('div.tab-content div.active').length
         $('#' + year).find('div.current').removeClass('in active').addClass('in active')
 
-  $("body.programaciones").on("ajax:before", "a[data-remote], form[data-remote]", (e) ->
+  # retirar y añadir estado de carga para las solicitudes ajax
+  body.on("ajax:before", "a[data-remote], form[data-remote]", (e) ->
     $("#modal_add").modal("hide")
     load_state = '<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>'
     $(this).closest("body").find("div.box").append(load_state)
   ).on "ajax:complete", "a[data-remote], form[data-remote]", (e, xhr, status) ->
     $(this).closest("body").find("div.box .overlay").remove()
 
+  body.on "ajax:success", ".change", (e, data, status, xhr)->
+    lote_id = data.lote.id
+    $.ajax(
+      url: "programaciones/get_row"
+      data: {lote_id: lote_id}
+      dataType: "json"
+      success: (row, status, xhr)->
+        $("tr[data-item-id='"+lote_id+"']").replaceWith(row.partial)
+        $.floatingMessage data.message, {
+          position: "bottom-right"
+          height: 80
+          time: 4000
+          className: "ui-state-active"
+        }
+    )
 
   # Ancho de las columnas mientras es arrastrada la fila
   fixHelper = (e, ui) ->

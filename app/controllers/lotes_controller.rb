@@ -147,11 +147,7 @@ class LotesController < ApplicationController
                                                                                       estado_id: @estado}, formats: :html
             link = view_context.link_to "Ver ciclo", lote_control_lotes_path(@lote, plc: params[:plc])
             hs[:message] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}. <br> #{link}"
-            hs[:process] = {}
-            hs[:process][:name] = next_state_lote[:controller].capitalize
-            estado_full = Estado.find(@estado)
-            hs[:process][:color] = estado_full.color
-            hs[:process][:color_claro] = estado_full.color_claro
+            hs[:lote] = @lote.as_json
             format.json { render json: hs, status: :ok }
             format.js { render 'control_lotes/cambio_estado' }
           else
