@@ -1,18 +1,12 @@
-<div class="row">
-  <div class="col-xs-9">
-    <%= simple_form_for [@control_lote, @seguimiento],format: :json, remote: true, html:{ id: "new_seguimiento_#{@control_lote.id}" }  do |f| %>
-        <%= f.input(:cantidad, label: false,  wrapper: :vertical_input_group) do %>
-            <%= f.input_field(:cantidad, :class => "form-control input-sm no-padding") %>
-            <div class="input-group-btn">
-              <%= f.button(:button, :class => "btn btn-primary btn-sm") do %>
-                  <i class="fa fa-floppy-o" aria-hidden="true"></i>
-              <% end %>
-            </div>
-        <% end %>
+<%= simple_form_for [@control_lote, @seguimiento], format: :json, remote: true, html: {id: "new_seguimiento_#{@control_lote.id}"} do |f| %>
+    <%= f.hidden_field :proceso, value: params[:process] %>
+    <%= f.input(:cantidad, label: false, wrapper: :vertical_input_group) do %>
+        <%= f.input_field(:cantidad, :class => "form-control input-sm no-padding") %>
+        <div class="input-group-btn">
+          <%= f.button(:button, :class => "btn btn-primary btn-sm") do %>
+              <i class="fa fa-floppy-o" aria-hidden="true"></i>
+          <% end %>
+        </div>
     <% end %>
-  </div>
-  <div class="text-left col-xs-2">
-    <span><%= @control_lote.cantidad_last %></span>
-  </div>
-</div>
+<% end %>
 

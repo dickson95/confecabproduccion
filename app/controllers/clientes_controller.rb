@@ -99,7 +99,7 @@ class ClientesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def cliente_params
       empresa = params[:cliente][:empresa]
-      params[:cliente][:empresa] = Cliente.to_boolean empresa
+      params[:cliente][:empresa] = util.to_boolean empresa
       params.require(:cliente).permit(:cliente, :telefono, :direccion, :email, :empresa,
       :mensaje, :asunto)
     end

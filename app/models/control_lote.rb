@@ -14,6 +14,14 @@ class ControlLote < ApplicationRecord
   scope :next, ->(id, lote_id) { where("id > ? and lote_id = ?", id, lote_id).first }
 
   # Métodos
+  def sub_or_process
+    if sub_estado_id > 0
+      self.sub_estado.sub_estado.capitalize
+    else
+      self.estado.estado.capitalize
+    end
+  end
+
   # Get para la última cantidad
   def cantidad_last
     last = self.seguimientos.last

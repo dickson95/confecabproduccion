@@ -27,7 +27,7 @@ $(document).on "ready", ->
     )
     return
 
-  $(".control_lote form[data-remote]").on("ajax:success", (e, data, status, xhr)->
+  $(".control_lotes").on("ajax:success", "form[data-remote]", (e, data, status, xhr)->
     $.floatingMessage "Dato registrado", {
       position: "bottom-right"
       height: 50
@@ -35,18 +35,16 @@ $(document).on "ready", ->
       time: 4000
       className: "ui-state-active"
     }
-  ).on("ajax:error", (e, xhr, status, error) ->
-    mess = ""
-    $.each xhr.responseJSON.cantidad, (i, v)->
-      m =  v + "<br>"
-      mess = mess + m
-
-    mess = mess + "<br> Click para cerrar"
-    $.floatingMessage mess, {
-      position: "bottom-right"
-      height: 80
-      className: "ui-state-error"
-    }
+  ).on("ajax:error", "form[data-remote]", (e, xhr, status, error) ->
+      input = $(this).find("input[type='number']")
+      parent = input.parent().parent()
+      parent.find("span.help-block").remove()
+      parent.children().addClass("has-error")
+      input.next().children().removeClass("btn-default btn-primary").addClass("btn-danger")
+      parent.append("<span class='help-block text-red'></span>")
+      span = parent.find("span.help-block")
+      $.each xhr.responseJSON.cantidad, (i, v)->
+        span.append(v + "<br>")
   )
 
 return

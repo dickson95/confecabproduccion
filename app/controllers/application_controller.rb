@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :set_company_layout
+  before_action :util
   #Parámetros para el registro de usuarios con username y otros datos en devise
   def configure_permitted_parameters
     added_attrs = [:username, :email, :password, :password_confirmation, :name,
@@ -27,5 +28,9 @@ class ApplicationController < ActionController::Base
       choose = params[:company] == "true" ? true : false
       session[:selected_company] ||= choose
     end
+  end
+
+  def util
+    util = Util.new
   end
 end

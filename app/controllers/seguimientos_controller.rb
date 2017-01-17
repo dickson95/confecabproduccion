@@ -1,5 +1,5 @@
 class SeguimientosController < ApplicationController
-  before_action :set_control_lote, only: [:create]
+  before_action :set_control_lote, only: [:create, :new]
   before_action :set_seguimiento, only: [:show, :edit, :update, :destroy]
 
   # GET /seguimientos
@@ -25,12 +25,10 @@ class SeguimientosController < ApplicationController
   # POST /seguimientos
   # POST /seguimientos.json
   def create
-    param_amo = seguimiento_params[:cantidad]
-    amount =  param_amo.strip==""|| param_amo=="0" ? nil : param_amo.to_i + @control_lote.cantidad_last
-    @seguimiento = Seguimiento.seguimientos_status_change(amount, @control_lote, action_name)
+    @seguimiento = process_or_reprocess
     respond_to do |format|
       if @seguimiento[:save]
-        save = @control_lote.seguimientos.order("id desc").offset(1).limit(1).update(:fecha_salida => Time.new)
+        @control_lote.seguimientos.order("id desc").offset(1).limit(1).update(:fecha_salida => Time.new) if util.to_boolean(params[:seguimiento][:process])
         format.json { render json: json_response, status: :created }
       else
         format.json { render json: @seguimiento[:seguimiento].errors, status: :unprocessable_entity }
@@ -74,7 +72,7 @@ class SeguimientosController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def seguimiento_params
-    params.require(:seguimiento).permit(:cantidad, :control_lote_id)
+    params.require(:seguimiento).permit(:cantidad, :control_lote_id, :proceso)
   end
 
   def json_response
@@ -82,5 +80,19 @@ class SeguimientosController < ApplicationController
         seguimiento: @seguimiento[:seguimiento],
         seg_prev: ControlLote.prev(@control_lote, @control_lote.lote).seguimientos.last
     }
+  end
+
+  def process_or_reprocess
+    param_amo = seguimiento_params[:cantidad]
+    # Evitar que si el valor del usuario viene vacío pueda ser válido
+    blank =  param_amo.strip!="" && param_amo.to_i > 0
+    # Si es por proceso normal
+    if util.to_boolean(params[:seguimiento][:proceso])
+      amount = param_amo.to_i + @control_lote.cantidad_last if blank
+      Seguimiento.seguimientos_status_change(amount, @control_lote, action_name)
+    else # Si es por reproceso
+      seguimiento = @control_lote.seguimientos.new(seguimiento_params)
+      seguimiento.return_units(param_amo.to_i)
+    end
   end
 end

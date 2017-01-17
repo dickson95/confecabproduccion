@@ -42,8 +42,8 @@ module ControlLotesHelper
   # wip_tracing: Definir si el campo para modificar la cantidad en este proceso debe o no aparecer
   def wip_tracing(control_lote)
     @control_lote = control_lote
-    if control_lote.estado_id > 3
-      form_cantidades
+    if control_lote.estado_id > 2
+      arrows
     else
       "<span>#{control_lote.cantidad_last}</span>".html_safe
     end
@@ -51,7 +51,25 @@ module ControlLotesHelper
 
   private
 
-  def form_cantidades
-    render partial: "seguimientos/form"
+  def arrows
+    down + amount + up
+  end
+
+  def up
+    link_to new_control_lote_seguimiento_path(@control_lote, process: false), data:{html: true, toggle: "popover#{@control_lote.id}2", placement: "top"},
+            remote: true, :class => "btn btn-sm margin-r-5" do
+      content_tag :i, "", :class => "fa fa-arrow-up"
+    end
+  end
+
+  def down
+    link_to new_control_lote_seguimiento_path(@control_lote, process: true),data:{html: true, toggle: "popover#{@control_lote.id}1", placement: "bottom"},
+            remote: true, :class => "btn btn-sm margin-r-5" do
+      content_tag :i, "", :class => "fa fa-arrow-down"
+    end
+  end
+
+  def amount
+    content_tag :span, @control_lote.cantidad_last, :class => "margin-r-5"
   end
 end
