@@ -1,3 +1,4 @@
+@estados = Estado.all
 wb = xlsx_package.workbook
 head = wb.styles.add_style :bg_color => "ededfe", :fg_color => "2d3f81", :sz => 30, :alignment => { :horizontal => :center, :vertical => :center }, :border => { :style => :thin, :color =>"00" }
 titles = wb.styles.add_style  :sz => 12, :alignment => {:horizontal => :center, :vertical => :center, :wrap_text => true}, :border => { :style => :thin, :color =>"00" }
@@ -22,14 +23,8 @@ wb.add_worksheet(:name => "#{mes}") do |sheet|
 		row_lote = set_row_programacion_lote lote
 		sheet.add_row row_lote, :style => body, :height => 25, :widths => width_body
 	end
-	if !@position.nil?
-        size_sub = params[:export][:processes_details].eql?("true")   ? @lotes_sub_estados.size : 0
-        size = 4 + size_sub
-        (0..size).each do
-            sheet.merge_cells sheet.rows.fetch(1).cells[(@position..@position += 1)]
-            @position += 1
-        end
-    end
 	sheet.row_style 0, head
+
+  # Mezclar primera fila de para el título
 	sheet.merge_cells sheet.rows.first.cells[(1..cont)]
 end

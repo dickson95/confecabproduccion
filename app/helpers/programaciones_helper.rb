@@ -16,16 +16,14 @@ module ProgramacionesHelper
       wip_width = 15
       wip_d = 5
       @position = result.size
-      result.push("WIP-Ingreso"); widths.push(wip_width)
-      result.push(""); widths.push(wip_d)
-      result.push("WIP-Integración"); widths.push(wip_width)
-      result.push(""); widths.push(wip_d)
-      result.push("WIP-Confección"); widths.push(wip_width)
-      result.push(""); widths.push(wip_d)
-      result.push("WIP-Terminación"); widths.push(wip_width)
-      result.push(""); widths.push(wip_d)
-      result.push("WIP-Completado"); widths.push(wip_width)
-      result.push(""); widths.push(wip_d)
+      # Nombres de los estados en la parte superior de las culumnas
+      @estados.each do |estado|
+        e = estado.name.downcase
+        result.push("Entrada #{e}"); widths.push(wip_width)
+        result.push("Salida #{e}"); widths.push(wip_width)
+        result.push("WIP #{e}"); widths.push(wip_d)
+        result.push("Cant #{e}"); widths.push(wip_d)
+      end
       if export[:processes_details].eql?("true")
         @lotes_sub_estados.each do |sub_estado|
           result.push(sub_estado.name.capitalize); widths.push(15)
@@ -52,18 +50,19 @@ module ProgramacionesHelper
     result.push(lote.cantidad)
     result.push(Money.new("#{lote.precio_u}00").format) if export[:precio_u] == "1"
     result.push(Money.new("#{lote.precio_t}00").format) if export[:precio_t] == "1"
+    # Exportar los procesos adicionales
     if export[:processes] == "1"
       hs = set_wip lote
-      result.push hs[:d1]
-      result.push hs[1]
-      result.push hs[:d2]
-      result.push hs[2]
-      result.push hs[:d3]
-      result.push hs[3]
-      result.push hs[:d4]
-      result.push hs[4]
-      result.push hs[:d5]
-      result.push hs[5]
+      cont = 1
+      @estados.each do |estado|
+        control = hs[estado.id]
+        result.push(control[:entry])
+        result.push(control[:output])
+        result.push(control[:days])
+        result.push(control[:value])
+          cont += 1
+      end
+      # Si se quiere el detalle del wip en la exportación
       if export[:processes_details].eql?("true")
         # Paso un lote para determinar los procesos externos
         hs = set_wip_external lote
@@ -86,21 +85,24 @@ module ProgramacionesHelper
   private
   #Establecer valores del los 5 wip
   def set_wip(lote)
-    controles = lote.control_lotes
-    e1 = true; e2 = true; e3 = true; e4 = true; e5 = true
-    hs = {1 => "0", 2 => "0", 3 => "0", 4 => "0", 5 => "0"}
+    controles = lote.control_lotes.where(:sub_estado_id => 0).group(:estado_id)
+    hs = {}
+    # Asignar valor 0 para que en caso de que el estado no exista en el proceso no quede en blanco
+    @estados.each do |estado|
+      hs[estado.id] = {value: "0", output: "", entry: "", days: "0" }
+    end
     controles.each do |control|
       if control.sub_estado_id.eql?(0)
-        date_range = control.date_range
-        value = control.cantidad
-        (hs[1] = value; hs[:d1] = date_range; e1 = false) if control.estado_id.eql?(1) && e1
-        (hs[2] = value; hs[:d2] = date_range; e2 = false) if control.estado_id.eql?(2) && e2
-        (hs[3] = value; hs[:d3] = date_range; e3 = false) if control.estado_id.eql?(3) && e3
-        (hs[4] = value; hs[:d4] = date_range; e4 = false) if control.estado_id.eql?(4) && e4
-        (hs[5] = value; hs[:d5] = date_range; e5 = false) if control.estado_id.eql?(5) && e5
+        entry = l(control.fecha_ingreso, format: "%d de %B")
+        $output = control.fecha_salida.is_a?(Time) ? l(control.fecha_salida, format: "%d de %B") : nil
+        con_hs = hs[control.estado_id]
+        con_hs[:value] = control.cantidad_last
+        con_hs[:output] = $output || "-"
+        con_hs[:entry] = entry
+        con_hs[:days] = ControlLote.date_operated(control.fecha_ingreso, control.fecha_salida)[:days] if control.fecha_salida
       end
     end
-    return hs
+    hs
   end
 
   # Establecer datos para los wip externos
@@ -114,7 +116,7 @@ module ProgramacionesHelper
     # El proceso solo establece uno de los procesos siendo el último registrado quien tiene la cantidad que se asigna
     controles.each do |control|
       if hs.include? control.sub_estado_id
-        hs[control.sub_estado_id] = {:amount => control.cantidad}
+        hs[control.sub_estado_id] = {:amount => control.cantidad_last}
         hs[control.sub_estado_id] = {:date => control.date_range}
       end
     end
@@ -125,7 +127,7 @@ module ProgramacionesHelper
     controles = lote.control_lotes.where("sub_estado_id > 0")
     sum = 0
     controles.each do |control|
-      sum += control.cantidad.nil? ? 0 : control.cantidad
+      sum += control.cantidad_last
     end
     return sum
   end
