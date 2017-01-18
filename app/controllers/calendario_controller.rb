@@ -1,4 +1,5 @@
 class CalendarioController < ApplicationController
+  before_filter :authorize
   def index
     @estados = Estado.all
     @lotes = Lote.where("(ingresara_a_planta IS NULL OR programacion_id IS NULL) AND empresa = ?", company)
@@ -38,5 +39,9 @@ class CalendarioController < ApplicationController
       )
     end
     events
+  end
+
+  def authorize
+    authorize! :read, :calendario
   end
 end

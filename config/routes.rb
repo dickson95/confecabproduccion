@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-
   get 'estadisticas', to: 'estadisticas#index'
   get "estadisticas/programaciones/detalles/:year/:month", to: "estadisticas#show_programaciones", as: :programaciones_show
   get "estadisticas/clientes/detalles/:year", to: "estadisticas#show_cliente", as: :clientes_show
@@ -19,6 +18,7 @@ Rails.application.routes.draw do
     # Más información sobre collection http://guides.rubyonrails.org/routing.html#adding-collection-routes
     get :export_pdf, on: :collection
     get :export_excel, on: :member
+    get :get_row, on: :collection
     patch :generate, on: :member # Editar una parte concreta, es patch
     patch :add_lotes_to_programing, as: :add_lotes, on: :collection # Para editar un atributo concreto; es patch
     patch :update_row_order, on: :collection
@@ -28,6 +28,8 @@ Rails.application.routes.draw do
   devise_for :users
   resources :users, except: [:create] do
     post 'new' => 'users#create', as: :create, on: :collection
+    patch :lock, on: :member
+    patch :unlock, on: :member
   end
 
   # Rutas de los lotes
@@ -44,6 +46,10 @@ Rails.application.routes.draw do
       patch :update_cantidad, on: :member
     end
     post :validate_op
+  end
+
+  resources :control_lotes do
+    resources :seguimientos
   end
 
   # Otras rutas

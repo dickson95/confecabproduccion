@@ -6,6 +6,9 @@
       <small>Procesos externos a los que son enviados los lotes</small>
     </h1>
 <% end %>
+
+<% update = can? :update, SubEstado %>
+<% destroy = can? :destroy, SubEstado %>
 <div class="box box-primary with-border">
   <div class="box-header">
     <h3 class="box-title">Adicionales</h3>
@@ -21,8 +24,8 @@
     <table class="table table-striped table-bordered " id="sub_estados">
       <thead>
       <tr>
-        <% if can? :manage, SubEstado %>
-            <th></th>
+        <% if update || destroy %>
+            <th class="no-padding" colspan="<%= update && destroy ? "2" : "1" %>"> Opc.</th>
         <% end %>
         <th title="Proceso adicional">Proceso adicional</th>
       </tr>
@@ -31,10 +34,18 @@
       <tbody>
       <% @sub_estados.each do |sub_estado| %>
           <tr>
-            <% if can? :update, SubEstado %>
+            <% if update %>
                 <td class="text-center">
                   <%= link_to edit_sub_estado_path(sub_estado), :title => "Editar" do %>
                       <%= content_tag :i, "", :class => "fa fa-pencil" %>
+                  <% end %>
+                </td>
+            <% end %>
+            <% if destroy %>
+                <td class="text-center">
+                  <%= link_to sub_estado, :class => 'text-red', remote: true, method: :delete, :title => "Eliminar",
+                              data: {confirm: '¿Seguro desea eliminar el proceso externo?', action: 'delete'} do %>
+                      <%= content_tag(:i, "", :class => "fa fa-trash-o") %>
                   <% end %>
                 </td>
             <% end %>

@@ -1,3 +1,4 @@
+# Funciones que son manejadas directamente por el controlador de control_lotes
 $(document).on "ready", ->
   $("input.cantidades").on("focus", ->
     if $(this).val().trim() == "0"
@@ -25,4 +26,25 @@ $(document).on "ready", ->
         $("#cantidad_proceso").text(data.total)
     )
     return
+
+  $(".control_lotes").on("ajax:success", "form[data-remote]", (e, data, status, xhr)->
+    $.floatingMessage "Dato registrado", {
+      position: "bottom-right"
+      height: 50
+      width: 130
+      time: 4000
+      className: "ui-state-active"
+    }
+  ).on("ajax:error", "form[data-remote]", (e, xhr, status, error) ->
+      input = $(this).find("input[type='number']")
+      parent = input.parent().parent()
+      parent.find("span.help-block").remove()
+      parent.children().addClass("has-error")
+      input.next().children().removeClass("btn-default btn-primary").addClass("btn-danger")
+      parent.append("<span class='help-block text-red'></span>")
+      span = parent.find("span.help-block")
+      $.each xhr.responseJSON.cantidad, (i, v)->
+        span.append(v + "<br>")
+  )
+
 return

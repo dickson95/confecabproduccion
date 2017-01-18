@@ -207,7 +207,7 @@
         </p>
         <p class="col-md-3 text-left">
           <strong>Tiempo de proceso:</strong>
-          <%= ControlLote.where(lote_id: @lote.lote.id).sum(:min_u) %>
+          <%= days @lote.fecha_ingreso, @lote.fecha_salida %>
         </p>
       </div>
 

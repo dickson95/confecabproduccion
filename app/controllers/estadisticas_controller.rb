@@ -1,9 +1,11 @@
 class EstadisticasController < ApplicationController
-  before_action :set_years, only:[:clientes, :programaciones]
-  before_action :meses, only:[:clientes, :show_programaciones, :programaciones]
+  before_action :set_years, only: [:clientes, :programaciones]
+  before_action :meses, only: [:clientes, :show_programaciones, :programaciones]
+  before_filter :authorize
+
   def index
     company = session[:selected_company] ? "CAB" : "D&C"
-    time = Time.new() 
+    time = Time.new()
     month = (time - 1.month).strftime("%Y-%m")
     year = time.strftime("%Y")
     year_month = time.strftime("%Y%m")
@@ -37,20 +39,20 @@ class EstadisticasController < ApplicationController
     company = session[:selected_company] ? "CAB" : "D&C"
     month_cliente(company, params[:year_month])
     respond_to do |format|
-      format.html{ render partial: 'show_month_cliente' }
+      format.html { render partial: 'show_month_cliente' }
     end
   end
 
   def show_cliente
     company = session[:selected_company] ? "CAB" : "D&C"
-    time = Time.new() 
+    time = Time.new()
     month = (time - 1.month).strftime("%Y-%m")
     @meses = meses
     @cliente = Cliente.where(:cliente => params[:cliente])
-    @programaciones = Programacion.where("extract(year from mes)=? and programaciones.empresa = ? ", 
-      params[:year] , session[:selected_company]).order(:mes)
+    @programaciones = Programacion.where("extract(year from mes)=? and programaciones.empresa = ? ",
+                                         params[:year], session[:selected_company]).order(:mes)
     respond_to do |format|
-      format.html{ render partial: 'show_cliente' }
+      format.html { render partial: 'show_cliente' }
     end
   end
 
@@ -70,7 +72,7 @@ class EstadisticasController < ApplicationController
       end
       @year_programaciones[year] = months
     end
-  end 
+  end
 
   def show_programaciones
     year_month = params[:year]+params[:month]
@@ -82,35 +84,39 @@ class EstadisticasController < ApplicationController
   end
 
   private
-    def set_years
-      @years = Programacion.years_db
-    end 
+  def set_years
+    @years = Programacion.years_db
+  end
 
-    def meses
-      @meses = Programacion.meses
-    end
+  def meses
+    @meses = Programacion.meses
+  end
 
-    def set_data_programaciones(year_month)
-      # Datos de las programaciones
-      # Porcentajes relativos, es decir el 100% de producción en cada planta
-      @confeccion_relative = Programacion.percentage_planta(year_month, 4, session[:selected_company])
-      @terminacion_relative = Programacion.percentage_planta(year_month, 5, session[:selected_company])
+  def set_data_programaciones(year_month)
+    # Datos de las programaciones
+    # Porcentajes relativos, es decir el 100% de producción en cada planta
+    @confeccion_relative = Programacion.percentage_planta(year_month, 4, session[:selected_company])
+    @terminacion_relative = Programacion.percentage_planta(year_month, 5, session[:selected_company])
 
-      # Porcenteje absoluto de progreso en la programación
-      absolute1 = @confeccion_relative * 0.7
-      absolute2 = @terminacion_relative * 0.3
+    # Porcenteje absoluto de progreso en la programación
+    absolute1 = @confeccion_relative * 0.7
+    absolute2 = @terminacion_relative * 0.3
 
-      @global_percente = absolute1 + absolute2 
-    end
+    @global_percente = absolute1 + absolute2
+  end
 
-    def annual_cliente(company, year)
-      Lote.current_state.state_filtered(5).select("SUM(lotes.cantidad) as cantidad, cliente_id").joins(:programacion, :control_lotes).where("lotes.empresa = ? and EXTRACT(year from programaciones.mes) = ?", company, year).group(:cliente_id)
-    end
+  def annual_cliente(company, year)
+    Lote.current_state.state_filtered(5).select("SUM(lotes.cantidad) as cantidad, cliente_id").joins(:programacion, :control_lotes).where("lotes.empresa = ? and EXTRACT(year from programaciones.mes) = ?", company, year).group(:cliente_id)
+  end
 
-    def month_cliente(company, month)
-      @amount_monthly = Lote.current_state.state_filtered(5).select("SUM(lotes.cantidad) as cantidad, cliente_id")
-        .joins(:programacion, :control_lotes)
-        .where("lotes.empresa = ? and programaciones.mes = ?", company, month+"-01")
-        .group(:cliente_id, :mes)
-    end
+  def month_cliente(company, month)
+    @amount_monthly = Lote.current_state.state_filtered(5).select("SUM(lotes.cantidad) as cantidad, cliente_id")
+                          .joins(:programacion, :control_lotes)
+                          .where("lotes.empresa = ? and programaciones.mes = ?", company, month+"-01")
+                          .group(:cliente_id, :mes)
+  end
+
+  def authorize
+    authorize! :read, :estadisticas
+  end
 end

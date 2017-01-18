@@ -7,7 +7,6 @@ class ProgramacionesController < ApplicationController
   before_action :sum_totals, except: [:modal_open, :update_row_order, :export_excel, :options_export, :update_meta_mensual]
   before_action :set_programaciones, only: [:index, :export_pdf]
   before_action :no_empty_program, except: [:modal_open, :remove_from_programing, :add_lotes_to_programing, :export_excel, :options_export]
-  after_action :states_lotes, only: [:generate, :add_lotes_to_programing]
 
   def index
     programacion = Programacion.set_year_program @empresa, params[:month]
@@ -58,15 +57,27 @@ class ProgramacionesController < ApplicationController
     end
   end
 
+  # recuperara una fila específica de los lotes de la programación
+  def get_row
+    lote = Lote.find(params[:lote_id])
+    this = Programacion
+    @programacion = this.where(id: lote.programacion_id)
+    states_lotes
+    lote_array = this.lote_array(lote)
+    row = {partial: (view_context.render partial: "row", locals: {lote: lote_array}, formats: :html)}
+    respond_to do |format|
+      format.json{ render json: row }
+    end
+  end
+
   # Relacionar los lotes con la programación
   def add_lotes_to_programing
     @lotes = Array.new
     if !params[:lotes].nil?
       params[:lotes].each do |lote|
-        lote = Lote
-                   .where(:id => lote)
+        lote = Lote.where(:id => lote)
                    .update(:programacion_id => @programacion.fetch(0), :respon_edicion_id => current_user)
-        @lotes.push lote
+        @lotes.push Programacion.lote_array(lote.first)
       end
     end
     set_programaciones

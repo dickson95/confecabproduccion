@@ -171,6 +171,23 @@ class Programacion < ApplicationRecord
     return res.nan? ? 0.0 : res
   end
 
+  # Con el fín de utiliar el mismo archivo de last_rows_table para las filas de la programación este método arma
+  # un array que tenga el mismo orden que se utiliza en el query del método del controlador set_programaciones
+  def self.lote_array(lote)
+    array = []
+    array.push(lote.cliente.cliente)
+    array.push lote.tipo_prenda.tipo
+    array.push lote.secuencia
+    array.push lote.referencia.referencia
+    array.push lote.cantidad
+    array.push lote.precio_u
+    array.push lote.precio_t
+    array.push lote.meta
+    array.push lote.h_req
+    array.push lote.id
+    array.push lote.ingresara_a_planta
+    array
+  end
 
   private
 

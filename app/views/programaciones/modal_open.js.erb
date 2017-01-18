@@ -1,27 +1,29 @@
 <% # Sección para brir modal %>
+  modal_add = $("#modal_add")
 <%if @lotes.nil?%>
-	$("#modal_add").html("<%=j render partial: "new"%>");
-	$("#modal_add").modal("toggle");
+  modal_add.html("<%=j render partial: "new"%>");
+  modal_add.modal("toggle");
 
 <%elsif @lotes.empty?%>
 	<% # Sección para cerrar modal %>
-	$("#modal_add").modal("toggle");
+  modal_add.modal("toggle");
 
 <%else%>
 	<% # Añadir los nuevos lotes a la tabla y cerrar modal %>
-
-	var last_rows = $('<%=j render partial: "last_rows_table"%>');
-	$("#<%=params[:month]%>t").find("tbody").append(last_rows);
+  <% @lotes.each do |lote| %>
+	$("#<%=params[:month]%>t").find("tbody").append('<%=j render partial: "row", locals: {lote: lote}%>');
+	<% end %>
 	$("#row_generate").remove();
 	$(".disabled-btn").prop("disabled", false);
 	<%if @no_empty_program == false%>
-		$("#add-lote").bind('click', false);
-		$("#add-lote").addClass("disabled");
+    add_lote = $("#add-lote");
+    add_lote.bind('click', false);
+    add_lote.addClass("disabled");
 	<%end%>
 
-	foot = $("tfoot div p")
-	foot.first().html("<strong>Horas:</strong> <%=@hours%>")
-	foot.last().html("<strong>Precio total:</strong> <%=@total%>")
-	$("#modal_add").modal("hide");
+	foot = $("tfoot div p");
+	foot.first().html("<strong>Horas:</strong> <%=@hours%>");
+	foot.last().html("<strong>Precio total:</strong> <%=@total%>");
+  modal_add.modal("hide");
 <%end%>
 

@@ -1,3 +1,12 @@
+<%
+=begin
+ MENÚ DE OPCIONES
+ Esto es un menú tipo dropodown. Visite https://goo.gl/sqfXgt este sitión para más información
+ Este es el menú de opciones que se despliega en el index de los lotes y en la programación
+ Cambie los item para y asigne permisos de modo individual
+=end
+%>
+
 <div class="dropdown" style="max-width: 30px; margin: 0;">
   <i data-toggle="dropdown" class="fa fa-ellipsis-v btn" id="lote_<%= lote_id %>"></i>
   <ul class="dropdown-menu" aria-labelledby="lote_<%= lote_id %>">
@@ -64,12 +73,13 @@
           <% end %>
         </li>
     <% end %>
-    <% # Puede editar %>
 
     <% if can? :destroy, Lote %>
         <li class="divider"></li>
         <li>
-          <%= link_to lote_path(lote_id), :class => "delete", :method => :delete, data: {:confirm => 'Si elimina este registro no podrá recuperarlo. ¿Está realmente seguro?'}, :title => "Eliminar", :remote => true do %>
+          <% data = {confirm: 'Si elimina este registro no podrá recuperarlo. ¿Está realmente seguro?',
+                     action: 'delete'} %>
+          <%= link_to lote_path(lote_id), :class => "delete", :method => :delete, data: data, :title => "Eliminar", :remote => true do %>
               <i class='fa fa-trash-o text-red hidden-xs' aria-hidden='true'></i>
               <span class="hidden-xs">Eliminar</span>
               <h5 class="visible-xs">
@@ -79,6 +89,5 @@
           <% end %>
         </li>
     <% end %>
-    <% # Puede eliminar %>
   </ul>
 </div>
