@@ -122,25 +122,24 @@ class LotesController < ApplicationController
   # Pasar entre los distintos estados del lote y registrar las fechas de salida
   # de un estado, la de entrada al siguiente y un responsable por acción
   def cambio_estado
+    this = Lote
     next_state_lote = next_state params[:btn]
     @estado = next_state_lote[:state] - 1 # Este es el estado que sigue del actual
     men = next_state_lote[:controller]
-    has_programing = Lote.has_programing params[:lote_id], @estado
+    has_programing = this.has_programing(params[:lote_id], @estado)
 
     if has_programing
       # Actualización de fecha para el último estado
-      @lote = Lote.find(params[:lote_id])
-      close_process
+      @lote = this.find(params[:lote_id])
       # Asignación de parámetros para el nuevo control a registrar. Responsable
       # por el movimiento
       @control = ControlLote.new(:lote_id => params[:lote_id], :estado_id => @estado,
-                                      :fecha_ingreso => @time, :resp_ingreso_id => current_user, :fecha_salida => @estado == 5 ? @time : nil,
-                                      :resp_salida_id => @estado == 5 ? current_user : nil)
+                                      :fecha_ingreso => @time, :resp_ingreso_id => current_user)
       respond_to do |format|
         # Nuevo estado en el historial de los lotes
         if @control.save
-          Seguimiento.seguimientos_status_change(@lote.cantidad, @control, action_name)
-          reqfor = request.format
+          Seguimiento.seguimientos_status_change(@lote.cantidad, @control, current_user, action_name)
+          reqfor = request.format # formato de la solicitud
           if reqfor == "application/json" || reqfor == "text/javascript"
             hs = Hash.new
             hs[:dropdown] = view_context.render partial: 'dropdown_options', locals: {lote_id: params[:lote_id],
@@ -436,11 +435,6 @@ class LotesController < ApplicationController
         @rol_form = s.name
       end
     end
-  end
-
-  def close_process # Cerrar procesos cuando se hace el cambio de estado rápido
-    control = @lote.control_lotes.last
-    control.update(fecha_salida: @time, resp_salida_id: current_user)
   end
 
   def time

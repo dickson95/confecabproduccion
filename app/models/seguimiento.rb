@@ -61,13 +61,14 @@ class Seguimiento < ApplicationRecord
   # 1. Nuevo seguimiento para el control_lote (proceso) actual con la cantidad "amount" suministrada
   # 2. Cerrar con fecha de salida el seguimiento para el proceso anterior al actual
   # 3. Crear nuevo seguimiento para el proceso anterior al actual
-  def self.seguimientos_status_change(amount, control, action) # este método se debe llamar después de cerrar y registrar los estados del lote
+  def self.seguimientos_status_change(amount, control, user, action) # este método se debe llamar después de cerrar y registrar los estados del lote
     @time = Time.new
     @control = control
     @lote = control.lote
     @amount = amount
     @action = action
     @state = @control.estado_id
+    @current_user = user
     continue
   end
 
@@ -109,6 +110,21 @@ class Seguimiento < ApplicationRecord
     @control_prev.seguimientos.last.update(:fecha_salida => @time)
   end
 
+  # Cierra los ciclos de los procesos solo si los anteriores procesos no tienen nada en seguimientos, es decir, si ya tienen
+  # la fecha de salida para el control como tal asignada
+  def self.close_controles(seguimiento)
+    previous_controles = ControlLote.where("id < ? AND lote_id = ?", @control_prev, @control_prev.lote)
+    close = true
+    previous_controles.each do |control|
+      close = false if control.fecha_salida.nil?
+    end
+    update = seguimiento.cantidad == 0 && close
+    # Cerrar proceso anterior
+    @control_prev.update(fecha_salida: @time, resp_salida_id: @current_user) if update
+    # Si el último estado es igual que el del control actual tambien cierra la fecha de este
+    @control.update(fecha_salida: @time, resp_salida_id: @current_user) if Estado.last.id == @state && update
+  end
+
   def self.seguimientos_register(cantidad) # Crea un nuevo seguimiento
     @seguimiento = @control.seguimientos.new(:cantidad => cantidad)
     @seguimiento.save
@@ -133,7 +149,9 @@ class Seguimiento < ApplicationRecord
     prev = @control_prev.cantidad_last
     curr_prev = @control.seguimientos.last.prev
     total = prev - (@amount - (curr_prev ? curr_prev.cantidad : 0))
-    @control_prev.seguimientos.new(:cantidad => total).save
+    seguimiento = @control_prev.seguimientos.new(:cantidad => total)
+    seguimiento.save
+    close_controles(seguimiento)
   end
 
   def set_control(control)

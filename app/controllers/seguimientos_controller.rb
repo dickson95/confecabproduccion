@@ -89,7 +89,7 @@ class SeguimientosController < ApplicationController
     # Si es por proceso normal
     if util.to_boolean(params[:seguimiento][:proceso])
       amount = param_amo.to_i + @control_lote.cantidad_last if blank
-      Seguimiento.seguimientos_status_change(amount, @control_lote, action_name)
+      Seguimiento.seguimientos_status_change(amount, @control_lote, current_user, action_name)
     else # Si es por reproceso
       seguimiento = @control_lote.seguimientos.new(seguimiento_params)
       seguimiento.return_units(param_amo.to_i)
