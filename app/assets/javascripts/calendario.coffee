@@ -57,6 +57,7 @@ $(document).ready ->
     # renderizar el evento en el calendario
     # El último argumento 'true' causa que el evento quede fijo al calendario (http://arshaw.com/fullcalendar/docs/event_rendering/renderEvent/)
     $('#calendar').fullCalendar 'renderEvent', copiedEventObject, true
+    $(this).remove()
     update_ingresara_a_planta(date._d, $(this).data("url"))
 
   event_drop = (e) ->

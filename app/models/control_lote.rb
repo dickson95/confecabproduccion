@@ -11,7 +11,7 @@ class ControlLote < ApplicationRecord
   validates :estado, :fecha_ingreso, presence: true
 
   scope :prev, ->(id, lote_id) { where("id < ? and lote_id = ?", id, lote_id).last }
-  scope :next, ->(id, lote_id) { where("id > ? and lote_id = ?", id, lote_id).first }
+  scope :next, ->(control) { where("id > ? and lote_id = ?", control, control.lote).first }
 
   # Métodos
   def sub_or_process

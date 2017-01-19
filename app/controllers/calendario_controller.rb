@@ -1,8 +1,9 @@
 class CalendarioController < ApplicationController
   before_filter :authorize
+  before_action :company
   def index
     @estados = Estado.all
-    @lotes = Lote.where("(ingresara_a_planta IS NULL OR programacion_id IS NULL) AND empresa = ?", company)
+    @lotes = Lote.where("(ingresara_a_planta IS NULL OR programacion_id IS NULL) AND empresa = ?", @company)
                  .order("programacion_id desc, secuencia asc")
     respond_to do |format|
       format.html
@@ -16,8 +17,8 @@ class CalendarioController < ApplicationController
   end
 
   def lotes_calendar
-    lotes = Lote.select(:id, :referencia_id, :ingresara_a_planta, :secuencia).where("(programacion_id IS NOT NULL AND ingresara_a_planta IS NOT NULL)
-                  AND ingresara_a_planta BETWEEN ? AND ?", params[:start], params[:end])
+    lotes = Lote.select(:id, :referencia_id, :ingresara_a_planta, :secuencia, :empresa).where("(programacion_id IS NOT NULL AND ingresara_a_planta IS NOT NULL AND empresa = ?)
+                   AND ingresara_a_planta BETWEEN ? AND ?", @company, params[:start],  params[:end])
     lotes_to_json_calendar(lotes)
   end
 

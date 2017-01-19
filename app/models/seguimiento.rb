@@ -15,7 +15,7 @@ class Seguimiento < ApplicationRecord
   validate :cant_return, if: "!cantidad.nil? && !proceso", on: [:create]
 
   def prev
-    self.control_lote.seguimientos.order("id desc").offset(1).limit(1).first
+    self.control_lote.seguimientos.where("id < ? ", self.id).order("id desc").first
   end
 
   # Se verifica que la cantidad ingresada corresponda a la cantidad que tiene el control_lote anterior al actual
@@ -40,7 +40,7 @@ class Seguimiento < ApplicationRecord
   # La cantidad que se pase debe ser la suma del último seguimiento registrado con la cantidad que el usuario pasó
   def cant_return
     control = ControlLote.find(self.control_lote.id)
-    control_next = ControlLote.next(control, control.lote)  # control siguiente al actual
+    control_next = ControlLote.next(control)  # control siguiente al actual
     amount = cantidad - control.cantidad_last # recuperar la cantidad real que el usuario ingresó
     invalid = (control_next.cantidad_last - amount) < 0
     errors.add(:cantidad, "No hay suficientes unidades en el proceso del que se pretende devolver") if invalid
@@ -77,7 +77,8 @@ class Seguimiento < ApplicationRecord
     control_prev = ControlLote.prev(control, control.lote)
     # Crear seguimiento nuevo para el previo control con la suma de lo pasado como cantidad a retornar
     amount_final = amount + control_prev.cantidad_last if amount > 0
-    @seguimiento = control_prev.seguimientos.new(cantidad: amount_final, proceso: self.proceso)
+    puts "registrar reproceso true"
+    @seguimiento = control_prev.seguimientos.new(cantidad: amount_final, proceso: self.proceso, reproceso: true)
     save = @seguimiento.save
     if save
       time = Time.new
