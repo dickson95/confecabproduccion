@@ -150,6 +150,7 @@ module ProgramacionesHelper
         puts "id seguimiento actual #{seguimiento.id}, id previo #{seguimiento.prev.id}"
         puts "cantidad en seguimiento #{seguimiento.cantidad }, seguimiento anterior #{seguimiento.prev.cantidad}"
         puts "cantidad restada #{seguimiento.cantidad - seguimiento.prev.cantidad}"
+        control.id
         $next = ControlLote.next(control)
         @result.push($next.estado.name.downcase)
         @result.push(seguimiento.control_lote.estado.name.downcase)
