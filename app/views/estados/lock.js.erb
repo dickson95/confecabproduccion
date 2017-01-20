@@ -1,11 +1,11 @@
 $("tr[data-empty]").remove();
 $("tr[data-id='<%= @estado.id %>']").remove();
-$("table#actives tbody").append("<%= j render 'row',  estado: @estado, actions: true, empty: false %>");
 tbody = $("table#inactives tbody");
-if (tbody.find("tr").length < 1) {
+tbody.append("<%= j render partial: "row", locals: { estado: @estado, actions: false, empty: false } %>");
+if (tbody.length < 1) {
     tbody.append("<%= j render partial: "row", locals: { empty: true  } %>");
 }
-$.floatingMessage("Proceso activado", {
+$.floatingMessage("Proceso desactivado", {
     position: "bottom-right",
     height: 80,
     time: 4000,

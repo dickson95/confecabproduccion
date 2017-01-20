@@ -1,35 +1,41 @@
 <% if empty %>
     <tr data-empty="true">
-      <td colspan="<%= can?(:udpate, Estado) ? (actions ? "8" : "7") : "6" %>" >No hay datos disponibles</td>
+      <td colspan="<%= can?(:udpate, Estado) ? ("9") : "7" %>" >No hay datos disponibles</td>
     </tr>
 <% else %>
 <tr data-id="<%= estado.id %>">
   <% if actions %>
       <% if can? :update, Estado %>
           <td>
-            <%= link_to edit_estado_path(estado), remote: true do %>
+            <%= link_to edit_estado_path(estado), remote: true, title: "Editar" do %>
                 <i class="fa fa-pencil"></i>
             <% end %>
           </td>
       <% end %>
       <% if can? :destroy, Estado %>
           <td>
-            <%= link_to estado_path(estado), remote: true, method: :delete, class: "text-red", title: "Desactivar" do %>
+            <%= link_to lock_estado_path(estado), remote: true, method: :patch, class: "text-red", title: "Desactivar" do %>
                 <i class="fa fa-lock"></i>
             <% end %>
           </td>
       <% end %>
   <% else %>
       <td>
-        <%= link_to unlock_estado_path(estado), remote: true, method: :patch, class: "text-red", title: "Activar" do %>
+        <%= link_to unlock_estado_path(estado), remote: true, method: :patch, class: "text-gray", title: "Activar" do %>
             <i class="fa fa-unlock"></i>
         <% end %>
       </td>
+      <td>
+        <%= link_to estado_path(estado), remote: true, method: :delete, class: "text-red", title: "Eliminar" do %>
+            <i class="fa fa-trash"></i>
+        <% end %>
+      </td>
   <% end %>
-  <td><%= estado.name %></td>
+  <td><%= estado.estado %></td>
   <td><%= estado.nombre_accion %></td>
   <td><%= estado.secuencia %></td>
   <td><%= estado.pasa %></td>
+  <td><%= estado.factura_asi %></td>
   <td><%= estado.color %>
     <small class="pull-right"><i class="fa fa-square fa-lg" style="color: <%= estado.color %>;"></i></small>
   </td>

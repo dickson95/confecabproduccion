@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   resources :sub_estados, :referencias, :tipos_prendas, :tallas, :roles, :clientes
   resources :calendario, except: :show
   resources :estados do
+    patch :lock, on: :member
     patch :unlock, on: :member
   end
   # get "clientes/send_email" => 'clientes#send_email', :as => :send_email # debe pertenecer a los clientes y tener el id del cliente a quien se envía el correo

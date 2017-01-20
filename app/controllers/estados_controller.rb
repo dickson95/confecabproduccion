@@ -1,5 +1,5 @@
 class EstadosController < ApplicationController
-  before_action :set_estado, only: [:edit, :update, :destroy, :unlock]
+  before_action :set_estado, only: [:edit, :update, :destroy, :unlock, :lock]
 
   def index
     this = Estado
@@ -24,9 +24,12 @@ class EstadosController < ApplicationController
   def update
     respond_to do |format|
       if @estado.update(params_estado)
-        format.js { "create_update" }
+        puts @estado.facturar_al
+        format.js { render "create_update" }
       else
-        format.js { "create_update" }
+        puts @estado.errors.full_messages
+        @estado.reload
+        format.js { render "create_update" }
       end
     end
   end
@@ -35,20 +38,32 @@ class EstadosController < ApplicationController
     @estado = Estado.new(params_estado)
     respond_to do |format|
       if @estado.save
-        format.js { "create_update" }
+        @estado = Estado.last
+        format.js { render "create_update" }
       else
-        format.js { "create_update" }
+        format.js { render "create_update" }
       end
     end
   end
 
   def destroy
-    @estado.update(active: false)
+    before = Before::Delete.new
+    @removed = false
+    if !before.child_records(@estado)
+      @id = @estado.id
+      @removed = true
+      @estado.destroy
+    end
+    respond_to :js
+  end
+
+  def lock
+    @estado.update_attribute(:active, false)
     respond_to :js
   end
 
   def unlock
-    @estado.update(active: true)
+    @estado.update_attribute(:active, true)
     respond_to :js
   end
 
@@ -59,6 +74,6 @@ class EstadosController < ApplicationController
   end
 
   def params_estado
-    params.require(:estado).permit(:estado, :nombre_accion, :pasa_cantidad, :color, :color_claro, :secuencia)
+    params.require(:estado).permit(:estado, :nombre_accion, :pasa_cantidad, :color, :color_claro, :secuencia, :facturar, :facturar_al)
   end
 end

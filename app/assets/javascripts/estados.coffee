@@ -8,3 +8,9 @@ $(document).ready ->
   ).on "click", ".edit_estado button[type='button'], .new_estado button[type='button']", ->
     $(".edit_estado, .new_estado").parent().remove()
     $("#box-estados").removeClass("col-md-6").addClass("col-md-12")
+
+  $("body.estados").on "change", "#estado_facturar", ->
+    if $(this).val() == "true"
+      $("#estado_facturar_al").removeAttr("readonly").removeClass("readonly")
+    else
+      $("#estado_facturar_al").attr("readonly", true).addClass("readonly")

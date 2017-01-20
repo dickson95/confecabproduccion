@@ -164,11 +164,11 @@ class Programacion < ApplicationRecord
     lotes = state_lotes_amount(month, state, company)
     # Contar cuantos lotes hay en la programación
     programacion = self.select(:id).where("EXTRACT(year_month from mes)=? and empresa = ?", month, company).limit(1) if lotes > 0
-    amount = self.find(programacion.first.id).lotes.count if !programacion.nil?
-
+    amount = self.find(programacion.first.id).lotes.count if programacion
     # Porcentaje completado para la planta
     res = (lotes.to_f * 100) / amount.to_f
-    return res.nan? ? 0.0 : res
+    res = res.nan? ? 0.0 : res
+    return res
   end
 
   # Con el fín de utiliar el mismo archivo de last_rows_table para las filas de la programación este método arma
