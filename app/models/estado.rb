@@ -21,11 +21,24 @@ class Estado < ApplicationRecord
 
   # Seguimiento anterior
   def prev
-    Estado.where("id < ?", self.id).order("secuencia desc").limit(1).first
+    Estado.active.where("secuencia < ?", self.secuencia).order("secuencia desc").limit(1).first
   end
-
   # Proceso siguiente
   def next
-    Estado.where("id > ?", self.id).order("secuencia asc").limit(1).first
+    Estado.active.where("secuencia > ?", self.secuencia).order("secuencia asc").limit(1).first
   end
+
+  # Traer el último con base a la secuencia
+  def self.last_estado
+    Estado.active.order("secuencia desc").limit(1).first
+  end
+
+  def self.active
+    where(active: true)
+  end
+
+  def self.inactive
+    where(active: false)
+  end
+
 end
