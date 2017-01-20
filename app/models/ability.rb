@@ -21,8 +21,10 @@ class Ability
         u.id == 1
       end
     elsif user.has_rol? :coor_tiempos
-      can :manage, [Programacion, User, ControlLote, Lote, SubEstado, Cliente, TipoPrenda, Seguimiento]
-      can :manage, [:calendario, :estadisticas]
+      can :manage, :all
+      cannot [:destroy, :lock], User do |u|
+        u.id == 1
+      end
     elsif user.has_rol? :coor_integracion
       can :manage, [Programacion, ControlLote, Lote]
       can :create, [Cliente, TipoPrenda, SubEstado]

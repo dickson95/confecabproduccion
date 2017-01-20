@@ -1,0 +1,13 @@
+$("tr[data-empty]").remove();
+$("tr[data-id='<%= @estado.id %>']").remove();
+$("table#actives tbody").append("<%= j render 'row',  estado: @estado, actions: true, empty: false %>");
+tbody = $("table#inactives tbody");
+if (tbody.find("tr").length < 1) {
+    tbody.append("<%= j render partial: "row", locals: { actions: false, empty: true  } %>");
+}
+$.floatingMessage("Proceso activado", {
+    position: "bottom-right",
+    height: 80,
+    time: 4000,
+    className: "ui-state-active"
+});

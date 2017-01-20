@@ -1,0 +1,48 @@
+<div class="row">
+  <div id="box-estados" class="col-md-12">
+    <div class="box box-primary">
+      <div class="box-body table-responsive">
+        <table class="table table-bordered table-striped" id="actives">
+          <caption>
+            <div class="pull-left">
+              <strong>Proceso:</strong> Nombre que se mostrará mientras el lote está en ese proceso <br>
+              <strong>Nombre como acción:</strong> Nombre que se muestra para la opción rápida para el siguiente estado
+              <br>
+              <strong>Color fuerte:</strong> Con este se resalta el lote en la programación y en el calendario <br>
+              <strong>Color claro:</strong> Con este se resalta el resto de información del lote
+            </div>
+            <div class="pull-right">
+              <%= link_to new_estado_path, remote: true do %>
+                  <i class="fa fa-plus fa-2x"></i>
+              <% end %>
+            </div>
+          </caption>
+          <thead>
+          <tr>
+            <% destroy = can? :destroy, Estado %>
+            <% update = can? :update, Estado %>
+            <% if update || destroy %>
+                <th colspan="<%= destroy && update ? "2" : "1" %>">Opc.</th>
+            <% end %>
+            <th>Proceso</th>
+            <th>Nombre como acción</th>
+            <th>Secuencia</th>
+            <th>Pasar cantidad automáticamente</th>
+            <th>Color fuerte</th>
+            <th>Color suave</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% if @estados.empty? %>
+              <%= render 'row',  actions: true, empty: true%>
+          <% else %>
+              <% @estados.each do |estado| %>
+                  <%= render 'row',  estado: estado, actions: true, empty: false %>
+              <% end %>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
