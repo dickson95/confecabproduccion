@@ -3,7 +3,6 @@ class ProgramacionesController < ApplicationController
   before_action :empresa
   before_action :set_meses, except: [:modal_open, :update_row_order, :update_meta_mensual]
   before_action :programacion_id, except: [:modal_open, :update_row_order, :export_excel, :update_meta_mensual]
-  before_action :states_lotes, only: [:index, :program_table]
   before_action :sum_totals, except: [:modal_open, :update_row_order, :export_excel, :options_export, :update_meta_mensual]
   before_action :set_programaciones, only: [:index, :export_pdf]
   before_action :no_empty_program, except: [:modal_open, :remove_from_programing, :add_lotes_to_programing, :export_excel, :options_export]
@@ -124,8 +123,10 @@ class ProgramacionesController < ApplicationController
   def options_export
     clientes = Lote.distinct.where("programacion_id = ?", @programacion.first).pluck(:cliente_id)
     @clientes = Cliente.select(:id, :cliente).find(clientes)
-    @estados = Estado.all
-    ids_sub_estados = Lote.joins(:control_lotes).where(:programacion_id => @programacion.first).distinct.where("control_lotes.sub_estado_id > 0").pluck("control_lotes.sub_estado_id")
+    @estados = Estado.active
+    company = session[:selected_company] ? "CAB" : "D&C"
+    ids_sub_estados = Lote.joins(:control_lotes).where(:programacion_id => @programacion.first, :empresa => company).distinct
+                          .where("control_lotes.sub_estado_id > 0").pluck("control_lotes.sub_estado_id")
     @sub_estados = SubEstado.find(ids_sub_estados)
     if params[:format_export].eql?("xlsx")
       @url = export_excel_programacion_path(@programacion.first, :format => "xlsx")

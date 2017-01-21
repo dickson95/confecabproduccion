@@ -57,6 +57,7 @@ class Ability
     elsif user.has_rol? :terminacion
       can [:export, :read, :cambio_estado], [Lote, Programacion]
       can :manage, [ControlLote,Seguimiento]
+      can :read, Cliente
       can :read, :calendario
     end
   end

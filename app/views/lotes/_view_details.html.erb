@@ -7,6 +7,8 @@
       <h4 class="modal-title" id="myModalLabel">
         REFERENCIA: <%= @lote.lote.referencia.referencia %>
       </h4>
+      <% programacion = @lote.lote.programacion %>
+      <small>Programado: <%= programacion ? l(programacion.mes, format: "%B de %Y") : "No tiene" %></small>
     </div>
     <div class="modal-body">
 

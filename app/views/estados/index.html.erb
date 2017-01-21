@@ -13,4 +13,6 @@
 
 <%= render "actives" %>
 
+<% if can? :unlock, User or can? :destroy, User %>
 <%= render "inactives" %>
+<% end %>

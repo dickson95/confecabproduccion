@@ -11,11 +11,13 @@
               <strong>Color fuerte:</strong> Con este se resalta el lote en la programación y en el calendario <br>
               <strong>Color claro:</strong> Con este se resalta el resto de información del lote
             </div>
-            <div class="pull-right">
-              <%= link_to new_estado_path, remote: true do %>
-                  <i class="fa fa-plus fa-2x"></i>
-              <% end %>
-            </div>
+            <% if can? :create, User %>
+                <div class="pull-right">
+                  <%= link_to new_estado_path, remote: true do %>
+                      <i class="fa fa-plus fa-2x"></i>
+                  <% end %>
+                </div>
+            <% end %>
           </caption>
           <thead>
           <tr>
@@ -35,10 +37,10 @@
           </thead>
           <tbody>
           <% if @estados.empty? %>
-              <%= render 'row',  actions: true, empty: true%>
+              <%= render 'row', actions: true, empty: true %>
           <% else %>
               <% @estados.each do |estado| %>
-                  <%= render 'row',  estado: estado, actions: true, empty: false %>
+                  <%= render 'row', estado: estado, actions: true, empty: false %>
               <% end %>
           <% end %>
           </tbody>

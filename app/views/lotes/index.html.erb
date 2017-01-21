@@ -34,6 +34,9 @@
       <% active = cookies[:tab_active] || @estados.first.id %>
       <% active = active.to_i %>
       <ul class="nav nav-tabs">
+        <li class="<%= "active" if 0 == active %>" data-url-tabs="<%= lotes_url(format: :js, state: 0) %>" data-id="<%= 0 %>">
+          <%= link_to "Todos", "#all", data:{:toggle => "tab"} %>
+        </li>
         <% @estados.each do |estado| %>
             <% id = estado.id %>
           <li class="<%= "active" if id == active %>" data-url-tabs="<%= lotes_url(format: :js, state: id) %>" data-id="<%= id %>">
@@ -42,6 +45,7 @@
         <% end %>
       </ul>
       <div class="tab-content no-padding">
+        <div class="tab-pane <%= "active" if 0 == active %>" id="all"></div>
         <% @estados.each do |estado| %>
             <div class="tab-pane <%= "active" if estado.id == active %>" id="<%= estado.name.downcase %>"></div>
         <% end %>

@@ -42,7 +42,7 @@ class Programacion < ApplicationRecord
     states_arr.each do |e|
       states["#{e.fetch(0)}"] = {id: e.fetch(1), name: e.fetch(2), color: e.fetch(3), color_claro: e.fetch(4) }
     end
-    return states
+    states
   end
 
   # Método que determina si hay una programación existente para el mes solicitado.
