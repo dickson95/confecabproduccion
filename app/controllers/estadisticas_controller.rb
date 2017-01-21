@@ -13,10 +13,19 @@ class EstadisticasController < ApplicationController
     # Datos mensuales de los clientes
     @amount_annual = annual_cliente(company, year)
     com_progr = "lotes.empresa = ?  and EXTRACT(year_month from programaciones.mes) = ?"
-    @wip_integracion = Lote.current_state.state_filtered(2).joins(:programacion).where(com_progr, company, year_month).sum("lotes.cantidad")
-    @wip_planta = Lote.current_state.state_filtered(3).joins(:programacion).where(com_progr, company, year_month).sum("lotes.cantidad")
-    @wip_terminacion = Lote.current_state.state_filtered(4).joins(:programacion).where(com_progr, company, year_month).sum("lotes.cantidad")
-    @wip_facturado = Lote.current_state.state_filtered(5).joins(:programacion).where(com_progr, company, year_month).sum("lotes.cantidad")
+    @wip = []
+    # Tomar los estados activos para hacer la estadística de cada uno
+    Estado.active.each do |estado|
+      lotes = Lote.joins(:programacion).where(com_progr, company, year_month)
+      amount = 0
+      # Despues de tener los lotes para la programación en la variable "lotes" se recorre para tomar los controles
+      # que tiene en el estado que se está tratando y sumar lo que hay realmente en cada estado
+      lotes.each do |lote|
+        # Acumular la cantidad que hay en el proceso
+        amounts = lote.control_lotes.where(estado_id: estado.id).each{ |control| amount += control.cantidad_last}
+      end
+      @wip.push({estado: estado, amount: amount})
+    end
     # Programaciones
     set_data_programaciones(time.strftime("%Y%m"))
   end
@@ -95,28 +104,39 @@ class EstadisticasController < ApplicationController
   def set_data_programaciones(year_month)
     # Datos de las programaciones
     # Porcentajes relativos, es decir el 100% de producción en cada planta
-    @confeccion_relative = Programacion.percentage_planta(year_month, 4, session[:selected_company])
-    @terminacion_relative = Programacion.percentage_planta(year_month, 5, session[:selected_company])
+    @relatives = []
+    last_id = Estado.select(:id).last_estado
+    estados = Estado.active.where("id <> ? AND facturar = ? ", last_id, true)
+    absolute = 0
+    estados.each do |estado|
+      next_estado = estado.next
+      relative =  Programacion.percentage_planta(year_month, next_estado.id, session[:selected_company])
+      @relatives.push({estado: estado, relative: relative} )
+      absolute += relative * (estado.facturar_al / 100)
+    end
 
     # Porcenteje absoluto de progreso en la programación
-    absolute1 = @confeccion_relative * 0.7
-    absolute2 = @terminacion_relative * 0.3
-
-    @global_percente = absolute1 + absolute2
+    @global_percente = absolute
   end
 
   def annual_cliente(company, year)
-    Lote.current_state.state_filtered(5).select("SUM(lotes.cantidad) as cantidad, cliente_id").joins(:programacion, :control_lotes).where("lotes.empresa = ? and EXTRACT(year from programaciones.mes) = ?", company, year).group(:cliente_id)
+    Lote.current_state.state_filtered(last_estado.id).select("SUM(lotes.cantidad) as cantidad, cliente_id").joins(:programacion, :control_lotes)
+        .where("lotes.empresa = ? and EXTRACT(year from programaciones.mes) = ?", company, year).group(:cliente_id)
   end
 
+  # Suma las cantidades completadas para determinado cliente
   def month_cliente(company, month)
-    @amount_monthly = Lote.current_state.state_filtered(5).select("SUM(lotes.cantidad) as cantidad, cliente_id")
+    @amount_monthly = Lote.current_state.state_filtered(last_estado.id).select("SUM(lotes.cantidad) as cantidad, cliente_id")
                           .joins(:programacion, :control_lotes)
-                          .where("lotes.empresa = ? and programaciones.mes = ?", company, month+"-01")
+                          .where("lotes.empresa = ? and programaciones.mes = ? and control_lotes.fecha_salida IS NOT NULL", company, month+"-01")
                           .group(:cliente_id, :mes)
   end
 
   def authorize
     authorize! :read, :estadisticas
+  end
+
+  def last_estado
+    Estado.last_estado
   end
 end

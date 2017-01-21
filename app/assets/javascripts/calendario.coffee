@@ -64,7 +64,7 @@ $(document).ready ->
     update_ingresara_a_planta(e.start._d, e['data-url'])
 
 
-  ini_events($('#external-events div.external-event'))
+  ini_events($('#external-events div.external-event')) if $("info").data("droppable")
 
 
   $('#calendar').fullCalendar
@@ -79,8 +79,8 @@ $(document).ready ->
       week: 'semana'
       day: 'día'
     events: $('#calendar').data("url")
-    editable: $("#actions").data("editable")
-    droppable: $("#actions").data("droppable")
+    editable: $("info").data("editable")
+    droppable: $("info").data("droppable")
     monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio',
       'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
     monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'

@@ -1,0 +1,13 @@
+<% puts @removed %>
+<% if @removed %>
+message = "Registro eliminado con éxito";
+$("tr[data-id='<%= @id %>']").remove();
+<% else %>
+message = "No se puede eliminar este proceso porque hay registros de ciclos dependientes es este";
+<% end %>
+$.floatingMessage(message, {
+    position: "bottom-right",
+    height: 80,
+    time: 4000,
+    className: "ui-state-<%= @removed ? "active" : "error" %>"
+});

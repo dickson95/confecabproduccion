@@ -1,7 +1,7 @@
 <%@mes_active = @meses[date[:month]][:number]%>
 <div id="<%=year%>" class="tab-pane fade <%= year.to_s == date[:year] ? "in active" : ""%>"> 
 	<!--Meses-->
-	<ul class="nav nav-tabs" role="tablist">
+	<ul class="nav nav-tabs" role="tablist" id="months">
 		<%@meses.each do |k, v|%>
 		<% year_month = "#{year}#{v[:number]}" %>
 		<% active = params[:month] == year_month ? true : false%>
@@ -13,9 +13,7 @@
 		<% year_month = "#{year}#{v[:number]}" %>
 		<% active = params[:month] == year_month ? true : false%>
 		<div  id="<%="#{year_month}p"%>" class="tab-pane fade <%= active ? "in active current" : ""%>">
-			<div class="table-responsive">
 			<%=render partial: "head_table", locals:{ year_month: year_month }%>
-			</div>
 		</div>	
 		<%end%>
 	</div>

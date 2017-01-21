@@ -7,6 +7,8 @@
       <h4 class="modal-title" id="myModalLabel">
         REFERENCIA: <%= @lote.lote.referencia.referencia %>
       </h4>
+      <% programacion = @lote.lote.programacion %>
+      <small>Programado: <%= programacion ? l(programacion.mes, format: "%B de %Y") : "No tiene" %></small>
     </div>
     <div class="modal-body">
 
@@ -226,11 +228,12 @@
                 <%= content_tag :i, "", :class => "fa fa-pencil" %>
                 Editar
             <% end %>
-            <% change = next_state @lote.estado.id %>
-            <% if change[:boolean] %>
-                <%= link_to lote_cambio_estado_path(@lote.lote, :btn => change[:state]), method: "PATCH", :class => "btn btn-primary" do %>
+            <% next_estado =  @lote.estado.next %>
+            <% if next_estado %>
+                <%= link_to lote_cambio_estado_path(@lote, :btn => next_estado.id, :plc => params[:plc]), data:{ action: "cambio_estado" },
+                            method: "PATCH", :class => "btn btn-primary" do %>
                     <i class='fa fa-fast-forward fa-fw' aria-hidden='true'></i>
-                    <%= change[:view] %>
+                    <%= next_estado.nombre_accion %>
                 <% end %>
             <% end %>
           </div>

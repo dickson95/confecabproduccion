@@ -1,11 +1,12 @@
 <% lote_id = lote.fetch(9) %>
-<% estado = @estados["#{lote_id}"] %>
-<tr data-item-id="<%= "#{lote_id}" %>" class="<%= (can? :update, Lote) ? "item" : "" %>" style="background-color: <%= estado[:color_claro] %>;">
+<% lote_object = Lote.find(lote_id) %>
+<% estado = lote_object.control_lotes.last.estado %>
+<tr data-item-id="<%= "#{lote_id}" %>" class="<%= (can? :update, Lote) ? "item" : "" %>" style="background-color: <%= estado.color_claro %>;">
   <% if can? :update, Programacion %>
       <td><%= check_box_tag "lotes[#{lote_id}]", lote_id %></td>
   <% end %>
   <td class="no-padding">
-    <%= render partial: "lotes/dropdown_options", locals: {lote_id: lote_id, estado_id: estado[:id]} %>
+    <%= render partial: "lotes/dropdown_options", locals: {lote_id: lote_id, estado_id: estado.id} %>
   </td>
   <% if can? :update, Programacion %>
       <td class="text-center no-padding-top no-padding-bottom no-padding-right">
@@ -13,21 +14,21 @@
                            :style => "max-width: 3em;", :class => "form-control text-black text-center input-sm no-padding" %>
       </td>
   <% end %>
-  <td class="state" style="background-color: <%= estado[:color] %>;"><%= @estados["#{lote_id}"][:name] %></td>
+  <td class="state" style="background-color: <%= estado.color %>;"><%= estado_or_sub lote_id %></td>
   <td><%= lote.fetch(0) %></td>
   <td><%= lote.fetch(1) %></td>
   <td><%= lote.fetch(3) %></td>
   <td><%= lote.fetch(4) %></td>
   <% if can? :prices, Lote %>
-      <td><%= Money.from_amount(lote.fetch(5), "COP").format(:no_cents => true) %></td>
-      <td><%= Money.from_amount(lote.fetch(6), "COP").format(:no_cents => true) %></td>
+      <td><%= money lote.fetch(5) %></td>
+      <td><%= money lote.fetch(6) %></td>
   <% end %>
   <td class="no-padding">
     <% if can? :update, Programacion %>
         <%= content_tag :input, "", data: {:lote => lote_id, url: update_ingresara_a_planta_lote_path(lote_id)},
                         :value => set_date(lote.fetch(10), "%d %B %Y"),:class => "form-control text-center input-sm no-padding ingresara_a_planta" %>
     <% else %>
-        <%= lote.fetch(10) %>
+        <%= set_date(lote.fetch(10), "%d %B %Y") %>
     <% end %>
   </td>
 </tr>

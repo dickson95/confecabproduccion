@@ -21,7 +21,7 @@ class LotesController < ApplicationController
   # GET /lotes
   # GET /lotes.json
   def index
-    @estados = Estado.all
+    @estados = Estado.active.order(:secuencia)
     respond_to do |format|
       format.html
       format.js
@@ -123,9 +123,9 @@ class LotesController < ApplicationController
   # de un estado, la de entrada al siguiente y un responsable por acción
   def cambio_estado
     this = Lote
-    next_state_lote = next_state params[:btn]
-    @estado = next_state_lote[:state] - 1 # Este es el estado que sigue del actual
-    men = next_state_lote[:controller]
+    next_estado = Estado.find params[:btn] # Lote siguiente del actual
+    @estado = next_estado.id # Este es el estado que sigue del actual
+    men = next_estado.name.downcase
     has_programing = this.has_programing(params[:lote_id], @estado)
 
     if has_programing

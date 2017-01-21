@@ -38,7 +38,10 @@
 					<%= f.input :precio_t, as: :boolean, label: "Precio total" %>
 					<% end %>
 					<%= f.input :processes, as: :boolean, label: "Procesos (WIP)" %>
-					<%= f.input :processes_details,  as: :radio_buttons, label: "Detallar procesos externos: ", required: false, disabled: true, input_html: { value: true }, checked: true %>
+					<%= f.input :processes_details,  as: :radio_buttons, label: "Detallar procesos externos:", required: false,
+                      disabled: true, input_html: { value: true }, checked: true, item_wrapper_class: "inline"%>
+          <%= f.input :reprocess,  as: :radio_buttons, label: "Reprocesos:", required: false,
+                      disabled: true, input_html: { value: true }, checked: true, item_wrapper_class: "inline"%>
 					<%= f.hidden_field :month, value: params[:month] %>
 				</div>
 			</div>
@@ -60,8 +63,8 @@
 		$("#modal_add").modal("toggle");
 	});
 	$("#export_processes").click(function(){
-		true_= $("#export_processes_details_true");
-		false_ = $("#export_processes_details_false");
+		true_= $("#export_processes_details_true, #export_reprocess_true");
+		false_ = $("#export_processes_details_false, #export_reprocess_false");
 		true_.toggleClass("disabled");
 		true_.attr('disabled', function(_, attr) { return !attr });
 		false_.toggleClass("disabled");

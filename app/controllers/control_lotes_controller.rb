@@ -131,9 +131,14 @@ class ControlLotesController < ApplicationController
 
   def set_prev_seguimiento
     this = ControlLote
-    prev = this.prev(@control_lote, @control_lote.lote).seguimientos.last
-    if prev
-      prev.update(cantidad: @control_lote.cantidad_last + prev.cantidad, fecha_salida: nil)
+    c_prev = this.prev(@control_lote, @control_lote.lote)
+    prev_seguimientos = c_prev.is_a?(this) ? c_prev.seguimientos : nil
+    if prev_seguimientos
+      if prev_seguimientos.any?
+        prev_seguimientos.where(reproceso: true).update(proceso: true, reproceso: false)
+        last_segu = prev_seguimientos.last
+        last_segu.update(cantidad: @control_lote.cantidad_last + last_segu.cantidad, fecha_salida: nil)
+      end
     end
   end
 
