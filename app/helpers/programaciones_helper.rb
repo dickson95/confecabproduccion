@@ -10,6 +10,15 @@ module ProgramacionesHelper
     (can?(:update, Programacion) && can?(:prices, Programacion)) ? 4 : 2
   end
 
+  def estado_or_sub(lote_id)
+    lote = Lote.find(lote_id)
+    lote.control_lotes.last.sub_or_process
+  end
+
+  def money(object)
+    Money.from_amount(object, "COP").format(:no_cents => true)
+  end
+
   # Formar estructura de títulos para el archivo de excel
   def titles_head
     export = params[:export]

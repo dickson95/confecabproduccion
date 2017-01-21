@@ -14,8 +14,17 @@ class EstadisticasController < ApplicationController
     @amount_annual = annual_cliente(company, year)
     com_progr = "lotes.empresa = ?  and EXTRACT(year_month from programaciones.mes) = ?"
     @wip = []
+    # Tomar los estados activos para hacer la estadística de cada uno
     Estado.active.each do |estado|
-      @wip.push({estado: estado, amount: Lote.current_state.state_filtered(estado.id).joins(:programacion).where(com_progr, company, year_month).sum("lotes.cantidad")})
+      lotes = Lote.joins(:programacion).where(com_progr, company, year_month)
+      amount = 0
+      # Despues de tener los lotes para la programación en la variable "lotes" se recorre para tomar los controles
+      # que tiene en el estado que se está tratando y sumar lo que hay realmente en cada estado
+      lotes.each do |lote|
+        # Acumular la cantidad que hay en el proceso
+        amounts = lote.control_lotes.where(estado_id: estado.id).each{ |control| amount += control.cantidad_last}
+      end
+      @wip.push({estado: estado, amount: amount})
     end
     # Programaciones
     set_data_programaciones(time.strftime("%Y%m"))
@@ -111,13 +120,15 @@ class EstadisticasController < ApplicationController
   end
 
   def annual_cliente(company, year)
-    Lote.current_state.state_filtered(last_estado.id).select("SUM(lotes.cantidad) as cantidad, cliente_id").joins(:programacion, :control_lotes).where("lotes.empresa = ? and EXTRACT(year from programaciones.mes) = ?", company, year).group(:cliente_id)
+    Lote.current_state.state_filtered(last_estado.id).select("SUM(lotes.cantidad) as cantidad, cliente_id").joins(:programacion, :control_lotes)
+        .where("lotes.empresa = ? and EXTRACT(year from programaciones.mes) = ?", company, year).group(:cliente_id)
   end
 
+  # Suma las cantidades completadas para determinado cliente
   def month_cliente(company, month)
     @amount_monthly = Lote.current_state.state_filtered(last_estado.id).select("SUM(lotes.cantidad) as cantidad, cliente_id")
                           .joins(:programacion, :control_lotes)
-                          .where("lotes.empresa = ? and programaciones.mes = ?", company, month+"-01")
+                          .where("lotes.empresa = ? and programaciones.mes = ? and control_lotes.fecha_salida IS NOT NULL", company, month+"-01")
                           .group(:cliente_id, :mes)
   end
 

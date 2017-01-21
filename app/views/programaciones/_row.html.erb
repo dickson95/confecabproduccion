@@ -13,14 +13,14 @@
                            :style => "max-width: 3em;", :class => "form-control text-black text-center input-sm no-padding" %>
       </td>
   <% end %>
-  <td class="state" style="background-color: <%= estado[:color] %>;"><%= @estados["#{lote_id}"][:name] %></td>
+  <td class="state" style="background-color: <%= estado[:color] %>;"><%= estado_or_sub lote_id %></td>
   <td><%= lote.fetch(0) %></td>
   <td><%= lote.fetch(1) %></td>
   <td><%= lote.fetch(3) %></td>
   <td><%= lote.fetch(4) %></td>
   <% if can? :prices, Lote %>
-      <td><%= Money.from_amount(lote.fetch(5), "COP").format(:no_cents => true) %></td>
-      <td><%= Money.from_amount(lote.fetch(6), "COP").format(:no_cents => true) %></td>
+      <td><%= money lote.fetch(5) %></td>
+      <td><%= money lote.fetch(6) %></td>
   <% end %>
   <td class="no-padding">
     <% if can? :update, Programacion %>

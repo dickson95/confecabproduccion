@@ -95,7 +95,8 @@ class Seguimiento < ApplicationRecord
   def self.continue
     @control_prev = control_prev
     first_seguimiento if !have_seguimientos(@lote)
-    $save = (@state < 4 || @action!="cambio_estado") ? seguimientos_register(@amount) : false
+    estado = Estado.find(@state)
+    $save = (estado.pasa_cantidad || @action!="cambio_estado") ? seguimientos_register(@amount) : false
     if $save
       close_seguimientos          # Cerrar seguimiento del proceso anterior
       reduce_previous_seguimiento # Restar cantidad para el lote en el proceso anterior
@@ -123,7 +124,7 @@ class Seguimiento < ApplicationRecord
     # Cerrar proceso anterior
     @control_prev.update(fecha_salida: @time, resp_salida_id: @current_user) if update
     # Si el último estado es igual que el del control actual tambien cierra la fecha de este
-    @control.update(fecha_salida: @time, resp_salida_id: @current_user) if Estado.last.id == @state && update
+    @control.update(fecha_salida: @time, resp_salida_id: @current_user) if Estado.last_estado.id == @state && update
   end
 
   def self.seguimientos_register(cantidad) # Crea un nuevo seguimiento
