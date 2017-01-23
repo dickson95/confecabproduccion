@@ -12,17 +12,14 @@ class Estado < ApplicationRecord
   validate :facturar_al, :max_percent_new, on: :create
   validate :facturar_al, :max_percent_update, on: :update
 
-  def facturar_al=(val)
-      self[:facturar_al] = facturar ? val : 0
-  end
 
   # Validar  que la suma de los procesos en sus porcentajes no supera el 100
   # No se tiene el último en cuenta pues este es la suma de los porcentajes
   def max_percent_new
-    id_last = Estado.select(:id).last_estado.id
+    id_last = Estado.active.select(:id).last_estado.id
     current_sum = Estado.where("id <> ?", id_last).sum(:facturar_al)
     sum = current_sum + facturar_al
-    errors.add(:facturar_al, "La suma de los porcentajes es mayor a 100%") if sum > 100 and id != id_last
+    errors.add(:facturar_al, "La suma de los porcentajes es mayor a 100%") if sum > 100 and secuencia < id_last
   end
 
   def max_percent_update
@@ -32,6 +29,13 @@ class Estado < ApplicationRecord
     errors.add(:facturar_al, "La suma de los porcentajes es mayor a 100%") if sum > 100 and id != id_last
   end
 
+  def facturar_al=(val)
+    self[:facturar_al] = facturar ? val : 0
+  end
+
+  def manual
+    self.pasa_manual ? "Sí" : "No"
+  end
   # Get name para los formularios que usan desplegables
   def name
     self.estado.upcase

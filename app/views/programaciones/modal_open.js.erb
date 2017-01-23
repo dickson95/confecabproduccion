@@ -22,8 +22,8 @@
 	<%end%>
 
 	foot = $("tfoot div p");
-	foot.first().html("<strong>Horas:</strong> <%=@hours%>");
-	foot.last().html("<strong>Precio total:</strong> <%=@total%>");
+	foot.first().html("<strong>Total unidades:</strong> <%= @cantidades %>");
+	foot.last().html("<strong>Precio total:</strong> <%= @total %>");
   modal_add.modal("hide");
 <%end%>
 

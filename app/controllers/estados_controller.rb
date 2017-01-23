@@ -37,10 +37,12 @@ class EstadosController < ApplicationController
   def create
     @estado = Estado.new(params_estado)
     respond_to do |format|
-      if @estado.save
+      @save = @estado.save
+      if @save
         @estado = Estado.last
         format.js { render "create_update" }
       else
+        puts  @estado.errors.full_messages
         format.js { render "create_update" }
       end
     end
@@ -74,6 +76,6 @@ class EstadosController < ApplicationController
   end
 
   def params_estado
-    params.require(:estado).permit(:estado, :nombre_accion, :pasa_cantidad, :color, :color_claro, :secuencia, :facturar, :facturar_al)
+    params.require(:estado).permit(:estado, :nombre_accion, :pasa_cantidad, :color, :color_claro, :secuencia, :facturar, :facturar_al, :pasa_manual)
   end
 end

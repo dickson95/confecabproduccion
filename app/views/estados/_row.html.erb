@@ -1,6 +1,6 @@
 <% if empty %>
     <tr data-empty="true">
-      <td colspan="<%= can?(:udpate, Estado) ? ("9") : "7" %>" >No hay datos disponibles</td>
+      <td colspan="<%= can?(:udpate, Estado) ? "10": "8" %>" >No hay datos disponibles</td>
     </tr>
 <% else %>
 <tr data-id="<%= estado.id %>">
@@ -21,12 +21,12 @@
       <% end %>
   <% else %>
       <td>
-        <%= link_to unlock_estado_path(estado), remote: true, method: :patch, class: "text-gray", title: "Activar" do %>
-            <i class="fa fa-unlock"></i>
+        <%= link_to unlock_estado_path(estado), remote: true, method: :patch, class: "text-blue", title: "Activar" do %>
+            <i class="fa fa-unlock "></i>
         <% end %>
       </td>
       <td>
-        <%= link_to estado_path(estado), remote: true, method: :delete, class: "text-red", title: "Eliminar" do %>
+        <%= link_to estado_path(estado), remote: true, method: :delete, class: " text-red", title: "Eliminar" do %>
             <i class="fa fa-trash"></i>
         <% end %>
       </td>
@@ -35,6 +35,7 @@
   <td><%= estado.nombre_accion %></td>
   <td><%= estado.secuencia %></td>
   <td><%= estado.pasa %></td>
+  <td><%= estado.manual %></td>
   <td><%= estado.factura_asi %></td>
   <td><%= estado.color %>
     <small class="pull-right"><i class="fa fa-square fa-lg" style="color: <%= estado.color %>;"></i></small>

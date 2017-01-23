@@ -76,9 +76,11 @@ class SeguimientosController < ApplicationController
   end
 
   def json_response
+    prev = ControlLote.prev(@control_lote, @control_lote.lote)
     {
         seguimiento: @seguimiento[:seguimiento],
-        seg_prev: ControlLote.prev(@control_lote, @control_lote.lote).seguimientos.last
+        seg_prev: prev.seguimientos.last,
+        date_range: prev.date_range
     }
   end
 

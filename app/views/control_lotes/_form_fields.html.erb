@@ -5,7 +5,7 @@
   readonly: true, label: 'Entró a este proceso el día'  %>
 </div>
 <div class="col-md-<%= col %>">
-  <%= c.association :estado, label: 'Parte del proceso', :include_blank => true %>
+  <%= c.association :estado, label: 'Parte del proceso', collection: Estado.active, :include_blank => true %>
 </div>
 <% # Sección del subestado %>
 <div class="col-md-<%= col %>">

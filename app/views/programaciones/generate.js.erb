@@ -1,10 +1,11 @@
 $("#<%=params[:month]%>t").find("tbody").replaceWith("<%=j render "table_tbody"%>");
 $(".disabled-btn").prop("disabled", false);
-$("#add-lote").bind('click', false);
-$("#add-lote").addClass("disabled");
+add_lote = $("#add-lote");
+add_lote.bind('click', false);
+add_lote.addClass("disabled");
 
 foot = $("tfoot div p");
 
-foot.first().html("<strong>Horas:</strong> <%=@hours%>");
+foot.first().html("<strong>Total unidades:</strong> <%= @cantidades %>");
 foot.last().html("<strong>Precio total:</strong> <%=@total%>");
 $(".overlay").remove();

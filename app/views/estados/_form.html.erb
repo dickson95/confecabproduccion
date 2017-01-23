@@ -12,11 +12,17 @@
         <div class="col-md-6">
           <%= f.input :nombre_accion %>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-3">
           <%= f.input :pasa_cantidad, as: :select, collection: [["Sí", true], ["No", false]], required: true %>
+        </div>
+        <div class="col-md-3">
+          <%= f.input :pasa_manual, as: :select, collection: [["Sí", true], ["No", false]], required: true %>
         </div>
       </div>
       <div class="row">
+        <div class="col-md-6">
+          <%= f.input :facturar, as: :select, collection: [["Sí", true], ["No", false]], required: true %>
+        </div>
         <div class="col-md-6">
           <%= f.input :facturar_al, wrapper: :vertical_input_group do%>
               <div class="input-group">
@@ -26,9 +32,6 @@
                 <%= f.input :facturar_al, label: false, input_html:{min: 0, max: 100, class: "form-control"}, readonly: !estado.facturar %>
               </div>
           <% end %>
-        </div>
-        <div class="col-md-6">
-          <%= f.input :facturar, as: :select, collection: [["Sí", true], ["No", false]], required: true %>
         </div>
       </div>
 

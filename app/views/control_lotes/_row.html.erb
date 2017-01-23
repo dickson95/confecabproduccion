@@ -19,7 +19,7 @@
       </td>
   <% end %>
   <td title="Proceso externo o interno"><%= control_lote.sub_or_process %></td>
-  <td title="Fecha de ingreso"><%= control_lote.date_range %></td>
+  <td title="Fecha de ingreso" data-date="true"><%= control_lote.date_range %></td>
   <td title="Responsable de ingreso"><%= control_lote.resp_ingreso_id.name %></td>
   <td title="Responsable de salida"><%= respon_exit control_lote.resp_salida_id %></td>
   <td title="Días en proceso"><%= days control_lote.fecha_ingreso, control_lote.fecha_salida %></td>
