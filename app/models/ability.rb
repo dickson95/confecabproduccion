@@ -36,7 +36,7 @@ class Ability
       can :manage, :calendario
     elsif user.has_rol? :aux_insumos
       can [:read, :update, :insumos, :cambio_estado, :export], Lote
-      can [:read, :export, :program_table], Programacion
+      can [:read, :export, :program_table, :get_row], Programacion
       can :read, [ControlLote, Cliente, Seguimiento]
       can [:create, :update], ControlLote
       cannot :update_cantidad, ControlLote
@@ -46,7 +46,7 @@ class Ability
       can :read, :calendario
     elsif user.has_rol? :gerente
       can :read, :all
-      can [:read, :export, :program_table], Programacion
+      can [:read, :export, :program_table, :get_row], Programacion
       can [:export, :prices], Lote
       cannot :manage, [Referencia, Talla, Rol]
       can :read, [:calendario, :estadisticas]
@@ -57,7 +57,9 @@ class Ability
     elsif user.has_rol? :terminacion
       can [:export, :read, :cambio_estado], [Lote, Programacion]
       can :manage, [ControlLote,Seguimiento]
+      can :create,  SubEstado
       can :read, Cliente
+      can [:read, :export, :program_table, :get_row], Programacion
       can :read, :calendario
     end
   end

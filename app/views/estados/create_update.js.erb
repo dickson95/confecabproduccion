@@ -1,14 +1,35 @@
-box_next = $("#box-estados").removeClass("col-md-6").addClass("col-md-12").next();
-row = "<%= j render partial: "row", locals: { estado: @estado, actions: true, empty: false } %>";
-console.log(row);
-<%if action_name == "update" %>
-box_next.remove();
-tr = $("table").find("[data-id='<%= @estado.id %>']");
-tr.replaceWith(row);
+<% # En caso de que resulte con falla la acción también se ponen los errores correspondientes %>
+<% if @estado.errors.any? %>
+  error = "has-error";
+  span = "<span class='help-block'></span>";
+
+  <% @estado.errors.each do |attr, error| %>
+    selector = "#estado_<%= attr %>";
+    div = $(selector).parent();
+    group = div.parent();
+    if(group.hasClass("input-group")){
+        parent_group = group.parent();
+        parent_group.children("span.help-block").remove();
+        parent_group.removeClass("has-error").addClass("has-error");
+        parent_group.append(span);
+        parent_group.children("span.help-block").append("<%= error %>");
+    }else{
+        div.children("span.help-block").remove();
+        div.removeClass("has-error").addClass("has-error");
+        div.append(span);
+        div.children("span.help-block").append("<%= error %>");
+    }
+  <% end %>
+
 <% else %>
-box_next.remove();
-<% puts @save %>
-<% if @save %>
-$("table#actives tbody").append("<%= j render 'row',  estado: @estado, actions: true, empty: false %>");
-<% end %>
+  box_next = $("#box-estados").removeClass("col-md-6").addClass("col-md-12").next();
+  row = "<%= j render 'row',  estado: @estado, actions: true, empty: false %>";
+  <% if action_name == "update" %>
+    box_next.remove();
+    tr = $("table").find("[data-id='<%= @estado.id %>']");
+    tr.replaceWith(row);
+  <% else %>
+    box_next.remove();
+    $("table#actives tbody").append(row);
+  <% end %>
 <% end %>

@@ -52,7 +52,9 @@ module ControlLotesHelper
   private
 
   def arrows
-    down + amount + up
+    content_tag :div, "", class: "row" do
+      down + amount + up
+    end
   end
 
   def up

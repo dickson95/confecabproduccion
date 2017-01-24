@@ -9,8 +9,8 @@ class Estado < ApplicationRecord
   validates :secuencia, uniqueness: true
   validates :pasa_cantidad, :facturar, inclusion: {in: [true, false]}
   validates :estado, :nombre_accion, :color, :color_claro, :secuencia, presence: true
-  validate :facturar_al, :max_percent_new, on: :create
-  validate :facturar_al, :max_percent_update, on: :update
+  validate :facturar_al, :max_percent_new, if: '!facturar_al.nil?', on: :create
+  validate :facturar_al, :max_percent_update,if: '!facturar_al.nil?', on: :update
 
 
   # Validar  que la suma de los procesos en sus porcentajes no supera el 100
