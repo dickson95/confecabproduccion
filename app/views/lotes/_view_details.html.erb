@@ -216,13 +216,16 @@
       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       <% if can? :update, Lote %>
           <div class="btn-group">
-            <%= link_to edit_lote_path(@lote.lote, :commit => "edit", :estado_id => @lote.estado.id, :sub_id => @lote.sub_estado.nil? ? "" : "#{@lote.sub_estado.id}"), class: "btn btn-primary" do |l| %>
+            <%= link_to edit_lote_path(@lote.lote, :commit => "edit", :estado_id => @lote.estado.id,
+                                       :sub_id => @lote.sub_estado.nil? ? "" : "#{@lote.sub_estado.id}", :plc => params[:plc]),
+                        class: "btn btn-primary" do |l| %>
                 <%= content_tag :i, "", :class => "fa fa-pencil" %>
                 Editar
             <% end %>
             <% next_estado =  @lote.estado.next %>
             <% if next_estado %>
-                <%= link_to lote_cambio_estado_path(@lote, :btn => next_estado.id, :plc => params[:plc]), data:{ action: "cambio_estado" },
+                <%= link_to lote_cambio_estado_path(@lote, :btn => next_estado.id, :plc => params[:plc]),
+                            data:{ action: "cambio_estado" },
                             method: "PATCH", :class => "btn btn-primary" do %>
                     <i class='fa fa-fast-forward fa-fw' aria-hidden='true'></i>
                     <%= next_estado.nombre_accion %>

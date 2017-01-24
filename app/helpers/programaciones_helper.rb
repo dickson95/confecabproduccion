@@ -71,6 +71,7 @@ module ProgramacionesHelper
         @result.push(sum_amount_external_processes(lote))
       end
       if export[:reprocess].eql?("true")
+        puts "reprocesos"
         reprocess_row(lote)
       end
     end
