@@ -1,0 +1,36 @@
+<div class="row">
+  <div id="box-estados" class="col-md-12">
+    <div class="box box-primary">
+      <div class="box-body table-responsive">
+        <table class="table table-bordered table-striped" id="inactives">
+          <caption>
+            <h3>Procesos inactivos</h3>
+            <small>Estos procesos no son tenidos en cuenta en el sistema</small>
+          </caption>
+          <thead>
+          <tr>
+            <th colspan="2"></th>
+            <th>Proceso</th>
+            <th>Nombre como acción</th>
+            <th>Secuencia</th>
+            <th>Pasar cantidad automáticamente</th>
+            <th>Paso manual de unidades</th>
+            <th>Factura (%)</th>
+            <th>Color fuerte</th>
+            <th>Color suave</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% if @estados_inactive.empty? %>
+              <%= render 'row', actions: false, empty: true%>
+          <% else %>
+              <% @estados_inactive.each do |estado| %>
+                  <%= render 'row', estado: estado, actions: false, empty: false %>
+              <% end %>
+          <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -31,23 +31,3 @@
 //= require dist/js/app
 //= require autocomplete-rails
 //= require_tree .
-
-
-$(document).on("ready", function () {
-    //Remover mensajes informativos
-    setTimeout(function () {
-        $("#notice").slideUp("normal", function () {
-            $(this).remove();
-        });
-    }, 7000);
-
-    $("body").on('show.bs.dropdown', '.dropdown', function (e) {
-        $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
-    }).on('hide.bs.dropdown', '.dropdown', function (e) {
-        $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
-    });
-});
-
-
-
-

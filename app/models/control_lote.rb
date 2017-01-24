@@ -1,4 +1,5 @@
 class ControlLote < ApplicationRecord
+  has_many :seguimientos, :dependent => :destroy
   belongs_to :lote, optional: true
   belongs_to :estado
   belongs_to :sub_estado, optional: true
@@ -8,9 +9,26 @@ class ControlLote < ApplicationRecord
   
   # Validaciones
   validates :estado, :fecha_ingreso, presence: true
-  
+
+  scope :prev, ->(id, lote_id) { where("id < ? and lote_id = ?", id, lote_id).last }
+  scope :next, ->(control) { where("id > ? and lote_id = ?", control, control.lote).first }
+
   # Métodos
-  
+  def sub_or_process
+    if sub_estado_id > 0
+      self.sub_estado.sub_estado.capitalize
+    else
+      self.estado.estado.capitalize
+    end
+  end
+
+  # Get para la última cantidad
+  def cantidad_last
+    last = self.seguimientos.last
+    return last.cantidad if last
+    0
+  end
+
   def sub_estado_id=(val)
     val = val.strip.eql?("") ? "0" : val
     write_attribute(:sub_estado_id, val)
@@ -22,13 +40,13 @@ class ControlLote < ApplicationRecord
     if !date2.nil?
       with_month = nil
       if date1.strftime("%m") == date2.strftime("%m")
-        with_month = date1.strftime("%d")
+        with_month = I18n::l(date1, format: "%d")
       else
-        with_month = date1.strftime("%d de %b")
+        with_month = I18n::l(date1, format: "%d de %b")
       end
-      "#{with_month} - #{date2.strftime("%d de %b")}"
+      "#{with_month} - #{I18n::l(date2, format: "%d de %b")}"
     else
-      date1.strftime "%d de %b"
+      I18n::l(date1, format: "%d de %b")
     end
   end
 

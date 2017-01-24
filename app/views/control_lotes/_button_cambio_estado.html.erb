@@ -1,0 +1,8 @@
+<% next_estado =  @lote.control_lotes.last.estado.next %>
+<% if next_estado %>
+    <%= link_to lote_cambio_estado_path(@lote, :btn => next_estado.id, :plc => params[:plc]), data:{ action: "cambio_estado" },
+                remote: true, method: "PATCH", :class => "btn btn-primary" do %>
+        <i class='fa fa-fast-forward fa-fw' aria-hidden='true'></i>
+        <%= next_estado.nombre_accion %>
+    <% end %>
+<% end %>

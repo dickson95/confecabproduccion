@@ -5,7 +5,7 @@ module LotesDatatablesHelper
     company = session[:selected_company] ? "CAB" : "D&C"
     {
         "draw": params[:draw],
-        "recordsTotal": Lote.where(:empresa => company).count,
+        "recordsTotal": Lote.current_state.state_filtered(params[:state]).where(:empresa => company).count,
         "recordsFiltered": arrays[:can],
         "data":  arrays[:a]
     }
@@ -42,15 +42,27 @@ module LotesDatatablesHelper
     order_val = params[:order]["0"]
     order = {"0" => {:id => order_val[:dir]}, "2" => {:cliente_id => order_val[:dir]} , "6" => {:tipo_prenda_id =>  order_val[:dir]}}
     if params[:search][:value].strip == ""
-      amou = Lote.where(:empresa => company).count
-      lotes = Lote.where("lotes.empresa = '#{company}'")
-        .limit(params[:length]).offset(params[:start]).order(order[order_val[:column]])
+      if params[:state] == "0"
+        amou = Lote.where(:empresa => company).count
+        lotes = Lote.where("lotes.empresa = '#{company}'")
+                    .limit(params[:length]).offset(params[:start]).order(order[order_val[:column]])
+      else
+        amou = Lote.current_state.state_filtered(params[:state]).where(:empresa => company).count
+        lotes = Lote.current_state.state_filtered(params[:state]).where("lotes.empresa = '#{company}'")
+                    .limit(params[:length]).offset(params[:start]).order(order[order_val[:column]])
+      end
     else
       keys = searchable_columns params[:search][:value].strip
       lotes = Lote.ransack(keys)
+      if params[:state] == "0"
       amou = lotes.result.where(:empresa => company).count
-      lotes = lotes.result.where(:empresa => company).limit(params[:length]).order(order[order_val[:column]])
-    end
+        lotes = lotes.result.where(:empresa => company).limit(params[:length]).order(order[order_val[:column]])
+      else
+        amou = lotes.result.current_state.state_filtered(params[:state]).where(:empresa => company).count
+        lotes = lotes.result.current_state.state_filtered(params[:state]).where(:empresa => company).limit(params[:length])
+                    .order(order[order_val[:column]])
+      end
+     end
     { lotes: lotes, amount: amou }
   end
   

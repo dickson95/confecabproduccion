@@ -1,0 +1,14 @@
+box_next = $("#box-estados").removeClass("col-md-6").addClass("col-md-12").next();
+row = "<%= j render partial: "row", locals: { estado: @estado, actions: true, empty: false } %>";
+console.log(row);
+<%if action_name == "update" %>
+box_next.remove();
+tr = $("table").find("[data-id='<%= @estado.id %>']");
+tr.replaceWith(row);
+<% else %>
+box_next.remove();
+<% puts @save %>
+<% if @save %>
+$("table#actives tbody").append("<%= j render 'row',  estado: @estado, actions: true, empty: false %>");
+<% end %>
+<% end %>

@@ -6,32 +6,35 @@
 	</caption>
 	<thead>
 		<tr>
+      <th>Sec.</th>
+			<th>Estado</th>
 			<th>Cliente</th>
-			<th>Descripción</th>
+      <th>Descripcion</th>
 			<th>Referencia</th>
 			<th>Cant</th>
 			<%if (can? :prices, Lote)%>
 			<th>Precio</th>
 			<th>Total</th>
 			<%end%>
-			<th>Meta</th>
-			<th>Horas</th>
+      <th>Entrara a planta</th>
 		</tr>
 	</thead>
 	<tbody>
-		<%@programaciones.each do |programacion|%>
-		<tr style="height: 25px;">
-			<td style="padding:0; margin:0;"><%=programacion.fetch(0)%></td>
-			<td style="padding:0; margin:0;"><%=programacion.fetch(1)%></td>
-			<td style="padding:0; margin:0;"><%=programacion.fetch(3)%></td>
-			<td style="padding:0; margin:0;"><%=programacion.fetch(4)%></td>
-			<%if (can? :prices, Lote)%>
-			<td style="padding:0; margin:0;"><%=Money.new(programacion.fetch(5)).format%></td>
-			<td style="padding:0; margin:0;"><%=Money.new(programacion.fetch(6)).format%></td>
-			<%end%>
-			<td style="padding:0; margin:0;"><%=programacion.fetch(7)%></td>
-			<td style="padding:0; margin:0;"><%=programacion.fetch(8)%></td>
-		</tr>
+		<%@programaciones.each do |lote|%>
+        <% lote_id = lote.fetch(9) %>
+      <tr class="no-padding" style="padding:0; margin:0;">
+        <td><%= lote.fetch(2) %></td>
+        <td><%= estado_or_sub lote_id %></td>
+        <td><%= lote.fetch(0) %></td>
+        <td><%= lote.fetch(1) %></td>
+        <td><%= lote.fetch(3) %></td>
+        <td><%= lote.fetch(4) %></td>
+        <% if can? :prices, Lote %>
+            <td><%= money lote.fetch(5) %></td>
+            <td><%= money lote.fetch(6) %></td>
+        <% end %>
+        <td><%= set_date(lote.fetch(10), "%d %B %Y") %></td>
+      </tr>
 		<%end%>
 	</tbody>
 </table>

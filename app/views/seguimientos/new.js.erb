@@ -1,0 +1,15 @@
+p1 = $("a[data-toggle='popover<%= params[:control_lote_id] %>1']");
+p2 = $("a[data-toggle='popover<%= params[:control_lote_id] %>2']");
+<% if params[:process] == "true" %>
+p = p1;
+pR = p2; // pR = popoverRemove
+<% else %>
+p = p2;
+pR = p1;
+<% end %>
+
+$(".popover").hide();
+p.data("title", "WIP <span class='pull-right close'  data-action='close'>x</span>");
+p.data("content", "<%= j render "form" %>");
+pR.popover("hide");
+p.popover("show");
