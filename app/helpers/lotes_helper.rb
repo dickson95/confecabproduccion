@@ -17,27 +17,6 @@ module LotesHelper
     end
   end
 
-  # Cambio de estados. Las opciones son todas las disponibles en el helper link_to
-  def next_state( state )
-    men = nil
-    state = state.to_i
-    case state
-      when 1
-        men = { :view => 'Integrar', :state => state + 1, :boolean => true }
-      when 2
-        men = { :view =>'Confeccionar', :controller => "integración", :state => state + 1, :boolean => true }
-      when 3
-        men = { :view => 'Terminar', :controller => "confección", :state => state + 1, :boolean => true }
-      when 4
-        men = { :view => 'Completar', :controller => "terminación", :state => state + 1, :boolean => true }
-      when 5
-        men = { :controller => "completado", :state => state + 1, :boolean => false }
-      else
-        men = {:state => state, :boolean => false }
-    end
-    return men
-  end
-
   def def_names(keys)
     names = Array.new
     modify = { 

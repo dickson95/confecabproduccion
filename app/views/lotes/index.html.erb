@@ -13,13 +13,14 @@
 <% can_pri = can? :prices, Lote %>
 <div class="box box-primary with-border" style="margin-top: 20px;">
   <div class="box-header">
-    <h4 class="box-title">Lotes</h4>
+    <h4 class="box-title">Lotes <span class="label label-primary"><%= Lote.where(:empresa => session[:selected_company] ? "CAB" : "D&C").count %></span></h4>
     <div class="box-tools pull-right">
       <% if can? :export, Lote %>
           <%= link_to options_export_lotes_path, :remote => true, :class => "btn-sm", :id => "exportar", :title => "Exportar excel" do %>
               <i class="fa fa-file-excel-o fa-2x" aria-hidden="true"></i>
           <% end %>
       <% end %>
+
       <% if can? :create, Lote %>
           <%= link_to new_lote_path(:plc => controller_name), :title => "Nuevo lote", :class => "btn-sm" do %>
               <%= content_tag :i, "", :class => "fa fa-plus fa-2x" %>
@@ -29,25 +30,27 @@
 
   </div>
   <div class="box-body">
-    <table class="table table-striped table-bordered" id="lotes" width="100%" data-source="<%= lotes_path(format: :json) %>">
-      <thead>
-      <tr>
-        <th title="Identificador">#</th>
-        <th style="max-width: 40px;"></th>
-        <th class="col-md-2" style="min-width: 140px;" title="Cliente">Cliente</th>
-        <th class="col-md-2" style="min-width: 80px;" title="Referencia">Referencia</th>
-        <th class="col-md-1" title="OP de lote">OP</th>
-        <th class="col-md-1" title="Cantidad">Cant</th>
-        <th class="col-md-2" title="Descripción de la prenda">Descripción</th>
-        <% if can_pri %>
-            <th class="col-md-2" title="Precio unitario">Precio</th>
-            <th class="col-md-2" title="Precio total">Total</th>
+    <div class="nav-tabs-custom">
+      <% active = cookies[:tab_active] || @estados.first.id %>
+      <% active = active.to_i %>
+      <ul class="nav nav-tabs">
+        <li class="<%= "active" if 0 == active %>" data-url-tabs="<%= lotes_url(format: :js, state: 0) %>" data-id="<%= 0 %>">
+          <%= link_to "Todos", "#all", data:{:toggle => "tab"} %>
+        </li>
+        <% @estados.each do |estado| %>
+            <% id = estado.id %>
+          <li class="<%= "active" if id == active %>" data-url-tabs="<%= lotes_url(format: :js, state: id) %>" data-id="<%= id %>">
+            <%= link_to estado.name.capitalize, "##{estado.name.downcase}", data:{:toggle => "tab"} %>
+          </li>
         <% end %>
-      </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-    <!--Fin de la lista-->
+      </ul>
+      <div class="tab-content no-padding">
+        <div class="tab-pane <%= "active" if 0 == active %>" id="all"></div>
+        <% @estados.each do |estado| %>
+            <div class="tab-pane <%= "active" if estado.id == active %>" id="<%= estado.name.downcase %>"></div>
+        <% end %>
+      </div>
+    </div>
   </div>
   <div id="targets" data-padding="[<%= can_pri ? "1, 7" : "1" %>]" data-orderable="[1, 3, 4, 5<%= ", 7, 8" if can_pri  %>]"></div>
 </div>

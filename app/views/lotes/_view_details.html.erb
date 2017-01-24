@@ -7,6 +7,8 @@
       <h4 class="modal-title" id="myModalLabel">
         REFERENCIA: <%= @lote.lote.referencia.referencia %>
       </h4>
+      <% programacion = @lote.lote.programacion %>
+      <small>Programado: <%= programacion ? l(programacion.mes, format: "%B de %Y") : "No tiene" %></small>
     </div>
     <div class="modal-body">
 
@@ -114,14 +116,6 @@
           <strong>Fecha de salida:</strong><br>
           <%= @lote.estado.id==5 ? l(@lote.fecha_salida, format: "%d de %b/%y") : "No ha salido" %>
         </p>
-        <p class="col-md-3 text-left">
-          <strong>Meta por hora:</strong>
-          <%= @lote.lote.meta %>
-        </p>
-        <p class="col-md-3 text-left">
-          <strong>Horas totales:</strong>
-          <%= @lote.lote.h_req %>
-        </p>
       </div>
 
       <!--Facturación-->
@@ -138,11 +132,11 @@
             </p>
             <p class="col-md-3 text-left">
               <strong>Precio unitario:</strong>
-              <%= Money.new("#{@lote.lote.precio_u}00", "USD").format %>
+              <%= Money.new("#{@lote.lote.precio_u}00", "COP").format(no_cents: true) %>
             </p>
             <p class="col-md-3 text-left">
               <strong>Precio total:</strong>
-              <%= Money.new("#{@lote.lote.precio_t}", "USD").format %>
+              <%= Money.new("#{@lote.lote.precio_t}", "COP").format(no_cents: true) %>
             </p>
           </div>
       <% end %>
@@ -203,11 +197,11 @@
         </p>
         <p class="col-sm-3 text-left">
           <strong>Proceso adicional:</strong>
-          <%= @lote.sub_estado.nil? ? "-" : "#{@lote.sub_estado.sub_estado}" %>
+          <%= @lote.sub_estado.nil? ? "-" : "#{@lote.sub_estado.sub_estado.capitalize}" %>
         </p>
         <p class="col-md-3 text-left">
           <strong>Tiempo de proceso:</strong>
-          <%= ControlLote.where(lote_id: @lote.lote.id).sum(:min_u) %>
+          <%= days @lote.fecha_ingreso, @lote.fecha_salida %>
         </p>
       </div>
 
@@ -226,11 +220,12 @@
                 <%= content_tag :i, "", :class => "fa fa-pencil" %>
                 Editar
             <% end %>
-            <% change = next_state @lote.estado.id %>
-            <% if change[:boolean] %>
-                <%= link_to lote_cambio_estado_path(@lote.lote, :btn => change[:state]), method: "PATCH", :class => "btn btn-primary" do %>
+            <% next_estado =  @lote.estado.next %>
+            <% if next_estado %>
+                <%= link_to lote_cambio_estado_path(@lote, :btn => next_estado.id, :plc => params[:plc]), data:{ action: "cambio_estado" },
+                            method: "PATCH", :class => "btn btn-primary" do %>
                     <i class='fa fa-fast-forward fa-fw' aria-hidden='true'></i>
-                    <%= change[:view] %>
+                    <%= next_estado.nombre_accion %>
                 <% end %>
             <% end %>
           </div>

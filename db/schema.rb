@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161223173234) do
+ActiveRecord::Schema.define(version: 20170123134209) do
 
   create_table "asignaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -67,18 +67,16 @@ ActiveRecord::Schema.define(version: 20161223173234) do
   end
 
   create_table "control_lotes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.datetime "fecha_ingreso",                                                     null: false
+    t.datetime "fecha_ingreso",                             null: false
     t.datetime "fecha_salida"
     t.integer  "lote_id"
-    t.integer  "estado_id",                                                         null: false
-    t.datetime "created_at",                                                        null: false
-    t.datetime "updated_at",                                                        null: false
-    t.integer  "sub_estado_id",                                         default: 0
-    t.decimal  "min_u",                         precision: 9, scale: 2
-    t.integer  "resp_ingreso_id",                                       default: 1, null: false
+    t.integer  "estado_id",                                 null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.integer  "sub_estado_id",                 default: 0
+    t.integer  "resp_ingreso_id",               default: 1, null: false
     t.integer  "resp_salida_id"
     t.text     "observaciones",   limit: 65535
-    t.integer  "cantidad",                                              default: 0
     t.index ["estado_id"], name: "index_control_lotes_on_estado_id", using: :btree
     t.index ["lote_id"], name: "index_control_lotes_on_lote_id", using: :btree
     t.index ["resp_ingreso_id"], name: "index_control_lotes_on_resp_ingreso_id", using: :btree
@@ -87,12 +85,18 @@ ActiveRecord::Schema.define(version: 20161223173234) do
   end
 
   create_table "estados", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "estado",        null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.string   "estado",                                   null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.string   "nombre_accion"
     t.string   "color"
     t.string   "color_claro"
+    t.integer  "secuencia"
+    t.boolean  "pasa_cantidad",            default: false
+    t.boolean  "active",                   default: true
+    t.float    "facturar_al",   limit: 24
+    t.boolean  "facturar",                 default: false
+    t.boolean  "pasa_manual",              default: false
   end
 
   create_table "lotes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -161,6 +165,17 @@ ActiveRecord::Schema.define(version: 20161223173234) do
     t.index ["user_id"], name: "index_roles_users_on_user_id", using: :btree
   end
 
+  create_table "seguimientos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "cantidad"
+    t.integer  "control_lote_id"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.date     "fecha_salida"
+    t.boolean  "proceso",         default: true
+    t.boolean  "reproceso",       default: false
+    t.index ["control_lote_id"], name: "index_seguimientos_on_control_lote_id", using: :btree
+  end
+
   create_table "sub_estados", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "sub_estado", null: false
     t.datetime "created_at", null: false
@@ -201,8 +216,11 @@ ActiveRecord::Schema.define(version: 20161223173234) do
     t.string   "name"
     t.string   "telefono"
     t.string   "username"
+    t.datetime "locked_at"
+    t.integer  "unlock_token"
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+    t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
     t.index ["username"], name: "index_users_on_username", unique: true, using: :btree
   end
 
@@ -217,4 +235,5 @@ ActiveRecord::Schema.define(version: 20161223173234) do
   add_foreign_key "lotes", "tipos_prendas"
   add_foreign_key "roles_users", "roles"
   add_foreign_key "roles_users", "users"
+  add_foreign_key "seguimientos", "control_lotes"
 end

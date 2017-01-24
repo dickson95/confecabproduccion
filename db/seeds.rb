@@ -1,1 +1,1 @@
-Rol.create(:name => "aux_facturacion")
+Rol.create(:name => "terminacion")

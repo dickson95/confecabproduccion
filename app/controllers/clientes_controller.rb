@@ -66,11 +66,14 @@ class ClientesController < ApplicationController
   # DELETE /clientes/1
   # DELETE /clientes/1.json
   def destroy
-    @cliente.destroy
+    bef_delete = Before::Delete.new
     respond_to do |format|
-      format.html { redirect_to clientes_path }
-      flash[:success] = "Cliente eliminado."
-      format.json { head :no_content }
+      if bef_delete.child_records(@cliente)
+        format.json { render json: "Algunos lotes dependen de este cliente. No se puede eliminar.", status: :conflict }
+      else
+        @cliente.destroy
+        format.json { render json: { message: "Cliente eliminado con éxito" } }
+      end
     end
   end
   
@@ -96,7 +99,7 @@ class ClientesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def cliente_params
       empresa = params[:cliente][:empresa]
-      params[:cliente][:empresa] = Cliente.to_boolean empresa
+      params[:cliente][:empresa] = util.to_boolean empresa
       params.require(:cliente).permit(:cliente, :telefono, :direccion, :email, :empresa,
       :mensaje, :asunto)
     end

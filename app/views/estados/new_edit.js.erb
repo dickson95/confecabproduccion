@@ -1,0 +1,13 @@
+
+<%
+  file = action_name
+  if action_name.eql?("update")
+    file = "edit"
+  elsif action_name.eql?("create")
+    file = "new"
+  end
+%>
+box = $("#box-estados");
+box.removeClass("col-md-12 col-md-6").addClass("col-md-6");
+box.next().remove();
+box.after("<%= j render file, estado: @estado %>");

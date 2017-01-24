@@ -10,10 +10,6 @@ class Cliente < ApplicationRecord
 	def cliente=(val)
 		self[:cliente] = val.upcase
 	end
-	
-	def self.to_boolean(str)
-		str == "true"
-	end
 
 	def self.hash_ids
 		result = select("id, cliente").as_json

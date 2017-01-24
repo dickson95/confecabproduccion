@@ -1,20 +1,27 @@
+<% referencia = @lote.referencia.referencia %>
+<% lote = Lote %>
+<% this = ControlLote %>
+<% seguimiento = Seguimiento %>
+<% update_seguimiento = can? :update, seguimiento %>
+<% read_seguimiento = can? :read, seguimiento %>
 <% content_for :title do %>
-    Historial del lote <%= @lote.referencia.referencia %>
+    Historial del lote <%= referencia %>
 <% end %>
 <%= content_for :content_header do %>
     <h1>
-      Detalle del ciclo de producción
+      Ciclo de
+      produccion <%= can?(:update, lote) ? link_to(referencia, edit_lote_path(@lote, plc: params[:plc])) : referencia %>
       <small></small>
     </h1>
 <% end %>
 <%= content_for :content_breadcrumb do %>
     <li><%= link_to params[:plc].capitalize, "/#{params[:plc]}" %></li>
-    <li><%= link_to "Ciclo de producción", lote_control_lotes_path(@lote, @control_lote, :plc=> params[:plc]) %></li>
+    <li><%= link_to "Ciclo de producción", lote_control_lotes_path(@lote, @control_lote, :plc => params[:plc]) %></li>
 <% end %>
 <div class="box box-primary with-border">
   <div class="box-header">
-    <h4 class="box-title">Ciclo de producción</h4>
-    <% if can? :create, ControlLote %>
+    <h4 class="box-title">Procesos</h4>
+    <% if can? :create, this %>
         <div class="box-tools">
           <%= link_to new_lote_control_lote_path(@lote, :plc => params[:plc]), :title => 'Proceso nuevo' do %>
               <i class="fa fa-plus fa-2x" aria-hidden="true"></i>
@@ -27,54 +34,26 @@
       <thead>
       <tr class="bg-primary">
         <th colspan="<%= set_colspan 5 %>">REFERENCIA: <%= @lote.referencia.referencia %></th>
-        <th colspan="<%= can?(:update_cantidad, ControlLote) ? "5" : "4" %>">OP: <%= @lote.op %></th>
+        <th colspan="<%= update_seguimiento ? "5" : "4" %>">OP: <%= @lote.op %></th>
       </tr>
       <tr class="bg-info">
-        <% if can?(:update, ControlLote) || can?(:destroy, ControlLote) %>
+        <% if can?(:update, this) || can?(:destroy, this) %>
             <th colspan="<%= set_colspan 2 %>"></th>
         <% end %>
         <th>Proceso</th>
-        <th>P.adicional</th>
         <th class="col-xs-2">Ingreso-Salida</th>
         <th class="col-xs-2">Ingresado por</th>
         <th class="col-xs-2">Salida por</th>
         <th>Días</th>
         <th class="col-xs-3">Observaciones</th>
-        <% if can? :update_cantidad, ControlLote %>
+        <% if update_seguimiento or read_seguimiento %>
             <th>Cantidades</th>
         <% end %>
       </tr>
       </thead>
       <tbody>
       <% @control_lotes.each do |control_lote| %>
-          <tr>
-            <% if can? :update, ControlLote %>
-                <td>
-                  <%= link_to edit_lote_control_lote_path(@lote, control_lote, :plc => params[:plc]) do %>
-                      <i class="fa fa-pencil" aria-hidden="true"></i>
-                  <% end %>
-                </td>
-            <% end %>
-            <% if can? :destroy, ControlLote %>
-                <td>
-                  <%= link_to lote_control_lote_path(@lote, control_lote, :plc => params[:plc]), data: {:confirm => "¿Esta seguro de eliminar este proceso?"}, method: "delete" do %>
-                      <i class="fa fa-trash text-red" aria-hidden="true"></i>
-                  <% end %>
-                </td>
-            <% end %>
-            <td title="Proceso"><%= control_lote.estado.name.upcase %></td>
-            <td title="Proceso adicional"><%= sub_process control_lote.sub_estado %></td>
-            <td title="Fecha de ingreso"><%= control_lote.date_range %></td>
-            <td title="Responsable de ingreso"><%= control_lote.resp_ingreso_id.name %></td>
-            <td title="Responsable de salida"><%= respon_exit control_lote.resp_salida_id %></td>
-            <td title="Días en proceso"><%= days control_lote.fecha_ingreso, control_lote.fecha_salida %></td>
-            <td title="Observaciones"><%= control_lote.observaciones %></td>
-            <% if can? :update_cantidad, ControlLote %>
-                <td style="padding: 1px;">
-                  <%= content_tag :input, "", data: {:control_id => control_lote.id}, :value => control_lote.cantidad, :type => "number", :class => "form-control input-sm cantidades" %>
-                </td>
-            <% end %>
-          </tr>
+          <%= render "row", control_lote: control_lote %>
       <% end %>
       </tbody>
     </table>
@@ -82,21 +61,14 @@
   <div class="box-footer">
     <div class="box-tools pull-right">
       <strong>Cantidad total:</strong> <span><%= @lote.cantidad %></span> <br>
-      <strong>Cantidad en proceso:</strong> <span id="cantidad_proceso"><%= @control_lotes.sum(:cantidad) %></span>
     </div>
   </div>
 </div>
 <div class="row">
   <div class="col-md-offset-9 col-md-3 text-right">
     <%= link_to "Regresar", "/#{params[:plc]}" %>
-    <% if can? :cambio_estado, Lote %>
-        <% change = next_state @lote.control_lotes.last.estado.id %>
-        <% if change[:boolean] %>
-            <%= link_to lote_cambio_estado_path(@lote, :btn => change[:state], :plc => params[:plc]), method: "PATCH", :class => "btn btn-primary" do %>
-                <i class='fa fa-fast-forward fa-fw' aria-hidden='true'></i>
-                <%= change[:view] %>
-            <% end %>
-        <% end %>
+    <% if can? :cambio_estado, lote %>
+        <%= render "button_cambio_estado" %>
     <% end %>
   </div>
 </div>

@@ -12,6 +12,10 @@ module Produccion11
     config.time_zone =  'America/Bogota'
     config.i18n.default_locale = 'es-CO'
     config.active_record.default_timezone = :local
+
+    #Cargar las clases adicionadas al directorio "lib"
+    config.autoload_paths << Rails.root.join('lib')
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

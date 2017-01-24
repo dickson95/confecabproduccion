@@ -67,11 +67,15 @@ class SubEstadosController < ApplicationController
   # DELETE /sub_estados/1
   # DELETE /sub_estados/1.json
   def destroy
-    @sub_estado.destroy
+    bef_delete = Before::Delete.new
     respond_to do |format|
-      format.html { redirect_to sub_estados_path }
-      flash[:success] = "Proceso eliminado con éxito"
-      format.json { head :no_content }
+      if bef_delete.child_records(@sub_estado)
+        format.json { render json: "Algunos ciclos de los lotes dependen de este proceso externo. No se puede eliminar.", status: :conflict }
+      else
+        @sub_estado.destroy
+        data= { message: "Proceso externo eliminado" }
+        format.json { render json: data }
+      end
     end
   end
 

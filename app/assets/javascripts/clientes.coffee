@@ -1,5 +1,5 @@
 $(document).on "ready", ->
-		target = if gon.clientes then [ 0, 1, 3, 4, 5 ] else [ 2..4 ]
+		target = if gon.clientes then [ 0, 1, 3, 4, 5 ] else [ 1..3 ]
 		$('#clientes').DataTable
       language:
         lengthMenu: 'Mostrar _MENU_ registros'

@@ -35,8 +35,9 @@
     new Morris.Bar({
       element: 'relatives<%= "#{params[:year]}#{params[:month]}" %>',
       data: [
-        {planta: 'Confección', value: <%= @confeccion_relative.round %>},
-        {planta: 'Terminación', value: <%= @terminacion_relative.round %>}
+          <% @relatives.each do |v| %>
+          {planta: '<%= v[:estado].estado %>', value: <%= v[:relative].round %>},
+          <% end %>
       ],
       xkey: 'planta',
       ykeys: ['value'],

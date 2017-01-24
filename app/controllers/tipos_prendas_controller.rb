@@ -69,11 +69,15 @@ class TiposPrendasController < ApplicationController
   # DELETE /tipos_prendas/1
   # DELETE /tipos_prendas/1.json
   def destroy
-    @tipo_prenda.destroy
+    bef_delete = Before::Delete.new
     respond_to do |format|
-      format.html { redirect_to tipos_prendas_url }
-      flash[:success] = "Descripción eliminada."
-      format.json { head :no_content }
+      if bef_delete.child_records(@tipo_prenda)
+        format.json { render json: "Algunos lotes dependen esta descripción. No se puede eliminar", status: :conflict }
+      else
+        @tipo_prenda.destroy
+        data= { message: "Descripción eliminada con éxito" }
+        format.json { render json: data }
+      end
     end
   end
 
