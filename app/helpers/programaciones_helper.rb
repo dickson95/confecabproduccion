@@ -23,8 +23,8 @@ module ProgramacionesHelper
   def titles_head
     export = params[:export]
     # Estas son las culumnas fijas que se presentan en la vista de las programaciones a la hora de exportar el excel
-    @result = ["Orden de trabajo", "Ingreso", "Ira a planta", "Proceso", "Cliente", "Referencia", "OP", "Cant"]
-    @widths = [7, 11, 11, 11, 11, 15, 11, :auto]
+    @result = ["Orden de trabajo", "Ingreso", "Ira a planta", "Proceso", "Cliente", "Referencia", "OP", "Descripción","Cant"]
+    @widths = [7, 11, 11, 11, 11, 15, 11, :auto, :auto]
     (@result.push("Pre. Unitario"); @widths.push(11)) if export[:precio_u] == "1"
     (@result.push("Pre. Total"); @widths.push(10)) if export[:precio_t] == "1"
     @wip_width = 15
@@ -56,6 +56,7 @@ module ProgramacionesHelper
     @result.push(lote.cliente.name)
     @result.push(lote.referencia.name)
     @result.push(lote.op)
+    @result.push(lote.tipo_prenda.tipo)
     @result.push(lote.cantidad)
     @result.push(money lote.precio_u) if export[:precio_u] == "1"
     @result.push(money lote.precio_t) if export[:precio_t] == "1"

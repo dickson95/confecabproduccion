@@ -4,9 +4,9 @@ head = wb.styles.add_style :bg_color => "ededfe", :fg_color => "2d3f81", :sz => 
 titles = wb.styles.add_style  :sz => 12, :alignment => {:horizontal => :center, :vertical => :center, :wrap_text => true}, :border => { :style => :thin, :color =>"00" }
 body =  wb.styles.add_style :border => { :style => :thin, :color =>"00" },:alignment => { :horizontal => :left}
 mes = @meses[@date[:month]][:string]
-
-wb.add_worksheet(:name => "#{mes}") do |sheet|
-	sheet.add_row ["", "#{mes.upcase}"], :height => 80
+company = session[:selected_company] ? "CAB" : "D&C"
+wb.add_worksheet(:name => "#{mes} de #{company}") do |sheet|
+	sheet.add_row ["", "#{mes.upcase} DE #{company}"], :height => 80
 
 	head_titles = titles_head
 	width_body = Array.new
