@@ -9,6 +9,7 @@ $(document).on "ready", ->
       time: 4000
       className: "ui-state-active"
     }
+    $(this).closest("body").find("div.box .overlay").remove()
   ).on("ajax:error", "a[data-action='delete']", (e, xhr, status, error) ->
     $.floatingMessage xhr.responseText || "Ocurrión un error", {
       position: "bottom-right"
@@ -16,4 +17,5 @@ $(document).on "ready", ->
       time: 6000
       className: "ui-state-error"
     }
+    $(this).closest("body").find("div.box .overlay").remove()
   )

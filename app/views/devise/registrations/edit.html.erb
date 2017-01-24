@@ -43,15 +43,3 @@ end %>
       </div>
   <% end %>
 </div>
-<% if current_user.id != 1 %>
-    <div class="box box-danger">
-      <div class="box-header">
-        <h3 class="box-title">Cancelar mi cuenta</h3>
-      </div>
-      <div class="box-body">
-        <p><%= link_to "Cancelar mi cuenta", registration_path(resource_name),
-                       data: {confirm: "Perderá acceso total a la aplicación si elimina su cuenta. ¿Está seguro?"},
-                       method: :delete %></p>
-      </div>
-    </div>
-<% end %>
