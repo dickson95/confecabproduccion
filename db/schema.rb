@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170123134209) do
+ActiveRecord::Schema.define(version: 20170125150703) do
 
   create_table "asignaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -38,15 +38,16 @@ ActiveRecord::Schema.define(version: 20170123134209) do
   end
 
   create_table "clientes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "cliente",                  null: false
-    t.string   "telefono"
+    t.string   "cliente",                                  null: false
     t.string   "direccion"
-    t.string   "email",                    null: false
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.string   "asunto"
-    t.text     "mensaje",    limit: 65535
+    t.text     "mensaje",       limit: 65535
     t.boolean  "empresa"
+    t.integer  "tiempo_pago",                 default: 15
+    t.string   "nit"
+    t.text     "observaciones", limit: 65535
   end
 
   create_table "colores", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -64,6 +65,15 @@ ActiveRecord::Schema.define(version: 20170123134209) do
     t.index ["color_id"], name: "index_colores_lotes_on_color_id", using: :btree
     t.index ["lote_id"], name: "index_colores_lotes_on_lote_id", using: :btree
     t.index ["total_id"], name: "index_colores_lotes_on_total_id", using: :btree
+  end
+
+  create_table "contactos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "contacto"
+    t.string   "cargo"
+    t.integer  "cliente_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cliente_id"], name: "index_contactos_on_cliente_id", using: :btree
   end
 
   create_table "control_lotes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -84,6 +94,14 @@ ActiveRecord::Schema.define(version: 20170123134209) do
     t.index ["sub_estado_id"], name: "index_control_lotes_on_sub_estado_id", using: :btree
   end
 
+  create_table "correos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "correo"
+    t.integer  "contacto_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["contacto_id"], name: "index_correos_on_contacto_id", using: :btree
+  end
+
   create_table "estados", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "estado",                                   null: false
     t.datetime "created_at",                               null: false
@@ -97,6 +115,14 @@ ActiveRecord::Schema.define(version: 20170123134209) do
     t.float    "facturar_al",   limit: 24
     t.boolean  "facturar",                 default: false
     t.boolean  "pasa_manual",              default: false
+  end
+
+  create_table "extensiones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "extension"
+    t.integer  "telefono_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["telefono_id"], name: "index_extensiones_on_telefono_id", using: :btree
   end
 
   create_table "lotes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -190,6 +216,14 @@ ActiveRecord::Schema.define(version: 20170123134209) do
     t.index ["categoria_id"], name: "index_tallas_on_categoria_id", using: :btree
   end
 
+  create_table "telefonos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "telefono"
+    t.integer  "cliente_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["cliente_id"], name: "index_telefonos_on_cliente_id", using: :btree
+  end
+
   create_table "tipos_prendas", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "tipo",       null: false
     t.datetime "created_at", null: false
@@ -198,6 +232,13 @@ ActiveRecord::Schema.define(version: 20170123134209) do
 
   create_table "totales", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "total"
+  end
+
+  create_table "unidades_tiempos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "unidad"
+    t.integer  "segundos"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -227,8 +268,11 @@ ActiveRecord::Schema.define(version: 20170123134209) do
   add_foreign_key "asignaciones", "roles", column: "role_id"
   add_foreign_key "asignaciones", "users"
   add_foreign_key "colores_lotes", "totales"
+  add_foreign_key "contactos", "clientes"
   add_foreign_key "control_lotes", "estados"
   add_foreign_key "control_lotes", "lotes"
+  add_foreign_key "correos", "contactos"
+  add_foreign_key "extensiones", "telefonos"
   add_foreign_key "lotes", "clientes"
   add_foreign_key "lotes", "programaciones"
   add_foreign_key "lotes", "referencias"
@@ -236,4 +280,5 @@ ActiveRecord::Schema.define(version: 20170123134209) do
   add_foreign_key "roles_users", "roles"
   add_foreign_key "roles_users", "users"
   add_foreign_key "seguimientos", "control_lotes"
+  add_foreign_key "telefonos", "clientes"
 end

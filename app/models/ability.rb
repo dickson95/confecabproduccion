@@ -52,11 +52,11 @@ class Ability
       can :read, [:calendario, :estadisticas]
     elsif user.has_rol? :aux_facturacion
       can [:export, :read, :billing, :prices], Lote
-      can :read, Cliente
+      can :manage, [Cliente, User]
       can :read, :calendario
     elsif user.has_rol? :terminacion
       can [:export, :read, :cambio_estado], [Lote, Programacion]
-      can :manage, [ControlLote,Seguimiento]
+      can :manage, [ControlLote, Seguimiento]
       can :create,  SubEstado
       can :read, Cliente
       can [:read, :export, :program_table, :get_row], Programacion

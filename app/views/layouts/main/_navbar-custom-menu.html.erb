@@ -36,7 +36,7 @@
   <ul class="dropdown-menu">
     <li>
       <ul class="menu">
-        <li><%= link_to  "#" do %><h5>Personas</h5><% end %></li>
+        <li><%= link_to  "#" do %>Personas<% end %></li>
         <% if can? :read, Cliente %>
             <li>
               <%= link_to clientes_path do %>
@@ -52,7 +52,7 @@
             </li>
         <% end %>
         <% if can?(:read, Cliente) && can?(:read, TipoPrenda)%>
-            <li><%= link_to  "#" do %><h5>Tablas</h5><% end %></li>
+            <li><%= link_to  "#" do %>Tablas<% end %></li>
         <% end %>
         <% if can? :read, TipoPrenda %>
             <li>
@@ -64,7 +64,7 @@
         <% if can? :read, Estado %>
             <li>
               <%= link_to estados_path do %>
-                  <i class="fa fa-cubes fa-fw text-red"></i>
+                  <i class="fa fa-cube fa-fw text-red"></i>
                   Procesos
               <% end %>
             </li>
@@ -73,6 +73,13 @@
             <li>
               <%= link_to sub_estados_path do %>
                   <i class="fa fa-cubes fa-fw text-red"></i> Procesos adicionales
+              <% end %>
+            </li>
+        <% end %>
+        <% if can? :read, UnidadTiempo %>
+            <li>
+              <%= link_to unidades_tiempos_path do %>
+                  <i class="fa fa-clock-o fa-fw text-red"></i> Unidades de tiempo
               <% end %>
             </li>
         <% end %>

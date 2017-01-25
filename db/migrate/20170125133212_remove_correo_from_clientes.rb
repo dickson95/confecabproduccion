@@ -1,0 +1,5 @@
+class RemoveCorreoFromClientes < ActiveRecord::Migration[5.0]
+  def change
+    remove_column :clientes, :email
+  end
+end

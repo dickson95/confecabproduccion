@@ -1,0 +1,1 @@
+json.array! @unidades_tiempos, partial: 'unidades_tiempos/unidad_tiempo', as: :unidad_tiempo

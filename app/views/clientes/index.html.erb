@@ -2,7 +2,7 @@
   "Clientes"
 end %>
 <% content_for :content_breadcrumb do %>
-    <li><%= link_to "Clientes",clientes_path %></li>
+    <li><%= link_to "Clientes", clientes_path %></li>
 <% end %>
 <div class="box box-primary with-border">
   <div class="box-header">
@@ -24,15 +24,20 @@ end %>
         <% if update || destroy %>
             <th class="no-padding" colspan="<%= update && destroy ? "2" : "1" %>"> Opc.</th>
         <% end %>
+        <th title="Nit">NIT</th>
         <th title="Cliente">Cliente</th>
+        <th title="Contactos">Contacto</th>
         <th title="Teléfono">Telefono</th>
+        <th title="Extensión">Ext.</th>
+        <th title="Correos">Correo</th>
         <th title="Dirección">Direccion</th>
-        <th title="Correo">Correo</th>
+        <th title="Plazo">Tiempo de pago</th>
       </tr>
       </thead>
 
       <tbody>
       <% @clientes.each do |cliente| %>
+          <% contactos = cliente.contactos %>
           <tr>
             <% if update %>
                 <td class="text-center">
@@ -49,10 +54,14 @@ end %>
                   <% end %>
                 </td>
             <% end %>
+            <td title="Nit"><%= cliente._nit %></td>
             <td title="Cliente"><%= cliente.cliente %></td>
-            <td title="Teléfono"><%= cliente.telefono.empty? ? '-' : cliente.telefono %></td>
-            <td title="Dirección"><%= cliente.direccion.empty? ? '-' : cliente.direccion %></td>
-            <td title="Correo"><%= cliente.email.empty? ? '-' : cliente.email %></td>
+            <td title="Contacto"><%= spans contactos, "contacto" %></td>
+            <td title="Teléfono"><%= first_telefono contactos %></td>
+            <td title="Teléfono"><%= first_extension contactos %></td>
+            <td title="Correo"><%= first_correo contactos %></td>
+            <td title="Dirección"><%= cliente._direccion %></td>
+            <td title="Tiempo de pago"><%= cliente._tiempo_pago %> días</td>
           </tr>
       <% end %>
       </tbody>
