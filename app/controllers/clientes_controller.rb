@@ -53,6 +53,7 @@ class ClientesController < ApplicationController
   def update
     respond_to do |format|
       if @cliente.update(cliente_params)
+        @cliente.reload
         format.html { redirect_to clientes_path }
         flash[:success] = "Actualización correcta."
         format.json { render :show, status: :ok, location: @cliente }
@@ -100,8 +101,38 @@ class ClientesController < ApplicationController
     def cliente_params
       empresa = params[:cliente][:empresa]
       params[:cliente][:empresa] = util.to_boolean empresa
-      params.require(:cliente).permit(:cliente, :telefono, :direccion, :email, :empresa,
-      :mensaje, :asunto)
+      params.require(:cliente).permit(
+          :nit,
+          :cliente,
+          :tiempo_pago,
+          :direccion,
+          :empresa,
+          :observaciones,
+          contactos_attributes:
+              [
+                  :id,
+                  :contacto,
+                  :cargo,
+                  :_destroy,
+                  correos_attributes:
+                      [
+                          :id,
+                          :correo
+                      ],
+                  telefonos_attributes:
+                      [
+                          :id,
+                          :telefono,
+                          :_destroy,
+                          extensiones_attributes:
+                              [
+                                  :id,
+                                  :extension,
+                                  :_destroy
+                              ]
+                      ]
+              ]
+      )
     end
 end
 

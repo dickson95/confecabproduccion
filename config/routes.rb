@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :unidades_tiempos
   get 'estadisticas', to: 'estadisticas#index'
   get "estadisticas/programaciones/detalles/:year/:month", to: "estadisticas#show_programaciones", as: :programaciones_show
   get "estadisticas/clientes/detalles/:year", to: "estadisticas#show_cliente", as: :clientes_show

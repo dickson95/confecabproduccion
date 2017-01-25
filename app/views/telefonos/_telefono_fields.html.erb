@@ -1,0 +1,9 @@
+<fieldset>
+  <%= f.input :telefono %>
+  <%= f.hidden_field :_destroy %>
+  <%= link_to "Eliminar", '#', class: "remove_fields" %>
+  <%= f.fields_for :extensiones do |extension| %>
+      <%= render 'extensiones/extension_fields', f: extension %>
+  <% end %>
+  <%= fields "Otra extensión", f, :extensiones %>
+</fieldset>

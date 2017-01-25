@@ -1,4 +1,4 @@
-@estados = Estado.all
+@estados = Estado.active
 wb = xlsx_package.workbook
 head = wb.styles.add_style :bg_color => "ededfe", :fg_color => "2d3f81", :sz => 30, :alignment => { :horizontal => :center, :vertical => :center }, :border => { :style => :thin, :color =>"00" }
 titles = wb.styles.add_style  :sz => 12, :alignment => {:horizontal => :center, :vertical => :center, :wrap_text => true}, :border => { :style => :thin, :color =>"00" }

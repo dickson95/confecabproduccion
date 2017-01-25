@@ -7,5 +7,7 @@
       <h1>Editar Cliente</h1>
   <% end %>
   <%content_for :title do "Editar cliente" end%>
-  <%= render 'form', cliente: @cliente %>
+  <div class="row">
+    <%= render 'form', cliente: @cliente %>
+  </div>
 </div>

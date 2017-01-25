@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170125150703) do
+ActiveRecord::Schema.define(version: 20170125192241) do
 
   create_table "asignaciones", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
@@ -218,10 +218,10 @@ ActiveRecord::Schema.define(version: 20170125150703) do
 
   create_table "telefonos", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "telefono"
-    t.integer  "cliente_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["cliente_id"], name: "index_telefonos_on_cliente_id", using: :btree
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "contacto_id"
+    t.index ["contacto_id"], name: "index_telefonos_on_contacto_id", using: :btree
   end
 
   create_table "tipos_prendas", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -280,5 +280,5 @@ ActiveRecord::Schema.define(version: 20170125150703) do
   add_foreign_key "roles_users", "roles"
   add_foreign_key "roles_users", "users"
   add_foreign_key "seguimientos", "control_lotes"
-  add_foreign_key "telefonos", "clientes"
+  add_foreign_key "telefonos", "contactos"
 end

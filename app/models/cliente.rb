@@ -1,10 +1,11 @@
 class Cliente < ApplicationRecord
   has_many :lotes
-  has_many :contactos
-  belongs_to :unidad_tiempo
+  has_many :contactos, dependent: :delete_all
 
   validates :cliente, presence: true
   validates :empresa, inclusion: {in: [true, false]}
+
+  accepts_nested_attributes_for :contactos, allow_destroy: true
 
   def name
     self.cliente

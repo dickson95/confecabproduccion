@@ -1,0 +1,17 @@
+<fieldset>
+  <%= f.input :contacto %>
+  <%= f.input :cargo %>
+  <%= f.hidden_field :_destroy %>
+  <%= link_to "Eliminar", '#', class: "remove_fields" %>
+  <%= f.fields_for :telefonos do |telefono| %>
+      <%= render 'telefonos/telefono_fields', f: telefono %>
+  <% end %>
+  <%= fields "Añadir teléfono", f, :telefonos %>
+
+
+  <!--Correos-->
+  <%= f.fields_for :correos do |correo| %>
+      <%= render 'correos/correo_fields', f: correo %>
+  <% end %>
+  <%= fields "Añadir correo", f, :correos %>
+</fieldset>

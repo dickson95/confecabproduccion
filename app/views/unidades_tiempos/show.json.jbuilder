@@ -1,1 +1,0 @@
-json.partial! "unidades_tiempos/unidad_tiempo", unidad_tiempo: @unidad_tiempo
