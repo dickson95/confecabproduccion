@@ -6,9 +6,14 @@ TELEFONO: Numero de teléfono
 
 =end
 class Telefono < ApplicationRecord
-  belongs_to :contacto
+  $util = Util.new
+  belongs_to :cliente
   has_many :extensiones, dependent: :delete_all
 
   validates :telefono, presence: true
   accepts_nested_attributes_for :extensiones, allow_destroy: true
+
+  def _telefono
+    $util.hyphen_or_string(self.telefono)
+  end
 end

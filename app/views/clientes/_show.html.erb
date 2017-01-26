@@ -1,0 +1,15 @@
+<div class="modal-dialog modal-lg">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3><%= @cliente.cliente %></h3>
+      <% lotes = @cliente.lotes.current_state.state_filtered(Estado.last_estado.id) %>
+      <small>Lotes facturados: <%= lotes.count %> - Unidades: <%= lotes.sum(:cantidad) %></small>
+    </div>
+    <div class="modal-body">
+      <%= render 'details_contactos' %>
+    </div>
+    <div class="modal-footer">
+      footer
+    </div>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 <fieldset class="row">
-  <div class="col-md-7 no-padding">
+  <div class="col-md-12 no-padding">
     <%= f.input :telefono, wrapper: :horizontal_form, class: "form-control" %>
   </div>
   <div class="col-md-1 text-right">
@@ -9,7 +9,7 @@
   </div>
 
     <!--Extensiones-->
-    <div class="col-md-4">
+    <div class="col-md-12">
       <%= f.fields_for :extensiones do |extension| %>
           <%= render 'extensiones/extension_fields', f: extension %>
       <% end %>

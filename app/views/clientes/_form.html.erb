@@ -62,14 +62,23 @@
               <div class="col-md-4">
                 <%= f.input :observaciones, input_html: {style: "height: 108px;"} %>
               </div>
-              <!--Contactos-->
+
+
+
+
+              <!--Teléfonos-->
               <div class="col-md-8  col-md-offset-2">
-                <%= f.fields_for :contactos do |contacto| %>
-                    <%= render 'contactos/contacto_fields', f: contacto %>
+                <%= f.fields_for :telefonos do |telefono| %>
+                    <%= render 'telefonos/telefono_fields', f: telefono %>
                 <% end %>
-                <hr>
-                <%= fields '<i class="fa fa-id-card-o"></i> Contacto'.html_safe, f, :contactos, "btn" %>
+                <%= fields '<i class="fa fa-phone"></i> Teléfono'.html_safe, f, :telefonos, "btn" %>
               </div>
+
+
+
+
+
+
             </div>
 
             <%= f.hidden_field :empresa, :value => session[:selected_company] %>

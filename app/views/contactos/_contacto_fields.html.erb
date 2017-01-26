@@ -1,4 +1,5 @@
 <fieldset class="row">
+  <hr>
     <div class="col-md-6">
       <%= f.input :contacto %>
     </div>
@@ -10,16 +11,6 @@
       <%= link_to '<i class="fa fa-times"></i>'.html_safe, '#', class: "remove_fields btn btn-danger btn-sm", style: "margin-top: 25px;" %>
     </div>
 
-
-    <!--Teléfonos-->
-    <div class="col-md-12">
-      <%= f.fields_for :telefonos do |telefono| %>
-          <%= render 'telefonos/telefono_fields', f: telefono %>
-      <% end %>
-      <%= fields '<i class="fa fa-phone"></i> Teléfono'.html_safe, f, :telefonos, "btn" %>
-    </div>
-
-  <hr>
     <!--Correos-->
     <div class="col-md-12">
       <%= f.fields_for :correos do |correo| %>
@@ -27,5 +18,4 @@
       <% end %>
       <%= fields '<i class="fa fa-envelope-o"></i> Correo'.html_safe, f, :correos, "btn" %>
     </div>
-  <hr>
 </fieldset>

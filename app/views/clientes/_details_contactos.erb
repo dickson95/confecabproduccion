@@ -1,0 +1,69 @@
+<table class="table table-bordered">
+  <caption>
+    <h4>Información de contactos</h4>
+  </caption>
+  <thead>
+  <tr>
+    <th>Teléfono</th>
+    <th>Extensión</th>
+    <th>Contacto</th>
+    <th>Cargo</th>
+    <th>Correo</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @telefonos = @cliente.telefonos %>
+  <% if @telefonos.any? %>
+      <% @telefonos.each do |telefono| %>
+          <% ext = first_ext(telefono) %>
+          <% contacto = contacto_any(ext.contacto) %>
+          <% rowspan = correos_from_conta_count(contacto) %>
+          <% correos = contacto.correos %>
+          <% # Determinar los rowspan %>
+          <% tr_ext = false %>
+
+
+          <!--tr del teléfono-->
+          <% # Pintar primera fila con el primer dato de cada relación. Al pinta el siguiente tr hace desde la segunda extensión %>
+          <% # Igualmente con los correos. Pinta el primero de la relación en esta fila y los demás a partir del segundo para este contacto %>
+          <tr>
+            <td rowspan="<%= rowspan_count(telefono.extensiones) %>"><%= telefono._telefono %></td>
+            <td rowspan="<%= rowspan %>"><%= ext._extension %></td>
+            <td rowspan="<%= rowspan %>"><%= contacto._contacto %></td>
+            <td rowspan="<%= rowspan %>"><%= contacto._cargo %></td>
+            <td><%= correo_any(correos.first)._correo %></td>
+          </tr>
+
+
+
+          <% # Aquí pinto los teléfonos y las extensiones de los teléfonos. %>
+          <% # tr_tel: impide que se pinte en la primera vuelta del ciclo el telefono pues ya se dibujó esa primera fila en %>
+          <% # las lineas anteriores %>
+
+          <% # Pintar las extensiones desde la segunda ("offset(1)") por que la primera se pintó junto con la primera fila %>
+          <% size = correos.size - 1 %>
+          <% telefono.extensiones.each do |extension| %>
+              <% if tr_ext %>
+                  <% contacto = extension.contacto %>
+                  <% rowspan = correos_from_conta_count(contacto) %>
+                  <td rowspan="<%= rowspan %>"><%= extension._extension %></td>
+                  <td rowspan="<%= rowspan %>"><%= contacto._contacto %></td>
+                  <td rowspan="<%= rowspan %>"><%= contacto._cargo %></td>
+                  <td><%= correo_any(contacto.correos.first)._correo %></td>
+                  <% tr_ext = true %>
+              <% end %>
+              <% contacto_any(extension.contacto).correos.offset(1).each do |correo| %>
+                  <tr>
+                    <td><%= correo._correo %></td>
+                  </tr>
+              <% end %>
+              <% tr_ext = true %>
+          <% end %>
+      <% end %>
+  <% else %>
+  <tr>
+    <td colspan="5">No hay información de contacto</td>
+  </tr>
+  <% end %>
+  </tbody>
+</table>

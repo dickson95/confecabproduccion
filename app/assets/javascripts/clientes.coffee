@@ -1,7 +1,7 @@
 $(document).on "ready", ->
   $("body.clientes").on 'click', '.remove_fields', (event) ->
     $(this).prev('input[type=hidden]').val('1')
-    $(this).closest('fieldset').hide()
+    $(this).closest('fieldset').remove()
     event.preventDefault()
 
   $("body.clientes").on 'click', '.add_fields', (event) ->

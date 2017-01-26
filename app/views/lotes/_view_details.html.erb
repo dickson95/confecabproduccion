@@ -114,7 +114,7 @@
         </p>
         <p class="col-md-3 text-left">
           <strong>Fecha de salida:</strong><br>
-          <%= @lote.estado.id==5 ? l(@lote.fecha_salida, format: "%d de %b/%y") : "No ha salido" %>
+          <%= @lote.estado.id==Estado.last_estado.id ? (@lote.fecha_salida ? l(@lote.fecha_salida, format: "%d de %b/%y") : "Las unidades no están completas") : "No ha salido" %>
         </p>
       </div>
 
@@ -132,11 +132,11 @@
             </p>
             <p class="col-md-3 text-left">
               <strong>Precio unitario:</strong>
-              <%= Money.new("#{@lote.lote.precio_u}00", "COP").format(no_cents: true) %>
+              <%= Money.from_amount(@lote.lote.precio_u, "COP").format(no_cents: true) %>
             </p>
             <p class="col-md-3 text-left">
               <strong>Precio total:</strong>
-              <%= Money.new("#{@lote.lote.precio_t}", "COP").format(no_cents: true) %>
+              <%= Money.from_amount(@lote.lote.precio_t, "COP").format(no_cents: true) %>
             </p>
           </div>
       <% end %>

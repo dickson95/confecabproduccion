@@ -1,13 +1,21 @@
 <fieldset class="row">
-    <div class="col-md-12">
-      <%= f.input :extension,  wrapper: :vertical_input_group,  label: false  do %>
-        <%= f.input_field :extension, class: "form-control",   placeholder: "Extensión" %>
+  <div class="col-md-12">
+    <%= f.input :extension, wrapper: :vertical_input_group, label: false do %>
+        <%= f.input_field :extension, class: "form-control", placeholder: "Extensión" %>
         <div class="input-group-btn">
           <%= link_to '#', class: "remove_fields btn btn-danger" do %>
               <i class="fa fa-times"></i>
           <% end %>
         </div>
-      <% end %>
-      <%= f.hidden_field :_destroy %>
-    </div>
+    <% end %>
+    <%= f.hidden_field :_destroy %>
+  </div>
+  <!--Contactos-->
+  <div class="col-md-8  col-md-offset-2">
+    <%= f.fields_for :contacto do |contacto| %>
+        <%= render 'contactos/contacto_fields', f: contacto %>
+    <% end %>
+    <hr>
+    <%= fields_one '<i class="fa fa-id-card-o"></i> Contacto'.html_safe, f, :contacto, "btn" %>
+  </div>
 </fieldset>

@@ -19,7 +19,7 @@ class ClientesController < ApplicationController
   def new
     @cliente = Cliente.new
     respond_to do |format|
-      format.js{ render 'lotes/ajaxResults' }
+      format.js { render 'lotes/ajaxResults' }
       format.html
     end
   end
@@ -38,10 +38,10 @@ class ClientesController < ApplicationController
         @clientes = Cliente.where(:empresa => session[:selected_company])
         @cliente = Cliente.last
         format.js { render "lotes/ajaxResults" }
-        format.html { redirect_to @cliente, notice: "Cliente guardado con éxito."}
+        format.html { redirect_to @cliente, notice: "Cliente guardado con éxito." }
         format.json { render :show, status: :created, location: @cliente }
       else
-        format.html { render :edit }
+        format.html { render :new }
         format.json { render json: @cliente.errors, status: :unprocessable_entity }
         format.js { render "lotes/ajaxResultsValidates" }
       end
@@ -73,11 +73,11 @@ class ClientesController < ApplicationController
         format.json { render json: "Algunos lotes dependen de este cliente. No se puede eliminar.", status: :conflict }
       else
         @cliente.destroy
-        format.json { render json: { message: "Cliente eliminado con éxito" } }
+        format.json { render json: {message: "Cliente eliminado con éxito"} }
       end
     end
   end
-  
+
   # Enviar correo electrónico por problemas con los insumos al cliente 
 =begin
   def send_email
@@ -92,47 +92,48 @@ class ClientesController < ApplicationController
 =end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_cliente
-      @cliente = Cliente.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_cliente
+    @cliente = Cliente.find(params[:id])
+  end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def cliente_params
-      empresa = params[:cliente][:empresa]
-      params[:cliente][:empresa] = util.to_boolean empresa
-      params.require(:cliente).permit(
-          :nit,
-          :cliente,
-          :tiempo_pago,
-          :direccion,
-          :empresa,
-          :observaciones,
-          contactos_attributes:
-              [
-                  :id,
-                  :contacto,
-                  :cargo,
-                  :_destroy,
-                  correos_attributes:
-                      [
-                          :id,
-                          :correo
-                      ],
-                  telefonos_attributes:
-                      [
-                          :id,
-                          :telefono,
-                          :_destroy,
-                          extensiones_attributes:
-                              [
-                                  :id,
-                                  :extension,
-                                  :_destroy
-                              ]
-                      ]
-              ]
-      )
-    end
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def cliente_params
+    empresa = params[:cliente][:empresa]
+    params[:cliente][:empresa] = util.to_boolean empresa
+    params.require(:cliente).permit(
+        :nit,
+        :cliente,
+        :tiempo_pago,
+        :direccion,
+        :empresa,
+        :observaciones,
+        telefonos_attributes:
+            [
+                :id,
+                :telefono,
+                :_destroy,
+                extensiones_attributes:
+                    [
+                        :id,
+                        :extension,
+                        :_destroy,
+                        contacto_attributes:
+                            [
+                                :id,
+                                :contacto,
+                                :cargo,
+                                :_destroy,
+                                correos_attributes:
+                                    [
+                                        :id,
+                                        :correo,
+                                        :_destroy
+                                    ]
+                            ]
+                    ]
+            ]
+    )
+  end
 end
 
