@@ -1,9 +1,18 @@
-<fieldset>
-  <%= f.input :telefono %>
-  <%= f.hidden_field :_destroy %>
-  <%= link_to "Eliminar", '#', class: "remove_fields" %>
-  <%= f.fields_for :extensiones do |extension| %>
-      <%= render 'extensiones/extension_fields', f: extension %>
-  <% end %>
-  <%= fields "Otra extensión", f, :extensiones %>
+<fieldset class="row">
+  <div class="col-md-7 no-padding">
+    <%= f.input :telefono, wrapper: :horizontal_form, class: "form-control" %>
+  </div>
+  <div class="col-md-1 text-right">
+    <%= link_to '#', class: "remove_fields btn btn-danger btn-sm" do %>
+        <i class="fa fa-times"></i>
+    <% end %>
+  </div>
+
+    <!--Extensiones-->
+    <div class="col-md-4">
+      <%= f.fields_for :extensiones do |extension| %>
+          <%= render 'extensiones/extension_fields', f: extension %>
+      <% end %>
+      <%= fields '<i class="fa fa-external-link"></i> Extensión'.html_safe, f, :extensiones %>
+    </div>
 </fieldset>

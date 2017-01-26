@@ -1,5 +1,11 @@
-<fieldset>
-  <%= f.input :correo %>
-  <%= f.hidden_field :_destroy %>
-  <%= link_to "Eliminar", '#', class: "remove_fields" %>
+<fieldset class="row" style="margin-top: 15px;" >
+  <%= f.input :correo,  wrapper: :horizontal_input_group do %>
+      <%= f.hidden_field :_destroy %>
+      <%= f.input_field :correo, class: "form-control" %>
+      <div class="input-group-btn">
+        <%= link_to '#', class: "remove_fields btn btn-danger" do %>
+            <i class="fa fa-times"></i>
+        <% end %>
+      </div>
+  <% end %>
 </fieldset>

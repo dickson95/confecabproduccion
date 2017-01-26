@@ -1,13 +1,15 @@
-<div class="col-md-6 col-md-offset-3">
-  <%= content_for :content_breadcrumb do %>
-      <li class="active"><%= link_to "Clientes", clientes_path %></li>
-      <li class="active"><%= link_to "Nuevo cliente", new_cliente_path %></li>
-  <% end %>
-  <%= content_for :content_header do %>
-      <h1>Nuevo cliente</h1>
-  <% end %>
-  <% content_for :title do
-    "Nuevo cliente"
-  end %>
-  <%= render 'form', cliente: @cliente %>
+<div class="row">
+  <div class="col-md-12">
+    <%= content_for :content_breadcrumb do %>
+        <li class="active"><%= link_to "Clientes", clientes_path %></li>
+        <li class="active"><%= link_to "Nuevo cliente", new_cliente_path %></li>
+    <% end %>
+    <%= content_for :content_header do %>
+        <h1>Nuevo cliente</h1>
+    <% end %>
+    <% content_for :title do
+      "Nuevo cliente"
+    end %>
+    <%= render 'form', cliente: @cliente %>
+  </div>
 </div>
