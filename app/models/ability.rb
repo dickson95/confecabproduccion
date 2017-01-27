@@ -52,6 +52,9 @@ class Ability
       can :read, [:calendario, :estadisticas]
     elsif user.has_rol? :aux_facturacion
       can [:export, :read, :billing, :prices], Lote
+      can [:read, :export, :program_table, :get_row], Programacion
+      # Actualizar orden de los lotes en la programación
+      cannot :update_row_order, Lote
       can :manage, [Cliente, User]
       can :read, :calendario
     elsif user.has_rol? :terminacion

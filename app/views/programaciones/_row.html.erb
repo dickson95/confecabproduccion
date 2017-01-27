@@ -1,7 +1,7 @@
 <% lote_id = lote.fetch(9) %>
 <% lote_object = Lote.find(lote_id) %>
 <% estado = lote_object.control_lotes.last.estado %>
-<tr data-item-id="<%= "#{lote_id}" %>" class="<%= (can? :update, Lote) ? "item" : "" %>" style="background-color: <%= estado.color_claro %>;">
+<tr data-item-id="<%= "#{lote_id}" %>" class="item" style="background-color: <%= estado.color_claro %>;">
   <% if can? :update, Programacion %>
       <td><%= check_box_tag "lotes[#{lote_id}]", lote_id %></td>
   <% end %>
@@ -18,6 +18,7 @@
   <td><%= lote.fetch(0) %></td>
   <td><%= lote.fetch(1) %></td>
   <td><%= lote.fetch(3) %></td>
+  <td><%= lote.fetch(11) %></td><!--OP-->
   <td><%= lote.fetch(4) %></td>
   <% if can? :prices, Lote %>
       <td><%= money lote.fetch(5) %></td>

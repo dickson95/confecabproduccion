@@ -38,7 +38,7 @@
           </ul>
         </div>
     <% end %>
-    <% if can? :update, Programacion %>
+    <% if can? :update_row_order, Lote %>
         <div class="pull-left col-sm-1">
           <%= submit_tag "Ordenar", class: "btn btn-default disabled-btn", disabled: disabled.fetch(0) %>
         </div>
@@ -62,6 +62,7 @@
   <th style="min-width: 70px;">Cliente</th>
   <th>Descripción</th>
   <th style="min-width: 80px;">Referencia</th>
+  <th>OP</th>
   <th>Cant</th>
   <% if can? :prices, Lote %>
       <% $colspan = 11 %>

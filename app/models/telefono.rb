@@ -8,7 +8,7 @@ TELEFONO: Numero de teléfono
 class Telefono < ApplicationRecord
   $util = Util.new
   belongs_to :cliente
-  has_many :extensiones, dependent: :delete_all
+  has_many :extensiones, dependent: :destroy
 
   validates :telefono, presence: true
   accepts_nested_attributes_for :extensiones, allow_destroy: true

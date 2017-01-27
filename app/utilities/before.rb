@@ -17,6 +17,17 @@ module Before
       false
     end
 
+    def child_of_relation(obj, rel)
+      associations = get_has_many_relations(get_class(obj))
+      associations.each do |ass|
+        if ass.name == rel.to_sym
+          amount_records = obj.public_send(ass.name).count
+          return true if amount_records > 0
+        end
+      end
+      false
+    end
+
     # Consigue el nombre de la clase como objeto
     def get_class(object)
       object.class

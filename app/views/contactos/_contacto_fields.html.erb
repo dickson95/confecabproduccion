@@ -1,18 +1,17 @@
-<fieldset class="row">
-  <hr>
+<fieldset>
     <div class="col-md-6">
-      <%= f.input :contacto %>
+      <%= f.input :contacto, placeholder: "Nombre * ", label: false %>
     </div>
     <div class="col-md-5">
-      <%= f.input :cargo %>
+      <%= f.input :cargo,  placeholder: "Cargo *", label: false %>
     </div>
-    <div class="col-md-1">
+    <div class="col-md-1 text-right no-padding">
       <%= f.hidden_field :_destroy %>
-      <%= link_to '<i class="fa fa-times"></i>'.html_safe, '#', class: "remove_fields btn btn-danger btn-sm", style: "margin-top: 25px;" %>
+      <%= link_to '<i class="fa fa-times"></i>'.html_safe, '#', class: "remove_fields btn btn-danger btn-sm" %>
     </div>
 
     <!--Correos-->
-    <div class="col-md-12">
+    <div class="col-md-12 no-padding">
       <%= f.fields_for :correos do |correo| %>
           <%= render 'correos/correo_fields', f: correo %>
       <% end %>

@@ -1,5 +1,5 @@
-<fieldset class="row">
-  <div class="col-md-12">
+<fieldset class="row" style="margin-top: 15px;">
+  <div class="col-md-2">
     <%= f.input :extension, wrapper: :vertical_input_group, label: false do %>
         <%= f.input_field :extension, class: "form-control", placeholder: "Extensión" %>
         <div class="input-group-btn">
@@ -11,11 +11,13 @@
     <%= f.hidden_field :_destroy %>
   </div>
   <!--Contactos-->
-  <div class="col-md-8  col-md-offset-2">
+  <div class="col-md-10 no-padding">
     <%= f.fields_for :contacto do |contacto| %>
         <%= render 'contactos/contacto_fields', f: contacto %>
     <% end %>
-    <hr>
-    <%= fields_one '<i class="fa fa-id-card-o"></i> Contacto'.html_safe, f, :contacto, "btn" %>
+    <% contacto = f.object.contacto %>
+    <div data-one="true" style="<%= contacto ? "display: none;" : "" %>">
+      <%= fields_one '<i class="fa fa-id-card-o"></i> Contacto'.html_safe, f, :contacto, "btn" %>
+    </div>
   </div>
 </fieldset>

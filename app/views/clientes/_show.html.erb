@@ -1,15 +1,45 @@
-<div class="modal-dialog modal-lg">
+<div class="modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
       <h3><%= @cliente.cliente %></h3>
       <% lotes = @cliente.lotes.current_state.state_filtered(Estado.last_estado.id) %>
-      <small>Lotes facturados: <%= lotes.count %> - Unidades: <%= lotes.sum(:cantidad) %></small>
+      <small>NIT: <%= @cliente._nit %></small>
     </div>
     <div class="modal-body">
-      <%= render 'details_contactos' %>
+      <div class="table-responsive">
+        <%= render 'details_contactos' %>
+      </div>
+      <hr>
+      <table class="table table-bordered">
+        <tbody>
+        <tr>
+          <th>Tiempo de pago</th>
+          <td><%= @cliente._tiempo_pago %> días</td>
+        </tr>
+        <tr>
+          <th>Dirección</th>
+          <td><%= @cliente._direccion %></td>
+        </tr>
+        <tr>
+          <th>Observaciones</th>
+          <td><%= @cliente.observaciones %></td>
+        </tr>
+        <tr>
+          <th>Día de registro</th>
+          <td><%= I18n::l(@cliente.created_at, format: "%d %b %Y") %></td>
+        </tr>
+        <tr>
+          <th>Última edicion</th>
+          <td><%= I18n::l(@cliente.updated_at, format: "%d %b %Y") %></td>
+        </tr>
+        </tbody>
+      </table>
     </div>
     <div class="modal-footer">
-      footer
+      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
     </div>
   </div>
 </div>

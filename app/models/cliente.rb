@@ -1,7 +1,9 @@
 class Cliente < ApplicationRecord
+  require 'util'
+  $util = Util.new
   has_many :lotes
-  has_many :contactos, dependent: :delete_all
-  has_many :telefonos, dependent: :delete_all
+  has_many :telefonos, dependent: :destroy
+  has_many :contactos, dependent: :destroy
 
   validates :cliente, presence: true
   validates :empresa, inclusion: {in: [true, false]}
@@ -14,18 +16,15 @@ class Cliente < ApplicationRecord
   end
 
   def _nit
-    nit = self.nit
-    nit ? nit : "-"
+    $util.hyphen_or_string(self.nit)
   end
 
   def _direccion
-    dir = self.direccion
-    dir.nil? ? "-" : dir
+    $util.hyphen_or_string(self.direccion)
   end
 
   def _tiempo_pago
-    tiempo_pago = self.tiempo_pago
-    tiempo_pago.nil? ? "-" : tiempo_pago
+    $util.hyphen_or_string(self.tiempo_pago)
   end
 
   def cliente=(val)
