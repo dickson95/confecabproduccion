@@ -186,6 +186,7 @@ class Programacion < ApplicationRecord
     array.push lote.h_req
     array.push lote.id
     array.push lote.ingresara_a_planta
+    array.push lote.op
     array
   end
 

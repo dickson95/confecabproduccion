@@ -36,6 +36,7 @@ $(document).on "ready", ->
         previous: 'Anterior'
         next: 'Siguiente'
     order: order
+    paging: false
     columnDefs: [
       {
         'targets': target

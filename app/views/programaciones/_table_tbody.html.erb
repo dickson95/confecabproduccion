@@ -6,7 +6,7 @@
     <% end %>
 <% elsif @no_empty_program && @programaciones.empty? %>
     <tr id="row_generate">
-      <td colspan="11" class="text-center">
+      <td colspan="12" class="text-center">
         <% if can? :generate, Programacion %>
             No existe programación para este mes<br>
             ¿Desea generarla?
