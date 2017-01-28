@@ -1,0 +1,6 @@
+<% if can? :update, Programacion %>
+    <%= text_field_tag "programacion[secuencia][#{lote_id}]", "", :value => secuencia,
+                       :style => "max-width: 3em;", :class => "form-control text-black text-center input-sm no-padding" %>
+<% else %>
+    <%= secuencia %>
+<% end %>

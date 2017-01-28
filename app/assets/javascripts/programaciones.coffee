@@ -28,6 +28,7 @@ $(document).on "ready", ->
   # Cargar datapicker despues de añadir filas a la tabla o de cambiar entre pestañas
   $("body").on "ajax:success", "a[data-remote], form[data-remote]", (e, data, status, xhr) ->
     setDatePicker()
+
   # Cambiar la clase active entre las pestañas y la carga de los datos
   $("ul.nav-tabs a").click (e)->
     e.preventDefault()
@@ -45,22 +46,6 @@ $(document).on "ready", ->
     $(this).closest("body").find("div.box").append(load_state)
   ).on "ajax:complete", "a[data-remote], form[data-remote]", (e, xhr, status) ->
     $(this).closest("body").find("div.box .overlay").remove()
-
-  body.on "ajax:success", ".change", (e, data, status, xhr)->
-    lote_id = data.lote.id
-    $.ajax(
-      url: "programaciones/get_row"
-      data: {lote_id: lote_id}
-      dataType: "json"
-      success: (row, status, xhr)->
-        $("tr[data-item-id='"+lote_id+"']").replaceWith(row.partial)
-        $.floatingMessage data.message, {
-          position: "bottom-right"
-          height: 80
-          time: 4000
-          className: "ui-state-active"
-        }
-    )
 
   # Ancho de las columnas mientras es arrastrada la fila
   fixHelper = (e, ui) ->

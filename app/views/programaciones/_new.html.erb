@@ -1,8 +1,13 @@
+<%
+=begin
+Ventana modal para añadir lotes nuevos
+=end
+%>
 <div class="modal-dialog modal-sm" role="document">
 	<div class="modal-content">
 		
 		<div class="modal-body">
-			<%=form_tag add_lotes_programaciones_path, remote: true, method: 'PATCH' do%>
+			<%=form_tag add_lotes_programaciones_path, remote: true, method: 'PATCH', id: "new_lotes_to_programacion" do%>
 				<table class="table">
 					<thead>
 						<tr>

@@ -1,5 +1,6 @@
 class ProgramacionesController < ApplicationController
   load_and_authorize_resource
+  include ProgramacionesDatatablesHelper
   before_action :empresa
   before_action :set_meses, except: [:modal_open, :update_row_order, :update_meta_mensual]
   before_action :programacion_id, except: [:modal_open, :update_row_order, :export_excel, :update_meta_mensual]
@@ -12,6 +13,9 @@ class ProgramacionesController < ApplicationController
     @years = Programacion.years_db
     if programacion
       programacion_id
+    end
+    respond_to do |format|
+      format.html
     end
   end
 
@@ -33,14 +37,11 @@ class ProgramacionesController < ApplicationController
   # POST /generate/:id
   def generate
     # Actualizar los lotes con programación id null
-    Lote.where("programacion_id IS NULL and empresa = ?", @empresa)
-        .update(:programacion_id => params[:id].to_i)
-    # Establecer las programaciones
-    set_programaciones
-    states_lotes
-    sum_totals
+    @lotes = Lote.where("programacion_id IS NULL and empresa = ?", @empresa)
+      .update(:programacion_id => params[:id].to_i)
+    common
     respond_to do |format|
-      format.js
+      format.json{render json: json_response_row_new }
     end
   end
 
@@ -58,33 +59,26 @@ class ProgramacionesController < ApplicationController
 
   # recuperara una fila específica de los lotes de la programación
   def get_row
-    lote = Lote.find(params[:lote_id])
-    this = Programacion
-    @programacion = this.where(id: lote.programacion_id)
-    states_lotes
-    lote_array = this.lote_array(lote)
-    row = {partial: (view_context.render partial: "row", locals: {lote: lote_array}, formats: :html)}
+    @lotes = []
+    @lotes.push(Lote.find(params[:lote_id]))
     respond_to do |format|
-      format.json{ render json: row }
+      format.json{ render json: json_response_row_new }
     end
   end
 
   # Relacionar los lotes con la programación
   def add_lotes_to_programing
     @lotes = Array.new
-    if !params[:lotes].nil?
+    if params[:lotes]
       params[:lotes].each do |lote|
         lote = Lote.where(:id => lote)
                    .update(:programacion_id => @programacion.fetch(0), :respon_edicion_id => current_user)
-        @lotes.push Programacion.lote_array(lote.first)
+        @lotes.push(lote.first)
       end
-    end
-    set_programaciones
-    no_empty_program
-    states_lotes
-    sum_totals
+      end
+    common
     respond_to do |format|
-      format.js { render "modal_open" }
+      format.json { render json: json_response_row_new }
     end
   end
 
@@ -92,20 +86,21 @@ class ProgramacionesController < ApplicationController
   def remove_from_programing
     if params[:commit] == "Retirar"
       @lotes = Array.new
-      if !params[:lotes].nil?
+      if params[:lotes]
         params[:lotes].each do |lote|
-          Lote.where(:id => lote)
+          lote_obj = Lote.where(:id => lote)
               .update(:programacion_id => nil, :secuencia => nil, :ingresara_a_planta => nil, :respon_edicion_id => current_user)
-          @lotes.push lote
+          @lotes.push lote_obj.first
         end
       end
+      common
+      respond_to do |format|
+        format.json {render json: json_response_row_new}
+      end
     elsif params[:commit] == "Ordenar"
+      common
       Programacion.sort_manually params[:programacion][:secuencia]
     end
-    set_programaciones
-    no_empty_program
-    states_lotes
-    sum_totals
     respond_to do |format|
       format.js
     end
@@ -223,5 +218,26 @@ class ProgramacionesController < ApplicationController
 
   def empresa
     @empresa = session[:selected_company] ? "CAB" : "D&C"
+  end
+
+  def common
+    set_programaciones
+    no_empty_program
+    states_lotes
+    sum_totals
+  end
+
+  def json_response_row_new
+    json ={}
+    json[:rows] ={}
+    @lotes.each do |lote|
+      estado = lote.control_lotes.last.estado
+      json[:rows][lote.id] = {row: row(lote), color: estado.color, color_claro: estado.color_claro}
+    end
+    json[:unidades] = "<strong>Total unidades:</strong>  #{@cantidades}"
+    json[:precio_total] = "<strong>Precio total:</strong> #{@total}"
+    json[:add] = @no_empty_program # Si debe estar habilitado el botón es true
+    json[:no_manage] = @programaciones.empty? # Si es true deben estar habilitados
+    json
   end
 end

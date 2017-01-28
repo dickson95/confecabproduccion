@@ -3,6 +3,7 @@
 *= require plugins/colorpicker/bootstrap-colorpicker.min
 *= require plugins/fullcalendar/fullcalendar.min
 *= require plugins/datatables/dataTables.bootstrap
+*= require plugins/datatables/extensions/RowReorder/rowReorder.dataTables.min
 *= require plugins/morris/morris
 *= require dist/css/AdminLTE.min
 *= require dist/css/skins/_all-skins.min

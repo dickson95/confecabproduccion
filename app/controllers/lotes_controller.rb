@@ -123,9 +123,9 @@ class LotesController < ApplicationController
   # de un estado, la de entrada al siguiente y un responsable por acción
   def cambio_estado
     this = Lote
-    next_estado = Estado.find params[:btn] # Lote siguiente del actual
-    @estado = next_estado.id # Este es el estado que sigue del actual
-    men = next_estado.name.downcase
+    @next_estado = Estado.find params[:btn] # Lote siguiente del actual
+    @estado = @next_estado.id # Este es el estado que sigue del actual
+    @men = @next_estado.estado
     has_programing = this.has_programing(params[:lote_id], @estado)
 
     if has_programing
@@ -141,13 +141,7 @@ class LotesController < ApplicationController
           Seguimiento.seguimientos_status_change(@lote.cantidad, @control, current_user, action_name)
           reqfor = request.format # formato de la solicitud
           if reqfor == "application/json" || reqfor == "text/javascript"
-            hs = Hash.new
-            hs[:dropdown] = view_context.render partial: 'dropdown_options', locals: {lote_id: params[:lote_id],
-                                                                                      estado_id: @estado}, formats: :html
-            link = view_context.link_to "Ver ciclo", lote_control_lotes_path(@lote, plc: params[:plc])
-            hs[:message] = "Lote #{men=="completado" ? men : "cambiado a #{men}"}. <br> #{link}"
-            hs[:lote] = @lote.as_json
-            format.json { render json: hs, status: :ok }
+            format.json { render json: json_cambio_estado, status: :ok }
             format.js { render 'control_lotes/cambio_estado' }
           else
             format.html { redirect_to :back }
@@ -439,5 +433,14 @@ class LotesController < ApplicationController
 
   def time
     @time = Time.new
+  end
+
+  def json_cambio_estado
+    json = Hash.new
+    json[:dropdown] = view_context.render partial: 'dropdown_options', locals: {lote_id: params[:lote_id], estado_id: @estado}, formats: :html
+    json[:estado] = @next_estado.as_json
+    json[:message] = "Lote cambiado a #{@men}. <br> #{view_context.link_to "Ver ciclo", lote_control_lotes_path(@lote, plc: params[:plc])}"
+    json[:lote] = @lote.as_json
+    json
   end
 end

@@ -1,0 +1,7 @@
+<% if can? :update, Programacion %>
+    <%= content_tag :input, "", data: {:lote => lote_id, url: update_ingresara_a_planta_lote_path(lote_id)},
+                    :value => set_date(ingresara, "%d %B %Y"),
+                    :class => "form-control text-center input-sm no-padding ingresara_a_planta" %>
+<% else %>
+    <%= set_date(ingresara, "%d %B %Y") %>
+<% end %>

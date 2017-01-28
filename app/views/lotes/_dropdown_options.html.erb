@@ -65,7 +65,7 @@
           <% if next_estado %>
               <%= link_to lote_cambio_estado_path(lote_id, :btn => next_estado.id, :plc => params[:controller], format: :json),
                           method: "PATCH", remote: true, :class => "change" do %>
-                  <i class='fa fa-fast-forward fa-fw text-green' aria-hidden='true'></i>
+                  <i class='fa fa-fast-forward fa-fw text-green hidden-xs' aria-hidden='true'></i>
                   <span class="hidden-xs"><%= next_estado.nombre_accion %></span>
                   <h5 class="visible-xs">
                     <i class="fa fa-fast-forward fa-fw text-green" aria-hidden="true"></i>

@@ -7,6 +7,7 @@ class Cliente < ApplicationRecord
 
   validates :cliente, presence: true
   validates :empresa, inclusion: {in: [true, false]}
+  validates :nit, numericality: true
 
   accepts_nested_attributes_for :contactos, allow_destroy: true
   accepts_nested_attributes_for :telefonos, allow_destroy: true

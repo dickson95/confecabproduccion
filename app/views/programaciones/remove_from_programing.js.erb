@@ -1,25 +1,4 @@
 <%month = params[:month]%>
 <%if params[:commit] == "Ordenar"%>
 	$('#<%=month%>t').find("tbody").replaceWith("<%=j render "table_tbody"%>");
-<%elsif params[:commit] == "Retirar"%>
-	
-	<%@lotes.each do |id|%>
-	lote = $("#lotes_<%=id%>").closest("tr");
-	lote.remove();
-	<%end%>
-
-	size_table = $('#<%=month%>t > tbody > tr').length;
-	if (size_table < 1){
-		$('#<%=month%>t').find("tbody").replaceWith("<%=j render "table_tbody"%>");
-	}
-	<%if @no_empty_program%>
-    add_lote = $("#add-lote");
-    add_lote.prop('disabled', false);
-    add_lote.unbind('click');
-    add_lote.removeClass("disabled");
-	<%end%>
-	foot = $("tfoot div p");
-
-	foot.first().html("<strong>Total unidades:</strong> <%= @cantidades %>");
-	foot.last().html("<strong>Precio total:</strong> <%= @total %>");
 <%end%>

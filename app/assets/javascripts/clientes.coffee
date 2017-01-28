@@ -13,7 +13,6 @@ $(document).on "ready", ->
     time = new Date().getTime()
     regexp = new RegExp($(this).data('id'), 'g')
     $(this).before($(this).data('fields').replace(regexp, time))
-    console.log $(this).data("one")
     parent = $(this).parent()
     if parent.data("one")
       $(this).hide()
@@ -21,7 +20,6 @@ $(document).on "ready", ->
 
   target = if gon.clientes then [0, 1, 2, 6, 7, 9, 10] else [0, 4, 5, 7, 8]
   order = if gon.clientes then [[4, "desc"]] else [[2, "desc"]]
-  console.log target
   $('#clientes').DataTable
     language:
       lengthMenu: 'Mostrar _MENU_ registros'

@@ -2,6 +2,7 @@ $("#lotes_wrapper").remove();
 $(".tab-content").find(".active").html("<%= j render "table" %>");
 
 lotes = $('#lotes');
+// targets es un div con los datas de qué columnas se ordenan y buscan (lotes/index.html)
 targets = $("#targets");
 lotes.DataTable({
   serverSide: true,

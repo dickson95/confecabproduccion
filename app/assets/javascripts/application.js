@@ -26,6 +26,7 @@
 //= require plugins/slimScroll/jquery.slimscroll.min
 //= require plugins/datatables/jquery.dataTables.min
 //= require plugins/datatables/dataTables.bootstrap.min
+//= require plugins/datatables/extensions/RowReorder/dataTables.rowReorder.min
 //= require plugins/morris/raphael-min
 //= require plugins/morris/morris.min
 //= require dist/js/app

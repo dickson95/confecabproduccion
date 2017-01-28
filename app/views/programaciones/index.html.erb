@@ -28,6 +28,8 @@ end %>
     </div>
   </div>
 </div>
+<% updt_programacion= can? :update, Programacion %>
+<div id="target" data-secuencia="<%= updt_programacion ? 2 : 1 %>" data-no-padding="<%= target_no_padding %>"
+data-state="<%= updt_programacion ? 3 : 2 %>"></div>
 
-<div class="modal fade" id="modal_add" tabindex="-1" role="dialog"
-     aria-labelledby="modalAddLabe" aria-hidden="true"></div>
+<info data-reorder="<%= can? :update_row_order, Lote %>" data-remove="<%= can? :update, Programacion %>" data-prices="<%= can? :prices, Lote %>"></info>

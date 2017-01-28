@@ -10,15 +10,15 @@
         <% if can? :generate, Programacion %>
             No existe programación para este mes<br>
             ¿Desea generarla?
-            <%= link_to "Generar programación", generate_programacion_path(@programacion, :month => params[:month]),
-                        method: :patch, remote: :true %>
+            <%= link_to "Generar programación", "#", data:{url: generate_programacion_path(@programacion, :month => params[:month])},
+                        method: :patch, id: "generate_programacion" %>
         <% else %>
             No se ha generado ninguna programación
         <% end %>
       </td>
     </tr>
 <% else %>
-    <tr>
+    <tr id="row_generate">
       <td colspan="<%= $colspan %>" class="text-center">
         No hay lotes disponibles para generar una programación
       </td>

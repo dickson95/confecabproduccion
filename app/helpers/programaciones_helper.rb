@@ -5,6 +5,13 @@ Para más información http://api.rubyonrails.org/classes/ActionController/Helpe
 Helper enfocado en gran parte en armar la exportación a excel de la programación solicitada
 =end
 module ProgramacionesHelper
+  def target_no_padding
+    upd_programacion = can? :update, Programacion; prices = can? :prices, Lote
+    return [1, 2, 11] if upd_programacion && prices
+    return [1, 2, 9] if upd_programacion
+    return [0, 1, 10] if prices
+    [0, 1, 8]
+  end
 
   def colspan
     (can?(:update, Programacion) && can?(:prices, Programacion)) ? 4 : 2
@@ -13,10 +20,6 @@ module ProgramacionesHelper
   def estado_or_sub(lote_id)
     lote = Lote.find(lote_id)
     lote.control_lotes.last.sub_or_process
-  end
-
-  def money(object)
-    Money.from_amount(object, "COP").format(:no_cents => true)
   end
 
   # Formar estructura de títulos para el archivo de excel

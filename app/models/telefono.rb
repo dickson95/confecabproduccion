@@ -10,7 +10,7 @@ class Telefono < ApplicationRecord
   belongs_to :cliente
   has_many :extensiones, dependent: :destroy
 
-  validates :telefono, presence: true
+  validates :telefono, presence: true, numericality: true
   accepts_nested_attributes_for :extensiones, allow_destroy: true
 
   def _telefono

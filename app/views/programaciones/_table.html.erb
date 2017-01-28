@@ -33,7 +33,7 @@
                     <i class="fa fa-file-pdf-o" aria-hidden="true"></i>
                     PDF
                   </h4>
-            <% end %>
+              <% end %>
             </li>
           </ul>
         </div>
@@ -55,9 +55,7 @@
       </th>
   <% end %>
   <th></th>
-  <% if can? :update, Programacion %>
-      <th>Sec</th>
-  <% end %>
+  <th>Sec</th>
   <th>Estado</th>
   <th style="min-width: 70px;">Cliente</th>
   <th>Descripción</th>
@@ -80,9 +78,9 @@
     <tr>
       <td colspan="8">
         <div class="pull-left">
-          <p><strong>Total unidades:</strong> <%= @cantidades %> </p>
+          <p class="total_unities"><strong>Total unidades:</strong> <%= @cantidades %> </p>
           <% if can? :prices, Lote %>
-              <p><strong>Precio total:</strong> <%= @total %> </p>
+              <p class="prices"><strong>Precio total:</strong> <%= @total %> </p>
           <% end %>
         </div>
       </td>
@@ -97,5 +95,5 @@
     </tr>
     </tfoot>
 <% end %>
-	
+
 
